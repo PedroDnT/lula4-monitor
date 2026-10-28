@@ -7,6 +7,7 @@ Site estático público com 3 monitores sobre juros, câmbio e fiscal depois da 
 | Intraday | `index.html` | Preços ao vivo, pesos de agora dos 3 cenários, 6 sinais de dominância |
 | Dominância fiscal | `dominancia.html` | Conta da dívida, rolagem, âncora de inflação, orçamento 2027 |
 | Relatório diário | `relatorio.html` | Pesos de partida (só fatos), fechamento da curva DI, Copom contra Focus |
+| Conceitos | `conceitos.html` | Cada termo em uma frase, com como ler o movimento |
 | Método | `metodo.html` | Como cada página funciona, fontes e limites |
 
 Sem build e sem dependência de servidor próprio: HTML, CSS e JS puros. Os gráficos usam d3 pelo CDN.
@@ -16,6 +17,8 @@ Sem build e sem dependência de servidor próprio: HTML, CSS e JS puros. Os grá
 ```
 index.html  dominancia.html  relatorio.html  metodo.html
 assets/style.css        tokens de cor e o cabeçalho com as abas
+assets/leia.js          blocos "o que é, o que mostra, o que implica" por seção e o glossário
+assets/leia.css         estilo desses blocos e da aba Conceitos
 assets/dash-shim.js     lê os arquivos de data/ e a API pública do SILO para as 2 páginas de dashboard
 data/relatorio/*.json   pesos, fatos, agenda, calendário do Copom, feriados, params
 data/dominancia/*.json  cenários, histórico, LFT, rolagem, orçamento, calibração, params

@@ -1,0 +1,32 @@
+/* Reading aids: a short explainer under each section heading, plus the Conceitos page. */
+.leia { border-left: 3px solid var(--color-accent); padding: 4px 0 4px 14px; margin: 2px 0 6px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 10px 28px; font-size: 14px; line-height: 1.45; max-width: 1040px; }
+.leia > div { min-width: 0; }
+.leia b { display: block; font-size: 12.5px; font-weight: 600; color: var(--color-accent); margin-bottom: 1px; }
+.leia p { margin: 0; color: var(--color-fg); }
+.leia .mv { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 4px 24px; color: var(--color-fg-muted); font-size: 13.5px; }
+.leia .mv span { min-width: 0; }
+.leia .mv i { font-style: normal; color: var(--color-fg); font-weight: 600; margin-right: 4px; }
+.leia .gl { grid-column: 1 / -1; font-size: 12.5px; color: var(--color-fg-muted); }
+.leia .gl a { margin-left: 8px; }
+.leia-toggle { font: inherit; font-size: 12.5px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--color-border); background: transparent; color: var(--color-fg-muted); cursor: pointer; margin: 0 0 6px auto; display: block; }
+.leia-toggle:hover { color: var(--color-fg); }
+.leia-toggle:focus-visible, .gloss a:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.site-head .in { position: relative; }
+.site-head .leia-toggle { position: absolute; right: 16px; top: 10px; margin: 0; }
+html[data-leia="off"] .leia { display: none; }
+@media (max-width: 700px) { .site-head .leia-toggle { position: static; margin: 0 0 6px; } }
+
+/* Conceitos page */
+.gloss { max-width: 76ch; margin: 0 auto; padding: 24px 16px 8px; }
+.gloss h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: 30px; line-height: 1.15; margin: 0 0 8px; text-wrap: balance; }
+.gloss .lead { font-size: 17px; margin: 0 0 14px; }
+.gloss h2 { font-size: 20px; margin: 32px 0 4px; scroll-margin-top: 90px; }
+.gloss input[type=search] { font: inherit; width: 100%; max-width: 26rem; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--color-border); background: var(--color-panel); color: var(--color-fg); }
+.gloss dl { margin: 0; }
+.gloss .it { padding: 12px 0; border-bottom: 1px solid var(--color-border); scroll-margin-top: 90px; }
+.gloss .it:target { background: var(--cds-chart-grid); margin: 0 -10px; padding: 12px 10px; border-radius: 8px; }
+.gloss dt { font-weight: 600; font-size: 16px; }
+.gloss dd { margin: 2px 0 0; color: var(--color-fg); }
+.gloss dd.r { color: var(--color-fg-muted); font-size: 14px; margin-top: 3px; }
+.gloss dd.r i { font-style: normal; font-weight: 600; color: var(--color-accent); margin-right: 4px; }
+.gloss .none { color: var(--color-fg-muted); }
