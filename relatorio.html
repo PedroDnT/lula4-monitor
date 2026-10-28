@@ -1,0 +1,435 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Relatório diário de juros · Monitor LULA4</title><meta name="robots" content="index,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400&display=swap">
+<link rel="stylesheet" href="assets/style.css"><script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script><script>window.DATASETS={"agenda": {"kind": "file", "url": "data/relatorio/agenda.json"}, "copom_cal": {"kind": "file", "url": "data/relatorio/copom_cal.json"}, "di_base": {"kind": "query", "tool": "future_curve", "args": {"p_root": "DI1", "p_trade_date": "2026-10-23"}}, "di_now": {"kind": "query", "tool": "future_curve", "args": {"p_root": "DI1"}}, "fatos": {"kind": "file", "url": "data/relatorio/fatos.json"}, "feriados": {"kind": "file", "url": "data/relatorio/feriados.json"}, "focus_m1": {"kind": "query", "tool": "focus_expectations", "args": {"p_endpoint": "ExpectativasMercadoSelic", "p_from": "{{focus_from}}", "p_horizon": "{{m1}}"}}, "focus_m2": {"kind": "query", "tool": "focus_expectations", "args": {"p_endpoint": "ExpectativasMercadoSelic", "p_from": "{{focus_from}}", "p_horizon": "{{m2}}"}}, "focus_m3": {"kind": "query", "tool": "focus_expectations", "args": {"p_endpoint": "ExpectativasMercadoSelic", "p_from": "{{focus_from}}", "p_horizon": "{{m3}}"}}, "pesos": {"kind": "file", "url": "data/relatorio/pesos.json"}};window.PARAMS_URL="data/relatorio/params.json";</script><script src="assets/dash-shim.js"></script></head><body>
+<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html">Intraday</a><a href="dominancia.html">Dominância fiscal</a><a href="relatorio.html" aria-current="page">Relatório diário</a><a href="metodo.html">Método</a></nav></div></header>
+<div id="dash-root">
+<style>
+#dash-root .dm { display: flex; flex-direction: column; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); }
+#dash-root .dm-head { display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+#dash-root .dm-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+#dash-root .dm-take { color: var(--color-fg-muted); font-size: var(--cds-font-size-body); margin: 0; max-width: 70ch; }
+#dash-root .dm-section { display: flex; flex-direction: column; gap: var(--cds-gap-md); }
+#dash-root .dm-h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+#dash-root .dm-sub { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: 0; max-width: 80ch; }
+#dash-root .dm-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: var(--cds-gap-md); }
+#dash-root .dm-tile { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
+#dash-root .dm-tile-label { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+#dash-root .dm-big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; min-height: 1.3em; }
+#dash-root .dm-steps { margin: 0 0 var(--cds-space-3, 12px); padding-left: 1.4em; line-height: 1.5; }
+#dash-root .dm-steps li { margin-bottom: 4px; }
+#dash-root .dm-note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+#dash-root .dm-pill { display: inline-block; font-size: var(--cds-font-size-caption); padding: 0 var(--cds-pad-sm); border-radius: 999px; border: 1px solid currentColor; width: fit-content; }
+#dash-root .dm-on { color: var(--color-bad); }
+#dash-root .dm-off { color: var(--color-ok); }
+#dash-root .dm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--cds-gap-md); }
+#dash-root .dm-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+#dash-root .dm-chart { position: relative; min-height: 220px; }
+#dash-root .ch-cen { min-height: 0; }
+#dash-root .dm-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+#dash-root .dm-legend span { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
+#dash-root .dm-sw { width: 10px; height: 3px; border-radius: 2px; display: inline-block; }
+#dash-root .dm-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; white-space: nowrap; z-index: 2; }
+#dash-root .dm-tip-date { color: var(--cds-text-secondary); }
+#dash-root .dm-table-wrap { overflow-x: auto; }
+#dash-root table.dm-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-body); font-variant-numeric: tabular-nums; }
+#dash-root .dm-table th { text-align: left; font-weight: var(--cds-font-weight-medium); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); }
+#dash-root .dm-table td { padding: var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
+#dash-root .dm-fail { display: flex; align-items: center; justify-content: center; gap: var(--cds-gap-xs); min-height: 200px; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+#dash-root .dm-fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
+#dash-root [data-dash-source-state=empty] { color: transparent; }
+#dash-root [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+#dash-root .dd-up { color: var(--color-bad); }
+#dash-root .dd-down { color: var(--color-ok); }
+#dash-root .dm-table td.num, #dash-root .dm-table th.num { text-align: right; }
+#dash-root .dm-table a { color: inherit; }
+#dash-root .dd-links { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); }
+#dash-root .dd-links a { color: var(--color-fg-muted); }
+#dash-root .dm-list { margin: 0; padding-left: 1.2em; line-height: 1.5; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); max-width: 80ch; }
+</style>
+
+<div class="dm">
+  <header class="dm-head" id="topo">
+    <h1 class="dm-title">Relatório diário de juros</h1>
+    <p class="dm-take dash-skeleton" data-source="resumo" data-field="texto" data-row="0">—</p>
+    <p class="dm-sub">Este relatório lê fatos e o fechamento da B3 uma vez por dia. Dele saem os pesos de partida dos 3 cenários. O mercado ao vivo está no <a href="index.html">painel intraday</a>; a dívida, a rolagem e a âncora de inflação estão no <a href="dominancia.html">monitor de dominância fiscal</a>.</p>
+    <nav class="dd-links"><a href="#pesos">Pesos</a><a href="#curva">Curva</a><a href="#copom">Copom</a><a href="#fatos">Fatos</a><a href="#agenda">Agenda</a><a href="#metodo">Método</a></nav>
+  </header>
+
+  <section class="dm-section" id="pesos">
+    <h2 class="dm-h2">Pesos de partida</h2>
+    <p class="dm-sub">A partida vem só de fatos: cada fato multiplica o peso de cada cenário, e os pesos voltam a somar 100%. A rotina diária aplica os fatos novos à partida; a revisão semanal aplica os gatilhos e não conta de novo um fato já aplicado. Durante o dia, o intraday soma a reação do DI jan/29: agora = partida + 0,3 × (mix do DI − partida), no máximo 15 pontos por peso.</p>
+    <div class="dm-tiles">
+      <div class="dm-tile" id="t-ancora">
+        <span class="dm-tile-label">Âncora retomada</span>
+        <span class="dm-big dash-skeleton" data-source="pesos_fmt" data-field="start" data-where="id=ancora">—</span>
+        <span class="dm-note">Agora <span data-source="pesos_fmt" data-field="probability" data-where="id=ancora">—</span> · se o DI jan/29 subir até <span data-source="pesos" data-field="di_jan29_move_bp" data-where="id=ancora">—</span> bp</span>
+      </div>
+      <div class="dm-tile" id="t-deriva">
+        <span class="dm-tile-label">Deriva fiscal</span>
+        <span class="dm-big dash-skeleton" data-source="pesos_fmt" data-field="start" data-where="id=deriva">—</span>
+        <span class="dm-note">Agora <span data-source="pesos_fmt" data-field="probability" data-where="id=deriva">—</span> · DI jan/29 perto de +<span data-source="pesos" data-field="di_jan29_move_bp" data-where="id=deriva">—</span> bp</span>
+      </div>
+      <div class="dm-tile" id="t-estresse">
+        <span class="dm-tile-label">Estresse e espiral</span>
+        <span class="dm-big dash-skeleton" data-source="pesos_fmt" data-field="start" data-where="id=estresse">—</span>
+        <span class="dm-note">Agora <span data-source="pesos_fmt" data-field="probability" data-where="id=estresse">—</span> · DI jan/29 acima de +<span data-source="pesos" data-field="di_jan29_move_bp" data-where="id=estresse">—</span> bp</span>
+      </div>
+      <div class="dm-tile" id="t-proposta">
+        <span class="dm-tile-label">Partida com os fatos pendentes</span>
+        <span class="dm-big dash-skeleton" data-source="proposta" data-field="texto" data-row="0">—</span>
+        <span class="dm-note">Âncora · Deriva · Estresse. <span data-source="proposta" data-field="n" data-row="0">—</span> fatos esperam a próxima rotina diária.</span>
+      </div>
+    </div>
+    <p class="dm-note">Partida de <span data-source="pesos" data-field="partida_em" data-row="0">—</span>; "agora" da rotina de <span data-source="pesos" data-field="agora_em" data-row="0">—</span>. Os multiplicadores são julgamento, não modelo.</p>
+  </section>
+
+  <section class="dm-section" id="curva">
+    <h2 class="dm-h2">Fechamento da curva DI</h2>
+    <p class="dm-sub">Ajustes da B3 (DI1), sessão de <span data-source="di_now" data-field="trade_date" data-row="0">—</span>, contra a sessão anterior e contra 23/10/2026, o último fechamento antes do 2º turno.</p>
+    <div class="dm-tiles">
+      <div class="dm-tile">
+        <span class="dm-tile-label">DI jan/29</span>
+        <span class="dm-big dash-skeleton" data-source="curva" data-field="agora" data-where="ticker=DI1F29">—</span>
+        <span class="dm-note"><span data-source="curva" data-field="d1" data-where="ticker=DI1F29">—</span> bp no dia · <span data-source="curva" data-field="d23" data-where="ticker=DI1F29">—</span> bp desde 23/10</span>
+      </div>
+      <div class="dm-tile">
+        <span class="dm-tile-label">Inclinação jan/27 a jan/29, bp</span>
+        <span class="dm-big dash-skeleton" data-source="inclinacao" data-field="agora" data-where="par=F27-F29">—</span>
+        <span class="dm-note">23/10: <span data-source="inclinacao" data-field="base" data-where="par=F27-F29">—</span> bp. Positiva = o mercado cobra mais pelo prazo longo.</span>
+      </div>
+      <div class="dm-tile">
+        <span class="dm-tile-label">Inclinação jan/29 a jan/35, bp</span>
+        <span class="dm-big dash-skeleton" data-source="inclinacao" data-field="agora" data-where="par=F29-F35">—</span>
+        <span class="dm-note">23/10: <span data-source="inclinacao" data-field="base" data-where="par=F29-F35">—</span> bp</span>
+      </div>
+    </div>
+    <div class="dm-grid">
+      <div class="dm-card" id="c-curva">
+        <h3 class="dm-h2">Curva DI por vencimento</h3>
+        <p class="dm-sub">Taxa de ajuste, % ao ano (252 dias úteis). Só contratos com posição em aberto acima de 100 mil.</p>
+        <div class="dm-legend lg-curva"></div>
+        <div class="dm-chart ch-curva" data-source="curva"></div>
+      </div>
+      <div class="dm-card" id="c-vertices">
+        <h3 class="dm-h2">Vértices de janeiro</h3>
+        <p class="dm-sub">Taxa e variação em bp. Vermelho = juro subiu.</p>
+        <div class="dm-table-wrap">
+          <table class="dm-table tb-vert" data-source="curva_jan" data-row-key="ticker">
+            <thead><tr>
+              <th data-field="ticker">Contrato</th>
+              <th class="num" data-field="agora">Taxa</th>
+              <th class="num" data-field="d1">No dia</th>
+              <th class="num" data-field="d23">Desde 23/10</th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dm-section" id="copom">
+    <h2 class="dm-h2">Copom: o que a curva precifica</h2>
+    <p class="dm-sub">Selic por reunião tirada dos ajustes do DI1 (bootstrap: Selic fixa entre reuniões, CDI = Selic − 0,10), contra a mediana do Focus. DI − Focus é o prêmio: risco fiscal e prêmio de prazo juntos; os dois não se separam com estes dados.</p>
+    <div class="dm-table-wrap">
+      <table class="dm-table tb-copom" data-source="copom" data-row-key="reuniao">
+        <thead><tr>
+          <th data-field="reuniao">Reunião</th>
+          <th data-field="decisao">Decisão</th>
+          <th class="num" data-field="selic_di">Selic no DI</th>
+          <th class="num" data-field="mudanca_bp">Mudança precificada, bp</th>
+          <th class="num" data-field="focus">Focus</th>
+          <th class="num" data-field="premio_bp">DI − Focus, bp</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="dm-note">Focus de <span data-source="copom" data-field="focus_data" data-row="1">—</span>. Contratos usados: <span data-source="copom_cal" data-field="contrato" data-row="0">—</span> para a taxa atual, depois um contrato por reunião (Fontes).</p>
+  </section>
+
+  <section class="dm-section" id="fatos">
+    <h2 class="dm-h2">Fatos do dia</h2>
+    <p class="dm-sub">Só fatos com fonte. Preço não entra aqui, porque já entra no intraday. Fator acima de 1 = o fato é mais provável naquele cenário. Cada fator sai da escala de 3 degraus (ver Método).</p>
+    <div class="dm-table-wrap">
+      <table class="dm-table tb-fatos" data-source="fatos" data-row-key="id">
+        <thead><tr>
+          <th data-field="data">Data</th>
+          <th data-field="fato">Fato</th>
+          <th data-field="fonte">Fonte</th>
+          <th class="num" data-field="f_ancora">Âncora</th>
+          <th class="num" data-field="f_deriva">Deriva</th>
+          <th class="num" data-field="f_estresse">Estresse</th>
+          <th data-field="degrau">Degrau e motivo</th>
+          <th data-field="status">Situação</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="dm-section" id="agenda">
+    <h2 class="dm-h2">Agenda e gatilhos</h2>
+    <p class="dm-sub">O que cada evento precisa mostrar para favorecer cada cenário.</p>
+    <div class="dm-table-wrap">
+      <table class="dm-table tb-agenda" data-source="agenda" data-row-key="id">
+        <thead><tr>
+          <th data-field="data">Data</th>
+          <th data-field="evento">Evento</th>
+          <th data-field="ancora">Âncora</th>
+          <th data-field="deriva">Deriva</th>
+          <th data-field="estresse">Estresse</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="dm-section" id="metodo">
+    <h2 class="dm-h2">Método e limites</h2>
+    <ol class="dm-list">
+      <li>Os ajustes do DI1 vêm da SILO, que carrega a sessão da B3 por volta das 06:40 do dia seguinte. A sessão de hoje entra amanhã.</li>
+      <li>Bootstrap: cada contrato é o CDI composto até o vencimento. Com a Selic fixa entre reuniões, cada contrato novo dá a Selic de uma reunião. Dias úteis pelo calendário nacional; confere com o PU da B3.</li>
+      <li>Reuniões depois da próxima são ruidosas, porque os contratos curtos negociam pouco.</li>
+      <li>Escala de 3 degraus para os fatos (escolha de Pedro, 27/10). O fator diz quanto o fato é mais provável num cenário. Fraco ×1,05: notícia não confirmada, fonte sem nome, ou intenção sem ato formal. Moderado ×1,15: ato oficial ou declaração formal confirmada (aviso do Tesouro, pedido protocolado, nome confirmado pelo governo). Forte ×1,30: decisão com efeito direto no resultado ou na trajetória fiscal (decisão de tribunal, orçamento enviado ou votado, ministro nomeado, ação de rating). Contra um cenário: o inverso (0,95, 0,87, 0,77). Um fato novo num canal que já entrou recebe no máximo fraco, para não contar duas vezes. Sem direção clara: 1,00.</li>
+      <li>A rotina diária (11:20) aplica os fatos pendentes à partida, como na atualização bayesiana: peso × fator, e os pesos voltam a somar 100%. Base de 27/10: 45 · 35 · 20 antes de qualquer fato, com f1 a f7 aplicados na escala. Os degraus são julgamento; a escala só deixa o julgamento explícito.</li>
+      <li>Não está aqui: juro real, inflação implícita, Focus IPCA, dívida e o histórico dos pesos (monitor de dominância); dólar, CDS e DI ao vivo (intraday).</li>
+    </ol>
+  </section>
+</div>
+
+<script>(function(){
+
+const siloRows = ({ answer }) => {
+  let t = answer;
+  if (t && typeof t === 'object' && !Array.isArray(t) && Array.isArray(t.content)) t = t.content.map((c) => c.text || '').join('\n');
+  if (Array.isArray(t)) return t;
+  if (typeof t !== 'string') throw new Error('SILO answered in an unexpected shape');
+  const i = t.indexOf('[');
+  if (i < 0) throw new Error(t.slice(0, 400));
+  return JSON.parse(t.slice(i));
+};
+const diLoader = { description: 'SILO text answer as rows (one per DI1 contract)', fn: (a) => siloRows(a).map((r) => ({ trade_date: r.trade_date, ticker: r.ticker, contract_month: r.contract_month, settlement_rate: Number(r.settlement_rate), prev_settlement_rate: r.prev_settlement_rate == null ? null : Number(r.prev_settlement_rate), open_interest: r.open_interest == null ? null : Number(r.open_interest) })) };
+const focusLoader = { description: 'SILO text answer as rows (survey_date, horizon, median)', fn: (a) => siloRows(a).map((r) => ({ survey_date: r.survey_date, horizon: r.horizon, median: Number(r.median) })) };
+dash.loader('di_now', diLoader);
+dash.loader('di_base', diLoader);
+dash.loader('focus_m1', focusLoader);
+dash.loader('focus_m2', focusLoader);
+dash.loader('focus_m3', focusLoader);
+
+window.ddDefaults = () => dash.setParams({ focus_from: d3.utcFormat('%Y-%m-%d')(d3.utcDay.offset(new Date(), -40)) });
+window.ddDefaults();
+
+dash.calc('pesos_fmt', {
+  title: 'Pesos em %',
+  description: 'Partida e agora de cada cenário, em % inteiro.',
+  inputs: ['pesos'],
+  fn: (pesos) => pesos.map((p) => ({ id: p.id, start: Math.round(Number(p.start) * 100) + '%', probability: Math.round(Number(p.probability) * 100) + '%' })),
+});
+
+dash.calc('proposta', {
+  title: 'Partida com fatos pendentes',
+  description: 'Partida × multiplicadores dos fatos com situação Pendente, normalizada para 100%.',
+  inputs: ['pesos', 'fatos'],
+  fn: (pesos, fatos) => {
+    const pend = fatos.filter((f) => f.status === 'Pendente');
+    const w = ['ancora', 'deriva', 'estresse'].map((k) => {
+      const p = pesos.find((r) => r.id === k);
+      return pend.reduce((acc, f) => acc * Number(f['f_' + k]), Number(p.start));
+    });
+    const s = w[0] + w[1] + w[2];
+    return [{ texto: w.map((x) => Math.round((x / s) * 100)).join(' · '), n: pend.length }];
+  },
+});
+
+dash.calc('curva', {
+  title: 'Curva DI: agora, véspera e 23/10',
+  description: 'Por contrato com posição em aberto acima de 100 mil: taxa de ajuste agora, variação no dia e desde 23/10/2026, em bp.',
+  inputs: ['di_now', 'di_base'],
+  fn: (di_now, di_base) => {
+    const base = new Map(di_base.map((r) => [r.ticker, r.settlement_rate]));
+    return di_now
+      .filter((r) => (r.open_interest || 0) > 100000 && r.contract_month <= '2035-01-01')
+      .map((r) => ({
+        ticker: r.ticker,
+        contract_month: r.contract_month,
+        agora: r.settlement_rate,
+        vespera: r.prev_settlement_rate,
+        base: base.has(r.ticker) ? base.get(r.ticker) : null,
+        d1: r.prev_settlement_rate == null ? null : Math.round((r.settlement_rate - r.prev_settlement_rate) * 100),
+        d23: base.has(r.ticker) ? Math.round((r.settlement_rate - base.get(r.ticker)) * 100) : null,
+      }));
+  },
+});
+
+dash.calc('curva_jan', {
+  title: 'Vértices de janeiro',
+  description: 'Os contratos de janeiro de 2027 a 2035 da curva.',
+  inputs: ['curva'],
+  fn: (curva) => curva.filter((r) => ['DI1F27', 'DI1F28', 'DI1F29', 'DI1F31', 'DI1F33', 'DI1F35'].includes(r.ticker)),
+});
+
+dash.calc('inclinacao', {
+  title: 'Inclinação da curva',
+  description: 'Diferença em bp entre dois vencimentos de janeiro, agora e em 23/10/2026.',
+  inputs: ['curva'],
+  fn: (curva) => {
+    const g = (t) => curva.find((r) => r.ticker === t);
+    return [['F27', 'F29'], ['F29', 'F35']].map(([a, b]) => {
+      const x = g('DI1' + a), y = g('DI1' + b);
+      return { par: a + '-' + b, agora: x && y ? Math.round((y.agora - x.agora) * 100) : null, base: x && y && x.base != null && y.base != null ? Math.round((y.base - x.base) * 100) : null };
+    });
+  },
+});
+
+dash.calc('copom', {
+  title: 'Selic por reunião: DI contra Focus',
+  description: 'Bootstrap dos ajustes DI1 (Selic fixa entre reuniões, CDI = Selic − 0,10, dias úteis do calendário nacional), contra a última mediana do Focus de cada reunião.',
+  inputs: ['di_now', 'copom_cal', 'feriados', 'focus_m1', 'focus_m2', 'focus_m3'],
+  fn: (di_now, copom_cal, feriados, focus_m1, focus_m2, focus_m3) => {
+    const hol = new Set(feriados.map((r) => r.data));
+    const iso = (d) => d.toISOString().slice(0, 10);
+    const bd = (a, b) => { let n = 0; const d = new Date(a + 'T00:00:00Z'); const e = new Date(b + 'T00:00:00Z'); while (d < e) { const w = d.getUTCDay(); if (w > 0 && w < 6 && !hol.has(iso(d))) n++; d.setUTCDate(d.getUTCDate() + 1); } return n; };
+    const venc = (m) => { const d = new Date(m + 'T00:00:00Z'); while (d.getUTCDay() === 0 || d.getUTCDay() === 6 || hol.has(iso(d))) d.setUTCDate(d.getUTCDate() + 1); return iso(d); };
+    const ct = new Map(di_now.map((r) => [r.ticker, r]));
+    const t = di_now[0].trade_date;
+    const focus = [...focus_m1, ...focus_m2, ...focus_m3];
+    const cur = ct.get(copom_cal[0].contrato).settlement_rate;
+    let k = 1, prevEff = t, prevCdi = cur, prevSelic = cur + 0.1;
+    return copom_cal.map((m, i) => {
+      if (i === 0) return { reuniao: 'Hoje', decisao: '', selic_di: +(cur + 0.1).toFixed(2), mudanca_bp: null, focus: null, premio_bp: null, focus_data: null };
+      k *= Math.pow(1 + prevCdi / 100, bd(prevEff, m.efetivo) / 252);
+      const c = ct.get(m.contrato), T = venc(c.contract_month);
+      const F = Math.pow(1 + c.settlement_rate / 100, bd(t, T) / 252);
+      const cdi = (Math.pow(F / k, 252 / bd(m.efetivo, T)) - 1) * 100;
+      const selic = cdi + 0.1;
+      const fr = focus.filter((r) => r.horizon === m.reuniao).sort((a, b) => (a.survey_date < b.survey_date ? 1 : -1))[0];
+      const dec = new Date(m.efetivo + 'T00:00:00Z'); dec.setUTCDate(dec.getUTCDate() - 1);
+      const row = { reuniao: m.reuniao, decisao: iso(dec), selic_di: +selic.toFixed(2), mudanca_bp: Math.round((selic - prevSelic) * 100), focus: fr ? fr.median : null, premio_bp: fr ? Math.round((selic - fr.median) * 100) : null, focus_data: fr ? fr.survey_date : null };
+      prevEff = m.efetivo; prevCdi = cdi; prevSelic = selic;
+      return row;
+    });
+  },
+});
+
+dash.calc('resumo', {
+  title: 'Resumo do dia',
+  description: 'Uma frase com o DI jan/29, a próxima reunião do Copom e a partida.',
+  inputs: ['curva', 'copom', 'pesos'],
+  fn: (curva, copom, pesos) => {
+    const f = curva.find((r) => r.ticker === 'DI1F29');
+    const n = copom[1];
+    const pc = (k) => Math.round(Number(pesos.find((p) => p.id === k).start) * 100);
+    const m = n.mudanca_bp;
+    const lado = m <= -13 ? 'um corte' : m >= 13 ? 'uma alta' : 'uma pausa';
+    return [{ texto: 'DI jan/29 em ' + f.agora.toFixed(2).replace('.', ',') + '%, ' + (f.d23 >= 0 ? '+' : '') + f.d23 + ' bp desde 23/10. A curva precifica ' + lado + ' (' + (m >= 0 ? '+' : '') + m + ' bp) no Copom de ' + n.decisao.slice(8, 10) + '/' + n.decisao.slice(5, 7) + '. Partida: ' + pc('ancora') + ' · ' + pc('deriva') + ' · ' + pc('estresse') + '.' }];
+  },
+});
+
+const fmtPct = (x) => (x == null ? '—' : x.toFixed(2).replace('.', ',') + '%');
+const fmtBp = (x) => (x == null ? '—' : (x > 0 ? '+' : '') + x);
+const fmtDate = (s) => (s ? s.slice(8, 10) + '/' + s.slice(5, 7) + '/' + s.slice(0, 4) : 'Sem data');
+const failLine = (el) => { el.replaceChildren(); const d = document.createElement('div'); d.className = 'dm-fail'; d.textContent = 'Failed to load'; el.appendChild(d); };
+
+function setText(root) {
+  root.querySelectorAll('[data-source][data-field]').forEach((el) => {
+    if (el.closest('table')) return;
+    const id = el.dataset.source, f = el.dataset.field;
+    const s = dash.data(id);
+    if (s.status !== 'ok') { if (s.status === 'error') el.classList.remove('dash-skeleton'); return; }
+    const rows = s.data || [];
+    let row;
+    if (el.dataset.row != null) row = rows[Number(el.dataset.row)];
+    else if (el.dataset.where) { const [k, v] = el.dataset.where.split('='); row = rows.find((r) => String(r[k]) === v); }
+    let v = row ? row[f] : null;
+    if (f === 'agora' && id === 'curva') v = fmtPct(v);
+    else if ((f === 'd1' || f === 'd23' || ((f === 'agora' || f === 'base') && id === 'inclinacao'))) v = fmtBp(v);
+    else if (/_em$|trade_date|focus_data/.test(f)) v = fmtDate(v);
+    el.textContent = v == null ? '—' : String(v);
+    el.classList.remove('dash-skeleton');
+  });
+}
+
+function fillTable(sel, id, cols) {
+  const tb = document.querySelector(sel + ' tbody');
+  const s = dash.data(id);
+  tb.replaceChildren();
+  if (s.status !== 'ok') return;
+  s.data.forEach((r) => {
+    const tr = document.createElement('tr');
+    cols.forEach(([k, fmt, cls]) => {
+      const td = document.createElement('td');
+      if (cls) td.className = cls;
+      const out = fmt ? fmt(r[k], r, td) : r[k];
+      if (out instanceof Node) td.appendChild(out); else td.textContent = out == null ? '—' : String(out);
+      tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+}
+const bpCell = (v, r, td) => { if (v > 0) td.classList.add('dd-up'); if (v < 0) td.classList.add('dd-down'); return fmtBp(v); };
+const fx = (v) => (v == null ? '—' : '×' + Number(v).toFixed(2).replace('.', ','));
+
+function drawCurve() {
+  const el = document.querySelector('.ch-curva');
+  const lg = document.querySelector('.lg-curva');
+  const s = dash.data('curva');
+  el.replaceChildren();
+  lg.replaceChildren();
+  if (s.status === 'error') { failLine(el); return; }
+  if (s.status !== 'ok' || !s.data.length) return;
+  const rows = s.data.map((r) => ({ ...r, d: new Date(r.contract_month + 'T00:00:00Z') }));
+  const series = [
+    { k: 'agora', name: 'Último ajuste', color: dash.colors[0], w: 2.5 },
+    { k: 'vespera', name: 'Sessão anterior', color: dash.colors[1], w: 1.5 },
+    { k: 'base', name: '23/10', color: 'var(--cds-chart-muted)', w: 1.5 },
+  ];
+  series.forEach((se) => { const sp = document.createElement('span'); const sw = document.createElement('i'); sw.className = 'dm-sw'; sw.style.background = se.color; sp.append(sw, se.name); lg.appendChild(sp); });
+  const W = Math.max(280, el.clientWidth), H = 240, m = { t: 10, r: 12, b: 26, l: 40 };
+  const vals = rows.flatMap((r) => series.map((se) => r[se.k]).filter((v) => v != null));
+  const x = d3.scaleUtc(d3.extent(rows, (r) => r.d), [m.l, W - m.r]);
+  const y = d3.scaleLinear([d3.min(vals) - 0.2, d3.max(vals) + 0.2], [H - m.b, m.t]).nice();
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+  svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(Math.min(6, W / 80)).tickFormat(d3.utcFormat('%Y'))).attr('font-size', null).attr('font-family', null).call((g) => { g.selectAll('text').attr('fill', 'var(--color-fg-muted)'); g.selectAll('line,path').attr('stroke', 'var(--cds-chart-axis)'); });
+  svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(-(W - m.l - m.r)).tickFormat((v) => v.toFixed(1))).attr('font-size', null).attr('font-family', null).call((g) => { g.select('.domain').remove(); g.selectAll('line').attr('stroke', 'var(--cds-chart-grid)'); g.selectAll('text').attr('fill', 'var(--color-fg-muted)'); });
+  series.slice().reverse().forEach((se) => {
+    svg.append('path').datum(rows.filter((r) => r[se.k] != null)).attr('fill', 'none').attr('stroke', se.color).attr('stroke-width', se.w).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round').attr('d', d3.line().x((r) => x(r.d)).y((r) => y(r[se.k])));
+  });
+  const tip = document.createElement('div'); tip.className = 'dm-tip'; tip.hidden = true; el.appendChild(tip);
+  const dot = svg.append('circle').attr('r', 4).attr('fill', dash.colors[0]).attr('opacity', 0);
+  svg.append('rect').attr('x', m.l).attr('y', m.t).attr('width', W - m.l - m.r).attr('height', H - m.t - m.b).attr('fill', 'transparent')
+    .on('mousemove', (ev) => {
+      const [px] = d3.pointer(ev);
+      const xd = x.invert(px);
+      const r = rows.reduce((a, b) => (Math.abs(b.d - xd) < Math.abs(a.d - xd) ? b : a));
+      dot.attr('cx', x(r.d)).attr('cy', y(r.agora)).attr('opacity', 1);
+      tip.replaceChildren();
+      const h = document.createElement('div'); h.className = 'dm-tip-date'; h.textContent = r.ticker; tip.appendChild(h);
+      [['Último', r.agora], ['Anterior', r.vespera], ['23/10', r.base]].forEach(([n, v]) => { const d = document.createElement('div'); d.textContent = n + ': ' + fmtPct(v); tip.appendChild(d); });
+      const d = document.createElement('div'); d.textContent = 'Desde 23/10: ' + fmtBp(r.d23) + ' bp'; tip.appendChild(d);
+      tip.hidden = false;
+      const sc = el.clientWidth / W;
+      const left = Math.min(x(r.d) * sc + 10, el.clientWidth - tip.offsetWidth - 4);
+      tip.style.left = Math.max(0, left) + 'px'; tip.style.top = '8px';
+    })
+    .on('mouseleave', () => { tip.hidden = true; dot.attr('opacity', 0); });
+}
+
+dash.onData(() => {
+  const root = document.getElementById('dash-root');
+  setText(root);
+  fillTable('.tb-vert', 'curva_jan', [['ticker'], ['agora', fmtPct, 'num'], ['d1', bpCell, 'num'], ['d23', bpCell, 'num']]);
+  fillTable('.tb-copom', 'copom', [['reuniao'], ['decisao', (v) => (v ? fmtDate(v) : '')], ['selic_di', fmtPct, 'num'], ['mudanca_bp', bpCell, 'num'], ['focus', fmtPct, 'num'], ['premio_bp', bpCell, 'num']]);
+  fillTable('.tb-fatos', 'fatos', [['data', fmtDate], ['fato'], ['fonte', (v, r) => { if (!/^https:\/\//.test(r.url || '')) return v; const a = document.createElement('a'); a.href = r.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = v; return a; }], ['f_ancora', fx, 'num'], ['f_deriva', fx, 'num'], ['f_estresse', fx, 'num'], ['degrau'], ['status']]);
+  fillTable('.tb-agenda', 'agenda', [['data', fmtDate], ['evento'], ['ancora'], ['deriva'], ['estresse']]);
+  drawCurve();
+});
+
+const named = document.getElementById(location.hash.slice(1));
+if (named) named.scrollIntoView();
+document.querySelectorAll('.dd-links a').forEach((a) => a.addEventListener('click', () => dash.setLink(a.getAttribute('href').slice(1))));
+
+})();</script>
+
+</div>
+<footer class="site-foot">Leitura de sinais de mercado e julgamento do autor, não recomendação de compra ou venda. Dados: SILO (CVM, BACEN, B3), BCB, B3, Tesouro Nacional. Tudo em horário de Brasília (UTC-3).</footer></body></html>

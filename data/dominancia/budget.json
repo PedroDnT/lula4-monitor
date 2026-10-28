@@ -1,0 +1,11 @@
+[
+ {"id":"limite","item":"Limite de despesas primárias (arcabouço)","valor_bi":2576.5,"pct_pib":17.4,"fonte":"PLOA 2027 (IFI, RAF 116, set/26)"},
+ {"id":"despesa_total","item":"Despesa primária total","valor_bi":2830.1,"pct_pib":19.1,"fonte":"PLOA 2027 (Ipea, Carta de Conjuntura 72)"},
+ {"id":"discricionarias","item":"Despesas discricionárias","valor_bi":266.8,"pct_pib":1.8,"fonte":"PLOA 2027 (Ipea, Carta de Conjuntura 72)"},
+ {"id":"meta_centro","item":"Meta de primário, centro","valor_bi":73.2,"pct_pib":0.5,"fonte":"PLDO 2027 (IFI, RAF 116)"},
+ {"id":"meta_piso","item":"Meta de primário, piso da banda","valor_bi":36.6,"pct_pib":0.25,"fonte":"PLDO 2027 (IFI, RAF 116)"},
+ {"id":"primario_ploa","item":"Primário projetado no PLOA","valor_bi":18.6,"pct_pib":0.13,"fonte":"PLOA 2027 (Ipea, Carta de Conjuntura 72)"},
+ {"id":"primario_ifi","item":"Primário projetado pela IFI","valor_bi":-86.1,"pct_pib":-0.6,"fonte":"IFI, RAF 113 (jun/26)"},
+ {"id":"contingenciamento_ifi","item":"Contingenciamento para cumprir o piso","valor_bi":35.7,"pct_pib":null,"fonte":"IFI, RAF 116 (set/26)"},
+ {"id":"selic_1pp","item":"Efeito de +1 p.p. de Selic por 12 meses na dívida bruta","valor_bi":59.3,"pct_pib":0.45,"fonte":"BCB, elasticidades da dívida (jun/26, Valor)"}
+]

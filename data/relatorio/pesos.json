@@ -1,0 +1,29 @@
+[
+ {
+  "id": "ancora",
+  "cenario": "Âncora retomada",
+  "start": 0.45,
+  "probability": 0.31,
+  "di_jan29_move_bp": 50,
+  "partida_em": "2026-10-28",
+  "agora_em": "2026-10-28"
+ },
+ {
+  "id": "deriva",
+  "cenario": "Deriva fiscal",
+  "start": 0.32,
+  "probability": 0.46,
+  "di_jan29_move_bp": 180,
+  "partida_em": "2026-10-28",
+  "agora_em": "2026-10-28"
+ },
+ {
+  "id": "estresse",
+  "cenario": "Estresse e espiral",
+  "start": 0.23,
+  "probability": 0.23,
+  "di_jan29_move_bp": 320,
+  "partida_em": "2026-10-28",
+  "agora_em": "2026-10-28"
+ }
+]

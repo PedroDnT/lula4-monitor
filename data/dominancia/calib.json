@@ -1,0 +1,65 @@
+[
+ {
+  "regra": "Inflação implícita 2 anos sobe mais de 50 bp em 4 semanas",
+  "grupo": "Âncora de inflação",
+  "avisou": "7 de 11",
+  "antecedencia_mediana": 24,
+  "aceso_em_calma_pct": 4.1,
+  "veredito": "Manter: avisa em parte das crises e quase nunca acende à toa.",
+  "aceso_meses_pct": null
+ },
+ {
+  "regra": "Inflação implícita 5 anos sobe mais de 50 bp em 4 semanas",
+  "grupo": "Âncora de inflação",
+  "avisou": "8 de 11",
+  "antecedencia_mediana": 14.5,
+  "aceso_em_calma_pct": 3.5,
+  "veredito": "Manter: o melhor equilíbrio entre aviso e alarme falso.",
+  "aceso_meses_pct": null
+ },
+ {
+  "regra": "Juro real 5 anos acima do neutro do BCB (5%)",
+  "grupo": "Conta da dívida",
+  "avisou": "7 de 11",
+  "antecedencia_mediana": 60,
+  "aceso_em_calma_pct": 74.2,
+  "veredito": "Serve como condição de custo, não como alarme: fica aceso na maior parte do tempo calmo.",
+  "aceso_meses_pct": null
+ },
+ {
+  "regra": "Juro real 5 anos acima de 7%",
+  "grupo": "Conta da dívida",
+  "avisou": "2 de 11",
+  "antecedencia_mediana": 13.0,
+  "aceso_em_calma_pct": 15.6,
+  "veredito": "Fraco: avisa pouco e ainda acende à toa.",
+  "aceso_meses_pct": null
+ },
+ {
+  "regra": "Juro real 5 anos sobe mais de 50 bp em 4 semanas",
+  "grupo": "Conta da dívida",
+  "avisou": "9 de 11",
+  "antecedencia_mediana": 16,
+  "aceso_em_calma_pct": 4.0,
+  "veredito": "Melhor alarme do teste: avisou em quase todas as crises com poucos alarmes falsos.",
+  "aceso_meses_pct": null
+ },
+ {
+  "regra": "r − g acima de zero",
+  "grupo": "Conta da dívida",
+  "avisou": null,
+  "antecedencia_mediana": null,
+  "aceso_em_calma_pct": null,
+  "aceso_meses_pct": 78,
+  "veredito": "Condição de fundo: aceso em 78% dos meses desde 2015. Diz que a dívida é vulnerável, não quando a crise vem."
+ },
+ {
+  "regra": "Lacuna do primário acima de 2 p.p.",
+  "grupo": "Conta da dívida",
+  "avisou": null,
+  "antecedencia_mediana": null,
+  "aceso_em_calma_pct": null,
+  "aceso_meses_pct": 64,
+  "veredito": "Condição de fundo: aceso em 64% dos meses desde 2015."
+ }
+]
