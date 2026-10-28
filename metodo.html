@@ -21,7 +21,7 @@
 <main class="m">
 <h1>Como cada página funciona</h1>
 <p class="lead">O site acompanha o que o mercado de juros, o câmbio e as contas públicas dizem depois da reeleição de Lula, em 3 escalas de tempo. Esta página explica o método de cada uma, de onde vêm os números e o que eles não conseguem dizer.</p>
-<nav class="toc" aria-label="Nesta página"><a href="#visao">Visão geral</a><a href="#intraday">Intraday</a><a href="#dominancia">Dominância fiscal</a><a href="#relatorio">Relatório diário</a><a href="#dados">Dados e atualização</a><a href="#limites">Limites</a></nav>
+<nav class="toc" aria-label="Nesta página"><a href="#visao">Visão geral</a><a href="#intraday">Intraday</a><a href="#dominancia">Dominância fiscal</a><a href="#relatorio">Relatório diário</a><a href="#dados">Dados e atualização</a><a href="#limites">Limites</a><a href="#referencias">Referências</a></nav>
 
 <h2 id="visao">Visão geral: fatos, preços e fundo</h2>
 <p>A pergunta central é qual de 3 cenários o mercado está precificando. Eles são os mesmos nas 3 páginas:</p>
@@ -104,6 +104,21 @@
 <li>O Intraday depende de fontes públicas: B3, Binance, BCB, SILO, Yahoo e OBM (CDS). Yahoo, OBM e Selic passam por rotas do próprio site (/api). Se uma fonte cair ou limitar o acesso, o painel mantém o último dado, avisa na tela e tenta de novo. Ele não inventa número.</li>
 <li>O histórico do Intraday tem uma base fixa do site (29 leituras iniciais) mais as leituras de cada navegador, guardadas no próprio aparelho. Dois leitores veem gráficos um pouco diferentes até o histórico crescer.</li>
 <li>Nada aqui é recomendação de compra ou venda.</li>
+</ul>
+<h2 id="referencias">Referências</h2>
+<h3>Literatura</h3>
+<ul>
+<li>Blanchard, O. (2004). Fiscal Dominance and Inflation Targeting: Lessons from Brazil. NBER Working Paper 10389. Base da ideia de dominância fiscal no monitor.</li>
+<li>Jordà, Ò. (2005). Estimation and Inference of Impulse Responses by Local Projections. American Economic Review, 95(1), 161–182. Método das projeções locais, usado no dólar do cenário Âncora.</li>
+</ul>
+<p>As outras técnicas são práticas comuns de mercado, sem autor único: o bootstrap da curva de juros a partir dos contratos de DI, a atualização dos pesos pela regra peso × fator e o leque de trajetórias da dívida com choques sorteados do histórico. Os degraus dos fatos e os limites dos alertas são escolha do autor.</p>
+<h3>Fontes de dados</h3>
+<ul>
+<li>B3, cotações de DI1, DOL e DAP: <a href="https://cotacao.b3.com.br">cotacao.b3.com.br</a>.</li>
+<li>BCB, PTAX e expectativas do Focus (Olinda): <a href="https://olinda.bcb.gov.br">olinda.bcb.gov.br</a>. Meta Selic (série SGS 432): <a href="https://api.bcb.gov.br">api.bcb.gov.br</a>.</li>
+<li>SILO, banco com dados da CVM, do BACEN e da B3 (curvas, ajustes, fluxo de investidores): API pública de leitura.</li>
+<li>Tesouro Nacional, Plano Anual de Financiamento e dívida: <a href="https://www.tesourotransparente.gov.br">tesourotransparente.gov.br</a>.</li>
+<li>Binance (USDT): <a href="https://data-api.binance.vision">data-api.binance.vision</a>. Yahoo Finance (EWZ, bolsa, dólar): <a href="https://finance.yahoo.com">finance.yahoo.com</a>. OBM, risco-país (CDS): <a href="https://obm.com.br/risco-pais">obm.com.br/risco-pais</a>.</li>
 </ul>
 </main>
 <footer class="site-foot">Leitura de sinais de mercado e julgamento do autor, não recomendação de compra ou venda. Tudo em horário de Brasília (UTC-3).</footer></body></html>
