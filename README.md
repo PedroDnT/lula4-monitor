@@ -20,19 +20,21 @@ assets/dash-shim.js     lê os arquivos de data/ e a API pública do SILO para a
 data/relatorio/*.json   pesos, fatos, agenda, calendário do Copom, feriados, params
 data/dominancia/*.json  cenários, histórico, LFT, rolagem, orçamento, calibração, params
 data/intraday/history.json   histórico-base do painel intraday
-functions/api/*.js      3 funções do Cloudflare Pages: yahoo, cds, selic (fontes sem CORS)
+worker.js  wrangler.jsonc  3 rotas /api/yahoo, /api/cds, /api/selic (fontes sem CORS)
 docs/ATUALIZACAO.md     quem escreve cada arquivo de dados e quando
 ```
 
-## Publicar no Cloudflare Pages
+## Publicar no Cloudflare (Workers)
 
-1. Cloudflare, Workers & Pages, Create, Pages, Connect to Git, escolha este repositório.
-2. Framework preset: None. Build command: vazio. Build output directory: `/` (a raiz).
-3. Depois do primeiro deploy: Custom domains, Set up a custom domain, e siga o passo de DNS.
+O site roda como um Worker com arquivos estáticos (`wrangler.jsonc`). O `worker.js` atende só `/api/*`; o resto vem direto dos arquivos.
 
-A pasta `functions/` é publicada junto, sem configuração. Cada commit na `main` publica de novo.
+1. Cloudflare, Workers & Pages, Create, Import a repository, escolha este repositório.
+2. Build command vazio. Deploy command: `npx wrangler deploy`. Branch `main`.
+3. Depois do deploy, em Settings, Domains & Routes, adicione o domínio próprio e siga o passo de DNS.
 
-Para ver local: `python3 -m http.server 8000` e abrir `http://localhost:8000`. As rotas `/api/*` só existem no Cloudflare. Local, o Yahoo, o CDS e a Selic aparecem como indisponíveis e o resto funciona.
+Cada commit na `main` publica de novo. O `.assetsignore` impede que `worker.js`, `docs/` e `README.md` sejam servidos como arquivos.
+
+Para ver local: `npx wrangler dev` (serve as 4 abas e as rotas `/api/*`).
 
 ## Avisos
 

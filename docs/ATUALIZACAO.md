@@ -2,11 +2,11 @@
 
 ## Ao vivo (sem commit)
 
-O navegador lê estas fontes a cada visita: API pública do SILO (curvas, Focus, séries fiscais, PTAX, fluxo estrangeiro), B3 (DI, DOL e DAP), Binance, BCB Olinda. As funções `functions/api/*.js` cobrem Yahoo, CDS da OBM e Selic.
+O navegador lê estas fontes a cada visita: API pública do SILO (curvas, Focus, séries fiscais, PTAX, fluxo estrangeiro), B3 (DI, DOL e DAP), Binance, BCB Olinda. O `worker.js` cobre Yahoo, CDS da OBM e Selic (rotas `/api/*`).
 
 ## Por arquivo (a rotina diária faz commit)
 
-Estes arquivos vêm de julgamento ou de fontes sem API aberta. A rotina "Brazil rates daily monitor" (dias úteis, 11:20 de Brasília, 14:20 UTC) deve gravá-los e fazer commit na `main`. O Cloudflare Pages publica sozinho.
+Estes arquivos vêm de julgamento ou de fontes sem API aberta. A rotina "Brazil rates daily monitor" (dias úteis, 11:20 de Brasília, 14:20 UTC) deve gravá-los e fazer commit na `main`. O Cloudflare publica sozinho.
 
 | Arquivo | O que muda | Quem escreve |
 | --- | --- | --- |
