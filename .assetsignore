@@ -1,0 +1,8 @@
+worker.js
+wrangler.jsonc
+.assetsignore
+.gitignore
+functions
+docs
+README.md
+LICENSE
