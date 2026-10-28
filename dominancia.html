@@ -1,0 +1,1564 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Monitor de dominância fiscal · Monitor LULA4</title><meta name="robots" content="index,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400&display=swap">
+<link rel="stylesheet" href="assets/style.css"><script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script><script>window.DATASETS={"budget": {"kind": "file", "url": "data/dominancia/budget.json"}, "calib": {"kind": "file", "url": "data/dominancia/calib.json"}, "canais": {"kind": "file", "url": "data/dominancia/canais.json"}, "contabilidade": {"kind": "file", "url": "data/dominancia/contabilidade.json"}, "dpl_2y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "DPL", "p_from": "{{start_curve}}", "p_tenor_days": 720}}, "dpl_5y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "DPL", "p_from": "{{start_curve}}", "p_tenor_days": 1800}}, "fiscal_dbgg": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "DBGG_PIB"}}, "fiscal_nom": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "NFSP_NOMINAL_12M"}}, "fiscal_pib": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "PIB"}}, "fiscal_prim": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "NFSP_PRIMARIO_12M"}}, "focus_debt": {"kind": "file", "url": "data/dominancia/focus_debt.json"}, "ipca_2027": {"kind": "query", "tool": "focus_expectations", "args": {"p_endpoint": "ExpectativasMercadoAnuais", "p_from": "{{start_focus}}", "p_horizon": "2027", "p_indicator": "IPCA"}}, "ipca_2028": {"kind": "query", "tool": "focus_expectations", "args": {"p_endpoint": "ExpectativasMercadoAnuais", "p_from": "{{start_focus}}", "p_horizon": "2028", "p_indicator": "IPCA"}}, "leiloes": {"kind": "file", "url": "data/dominancia/leiloes.json"}, "lft": {"kind": "file", "url": "data/dominancia/lft.json"}, "obrigatorias": {"kind": "file", "url": "data/dominancia/obrigatorias.json"}, "pre_2y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "PRE", "p_from": "{{start_curve}}", "p_tenor_days": 720}}, "pre_5y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "PRE", "p_from": "{{start_curve}}", "p_tenor_days": 1800}}, "rolagem": {"kind": "file", "url": "data/dominancia/rolagem.json"}, "scenario_history": {"kind": "file", "url": "data/dominancia/scenario_history.json"}, "scenarios": {"kind": "file", "url": "data/dominancia/scenarios.json"}};window.PARAMS_URL="data/dominancia/params.json";</script><script src="assets/dash-shim.js"></script></head><body>
+<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html">Intraday</a><a href="dominancia.html" aria-current="page">Dominância fiscal</a><a href="relatorio.html">Relatório diário</a><a href="metodo.html">Método</a></nav></div></header>
+<div id="dash-root">
+<style>
+#dash-root .dm { display: flex; flex-direction: column; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); }
+#dash-root .dm-head { display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+#dash-root .dm-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+#dash-root .dm-take { color: var(--color-fg-muted); font-size: var(--cds-font-size-body); margin: 0; max-width: 70ch; }
+#dash-root .dm-section { display: flex; flex-direction: column; gap: var(--cds-gap-md); }
+#dash-root .dm-h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+#dash-root .dm-sub { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: 0; max-width: 80ch; }
+#dash-root .dm-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: var(--cds-gap-md); }
+#dash-root .dm-tile { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
+#dash-root .dm-tile-label { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+#dash-root .dm-big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; min-height: 1.3em; }
+#dash-root .dm-steps { margin: 0 0 var(--cds-space-3, 12px); padding-left: 1.4em; line-height: 1.5; }
+#dash-root .dm-steps li { margin-bottom: 4px; }
+#dash-root .cen-explica { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--cds-gap-md, 16px); margin-bottom: var(--cds-gap-md, 16px); }
+#dash-root .cen-box { border-left: 4px solid var(--color-border, #ccc); padding: 4px 0 4px 12px; display: flex; flex-direction: column; gap: 6px; }
+#dash-root .cen-box h4 { margin: 0; font-size: var(--cds-font-size-body); }
+#dash-root .cen-box p { margin: 0; line-height: 1.45; }
+#dash-root .cen-box .dm-note { color: var(--color-fg-muted); }
+#dash-root .dm-sim { margin-top: var(--cds-space-4, 16px); padding-top: var(--cds-space-3, 12px); border-top: 1px solid var(--cds-border); }
+#dash-root .dm-h3 { margin: 0 0 8px; font-size: var(--cds-font-size-body, 15px); font-weight: 600; }
+#dash-root .dm-sim-ctl { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: flex-end; margin-bottom: 8px; }
+#dash-root .dm-sim-ctl label { display: flex; flex-direction: column; gap: 4px; font-size: var(--cds-font-size-caption); min-width: 220px; flex: 1 1 220px; }
+#dash-root .dm-sim-ctl input[type=range] { width: 100%; accent-color: var(--cds-accent, currentColor); }
+#dash-root .dm-btn { font: inherit; font-size: var(--cds-font-size-caption); padding: 6px 10px; border-radius: var(--cds-radius, 6px); border: 1px solid var(--cds-border); background: var(--cds-surface, transparent); color: var(--color-fg); cursor: pointer; }
+#dash-root .dm-note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+#dash-root .dm-pill { display: inline-block; font-size: var(--cds-font-size-caption); padding: 0 var(--cds-pad-sm); border-radius: 999px; border: 1px solid currentColor; width: fit-content; }
+#dash-root .dm-on { color: var(--color-bad); }
+#dash-root .dm-off { color: var(--color-ok); }
+#dash-root .dm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--cds-gap-md); }
+#dash-root .dm-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+#dash-root .dm-chart { position: relative; min-height: 220px; }
+#dash-root .ch-cen { min-height: 0; }
+#dash-root .dm-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+#dash-root .dm-legend span { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
+#dash-root .dm-sw { width: 10px; height: 3px; border-radius: 2px; display: inline-block; }
+#dash-root .dm-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; white-space: nowrap; z-index: 2; }
+#dash-root .dm-tip-date { color: var(--cds-text-secondary); }
+#dash-root .dm-table-wrap { overflow-x: auto; }
+#dash-root table.dm-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-body); font-variant-numeric: tabular-nums; }
+#dash-root .dm-table th { text-align: left; font-weight: var(--cds-font-weight-medium); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); }
+#dash-root .dm-table td { padding: var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
+#dash-root .dm-fail { display: flex; align-items: center; justify-content: center; gap: var(--cds-gap-xs); min-height: 200px; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+#dash-root .dm-fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
+#dash-root [data-dash-source-state=empty] { color: transparent; }
+#dash-root [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+</style>
+
+<div class="dm">
+  <header class="dm-head" id="topo">
+    <h1 class="dm-title">Monitor de dominância fiscal</h1>
+    <p class="dm-take dm-takeaway dash-skeleton" data-source="alertas">—</p>
+    <p class="dm-sub">O pânico do dia (correlação dólar-DI, CDS, DI ao vivo) está no <a href="index.html">painel intraday</a>. Este painel mede o fundo: a conta da dívida, a rolagem, a âncora de inflação e o orçamento.</p>
+    <p class="dm-sub">Curvas de mercado até a sessão de <span data-source="anchor_now" data-field="date" data-row="0">—</span>. A B3 publica as curvas de referência depois do fechamento e a SILO carrega a sessão às 03:00 (06:00 UTC) do dia seguinte, então o pregão de hoje ainda não entra nos alertas. O Focus é semanal. Este painel mede o fundo, que muda devagar; </p>
+  </header>
+
+  <section class="dm-section" id="divida">
+    <h2 class="dm-h2">Conta da dívida</h2>
+    <p class="dm-sub">Juro implícito (r) = juros nominais em 12 meses ÷ dívida bruta média de 12 meses. Crescimento nominal (g) = PIB de 12 meses contra 12 meses antes. Primário que estabiliza = dívida × (r − g) ÷ (1 + g). Os juros do BCB seguem o conceito da dívida líquida, então r é uma aproximação.</p>
+    <div class="dm-tiles">
+      <div class="dm-tile" id="t-divida">
+        <span class="dm-tile-label">Dívida bruta (DBGG), % do PIB</span>
+        <span class="dm-big dash-skeleton" data-source="fiscal_now" data-field="gross_debt_gdp" data-row="0">—</span>
+        <span class="dm-note"><span data-source="fiscal_now" data-field="debt_change_12m" data-row="0">—</span> p.p. em 12 meses · <span data-source="fiscal_now" data-field="month" data-row="0">—</span></span>
+      </div>
+      <div class="dm-tile" id="t-rg">
+        <span class="dm-tile-label">r − g, pontos percentuais</span>
+        <span class="dm-big dash-skeleton" data-source="fiscal_now" data-field="r_minus_g" data-row="0">—</span>
+        <span class="dm-note">r <span data-source="fiscal_now" data-field="r" data-row="0">—</span>% · g <span data-source="fiscal_now" data-field="g" data-row="0">—</span>%</span>
+      </div>
+      <div class="dm-tile" id="t-primario">
+        <span class="dm-tile-label">Primário que estabiliza a dívida, % do PIB</span>
+        <span class="dm-big dash-skeleton" data-source="fiscal_now" data-field="stabilizing_primary" data-row="0">—</span>
+        <span class="dm-note">Hoje <span data-source="fiscal_now" data-field="primary_balance" data-row="0">—</span>% · lacuna <span data-source="fiscal_now" data-field="primary_gap" data-row="0">—</span> p.p.</span>
+      </div>
+      <div class="dm-tile" id="t-lft">
+        <span class="dm-tile-label">Fatia da DPF em taxa flutuante (LFT)</span>
+        <span class="dm-big dash-skeleton" data-source="lft_now" data-field="floating_share_dpf" data-row="0">—</span>
+        <span class="dm-note">Teto do PAF 2026: 53% · <span data-source="lft_now" data-field="month" data-row="0">—</span></span>
+      </div>
+    </div>
+    <div class="dm-grid">
+      <div class="dm-card" id="c-rg">
+        <h3 class="dm-h2">Juro da dívida contra crescimento nominal</h3>
+        <p class="dm-sub">Acumulado em 12 meses, %. Com r acima de g, a dívida cresce sem déficit primário.</p>
+        <div class="dm-legend lg-rg"></div>
+        <div class="dm-chart ch-rg" data-source="fiscal_series"></div>
+      </div>
+      <div class="dm-card" id="c-focus-divida">
+        <h3 class="dm-h2">Dívida bruta esperada pelo Focus</h3>
+        <p class="dm-sub">Mediana, % do PIB, por ano. Duas pesquisas: antes e depois de quatro semanas. Gatilho: a linha da última pesquisa sobe em todos os anos. A linha cinza de 70% é a referência do FMI para emergentes, não um gatilho.</p>
+        <div class="dm-legend lg-fd"></div>
+        <div class="dm-chart ch-fd" data-source="focus_debt"></div>
+      </div>
+      <div class="dm-card" id="c-rmg">
+        <h3 class="dm-h2">r − g</h3>
+        <p class="dm-sub">Pontos percentuais, por mês. Gatilho: acima de zero.</p>
+        <div class="dm-chart ch-rmg" data-source="fiscal_series"></div>
+      </div>
+      <div class="dm-card" id="c-gap">
+        <h3 class="dm-h2">Lacuna do primário</h3>
+        <p class="dm-sub">Primário que estabiliza a dívida menos o primário atual, p.p. do PIB. Gatilho: acima de 2 p.p.</p>
+        <div class="dm-chart ch-gap" data-source="fiscal_series"></div>
+      </div>
+    </div>
+    <div class="dm-card" id="c-fan">
+      <h3 class="dm-h2">Leque da dívida bruta até 2030, % do PIB</h3>
+      <p class="dm-sub">2.000 trajetórias de dívida = dívida × (1 + r) ÷ (1 + g) − primário, ano a ano. Ponto de partida: os valores de r, g e primário do último mês. Cada ano soma um choque conjunto de r, g e primário sorteado dos meses desde 2015, o que mantém a correlação entre eles (estilo FMI). Sem mudança de política: o primário fica no nível atual. Faixas: 10% a 90% e 25% a 75%; linha: mediana.</p>
+      <div class="dm-tiles">
+        <div class="dm-tile">
+          <span class="dm-tile-label">Dívida em 2030, mediana</span>
+          <span class="dm-big dash-skeleton" data-source="debt_fan_now" data-field="p50" data-row="0">—</span>
+          <span class="dm-note">10% a 90%: <span data-source="debt_fan_now" data-field="p10" data-row="0">—</span> a <span data-source="debt_fan_now" data-field="p90" data-row="0">—</span></span>
+        </div>
+        <div class="dm-tile">
+          <span class="dm-tile-label">Chance de passar de 100% do PIB em 2030</span>
+          <span class="dm-big dash-skeleton" data-source="debt_fan_now" data-field="prob_100" data-row="0">—</span>
+          <span class="dm-note">Partida: <span data-source="debt_fan_now" data-field="start" data-row="0">—</span> do PIB</span>
+        </div>
+      </div>
+      <div class="dm-chart ch-fan" data-source="debt_fan"></div>
+    </div>
+  </section>
+
+  <section class="dm-section" id="rolagem">
+    <h2 class="dm-h2">Rolagem da dívida</h2>
+    <p class="dm-sub">Antes de a dívida mudar, a crise aparece na rolagem: o Tesouro cancela leilões, encurta prazos ou só vende LFT. As faixas vêm do Plano Anual de Financiamento (PAF) 2026: vincendo em 12 meses de 18% a 22%, prazo médio de 3,8 a 4,2 anos. Dados mensais do Relatório Mensal da Dívida (RMD); eventos de leilão da imprensa, com a fonte em cada linha.</p>
+    <div class="dm-tiles">
+      <div class="dm-tile">
+        <span class="dm-tile-label">DPF que vence em 12 meses</span>
+        <span class="dm-big dash-skeleton" data-source="rolagem_now" data-field="vincendo_12m_pct" data-row="0">—</span>
+        <span class="dm-note">Faixa do PAF: 18% a 22% · <span data-source="rolagem_now" data-field="month" data-row="0">—</span></span>
+      </div>
+      <div class="dm-tile">
+        <span class="dm-tile-label">Prazo médio da DPF, anos</span>
+        <span class="dm-big dash-skeleton" data-source="rolagem_now" data-field="prazo_medio_anos" data-row="0">—</span>
+        <span class="dm-note">Faixa do PAF: 3,8 a 4,2</span>
+      </div>
+      <div class="dm-tile">
+        <span class="dm-tile-label">Leilões de venda cancelados</span>
+        <span class="dm-big dash-skeleton" data-source="leiloes_resumo" data-field="cancelamentos" data-row="0">—</span>
+        <span class="dm-note">Nos 30 dias até <span data-source="leiloes_resumo" data-field="ate" data-row="0">—</span></span>
+      </div>
+      <div class="dm-tile">
+        <span class="dm-tile-label">Recompras do Tesouro</span>
+        <span class="dm-big dash-skeleton" data-source="leiloes_resumo" data-field="recompras" data-row="0">—</span>
+        <span class="dm-note">Nos mesmos 30 dias</span>
+      </div>
+    </div>
+    <div class="dm-grid">
+      <div class="dm-card" id="c-venc">
+        <h3 class="dm-h2">DPF que vence em 12 meses, %</h3>
+        <p class="dm-sub">Alerta acima do teto do PAF (22%).</p>
+        <div class="dm-chart ch-venc" data-source="rolagem"></div>
+      </div>
+      <div class="dm-card" id="c-prazo">
+        <h3 class="dm-h2">Prazo médio da DPF, anos</h3>
+        <p class="dm-sub">Alerta abaixo do piso do PAF (3,8 anos).</p>
+        <div class="dm-chart ch-prazo" data-source="rolagem"></div>
+      </div>
+    </div>
+    <div class="dm-card">
+      <div class="dm-table-wrap">
+        <table class="dm-table tb-leiloes" data-source="leiloes" data-row-key="date,evento">
+          <thead><tr>
+            <th data-field="date">Data</th>
+            <th data-field="tipo">Tipo</th>
+            <th data-field="evento">O que o Tesouro fez</th>
+            <th data-field="fonte">Fonte</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="dm-section" id="ancora">
+    <h2 class="dm-h2">Âncora de inflação</h2>
+    <p class="dm-sub">Inflação implícita = (1 + PRE) ÷ (1 + DPL) − 1, nos vértices fixos de 720 e 1.800 dias corridos das curvas de referência da B3, pela SILO. Sessão mais recente: <span data-source="anchor_now" data-field="date" data-row="0">—</span>.</p>
+    <div class="dm-tiles">
+      <div class="dm-tile" id="t-be2">
+        <span class="dm-tile-label">Inflação implícita 2 anos</span>
+        <span class="dm-big dash-skeleton" data-source="anchor_now" data-field="be_2y" data-row="0">—</span>
+        <span class="dm-note"><span data-source="anchor_now" data-field="be_2y_change_4w_bp" data-row="0">—</span> bp em 4 semanas</span>
+      </div>
+      <div class="dm-tile" id="t-be5">
+        <span class="dm-tile-label">Inflação implícita 5 anos</span>
+        <span class="dm-big dash-skeleton" data-source="anchor_now" data-field="be_5y" data-row="0">—</span>
+        <span class="dm-note"><span data-source="anchor_now" data-field="be_5y_change_4w_bp" data-row="0">—</span> bp em 4 semanas</span>
+      </div>
+      <div class="dm-tile" id="t-real5">
+        <span class="dm-tile-label">Juro real 5 anos (DPL)</span>
+        <span class="dm-big dash-skeleton" data-source="anchor_now" data-field="real_5y" data-row="0">—</span>
+        <span class="dm-note">Média da janela <span data-source="anchor_now" data-field="real_5y_avg" data-row="0">—</span>%</span>
+      </div>
+      <div class="dm-tile" id="t-ipca27">
+        <span class="dm-tile-label">Focus IPCA 2027 (meta 3%)</span>
+        <span class="dm-big dash-skeleton" data-source="focus_now" data-field="ipca_2027" data-row="0">—</span>
+        <span class="dm-note"><span data-source="focus_now" data-field="ipca_2027_change_4w" data-row="0">—</span> p.p. em 4 semanas · 2028: <span data-source="focus_now" data-field="ipca_2028" data-row="0">—</span>%</span>
+      </div>
+    </div>
+    <div class="dm-grid">
+      <div class="dm-card" id="c-be">
+        <h3 class="dm-h2">Inflação implícita na curva</h3>
+        <p class="dm-sub">% ao ano. Linhas cinza: meta de 3% e teto de 4,5% (referências). O gatilho está no gráfico ao lado, na mudança em 4 semanas.</p>
+        <div class="dm-legend lg-be"></div>
+        <div class="dm-chart ch-be" data-source="anchor_series"></div>
+      </div>
+      <div class="dm-card" id="c-be-chg">
+        <h3 class="dm-h2">Mudança em 4 semanas: inflação implícita e juro real</h3>
+        <p class="dm-sub">Pontos-base contra a sessão de 20 pregões antes. Gatilho para as três linhas: acima de +50 bp.</p>
+        <div class="dm-legend lg-bechg"></div>
+        <div class="dm-chart ch-bechg" data-source="anchor_series"></div>
+      </div>
+      <div class="dm-card" id="c-real">
+        <h3 class="dm-h2">Juro real de 5 anos</h3>
+        <p class="dm-sub">% ao ano, curva DPL da B3. Linhas cinza: taxa real neutra do BCB, 5,00% (Relatório de Política Monetária), e média da janela. São referências: o nível ficou acima do neutro em 74% dos dias calmos desde 2010, então o gatilho é a alta de 50 bp em 4 semanas (gráfico ao lado).</p>
+        <div class="dm-chart ch-real" data-source="anchor_series anchor_now"></div>
+      </div>
+      <div class="dm-card" id="c-ipca">
+        <h3 class="dm-h2">Focus: IPCA esperado</h3>
+        <p class="dm-sub">Mediana, % no ano, por data da pesquisa. Linha cinza: meta de 3%. Gatilho: IPCA 2027 acima do teto da meta, 4,5% (linha vermelha).</p>
+        <div class="dm-legend lg-ipca"></div>
+        <div class="dm-chart ch-ipca" data-source="ipca_2027 ipca_2028"></div>
+      </div>
+      <div class="dm-card" id="c-lft">
+        <h3 class="dm-h2">Dívida em LFT</h3>
+        <p class="dm-sub">Fatia da DPF em taxa flutuante, %. Gatilhos: acima do teto de 53% do PAF 2026, ou alta de 2 p.p. em 3 meses.</p>
+        <div class="dm-chart ch-lft" data-source="lft"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dm-section" id="cenarios">
+    <h2 class="dm-h2">Cenários possíveis</h2>
+    <p class="dm-sub">Peso de cada cenário, dia a dia. A partida vem da revisão semanal dos fatos; cada dia útil soma a regra de mercado do DI jan/29. A rotina diária copia aqui os pesos do arquivo de cenários do monitor; este painel não calcula nem muda os pesos. Os pesos são julgamento, não previsão de modelo.</p>
+    <div class="dm-tiles tl-cen"></div>
+    <div class="dm-grid">
+      <div class="dm-card" id="c-cen">
+        <h3 class="dm-h2">Pesos por dia</h3>
+        <p class="dm-sub">Cada barra soma 100%. A primeira é a partida da semana.</p>
+        <div class="dm-legend lg-cen"></div>
+        <div class="dm-chart ch-cen" data-source="scenario_history"></div>
+      </div>
+    </div>
+    <div class="dm-card">
+      <div class="dm-table-wrap">
+        <table class="dm-table tb-cen" data-source="scenarios" data-row-key="cenario">
+          <thead><tr>
+            <th data-field="cenario">Cenário</th>
+            <th data-field="probability">Peso</th>
+            <th data-field="precisa">O que precisa acontecer</th>
+            <th data-field="di_jan29_move_bp">DI jan/29 desde 23/10</th>
+            <th data-field="usdbrl_6m">Dólar em 6 meses</th>
+            <th data-field="selic_end2027">Selic fim de 2027</th>
+            <th data-field="ipca_2027">IPCA 2027</th>
+            <th data-field="gross_debt_2030">Dívida bruta 2030</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="dm-card" id="c-cen-explica">
+      <h3 class="dm-h2">O que é cada cenário e como chegamos aos pesos</h3>
+      <div class="cen-explica"></div>
+      <h3 class="dm-h3">De onde vem o peso</h3>
+      <ol class="dm-steps">
+        <li><b>Partida.</b> Em 26/10 o monitor fixou a primeira partida por julgamento: 45% Âncora, 33% Deriva, 22% Estresse. Não é saída de modelo. Depois disso, só fatos mudam a partida.</li>
+        <li><b>Fatos movem a partida.</b> Cada fato político ou fiscal novo, com fonte, multiplica o peso de cada cenário por um fator. Fraco 1,05 (notícia não confirmada), moderado 1,15 (ato oficial), forte 1,30 (decisão com efeito direto, como sentença, Orçamento votado, ministro nomeado, rating). Contra um cenário, o inverso: 0,95, 0,87 ou 0,77. Depois os três voltam a somar 100%. Preço de mercado nunca conta como fato.</li>
+        <li><b>O mercado ajusta o dia.</b> A regra lê quanto o DI jan/29 subiu desde 23/10. Cada cenário tem uma marca: +50 bp para Âncora, +180 bp para Deriva, +320 bp para Estresse. A alta do dia vira uma mistura entre os dois cenários mais próximos. Exemplo: +250 bp fica no meio entre Deriva e Estresse.</li>
+        <li><b>O peso que aparece.</b> Peso = partida + 30% da distância até essa mistura, com limite de 15 p.p. por cenário. Os três voltam a somar 100%. Como a regra parte sempre da partida, rodar duas vezes no mesmo dia dá o mesmo número.</li>
+      </ol>
+      <p class="dm-sub">Os fatores e as marcas do DI são escolhas do monitor, não estimativas estatísticas. Os fatos aplicados ficam listados no Relatório diário de juros.</p>
+    </div>
+  </section>
+
+  <section class="dm-section" id="orcamento">
+    <h2 class="dm-h2">Orçamento 2027 e gasto do governo</h2>
+    <p class="dm-sub">O orçamento de 2027 por partes, e o que acontece com a dívida em cada cenário: fica no controle ou sai dele.</p>
+    <div class="dm-tiles">
+      <div class="dm-tile">
+        <span class="dm-tile-label">Limite de despesas primárias 2027</span>
+        <span class="dm-big dash-skeleton" data-source="budget" data-field="valor_bi" data-where="id=limite">—</span>
+        <span class="dm-note"><span data-source="budget" data-field="pct_pib" data-where="id=limite">—</span> do PIB</span>
+      </div>
+      <div class="dm-tile">
+        <span class="dm-tile-label">Despesas discricionárias</span>
+        <span class="dm-big dash-skeleton" data-source="budget" data-field="valor_bi" data-where="id=discricionarias">—</span>
+        <span class="dm-note"><span data-source="budget" data-field="pct_pib" data-where="id=discricionarias">—</span> do PIB · a única parte que se corta no curto prazo</span>
+      </div>
+      <div class="dm-tile">
+        <span class="dm-tile-label">Primário 2027: PLOA contra meta</span>
+        <span class="dm-big dash-skeleton" data-source="budget" data-field="valor_bi" data-where="id=primario_ploa">—</span>
+        <span class="dm-note">Meta <span data-source="budget" data-field="valor_bi" data-where="id=meta_centro">—</span> · piso <span data-source="budget" data-field="valor_bi" data-where="id=meta_piso">—</span></span>
+      </div>
+      <div class="dm-tile">
+        <span class="dm-tile-label">Primário 2027 nas contas da IFI</span>
+        <span class="dm-big dash-skeleton" data-source="budget" data-field="valor_bi" data-where="id=primario_ifi">—</span>
+        <span class="dm-note">Contingenciamento para o piso: <span data-source="budget" data-field="valor_bi" data-where="id=contingenciamento_ifi">—</span></span>
+      </div>
+    </div>
+    <div class="dm-grid">
+      <div class="dm-card" id="c-partes">
+        <h3 class="dm-h2">O orçamento em 4 partes</h3>
+        <ol class="dm-steps partes-list"><li>—</li></ol>
+        <p class="dm-sub">Fontes: PLOA e PLDO 2027, nas leituras da IFI e do Ipea (tabela de fontes abaixo).</p>
+      </div>
+      <div class="dm-card" id="c-controle">
+        <h3 class="dm-h2">A dívida fica ou sai do controle?</h3>
+        <p class="dm-note dm-live"><span class="ctl-txt">—</span></p>
+        <div class="dm-legend lg-ctl"></div>
+        <div class="dm-chart ch-ctl" data-source="scenarios" style="height:auto;min-height:0"></div>
+        <ul class="dm-steps ctl-list"></ul>
+        <p class="dm-sub">"No controle" = a dívida bruta parar de subir em % do PIB. Hoje = último mês do BCB. 2030 = dívida bruta de cada cenário, do arquivo de cenários do monitor. A conta por ano é a do card abaixo: o que falta poupar, mais os juros a mais do cenário. A linha cinza tracejada é o alerta de 70% do PIB do FMI para emergentes.</p>
+      </div>
+    </div>
+    <div class="dm-grid">
+      <div class="dm-card" id="c-orc">
+        <h3 class="dm-h2">O tamanho da conta contra o gasto que se pode cortar</h3>
+        <p class="dm-note dm-live"><span class="orc-txt">—</span></p>
+        <ol class="dm-steps">
+          <li><b>Juros</b>: o que a dívida bruta cobra em um ano, ao custo médio dos últimos 12 meses.</li>
+          <li><b>Crescimento</b>: o PIB nominal cresce, e a dívida pesa menos em proporção. Isso desconta parte dos juros.</li>
+          <li><b>Superávit do PLOA</b>: o que o Orçamento de 2027 já prevê poupar.</li>
+          <li><b>A conta</b>: o que sobra é o superávit a mais que faria a dívida parar de subir em % do PIB.</li>
+        </ol>
+        <div class="dm-chart ch-orc" data-source="orcamento_impacto" style="height:auto;min-height:0"></div>
+        <h4 class="dm-h3">De onde poderia vir o dinheiro do buraco?</h4>
+        <div class="dm-table-wrap">
+          <table class="dm-table tb-gap">
+            <thead><tr><th>Fonte</th><th>Quanto daria</th><th>Fecha o buraco?</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="dm-sub">R$ bilhões por ano, ao PIB de 2027 implícito na meta. Leia de cima para baixo: os juros somam, o crescimento e o superávit previsto descontam, e a barra em negrito é a conta. As linhas "Se ..." mostram quanto a conta cresce em cada cenário: a Selic de fim de 2027 do cenário menos a do Âncora, por 12 meses, × a elasticidade do BCB (R$ 59,3 bi por 1 p.p.). As últimas linhas comparam a conta com o que dá para cortar: todo o gasto discricionário, o buraco que sobra mesmo zerando esse gasto (em vermelho) e o bloqueio que a IFI estima.</p>
+      </div>
+    </div>
+    <div class="dm-card" id="c-canais">
+      <h3 class="dm-h2">Da inflação desancorada ao orçamento</h3>
+      <ol class="dm-steps">
+        <li>As expectativas sobem. O BCB mantém a Selic alta por mais tempo, e a inflação corrente sobe.</li>
+        <li>A Selic e o IPCA encarecem a dívida (LFT e NTN-B). Esse juro fica fora do teto de gastos e fora da meta de primário.</li>
+        <li>No primário, a inflação também sobe a receita e, no ano seguinte, o limite de gasto. Os benefícios ligados ao salário mínimo sobem junto e tomam espaço das discricionárias dentro do teto.</li>
+        <li>Resultado: o primário parece em ordem, mas o déficit nominal e a dívida sobem. É assim que a desancoragem vira dominância fiscal.</li>
+      </ol>
+      <p class="dm-note dm-live">Hoje: <span class="desanc-txt">—</span></p>
+      <p class="dm-sub">Efeito de um choque de 1 p.p. contra o cenário do PLDO 2027, um choque por linha, sem somar. O Tesouro mede o juro pago no orçamento (R$ 11,0 bi em 2027 por 1 p.p. de Selic); o BCB mede o juro que entra na dívida bruta em 12 meses (R$ 59,3 bi, na tabela abaixo). São medidas diferentes do mesmo choque.</p>
+      <div class="dm-table-wrap">
+        <table class="dm-table tb-canais" data-source="canais" data-row-key="id">
+          <thead><tr>
+            <th data-field="choque">Choque</th>
+            <th data-field="canal">Canal</th>
+            <th data-field="ef_2027">Efeito em 2027</th>
+            <th data-field="ef_2030">Efeito em 2030</th>
+            <th data-field="onde">Onde entra</th>
+            <th data-field="fonte">Fonte</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="dm-sim">
+        <h4 class="dm-h3">Simule: mexa nos choques e veja onde a conta cai</h4>
+        <div class="dm-sim-ctl">
+          <label>Selic acima do cenário do PLDO: <b class="sim-s-v">0</b> p.p.
+            <input type="range" class="sim-s" min="0" max="5" step="0.25" value="0" aria-label="Selic acima do cenário do PLDO, em pontos percentuais"></label>
+          <label>Inflação acima do PLOA (3,6%): <b class="sim-i-v">0</b> p.p.
+            <input type="range" class="sim-i" min="0" max="4" step="0.25" value="0" aria-label="Inflação acima do PLOA, em pontos percentuais"></label>
+          <button type="button" class="dm-btn sim-focus">Usar o Focus de hoje</button>
+        </div>
+        <p class="dm-sub flow-cap">—</p>
+        <div class="dm-chart ch-flow" style="height:auto;min-height:0"></div>
+        <div class="dm-chart ch-sim" style="height:auto;min-height:0"></div>
+        <p class="dm-note dm-live"><span class="sim-txt">—</span></p>
+        <p class="dm-sub">Conta linear com as sensibilidades da tabela acima, efeito em 12 meses. Os choques somam, o que é uma aproximação: o PLDO mede cada um isolado. Benefícios e teto mudam no ano seguinte ao da inflação. A receita a mais (+0,6% por p.p.) fica fora da conta, porque não há base de receita no painel.</p>
+      </div>
+    </div>
+    <div class="dm-card" id="c-obrig">
+      <h3 class="dm-h2">Por que até as despesas obrigatórias ficam sem espaço</h3>
+      <ol class="dm-steps">
+        <li>O arcabouço é um teto único para as obrigatórias e as discricionárias. Ele cresce no máximo 2,5% acima da inflação.</li>
+        <li>As principais obrigatórias crescem de 2 a 5 vezes isso (gráfico da esquerda). Os pisos de saúde e educação seguem a receita. O INSS e o BPC seguem o salário mínimo e o número de beneficiários.</li>
+        <li>Cada real a mais nas obrigatórias sai das discricionárias: custeio, investimento e o funcionamento da máquina (gráfico da direita).</li>
+        <li>Quando as obrigatórias passam de 95% da despesa primária, a LC 200/2023 (art. 8º) aciona as travas do art. 167-A da Constituição: sem reajuste de despesa obrigatória acima da inflação, sem concursos, sem nova despesa obrigatória.</li>
+        <li>Se mesmo assim a conta não cabe, só resta mudar a lei (desindexar benefícios, rever os pisos) ou romper o teto. A desancoragem acelera isso: o INPC sobe os benefícios no ano seguinte, e a Selic sobe os juros, que ficam fora do teto e aumentam a dívida.</li>
+      </ol>
+      <div class="dm-tiles">
+        <div class="dm-tile">
+          <span class="dm-tile-label">Obrigatórias / despesa primária, 2027 (PLDO)</span>
+          <span class="dm-big dash-skeleton obr-share">—</span>
+          <span class="dm-note">Trava legal em 95%</span>
+        </div>
+        <div class="dm-tile">
+          <span class="dm-tile-label">Mesma conta com a correção da IFI</span>
+          <span class="dm-big dash-skeleton obr-share-ifi">—</span>
+          <span class="dm-note obr-ifi-note">—</span>
+        </div>
+      </div>
+      <div class="dm-grid">
+        <div>
+          <p class="dm-sub">Crescimento real, % de 2025 para 2026 (projeção do MPO). Linha vermelha: o máximo do teto, 2,5%.</p>
+          <div class="dm-chart ch-obr-cresc" data-source="obrigatorias"></div>
+        </div>
+        <div>
+          <p class="dm-sub">Discricionárias do Poder Executivo, R$ bilhões, projeção do PLDO 2027. A última barra tira de 2027 o que a IFI diz faltar para INSS e BPC.</p>
+          <div class="dm-chart ch-obr-discr" data-source="espaco_teto"></div>
+        </div>
+      </div>
+    </div>
+    <div class="dm-card" id="c-contab">
+      <h3 class="dm-h2">Contabilidade criativa: a meta cumprida no papel</h3>
+      <ol class="dm-steps">
+        <li>A meta de primário não conta todo o gasto. Por lei, precatórios, projetos de defesa e gastos do Fundo Social saem da conta. O resultado "após deduções" é o que vale para a meta. O resultado "efetivo" é o que a dívida sente.</li>
+        <li>O teto também tem saídas. Em 2027, R$ 249,5 bi da despesa primária ficam fora do limite (8,8% do total sem as transferências), entre eles R$ 95,4 bi de precatórios.</li>
+        <li>Mudar a regra abre espaço sem cortar gasto. A parte dos precatórios que conta na meta cai de R$ 59,9 bi em 2026 para R$ 37,6 bi em 2027, o que libera R$ 22,3 bi.</li>
+        <li>De 2023 a 2026, o gasto fora da meta chega perto de R$ 400 bi, nas contas da IFI (out/2025). Nada disso some da dívida: ela cresce com o resultado efetivo.</li>
+      </ol>
+      <p class="dm-note dm-live">Leitura: <span class="contab-txt">—</span></p>
+      <div class="dm-grid">
+        <div>
+          <p class="dm-sub">Deduções da meta, R$ bilhões. De 2028 em diante, projeção do governo.</p>
+          <div class="dm-chart ch-contab" data-source="contab"></div>
+        </div>
+        <div class="dm-table-wrap">
+          <table class="dm-table tb-contab" data-source="contab" data-row-key="id">
+            <thead><tr>
+              <th data-field="rotulo">Ano</th>
+              <th data-field="efetivo_bi">Efetivo</th>
+              <th data-field="deducoes_bi">Deduções</th>
+              <th data-field="apos_bi">Após deduções</th>
+              <th data-field="piso_bi">Piso da meta</th>
+              <th data-field="cumpre_sem">Cumpre sem deduções?</th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <p class="dm-sub contab-fontes">R$ bilhões. Fontes por linha: <span class="contab-src">—</span></p>
+    </div>
+    <div class="dm-card">
+      <div class="dm-table-wrap">
+        <table class="dm-table tb-orc" data-source="budget" data-row-key="item">
+          <thead><tr>
+            <th data-field="item">Item</th>
+            <th data-field="valor_bi">R$ bilhões</th>
+            <th data-field="pct_pib">% do PIB</th>
+            <th data-field="fonte">Fonte</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="dm-section" id="alertas">
+    <h2 class="dm-h2">Alertas</h2>
+    <p class="dm-sub">Dominância fiscal plena precisa das duas coisas: a conta da dívida ruim e a perda da âncora de inflação. O r − g acima de zero, o Focus IPCA acima do teto da meta e o teto de LFT do PAF seguem referências oficiais ou da literatura. As outras regras são escolhas do monitor.</p>
+    <div class="dm-card">
+      <div class="dm-table-wrap">
+        <table class="dm-table tb-alertas" data-source="alertas" data-row-key="indicador">
+          <thead><tr>
+            <th data-field="indicador">Indicador</th>
+            <th data-field="grupo">Grupo</th>
+            <th data-field="leitura">Último</th>
+            <th data-field="regra">Alerta se</th>
+            <th data-field="estado">Estado</th>
+            <th data-field="desde">Desde</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="dm-card" id="c-calib">
+      <h3 class="dm-h2">Calibração: os gatilhos avisaram nas crises passadas?</h3>
+      <p class="dm-sub">Teste com as curvas da B3 na SILO, de 2010 a 26/10/2026. Crise = o DI de 2 anos sobe 200 bp ou o dólar sobe 15% em 60 pregões; o teste achou 11, de set/2011 a nov/2024. "Avisou" = acendeu até 60 pregões antes do início ou no dia. "Aceso em calma" = parte dos dias fora das crises em que o alerta acendeu à toa. Atenção: a crise e os alertas de mercado vêm das mesmas curvas, então o teste favorece esses alertas.</p>
+      <div class="dm-table-wrap">
+        <table class="dm-table tb-calib" data-source="calib" data-row-key="regra">
+          <thead><tr>
+            <th data-field="regra">Regra</th>
+            <th data-field="avisou">Avisou</th>
+            <th data-field="antecedencia_mediana">Antecedência mediana, pregões</th>
+            <th data-field="aceso_em_calma_pct">Aceso em calma</th>
+            <th data-field="aceso_meses_pct">Aceso nos meses desde 2015</th>
+            <th data-field="veredito">Leitura</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>(function(){
+
+// Filters: rolling windows, set from today so the queries stay under the 1,000-row page.
+window.dmDefaults = () => {
+  const iso = d3.utcFormat('%Y-%m-%d');
+  dash.setParams({
+    start_curve: iso(d3.utcYear.offset(new Date(), -3)),
+    start_focus: iso(d3.utcDay.offset(new Date(), -400)),
+  });
+};
+window.dmDefaults();
+
+// SILO answers are text: a "rows: N" line, a "provenance" line, then a JSON array.
+const siloRows = ({ answer }) => {
+  let t = answer;
+  if (t && typeof t === 'object' && !Array.isArray(t) && Array.isArray(t.content)) t = t.content.map((c) => c.text || '').join('\n');
+  if (Array.isArray(t)) return t;
+  if (typeof t !== 'string') throw new Error('SILO answered in an unexpected shape');
+  const i = t.indexOf('[');
+  if (i < 0) throw new Error(t.slice(0, 400));
+  return JSON.parse(t.slice(i));
+};
+const curveLoader = { description: 'SILO text answer as rows (trade_date, rate)', fn: (a) => siloRows(a).map((r) => ({ trade_date: r.trade_date, rate: Number(r.rate) })) };
+const focusLoader = { description: 'SILO text answer as rows (survey_date, median)', fn: (a) => siloRows(a).map((r) => ({ survey_date: r.survey_date, median: Number(r.median) })) };
+dash.loader('pre_2y', curveLoader);
+dash.loader('pre_5y', curveLoader);
+dash.loader('dpl_2y', curveLoader);
+dash.loader('dpl_5y', curveLoader);
+dash.loader('ipca_2027', focusLoader);
+dash.loader('ipca_2028', focusLoader);
+const macroLoader = { description: 'SILO text answer as rows (month YYYY-MM, value)', fn: (a) => siloRows(a).filter((r) => r.value !== null).map((r) => ({ month: r.reference_date.slice(0, 7), value: Number(r.value) })) };
+dash.loader('fiscal_dbgg', macroLoader);
+dash.loader('fiscal_prim', macroLoader);
+dash.loader('fiscal_nom', macroLoader);
+dash.loader('fiscal_pib', macroLoader);
+
+dash.calc('fiscal', {
+  title: 'Dívida, déficits e PIB 12m por mês',
+  description: 'Junta as quatro séries do BCB por mês. PIB 12m = soma dos 12 últimos meses do PIB mensal (SGS 4380), o mesmo número da série 4382; só sai quando os 12 meses existem.',
+  inputs: ['fiscal_dbgg', 'fiscal_prim', 'fiscal_nom', 'fiscal_pib'],
+  fn: (dbgg, prim, nom, pib) => {
+    const by = (rows) => new Map(rows.map((r) => [r.month, r.value]));
+    const D = by(dbgg), P = by(prim), N = by(nom), Y = by(pib);
+    const months = [...new Set([...D.keys(), ...P.keys(), ...N.keys(), ...Y.keys()])].sort();
+    const back = (m, k) => { const [y, mo] = m.split('-').map(Number); const t = y * 12 + mo - 1 - k; return `${Math.floor(t / 12)}-${String(t % 12 + 1).padStart(2, '0')}`; };
+    const gdp12 = (m) => { let s = 0; for (let k = 0; k < 12; k++) { const v = Y.get(back(m, k)); if (v === undefined) return null; s += v; } return s; };
+    const v = (M, m) => (M.has(m) ? M.get(m) : null);
+    return months.map((m) => ({ month: m, gross_debt_gdp: v(D, m), primary_deficit_12m_gdp: v(P, m), nominal_deficit_12m_gdp: v(N, m), gdp_12m_brl_mn: gdp12(m) }));
+  },
+});
+
+dash.calc('fiscal_series', {
+  title: 'r, g e primário estabilizador',
+  description: 'Por mês: r = (déficit nominal − déficit primário) ÷ média da dívida bruta agora e 12 meses antes; g = PIB 12m ÷ PIB 12m de 12 meses antes − 1; primário estabilizador = dívida × (r − g) ÷ (1 + g).',
+  inputs: ['fiscal'],
+  fn: (fiscal) => {
+    const byMonth = new Map(fiscal.map((r) => [r.month, r]));
+    const ok = (v) => v !== null && v !== undefined && v !== '' && isFinite(Number(v));
+    const out = [];
+    for (const row of fiscal) {
+      const [y, m] = row.month.split('-');
+      const prev = byMonth.get(`${Number(y) - 1}-${m}`);
+      if (!prev) continue;
+      const vals = [row.gross_debt_gdp, prev.gross_debt_gdp, row.primary_deficit_12m_gdp, row.nominal_deficit_12m_gdp, row.gdp_12m_brl_mn, prev.gdp_12m_brl_mn];
+      if (!vals.every(ok)) continue;
+      const d = Number(row.gross_debt_gdp), d0 = Number(prev.gross_debt_gdp);
+      const p = Number(row.primary_deficit_12m_gdp), n = Number(row.nominal_deficit_12m_gdp);
+      const r = (n - p) / ((d + d0) / 2) * 100;
+      const g = (Number(row.gdp_12m_brl_mn) / Number(prev.gdp_12m_brl_mn) - 1) * 100;
+      const s = d * (r - g) / (100 + g);
+      out.push({ month: row.month, gross_debt_gdp: d, debt_change_12m: d - d0, r, g, r_minus_g: r - g, stabilizing_primary: s, primary_balance: -p, primary_gap: s + p });
+    }
+    return out;
+  },
+});
+
+dash.calc('fiscal_now', {
+  title: 'Conta da dívida, último mês',
+  description: 'O mês mais recente com dívida, déficits e PIB publicados.',
+  inputs: ['fiscal_series'],
+  fn: (fiscal_series) => fiscal_series.slice(-1),
+});
+
+dash.calc('lft_now', {
+  title: 'Fatia em LFT, último mês',
+  description: 'O mês mais recente do Relatório Mensal da Dívida.',
+  inputs: ['lft'],
+  fn: (lft) => lft.slice().sort((a, b) => (a.month < b.month ? -1 : 1)).slice(-1),
+});
+
+dash.calc('anchor_series', {
+  title: 'Inflação implícita e juro real',
+  description: 'Por sessão: inflação implícita = (1 + PRE) ÷ (1 + DPL) − 1 nos vértices de 720 e 1.800 dias; juro real de 5 anos = DPL 1.800.',
+  inputs: ['pre_2y', 'pre_5y', 'dpl_2y', 'dpl_5y'],
+  fn: (pre_2y, pre_5y, dpl_2y, dpl_5y) => {
+    const map = (rows) => new Map(rows.map((r) => [r.trade_date, Number(r.rate)]));
+    const p2 = map(pre_2y), p5 = map(pre_5y), r2 = map(dpl_2y), r5 = map(dpl_5y);
+    const be = (p, r) => ((1 + p / 100) / (1 + r / 100) - 1) * 100;
+    return [...p2.keys()].filter((d) => p5.has(d) && r2.has(d) && r5.has(d)).sort()
+      .map((d) => ({ date: d, be_2y: be(p2.get(d), r2.get(d)), be_5y: be(p5.get(d), r5.get(d)), real_5y: r5.get(d) }));
+  },
+});
+
+dash.calc('anchor_now', {
+  title: 'Âncora de inflação, última sessão',
+  description: 'Última sessão, mudança contra a sessão de 20 pregões antes (cerca de 4 semanas) e média do juro real na janela.',
+  inputs: ['anchor_series'],
+  fn: (anchor_series) => {
+    if (!anchor_series.length) return [];
+    const last = anchor_series[anchor_series.length - 1];
+    const back = anchor_series[Math.max(0, anchor_series.length - 21)];
+    return [{
+      date: last.date,
+      be_2y: last.be_2y, be_2y_change_4w_bp: (last.be_2y - back.be_2y) * 100,
+      be_5y: last.be_5y, be_5y_change_4w_bp: (last.be_5y - back.be_5y) * 100,
+      real_5y: last.real_5y, real_5y_change_4w_bp: (last.real_5y - back.real_5y) * 100,
+      real_5y_avg: anchor_series.reduce((t, r) => t + r.real_5y, 0) / anchor_series.length,
+      window_start: anchor_series[0].date,
+    }];
+  },
+});
+
+dash.calc('focus_now', {
+  title: 'Focus IPCA, última pesquisa',
+  description: 'Mediana mais recente e mudança contra a pesquisa de 28 dias antes ou a anterior mais próxima.',
+  inputs: ['ipca_2027', 'ipca_2028'],
+  fn: (ipca_2027, ipca_2028) => {
+    const lastAndBack = (rows) => {
+      const s = rows.slice().sort((a, b) => (a.survey_date < b.survey_date ? -1 : 1));
+      if (!s.length) return [null, null];
+      const last = s[s.length - 1];
+      const cut = new Date(new Date(last.survey_date).getTime() - 28 * 864e5).toISOString().slice(0, 10);
+      const back = s.filter((r) => r.survey_date <= cut).pop() || s[0];
+      return [last, back];
+    };
+    const [a, a0] = lastAndBack(ipca_2027), [b, b0] = lastAndBack(ipca_2028);
+    if (!a || !b) return [];
+    return [{ survey_date: a.survey_date, ipca_2027: a.median, ipca_2027_change_4w: a.median - a0.median, ipca_2028: b.median, ipca_2028_change_4w: b.median - b0.median }];
+  },
+});
+
+dash.calc('rolagem_now', {
+  title: 'Rolagem, último mês',
+  description: 'O mês mais recente do Relatório Mensal da Dívida.',
+  inputs: ['rolagem'],
+  fn: (rolagem) => rolagem.slice().sort((a, b) => (a.month < b.month ? -1 : 1)).slice(-1),
+});
+
+dash.calc('leiloes_resumo', {
+  title: 'Leilões, últimos 30 dias',
+  description: 'Cancelamentos de leilão de venda e recompras nos 30 dias até o evento mais recente.',
+  inputs: ['leiloes'],
+  fn: (leiloes) => {
+    if (!leiloes.length) return [];
+    const ate = leiloes.map((r) => r.date).sort().pop();
+    const desde = new Date(new Date(ate + 'T00:00:00Z').getTime() - 30 * 864e5).toISOString().slice(0, 10);
+    const win = leiloes.filter((r) => r.date > desde);
+    return [{ ate, cancelamentos: win.filter((r) => r.tipo === 'Cancelamento').length, recompras: win.filter((r) => r.tipo === 'Recompra').length }];
+  },
+});
+
+dash.calc('debt_fan', {
+  title: 'Leque da dívida bruta',
+  description: 'Simulação de 2.000 trajetórias até 2030: partida no último mês; choques anuais conjuntos de r, g e primário sorteados dos desvios em relação à média desde 2015; semente fixa, então o resultado se repete.',
+  inputs: ['fiscal_series'],
+  fn: (fiscal_series) => {
+    const hist = fiscal_series.filter((r) => r.month >= '2015-01');
+    if (hist.length < 24) return [];
+    const last = fiscal_series[fiscal_series.length - 1];
+    const mean = (k) => hist.reduce((t, r) => t + r[k], 0) / hist.length;
+    const mr = mean('r'), mg = mean('g'), mp = mean('primary_balance');
+    let seed = 20261027;
+    const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
+    const startYear = Number(last.month.slice(0, 4)), years = [];
+    for (let y = startYear + 1; y <= 2030; y++) years.push(y);
+    const paths = [];
+    for (let k = 0; k < 2000; k++) {
+      let d = last.gross_debt_gdp; const p = [];
+      for (const y of years) {
+        const h = hist[Math.floor(rnd() * hist.length)];
+        const r = last.r + (h.r - mr), g = last.g + (h.g - mg), pb = last.primary_balance + (h.primary_balance - mp);
+        d = d * (1 + r / 100) / (1 + g / 100) - pb;
+        p.push(d);
+      }
+      paths.push(p);
+    }
+    const q = (arr, x) => { const s = arr.slice().sort((a, b) => a - b); return s[Math.min(s.length - 1, Math.floor(x * s.length))]; };
+    const out = [{ year: startYear, p10: last.gross_debt_gdp, p25: last.gross_debt_gdp, p50: last.gross_debt_gdp, p75: last.gross_debt_gdp, p90: last.gross_debt_gdp, prob_100: null, start: last.gross_debt_gdp, start_month: last.month }];
+    years.forEach((y, i) => {
+      const col = paths.map((p) => p[i]);
+      out.push({ year: y, p10: q(col, 0.1), p25: q(col, 0.25), p50: q(col, 0.5), p75: q(col, 0.75), p90: q(col, 0.9), prob_100: col.filter((v) => v > 100).length / col.length * 100, start: last.gross_debt_gdp, start_month: last.month });
+    });
+    return out;
+  },
+});
+
+dash.calc('debt_fan_now', {
+  title: 'Leque da dívida em 2030',
+  description: 'A linha de 2030 do leque da dívida.',
+  inputs: ['debt_fan'],
+  fn: (debt_fan) => debt_fan.filter((r) => r.year === 2030),
+});
+
+// BCB real neutral rate used in its reference scenario (Relatório de Política Monetária, jun/2026: 5,00%).
+window.NEUTRAL_REAL = 5;
+
+dash.calc('alertas', {
+  title: 'Alertas de dominância',
+  description: 'Dez regras fixas do monitor aplicadas aos valores mais recentes; Desde = início da sequência atual (aceso ou apagado) na série de cada regra.',
+  inputs: ['fiscal_now', 'focus_debt', 'anchor_now', 'focus_now', 'lft', 'fiscal_series', 'anchor_series', 'ipca_2027', 'rolagem', 'leiloes_resumo', 'leiloes'],
+  fn: (fiscal_now, focus_debt, anchor_now, focus_now, lft, fiscal_series, anchor_series, ipca_2027, rolagem, leiloes_resumo, leiloes) => {
+    const dmy = (d) => (d.length === 7 ? `${d.slice(5, 7)}/${d.slice(0, 4)}` : `${d.slice(8, 10)}/${d.slice(5, 7)}/${d.slice(0, 4)}`);
+    // first date of the current run of equal states; 'antes de' when the run reaches the start of the series
+    const since = (pts, test) => {
+      const s = pts.filter((p) => p.v !== null && p.v !== undefined && isFinite(p.v));
+      if (!s.length) return '';
+      const now = test(s[s.length - 1].v);
+      let i = s.length - 1;
+      while (i > 0 && test(s[i - 1].v) === now) i--;
+      return (i === 0 ? 'antes de ' : '') + dmy(s[i].d);
+    };
+    const chg20 = (k) => anchor_series.map((r, i) => ({ d: r.date, v: i >= 20 ? (r[k] - anchor_series[i - 20][k]) * 100 : null }));
+    const f1 = (v) => v.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    const f2 = (v) => v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const sg = (v, f) => (v > 0 ? '+' : v < 0 ? '−' : '') + f(Math.abs(v));
+    const rows = [];
+    const st = (on) => (on ? 'Aceso' : 'Apagado');
+    const fz = fiscal_now[0];
+    if (fz) {
+      const lastSurvey = focus_debt.map((r) => r.survey_date).sort().pop();
+      const path = focus_debt.filter((r) => r.survey_date === lastSurvey).sort((a, b) => a.year - b.year);
+      const rising = path.length > 1 && path.every((r, i) => i === 0 || Number(r.median_gdp) > Number(path[i - 1].median_gdp));
+      rows.push({ indicador: 'Dívida bruta', grupo: 'Conta da dívida', leitura: `${f1(fz.gross_debt_gdp)}% do PIB; Focus vê ${f1(Number(path[path.length - 1]?.median_gdp))}% em ${path[path.length - 1]?.year}`, regra: 'Focus vê alta todo ano', estado: st(rising) });
+      rows.push({ indicador: 'r − g', grupo: 'Conta da dívida', leitura: `${sg(fz.r_minus_g, f1)} p.p.`, regra: 'Acima de zero', estado: st(fz.r_minus_g > 0), desde: since(fiscal_series.map((r) => ({ d: r.month, v: r.r_minus_g })), (v) => v > 0) });
+      rows.push({ indicador: 'Lacuna do primário', grupo: 'Conta da dívida', leitura: `${f1(fz.primary_gap)} p.p. do PIB`, regra: 'Acima de 2 p.p.', estado: st(fz.primary_gap > 2), desde: since(fiscal_series.map((r) => ({ d: r.month, v: r.primary_gap })), (v) => v > 2) });
+    }
+    const ls = lft.slice().sort((a, b) => (a.month < b.month ? -1 : 1));
+    if (ls.length) {
+      const last = ls[ls.length - 1], first = ls[Math.max(0, ls.length - 4)];
+      const chg = Number(last.floating_share_dpf) - Number(first.floating_share_dpf);
+      rows.push({ indicador: 'Fatia em LFT', grupo: 'Conta da dívida', leitura: `${f2(Number(last.floating_share_dpf))}% da DPF; ${sg(chg, f1)} p.p. desde ${first.month}`, regra: 'Acima de 53% ou +2 p.p. em 3 meses', estado: st(Number(last.floating_share_dpf) > 53 || chg >= 2), desde: since(ls.map((r, i) => { const v = Number(r.floating_share_dpf); return { d: r.month, v: v > 53 || v - Number(ls[Math.max(0, i - 3)].floating_share_dpf) >= 2 ? 1 : 0 }; }), (v) => v === 1) });
+    }
+    const an = anchor_now[0];
+    if (an) {
+      rows.push({ indicador: 'Juro real 5 anos', grupo: 'Conta da dívida', leitura: `${f2(an.real_5y)}%; média ${f2(an.real_5y_avg)}%; ${sg(an.real_5y_change_4w_bp, (v) => Math.round(v).toString())} bp em 4 semanas`, regra: 'Sobe mais de 50 bp em 4 semanas', estado: st(an.real_5y_change_4w_bp > 50), desde: since(chg20('real_5y'), (v) => v > 50) });
+      rows.push({ indicador: 'Inflação implícita 2 anos', grupo: 'Âncora de inflação', leitura: `${f2(an.be_2y)}%; ${sg(an.be_2y_change_4w_bp, (v) => Math.round(v).toString())} bp em 4 semanas`, regra: 'Sobe mais de 50 bp em 4 semanas', estado: st(an.be_2y_change_4w_bp > 50), desde: since(chg20('be_2y'), (v) => v > 50) });
+      rows.push({ indicador: 'Inflação implícita 5 anos', grupo: 'Âncora de inflação', leitura: `${f2(an.be_5y)}%; ${sg(an.be_5y_change_4w_bp, (v) => Math.round(v).toString())} bp em 4 semanas`, regra: 'Sobe mais de 50 bp em 4 semanas', estado: st(an.be_5y_change_4w_bp > 50), desde: since(chg20('be_5y'), (v) => v > 50) });
+    }
+    const fo = focus_now[0];
+    const ro = rolagem.slice().sort((a, b) => (a.month < b.month ? -1 : 1));
+    if (ro.length) {
+      const r = ro[ro.length - 1];
+      const bad = (x) => x.vincendo_12m_pct > 22 || x.prazo_medio_anos < 3.8;
+      rows.push({ indicador: 'Perfil de vencimentos', grupo: 'Rolagem da dívida', leitura: `${f2(r.vincendo_12m_pct)}% vence em 12 meses; prazo médio ${f2(r.prazo_medio_anos)} anos (${dmy(r.month)})`, regra: 'Acima de 22% em 12 meses ou prazo abaixo de 3,8 anos (PAF)', estado: st(bad(r)), desde: since(ro.map((x) => ({ d: x.month, v: bad(x) ? 1 : 0 })), (v) => v === 1) });
+    }
+    const lr = leiloes_resumo[0];
+    if (lr) {
+      const cut = new Date(new Date(lr.ate + 'T00:00:00Z').getTime() - 30 * 864e5).toISOString().slice(0, 10);
+      const firstCancel = leiloes.filter((x) => x.tipo === 'Cancelamento' && x.date > cut).map((x) => x.date).sort()[0];
+      rows.push({ indicador: 'Leilões do Tesouro', grupo: 'Rolagem da dívida', leitura: `${lr.cancelamentos} leilão(ões) de venda cancelado(s) e ${lr.recompras} recompra(s) em 30 dias`, regra: 'Algum leilão de venda cancelado em 30 dias', estado: st(lr.cancelamentos > 0), desde: lr.cancelamentos > 0 && firstCancel ? dmy(firstCancel) : '' });
+    }
+    if (fo) rows.push({ indicador: 'Focus IPCA 2027', grupo: 'Âncora de inflação', leitura: `${f2(fo.ipca_2027)}%; ${sg(fo.ipca_2027_change_4w, f2)} p.p. em 4 semanas`, regra: 'Acima do teto da meta (4,5%)', estado: st(fo.ipca_2027 > 4.5), desde: since(ipca_2027.slice().sort((a, b) => (a.survey_date < b.survey_date ? -1 : 1)).map((r) => ({ d: r.survey_date, v: r.median })), (v) => v > 4.5) });
+    return rows;
+  },
+});
+
+// IPCA 2027 assumed in PLOA 2027 (Câmara, Raio X do PLOA 2027, set/26).
+window.IPCA_PLOA_2027 = 3.6;
+
+dash.calc('desancoragem', {
+  title: 'Focus IPCA 2027 contra o PLOA',
+  description: 'Mediana Focus do IPCA 2027 menos os 3,6% do PLOA 2027, com os custos de 1 p.p. do Anexo de Riscos Fiscais aplicados à diferença.',
+  inputs: ['focus_now'],
+  fn: (focus_now) => {
+    if (!focus_now.length) return [];
+    const f = focus_now[0], gap = f.ipca_2027 - window.IPCA_PLOA_2027;
+    return [{ survey_date: f.survey_date, ipca_2027: f.ipca_2027, ipca_ploa: window.IPCA_PLOA_2027, gap_pp: gap, ntnb_2027_bi: gap * 3.162, beneficios_bi: gap * 13.5 }];
+  },
+});
+
+dash.calc('espaco_teto', {
+  title: 'Espaço das discricionárias no teto',
+  description: 'Discricionárias do Executivo e fatia das obrigatórias na despesa primária, por ano do PLDO 2027; 2027 também com a subestimativa de INSS e BPC apontada pela IFI, mantida a despesa total.',
+  inputs: ['obrigatorias'],
+  fn: (obrigatorias) => {
+    const rows = obrigatorias.filter((r) => r.grupo === 'pldo').sort((a, b) => a.ano - b.ano)
+      .map((r) => ({ id: r.id, item: `${r.ano} (PLDO)`, ano: r.ano, valor_bi: r.discr_executivo_bi, share: (r.obrigatorias_bi / r.primaria_bi) * 100 }));
+    const adj = obrigatorias.find((r) => r.id === 'ifi_subestimativa'), base = obrigatorias.find((r) => r.id === 'pldo_2027');
+    if (adj && base) rows.push({ id: 'ifi_2027', item: '2027 com a correção da IFI', ano: 2027, valor_bi: base.discr_executivo_bi - adj.valor, share: ((base.obrigatorias_bi + adj.valor) / base.primaria_bi) * 100, ajuste_bi: adj.valor });
+    return rows;
+  },
+});
+
+dash.calc('contab', {
+  title: 'Resultado primário com e sem as deduções da meta',
+  description: 'Por ano: resultado efetivo, deduções legais, resultado após deduções e se o efetivo alcançaria o piso da meta sem as deduções.',
+  inputs: ['contabilidade'],
+  fn: (contabilidade) => contabilidade.slice().sort((a, b) => a.ordem - b.ordem).map((r) => ({
+    ...r,
+    cumpre_sem: r.piso_bi === null || r.piso_bi === undefined ? null : r.efetivo_bi >= r.piso_bi,
+    falta_sem_bi: r.piso_bi === null || r.piso_bi === undefined ? null : r.piso_bi - r.efetivo_bi,
+  })),
+});
+
+dash.calc('orcamento_impacto', {
+  title: 'A conta para a dívida parar de subir',
+  description: 'Em R$ bi ao PIB de 2027 implícito na meta. Juros = dívida × r ÷ (1 + g); crescimento = − dívida × g ÷ (1 + g); menos o primário do PLOA; a soma é o esforço para estabilizar. Comparações: discricionárias do PLOA, contingenciamento da IFI e juros a mais por cenário (elasticidade do BCB).',
+  inputs: ['budget', 'scenarios', 'fiscal_now'],
+  fn: (budget, scenarios, fiscal_now) => {
+    // Calcs run apart from the page script, so the formatter is local.
+    const nf = (d) => new Intl.NumberFormat('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+    const b = Object.fromEntries(budget.map((r) => [r.id, r]));
+    const anc = scenarios.find((r) => r.id === 'ancora');
+    const pib = b.meta_centro.valor_bi / (b.meta_centro.pct_pib / 100);
+    const rows = [];
+    let conta = null, sens = null;
+    if (fiscal_now.length) {
+      const f = fiscal_now[0], d = f.gross_debt_gdp;
+      const juros = d * f.r / (100 + f.g) / 100 * pib;
+      const cresc = -d * f.g / (100 + f.g) / 100 * pib;
+      const ploa = -b.primario_ploa.pct_pib / 100 * pib;
+      conta = juros + cresc + ploa;
+      // R$ bi off the bill per 1 p.p. more nominal growth: d/(1+g)^2 of GDP.
+      sens = { g: d / 100 / Math.pow(1 + f.g / 100, 2) / 100 * pib };
+      rows.push({ id: 'juros', kind: 'up', item: 'Juros da dívida em um ano', start: 0, end: juros, valor_bi: juros, nota: `dívida ${nf(1).format(d)}% do PIB × juro médio ${nf(1).format(f.r)}%` });
+      rows.push({ id: 'crescimento', kind: 'down', item: 'Desconto do crescimento do PIB', start: juros, end: juros + cresc, valor_bi: cresc, nota: `PIB nominal ${nf(1).format(f.g)}% em 12 meses` });
+      rows.push({ id: 'ploa', kind: 'down', item: 'Superávit já previsto no PLOA', start: juros + cresc, end: conta, valor_bi: ploa, nota: `${nf(2).format(b.primario_ploa.pct_pib)}% do PIB` });
+      rows.push({ id: 'esforco', kind: 'total', item: 'A conta: falta poupar', start: 0, end: conta, valor_bi: conta, nota: `${nf(1).format(conta / pib * 100)}% do PIB`, mes: f.month });
+      scenarios.filter((r) => anc && r.id !== 'ancora').forEach((r) => {
+        const extra = (r.selic_end2027 - anc.selic_end2027) * b.selic_1pp.valor_bi;
+        rows.push({ id: 'juros_' + r.id, kind: 'scenario', item: `Se ${r.cenario.split(' ')[0]}: juros a mais`, start: conta, end: conta + extra, valor_bi: extra, nota: `Selic ${nf(1).format(r.selic_end2027)}% contra ${nf(1).format(anc.selic_end2027)}%` });
+      });
+    }
+    rows.push({ id: 'discricionarias', kind: 'compare', item: 'Todo o gasto discricionário (PLOA)', start: 0, end: b.discricionarias.valor_bi, valor_bi: b.discricionarias.valor_bi, nota: 'custeio e investimento que podem ser cortados' });
+    if (conta !== null && conta > b.discricionarias.valor_bi) {
+      const gap = conta - b.discricionarias.valor_bi;
+      rows.push({ id: 'gap', kind: 'gap', item: 'O buraco que sobra', start: b.discricionarias.valor_bi, end: conta, valor_bi: gap, nota: 'sem fonte de corte que cubra', selic_pp: gap / b.selic_1pp.valor_bi, g_pp: sens ? gap / sens.g : null });
+    }
+    rows.push({ id: 'contingenciamento', kind: 'compare', item: 'Bloqueio que a IFI estima para o piso', start: 0, end: b.contingenciamento_ifi.valor_bi, valor_bi: b.contingenciamento_ifi.valor_bi, nota: 'o corte em discussão' });
+    return rows;
+  },
+});
+
+})();</script>
+
+<script>(function(){
+
+const nf = (d) => new Intl.NumberFormat('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+const fmt1 = nf(1), fmt2 = nf(2);
+const signed = (f) => (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + f.format(Math.abs(v));
+const parseDay = (s) => new Date(s + (s.length === 7 ? '-01' : '') + 'T00:00:00Z');
+const monthName = (s) => d3.utcFormat('%m/%Y')(parseDay(s));
+const dayName = (s) => d3.utcFormat('%d/%m/%Y')(parseDay(s));
+
+function setText(sel, id, f) {
+  document.querySelectorAll(sel).forEach((el) => {
+    const d = dash.data(id);
+    if (d.status === 'ok' && d.data.length) {
+      const v = d.data[Number(el.dataset.row || 0)][el.dataset.field];
+      el.textContent = v === null || v === undefined ? '—' : f(el.dataset.field, v);
+      el.classList.remove('dash-skeleton');
+    } else if (d.status !== 'loading') {
+      el.textContent = '—';
+      el.classList.remove('dash-skeleton');
+    }
+  });
+}
+
+function legend(el, items) {
+  el.replaceChildren(...items.map((it) => {
+    const s = document.createElement('span');
+    const sw = document.createElement('i');
+    sw.className = 'dm-sw';
+    sw.style.background = it.color;
+    if (it.dashed) sw.style.background = `repeating-linear-gradient(90deg, ${it.color} 0 4px, transparent 4px 7px)`;
+    s.append(sw, document.createTextNode(it.label));
+    return s;
+  }));
+}
+
+function failBox(el, status) {
+  el.replaceChildren();
+  if (status === 'error') {
+    const f = document.createElement('div');
+    f.className = 'dm-fail';
+    f.textContent = 'Failed to load';
+    el.append(f);
+  }
+}
+
+// series: [{label, color, points: [{x: Date, y}]}]; refs: [{y, label, kind: 'trigger' | 'ref', anchor}]
+function lineChart(el, series, { yFmt = fmt1, xFmt = d3.utcFormat('%m/%y'), tipX = d3.utcFormat('%d/%m/%Y'), refs = [], height = 220, ySuffix = '%' } = {}) {
+  el.replaceChildren();
+  const width = Math.max(260, el.clientWidth);
+  const all = series.flatMap((s) => s.points);
+  if (!all.length) return;
+  const ys = all.map((p) => p.y).concat(refs.map((r) => r.y));
+  const [lo, hi] = d3.extent(ys);
+  const pad = (hi - lo) * 0.08 || 0.5;
+  const y = d3.scaleLinear([lo - pad, hi + pad], [height - 24, 8]).nice();
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${width} ${height}`).attr('height', height);
+  const ticks = y.ticks(5);
+  const probe = svg.append('text').attr('font-size', 'var(--cds-font-size-caption)');
+  const left = d3.max(ticks, (t) => { probe.text(yFmt.format(t)); return probe.node().getComputedTextLength(); }) + 10;
+  probe.remove();
+  const right = 12;
+  const x = d3.scaleUtc(d3.extent(all, (p) => p.x), [left, width - right]);
+  const g = svg.append('g');
+  g.selectAll('line.grid').data(ticks).join('line').attr('x1', left).attr('x2', width - right).attr('y1', (t) => y(t)).attr('y2', (t) => y(t)).attr('stroke', 'var(--cds-chart-grid)');
+  g.selectAll('text.yt').data(ticks).join('text').attr('x', left - 8).attr('y', (t) => y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').attr('fill', 'var(--color-fg-muted)').attr('font-size', 'var(--cds-font-size-caption)').text((t) => yFmt.format(t));
+  const nx = Math.max(2, Math.floor((width - left) / 80));
+  g.selectAll('text.xt').data(x.ticks(nx)).join('text').attr('x', (t) => x(t)).attr('y', height - 6).attr('text-anchor', 'middle').attr('fill', 'var(--color-fg-muted)').attr('font-size', 'var(--cds-font-size-caption)').text((t) => xFmt(t));
+  g.append('line').attr('x1', left).attr('x2', width - right).attr('y1', height - 24).attr('y2', height - 24).attr('stroke', 'var(--cds-chart-axis)');
+  refs.forEach((r) => {
+    const trig = r.kind === 'trigger';
+    g.append('line').attr('x1', left).attr('x2', width - right).attr('y1', y(r.y)).attr('y2', y(r.y)).attr('stroke', trig ? 'var(--cds-chart-status-critical)' : 'var(--cds-chart-reference)').attr('stroke-width', trig ? 1.5 : 1).attr('stroke-dasharray', '4 3');
+    g.append('text').attr('x', r.anchor === 'start' ? left + 4 : width - right).attr('y', y(r.y) - 4).attr('text-anchor', r.anchor || 'end').attr('fill', trig ? 'var(--cds-chart-status-critical)' : 'var(--color-fg-muted)').attr('font-size', 'var(--cds-font-size-caption)').text(r.label);
+  });
+  const line = d3.line().x((p) => x(p.x)).y((p) => y(p.y)).defined((p) => isFinite(p.y));
+  series.forEach((s) => {
+    svg.append('path').datum(s.points).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round').attr('d', line);
+    const last = s.points[s.points.length - 1];
+    if (last) svg.append('circle').attr('cx', x(last.x)).attr('cy', y(last.y)).attr('r', 3.5).attr('fill', s.color);
+  });
+  // tooltip
+  const tip = d3.select(el).append('div').attr('class', 'dm-tip').style('display', 'none');
+  const rule = svg.append('line').attr('y1', 8).attr('y2', height - 24).attr('stroke', 'var(--cds-chart-axis)').style('display', 'none');
+  const dots = series.map((s) => svg.append('circle').attr('r', 4).attr('fill', s.color).style('display', 'none'));
+  const bis = d3.bisector((p) => p.x).center;
+  svg.append('rect').attr('x', left).attr('y', 0).attr('width', width - left - right).attr('height', height - 24).attr('fill', 'transparent')
+    .on('mousemove', (ev) => {
+      const [mx] = d3.pointer(ev);
+      const xv = x.invert(mx);
+      const hits = series.map((s) => s.points[bis(s.points, xv)]).filter(Boolean);
+      if (!hits.length) return;
+      const xd = hits[0].x;
+      rule.attr('x1', x(xd)).attr('x2', x(xd)).style('display', null);
+      series.forEach((s, i) => { const p = s.points[bis(s.points, xv)]; if (p) dots[i].attr('cx', x(p.x)).attr('cy', y(p.y)).style('display', null); });
+      tip.node().replaceChildren();
+      tip.append('div').attr('class', 'dm-tip-date').text(tipX(xd));
+      series.forEach((s) => {
+        const p = s.points[bis(s.points, xv)];
+        if (!p) return;
+        const row = tip.append('div');
+        if (series.length > 1) row.append('span').attr('class', 'dm-sw').style('background', s.color).style('margin-right', '6px');
+        row.append('span').text(`${series.length > 1 ? s.label + ': ' : ''}${yFmt.format(p.y)}${ySuffix}`);
+      });
+      tip.style('display', null);
+      const tw = tip.node().offsetWidth;
+      const px = x(xd) + 12 + tw > width ? x(xd) - 12 - tw : x(xd) + 12;
+      tip.style('left', `${Math.max(0, px)}px`).style('top', '8px');
+    })
+    .on('mouseleave', () => { tip.style('display', 'none'); rule.style('display', 'none'); dots.forEach((d) => d.style('display', 'none')); });
+}
+
+function barChart(el, rows, { ref, ref2 = null, height = 220 } = {}) {
+  el.replaceChildren();
+  const width = Math.max(260, el.clientWidth);
+  const left = 8, right = 8, top = 22, bottom = 24;
+  const x = d3.scaleBand(rows.map((r) => r.month), [left, width - right]).padding(0.35);
+  const vals = rows.map((r) => Number(r.floating_share_dpf));
+  const lo = Math.floor(Math.min(d3.min(vals), ref, ref2 ?? ref) - 3);
+  const y = d3.scaleLinear([lo, Math.max(d3.max(vals), ref) + 1], [height - bottom, top]);
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${width} ${height}`).attr('height', height);
+  svg.selectAll('rect').data(rows).join('rect').attr('x', (r) => x(r.month) + Math.max(0, (x.bandwidth() - 32) / 2)).attr('width', Math.min(32, x.bandwidth()))
+    .attr('y', (r) => y(Number(r.floating_share_dpf))).attr('height', (r) => y(lo) - y(Number(r.floating_share_dpf))).attr('rx', 4).attr('fill', dash.colors[0]);
+  svg.selectAll('text.v').data(rows).join('text').attr('x', (r) => x(r.month) + x.bandwidth() / 2).attr('y', (r) => y(Number(r.floating_share_dpf)) - 6).attr('text-anchor', 'middle').attr('fill', 'var(--color-fg)').attr('font-size', 'var(--cds-font-size-caption)').text((r) => fmt2.format(Number(r.floating_share_dpf)) + '%');
+  svg.selectAll('text.m').data(rows).join('text').attr('x', (r) => x(r.month) + x.bandwidth() / 2).attr('y', height - 6).attr('text-anchor', 'middle').attr('fill', 'var(--color-fg-muted)').attr('font-size', 'var(--cds-font-size-caption)').text((r) => monthName(r.month));
+  svg.append('line').attr('x1', left).attr('x2', width - right).attr('y1', y(ref)).attr('y2', y(ref)).attr('stroke', 'var(--cds-chart-status-critical)').attr('stroke-dasharray', '4 3');
+  svg.append('text').attr('x', left).attr('y', y(ref) - 4).attr('fill', 'var(--cds-chart-status-critical)').attr('font-size', 'var(--cds-font-size-caption)').text(`Gatilho: teto PAF ${fmt1.format(ref)}%`);
+  if (ref2 !== null) {
+    svg.append('line').attr('x1', left).attr('x2', width - right).attr('y1', y(ref2)).attr('y2', y(ref2)).attr('stroke', 'var(--cds-chart-status-critical)').attr('stroke-dasharray', '2 3');
+    svg.append('text').attr('x', width - right).attr('y', y(ref2) + 12).attr('text-anchor', 'end').attr('fill', 'var(--cds-chart-status-critical)').attr('font-size', 'var(--cds-font-size-caption)').text(`Gatilho: 3 meses antes + 2 p.p. = ${fmt2.format(ref2)}%`);
+  }
+  svg.append('line').attr('x1', left).attr('x2', width - right).attr('y1', height - bottom).attr('y2', height - bottom).attr('stroke', 'var(--cds-chart-axis)');
+}
+
+// rows: [{label, note, <key>: share}]; one horizontal bar per row, segments sum to 1
+function hbarChart(el, rows, { ref = null, refLabel = '', fmt = (v) => nf(1).format(v) } = {}) {
+  el.replaceChildren();
+  const width = el.clientWidth || 600;
+  const bar = 26, gap = 10, labW = Math.min(240, width * 0.42), top = 6, bottom = 22;
+  const height = top + rows.length * (bar + gap) + bottom;
+  const max = d3.max(rows.map((r) => r.valor_bi).concat(ref === null ? [] : [ref])) * 1.12;
+  const x = d3.scaleLinear().domain([0, max]).range([labW, width - 8]);
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${width} ${height}`).attr('role', 'img');
+  rows.forEach((r, i) => {
+    const y = top + i * (bar + gap);
+    svg.append('text').attr('x', labW - 8).attr('y', y + bar / 2).attr('dy', '0.32em').attr('text-anchor', 'end').attr('fill', 'var(--color-fg)').attr('font-size', 'var(--cds-font-size-caption)').text(r.item);
+    svg.append('rect').attr('x', x(0)).attr('y', y).attr('width', Math.max(0, x(r.valor_bi) - x(0))).attr('height', bar).attr('rx', 3).attr('fill', r.id.startsWith('juros') ? dash.colors[2] : r.id === 'esforco' ? dash.colors[1] : dash.colors[0]);
+    svg.append('text').attr('x', x(r.valor_bi) + 4).attr('y', y + bar / 2).attr('dy', '0.32em').attr('fill', 'var(--color-fg-muted)').attr('font-size', 'var(--cds-font-size-caption)').text(fmt(r.valor_bi));
+  });
+  if (ref !== null) {
+    svg.append('line').attr('x1', x(ref)).attr('x2', x(ref)).attr('y1', 0).attr('y2', height - bottom + 4).attr('stroke', 'var(--cds-chart-status-critical, var(--color-bad))').attr('stroke-dasharray', '4 3');
+    svg.append('text').attr('x', x(ref)).attr('y', height - 6).attr('text-anchor', 'middle').attr('fill', 'var(--cds-chart-status-critical, var(--color-bad))').attr('font-size', 'var(--cds-font-size-caption)').text(refLabel);
+  }
+}
+
+function slopeChart(el, now, rows, colors) {
+  el.replaceChildren();
+  const width = el.clientWidth || 600, narrow = width < 520, height = 260, top = 14, bottom = 26, left = 40, right = narrow ? 64 : 150;
+  const vals = rows.map((r) => r.v).concat([now.v, 70]);
+  const y = d3.scaleLinear().domain([d3.min(vals) - 4, d3.max(vals) + 3]).range([height - bottom, top]);
+  const x0 = left + 10, x1 = width - right;
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${width} ${height}`).attr('role', 'img')
+    .attr('aria-label', 'Dívida bruta hoje e em 2030 em cada cenário, contra a linha de dívida estável.');
+  svg.append('g').attr('transform', `translate(${left},0)`).call(d3.axisLeft(y).ticks(5).tickFormat((v) => nf(0).format(v) + '%')).attr('color', 'var(--color-fg-muted)');
+  [[x0, now.label, 'start'], [x1, '2030', 'middle']].forEach(([x, t, an]) => svg.append('text').attr('x', an === 'start' ? x - 8 : x).attr('y', height - 6).attr('text-anchor', an).attr('fill', 'var(--color-fg-muted)').attr('font-size', 'var(--cds-font-size-caption)').text(t));
+  const hline = (v, txt, color, dash) => {
+    svg.append('line').attr('x1', x0).attr('x2', x1).attr('y1', y(v)).attr('y2', y(v)).attr('stroke', color).attr('stroke-dasharray', dash);
+    svg.append('text').attr('x', x1 + 6).attr('y', y(v)).attr('dy', '0.32em').attr('fill', color).attr('font-size', 'var(--cds-font-size-caption)').text(txt);
+  };
+  hline(now.v, narrow ? 'estável' : 'estável (no controle)', 'var(--color-fg, #333)', '5 3');
+  hline(70, narrow ? 'FMI' : 'alerta FMI 70%', 'var(--color-fg-muted, #888)', '2 3');
+  const ly = rows.map((r) => y(r.v)).sort((a, b) => a - b);
+  rows.slice().sort((a, b) => y(a.v) - y(b.v)).forEach((r, i) => {
+    svg.append('line').attr('x1', x0).attr('x2', x1).attr('y1', y(now.v)).attr('y2', y(r.v)).attr('stroke', colors[r.id]).attr('stroke-width', 2.5);
+    svg.append('circle').attr('cx', x1).attr('cy', y(r.v)).attr('r', 4).attr('fill', colors[r.id]);
+    const yy = Math.max(ly[i], i ? ly[i - 1] + 14 : -Infinity);
+    ly[i] = yy;
+    svg.append('text').attr('x', x1 + 6).attr('y', yy).attr('dy', '0.32em').attr('fill', colors[r.id]).attr('font-size', 'var(--cds-font-size-caption)').attr('font-weight', 600)
+      .text(narrow ? nf(1).format(r.v) + '%' : `${r.label.split(' ')[0]} ${nf(1).format(r.v)}%`);
+  });
+  svg.append('circle').attr('cx', x0).attr('cy', y(now.v)).attr('r', 4).attr('fill', 'var(--color-fg, #333)');
+  svg.append('text').attr('x', x0 + 8).attr('y', y(now.v) + 18).attr('fill', 'var(--color-fg, #333)').attr('font-size', 'var(--cds-font-size-caption)').text(nf(1).format(now.v) + '%');
+}
+
+function waterfallChart(el, rows) {
+  el.replaceChildren();
+  const width = el.clientWidth || 600, narrow = width < 520;
+  const bar = 24, gap = narrow ? 30 : 12, labW = narrow ? 8 : Math.min(250, width * 0.4), top = 6, bottom = 24;
+  const rowH = bar + gap + (narrow ? 0 : 0);
+  const height = top + rows.length * rowH + bottom;
+  const max = d3.max(rows, (r) => Math.max(r.start, r.end)) * 1.08;
+  const x = d3.scaleLinear().domain([0, max]).range([labW, width - (narrow ? 48 : 70)]);
+  const col = { up: dash.colors[3] || '#3a9d5d', down: 'var(--color-fg-muted)', total: dash.colors[1], compare: dash.colors[0], scenario: dash.colors[2], gap: 'var(--color-bad, #c0392b)' };
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${width} ${height}`).attr('role', 'img')
+    .attr('aria-label', 'Cascata: juros da dívida, menos o crescimento, menos o superávit previsto, dá a conta; comparada ao gasto discricionário.');
+  svg.append('g').attr('transform', `translate(0,${height - bottom})`).call(d3.axisBottom(x).ticks(narrow ? 4 : 6).tickFormat((v) => nf(0).format(v))).attr('color', 'var(--color-fg-muted)');
+  const tip = d3.select(el).style('position', 'relative').append('div').attr('class', 'dm-tip').style('display', 'none');
+  rows.forEach((r, i) => {
+    const y = top + i * rowH + (narrow ? 16 : 0);
+    const x0 = x(Math.min(r.start, r.end)), w = Math.abs(x(r.end) - x(r.start));
+    if (narrow) svg.append('text').attr('x', labW).attr('y', y - 5).attr('fill', 'var(--color-fg)').attr('font-size', 'var(--cds-font-size-caption)').attr('font-weight', r.kind === 'total' || r.kind === 'gap' ? 600 : 400).text(r.item);
+    else svg.append('text').attr('x', labW - 8).attr('y', y + bar / 2).attr('dy', '0.32em').attr('text-anchor', 'end').attr('fill', 'var(--color-fg)').attr('font-size', 'var(--cds-font-size-caption)').attr('font-weight', r.kind === 'total' || r.kind === 'gap' ? 600 : 400).text(r.item);
+    svg.append('rect').attr('x', x0).attr('y', y).attr('width', Math.max(1, w)).attr('height', bar).attr('rx', 3).attr('fill', col[r.kind]).attr('opacity', r.kind === 'down' ? 0.45 : 1)
+      .on('mousemove', (ev) => {
+        const [mx, my] = d3.pointer(ev, el);
+        tip.style('display', 'block').style('left', `${Math.min(mx + 12, width - 200)}px`).style('top', `${my + 12}px`).text(`${r.item}: ${(r.valor_bi < 0 ? '−' : '+')}R$ ${nf(1).format(Math.abs(r.valor_bi))} bi (${r.nota})`);
+      })
+      .on('mouseleave', () => tip.style('display', 'none'));
+    if (r.kind === 'gap') svg.append('line').attr('x1', x(r.end)).attr('x2', x(r.end)).attr('y1', top).attr('y2', y + bar).attr('stroke', col.gap).attr('stroke-dasharray', '3 3');
+    const lab = (r.kind === 'down' ? '−' : r.kind === 'up' || r.kind === 'scenario' ? '+' : r.kind === 'gap' ? 'falta ' : '') + nf(0).format(Math.abs(r.valor_bi));
+    svg.append('text').attr('x', x(Math.max(r.start, r.end)) + 4).attr('y', y + bar / 2).attr('dy', '0.32em').attr('fill', 'var(--color-fg-muted)').attr('font-size', 'var(--cds-font-size-caption)').text(lab);
+    const next = rows[i + 1];
+    if (next && ['up', 'down'].includes(r.kind)) svg.append('line').attr('x1', x(r.end)).attr('x2', x(r.end)).attr('y1', y + bar).attr('y2', y + rowH + (narrow ? 16 : 0)).attr('stroke', 'var(--color-fg-muted)').attr('stroke-dasharray', '2 2');
+  });
+}
+
+// Per 1 p.p., 12 months (dataset canais; NTN-B unrounded as in calc desancoragem).
+const SIM_K = { selic_juros: 11.0, selic_dbgg: 59.3, ipca_ntnb: 3.162, inpc_benef: 13.5, ipca_teto: 23.9 };
+let simReady = false, simFocusGap = null;
+function setupSim(focusGap) {
+  simFocusGap = focusGap;
+  const root = document.querySelector('#c-canais .dm-sim');
+  if (!root) return;
+  const sS = root.querySelector('.sim-s'), sI = root.querySelector('.sim-i'), btn = root.querySelector('.sim-focus');
+  btn.disabled = focusGap === null;
+  if (!simReady) {
+    simReady = true;
+    sS.addEventListener('input', drawSim); sI.addEventListener('input', drawSim);
+    btn.addEventListener('click', () => { if (simFocusGap !== null) { sI.value = Math.max(0, Math.min(4, Math.round(simFocusGap * 4) / 4)); drawSim(); } });
+    if (focusGap !== null) sI.value = Math.max(0, Math.min(4, Math.round(focusGap * 4) / 4));
+  }
+  drawSim();
+}
+function flowChart(el, s, i) {
+  el.replaceChildren();
+  const width = el.clientWidth || 600, narrow = width < 520;
+  const green = dash.colors[3] || '#3a9d5d';
+  const dest = { fora: { label: 'Fora do teto e da meta: vai para a dívida', short: 'Vai para a dívida', c: dash.colors[1] },
+    aperta: { label: 'Dentro do teto: aperta as discricionárias', short: 'Aperta discricionárias', c: dash.colors[2] },
+    folga: { label: 'Dentro do teto: dá folga', short: 'Folga no teto', c: green } };
+  const links = [
+    { src: 'selic', mid: 'Juros pagos no orçamento', v: SIM_K.selic_juros * s, to: 'fora' },
+    { src: 'ipca', mid: 'Juros da NTN-B', v: SIM_K.ipca_ntnb * i, to: 'fora' },
+    { src: 'ipca', mid: 'Benefícios do salário mínimo', v: SIM_K.inpc_benef * i, to: 'aperta' },
+    { src: 'ipca', mid: 'Teto de gastos sobe', v: SIM_K.ipca_teto * i, to: 'folga' },
+  ].filter((l) => l.v > 0);
+  if (!links.length) return;
+  const srcLab = { selic: `Selic +${nf(2).format(s)} p.p.`, ipca: `Inflação +${nf(2).format(i)} p.p.` };
+  const total = d3.sum(links, (l) => l.v);
+  const lab = 30, pad = narrow ? 40 : 20, top = 6, nodeW = 10;
+  const avail = Math.max(120, Math.min(260, 70 * links.length));
+  const k = avail / total;
+  const col = (keys, val) => { let y = top + lab; const out = {}; keys.forEach((key) => { const h = Math.max(2, val(key) * k); out[key] = { y, h, used: 0, usedIn: 0 }; y += h + pad + lab; }); return [out, y]; };
+  const srcKeys = [...new Set(links.map((l) => l.src))], midKeys = links.map((l) => l.mid), dstKeys = [...new Set(links.map((l) => l.to))];
+  const sum = (f) => (key) => d3.sum(links.filter(f(key)), (l) => l.v);
+  const [S, hS] = col(srcKeys, sum((key) => (l) => l.src === key));
+  const [M, hM] = col(midKeys, sum((key) => (l) => l.mid === key));
+  const [D, hD] = col(dstKeys, sum((key) => (l) => l.to === key));
+  const height = Math.max(hS, hM, hD) - lab + (narrow ? 12 : 0);
+  const x0 = 2, x1 = width / 2 - nodeW / 2, x2 = width - nodeW - 2;
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${width} ${height}`).attr('role', 'img')
+    .attr('aria-label', 'Fluxo: cada choque, o canal por onde passa e onde a conta cai, em R$ bilhões por ano.');
+  const band = (xa, ya, xb, yb, h) => { const xm = (xa + xb) / 2; return `M${xa},${ya}C${xm},${ya} ${xm},${yb} ${xb},${yb}L${xb},${yb + h}C${xm},${yb + h} ${xm},${ya + h} ${xa},${ya + h}Z`; };
+  links.forEach((l) => {
+    const h = l.v * k, c = dest[l.to].c;
+    const sy = S[l.src].y + S[l.src].used; S[l.src].used += h;
+    const m = M[l.mid];
+    const dy = D[l.to].y + D[l.to].usedIn; D[l.to].usedIn += h;
+    svg.append('path').attr('d', band(x0 + nodeW, sy, x1, m.y, h)).attr('fill', c).attr('opacity', 0.35);
+    svg.append('path').attr('d', band(x1 + nodeW, m.y, x2, dy, h)).attr('fill', c).attr('opacity', 0.35);
+  });
+  const fs = 'var(--cds-font-size-caption)', fg = 'var(--color-fg, #333)', mu = 'var(--color-fg-muted, #777)';
+  const node = (x, n, c, l1, l2, anchor, below = false) => {
+    svg.append('rect').attr('x', x).attr('y', n.y).attr('width', nodeW).attr('height', n.h).attr('fill', c).attr('rx', 2);
+    const tx = anchor === 'start' ? x : anchor === 'end' ? x + nodeW : x + nodeW / 2;
+    const ly = below ? n.y + n.h + 31 : n.y;
+    svg.append('text').attr('x', tx).attr('y', ly - 18).attr('text-anchor', anchor).attr('fill', fg).attr('font-size', fs).attr('font-weight', 600).text(l1);
+    svg.append('text').attr('x', tx).attr('y', ly - 5).attr('text-anchor', anchor).attr('fill', mu).attr('font-size', fs).text(l2);
+  };
+  const bi = (v) => 'R$ ' + nf(1).format(v) + ' bi';
+  srcKeys.forEach((key) => node(x0, S[key], fg, srcLab[key], 'choque', 'start'));
+  links.forEach((l) => node(x1, M[l.mid], dest[l.to].c, narrow ? l.mid.replace(' do salário mínimo', '').replace(' no orçamento', '').replace(' de gastos', '') : l.mid, bi(l.v), 'middle', narrow));
+  dstKeys.forEach((key) => node(x2, D[key], dest[key].c, narrow ? dest[key].short : dest[key].label, bi(d3.sum(links.filter((l) => l.to === key), (l) => l.v)), 'end'));
+}
+function drawSim() {
+  const root = document.querySelector('#c-canais .dm-sim');
+  const s = Number(root.querySelector('.sim-s').value), i = Number(root.querySelector('.sim-i').value);
+  root.querySelector('.sim-s-v').textContent = nf(2).format(s);
+  root.querySelector('.sim-i-v').textContent = nf(2).format(i);
+  const unit = s === 0 && i === 0;
+  root.querySelector('.flow-cap').textContent = unit
+    ? 'O fluxo abaixo mostra 1 p.p. de cada choque, porque os controles estão em zero. Da esquerda para a direita: o choque, o canal por onde passa e onde a conta cai, em R$ bi por ano. A largura de cada faixa é o tamanho do efeito.'
+    : 'Da esquerda para a direita: o choque, o canal por onde passa e onde a conta cai, em R$ bi por ano. A largura de cada faixa é o tamanho do efeito. Mova os controles e o fluxo muda.';
+  flowChart(root.querySelector('.ch-flow'), unit ? 1 : s, unit ? 1 : i);
+  const rows = [
+    { id: 'juros_selic', item: 'Juros pagos no orçamento (Selic)', v: SIM_K.selic_juros * s, grupo: 'fora' },
+    { id: 'juros_ntnb', item: 'Juros da NTN-B (inflação)', v: SIM_K.ipca_ntnb * i, grupo: 'fora' },
+    { id: 'benef', item: 'Benefícios do salário mínimo', v: SIM_K.inpc_benef * i, grupo: 'dentro' },
+    { id: 'teto', item: 'Teto de gastos sobe', v: -SIM_K.ipca_teto * i, grupo: 'dentro' },
+  ];
+  const el = root.querySelector('.ch-sim');
+  el.replaceChildren();
+  const width = el.clientWidth || 600, narrow = width < 520;
+  const bar = 22, gap = narrow ? 26 : 10, labW = narrow ? 8 : Math.min(230, width * 0.38), top = 6, bottom = 22;
+  const rowH = bar + gap, height = top + rows.length * rowH + bottom;
+  const lim = Math.max(30, d3.max(rows, (r) => Math.abs(r.v))) * 1.15;
+  const x = d3.scaleLinear().domain([-lim, lim]).range([labW, width - 8]);
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${width} ${height}`).attr('role', 'img')
+    .attr('aria-label', 'Efeito dos choques em R$ bilhões por ano, à direita piora, à esquerda folga.');
+  svg.append('g').attr('transform', `translate(0,${height - bottom})`).call(d3.axisBottom(x).ticks(narrow ? 4 : 6).tickFormat((v) => nf(0).format(v))).attr('color', 'var(--color-fg-muted)');
+  svg.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', 0).attr('y2', height - bottom).attr('stroke', 'var(--color-fg-muted)');
+  rows.forEach((r, k) => {
+    const y = top + k * rowH + (narrow ? 14 : 0);
+    if (narrow) svg.append('text').attr('x', labW).attr('y', y - 4).attr('fill', 'var(--color-fg)').attr('font-size', 'var(--cds-font-size-caption)').text(r.item);
+    else svg.append('text').attr('x', labW - 8).attr('y', y + bar / 2).attr('dy', '0.32em').attr('text-anchor', 'end').attr('fill', 'var(--color-fg)').attr('font-size', 'var(--cds-font-size-caption)').text(r.item);
+    const c = r.v < 0 ? (dash.colors[3] || '#3a9d5d') : r.grupo === 'fora' ? dash.colors[1] : dash.colors[2];
+    svg.append('rect').attr('x', Math.min(x(0), x(r.v))).attr('y', y).attr('width', Math.max(1, Math.abs(x(r.v) - x(0)))).attr('height', bar).attr('rx', 3).attr('fill', c);
+    const t = (r.v > 0 ? '+' : r.v < 0 ? '−' : '') + nf(1).format(Math.abs(r.v));
+    svg.append('text').attr('x', r.v < 0 ? x(r.v) - 4 : x(r.v) + 4).attr('y', y + bar / 2).attr('dy', '0.32em').attr('text-anchor', r.v < 0 ? 'end' : 'start').attr('fill', 'var(--color-fg-muted)').attr('font-size', 'var(--cds-font-size-caption)').text(t);
+  });
+  const fora = rows.filter((r) => r.grupo === 'fora').reduce((a, r) => a + r.v, 0);
+  const espaco = -(rows.find((r) => r.id === 'teto').v + rows.find((r) => r.id === 'benef').v);
+  const bi = (v) => 'R$ ' + nf(1).format(Math.abs(v)) + ' bi';
+  root.querySelector('.sim-txt').textContent = s === 0 && i === 0
+    ? 'Sem choque, nada muda. Mova os controles.'
+    : `Juros a mais, fora do teto e da meta: ${bi(fora)} por ano${s > 0 ? `; a dívida bruta cresce cerca de ${bi(SIM_K.selic_dbgg * s)} em 12 meses pela conta do BCB` : ''}. Dentro do teto, ${i > 0 ? (espaco >= 0 ? `o teto sobe mais que os benefícios e sobram ${bi(espaco)} para as discricionárias no ano seguinte. Por isso o primário parece em ordem enquanto a dívida sobe.` : `os benefícios sobem mais que o teto e as discricionárias perdem ${bi(espaco)} no ano seguinte.`) : 'nada muda, porque a Selic não mexe no teto. Por isso o primário parece em ordem enquanto a dívida sobe.'}`;
+}
+
+function fanChart(el, rows, { refs = [] } = {}) {
+  el.replaceChildren();
+  const width = el.clientWidth || 600, height = 240, m = { t: 12, r: 64, b: 24, l: 40 };
+  const x = d3.scaleLinear().domain(d3.extent(rows, (r) => r.year)).range([m.l, width - m.r]);
+  const y = d3.scaleLinear().domain([Math.min(d3.min(rows, (r) => r.p10), ...refs.map((f) => f.y)) - 3, Math.max(d3.max(rows, (r) => r.p90), ...refs.map((f) => f.y)) + 3]).nice().range([height - m.b, m.t]);
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${width} ${height}`).attr('role', 'img');
+  svg.append('g').attr('transform', `translate(0,${height - m.b})`).call(d3.axisBottom(x).ticks(rows.length).tickFormat(d3.format('d'))).attr('color', 'var(--color-fg-muted)');
+  svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5)).attr('color', 'var(--color-fg-muted)');
+  const c = dash.colors[0];
+  svg.append('path').datum(rows).attr('fill', c).attr('opacity', 0.15).attr('d', d3.area().x((r) => x(r.year)).y0((r) => y(r.p10)).y1((r) => y(r.p90)));
+  svg.append('path').datum(rows).attr('fill', c).attr('opacity', 0.3).attr('d', d3.area().x((r) => x(r.year)).y0((r) => y(r.p25)).y1((r) => y(r.p75)));
+  svg.append('path').datum(rows).attr('fill', 'none').attr('stroke', c).attr('stroke-width', 2).attr('d', d3.line().x((r) => x(r.year)).y((r) => y(r.p50)));
+  refs.forEach((f) => {
+    const col = f.kind === 'trigger' ? 'var(--cds-chart-status-critical, var(--color-bad))' : 'var(--color-fg-muted)';
+    svg.append('line').attr('x1', m.l).attr('x2', width - m.r).attr('y1', y(f.y)).attr('y2', y(f.y)).attr('stroke', col).attr('stroke-dasharray', '4 3');
+    svg.append('text').attr('x', width - m.r + 4).attr('y', y(f.y)).attr('dy', '0.32em').attr('fill', col).attr('font-size', 'var(--cds-font-size-caption)').text(f.label);
+  });
+  rows.forEach((r) => svg.append('text').attr('x', x(r.year)).attr('y', y(r.p50) - 8).attr('text-anchor', 'middle').attr('fill', 'var(--color-fg)').attr('font-size', 'var(--cds-font-size-caption)').text(nf(1).format(r.p50)));
+}
+
+function stackChart(el, rows, keys, colors) {
+  el.replaceChildren();
+  const width = Math.max(260, el.clientWidth);
+  const bar = 26, gap = 14, top = 4;
+  const probe = d3.select(el).append('svg').append('text').attr('font-size', 'var(--cds-font-size-caption)');
+  const left = d3.max(rows, (r) => { probe.text(r.label); return probe.node().getComputedTextLength(); }) + 12;
+  d3.select(el).selectAll('svg').remove();
+  const height = top + rows.length * (bar + gap);
+  const x = d3.scaleLinear([0, 1], [left, width - 8]);
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${width} ${height}`).attr('height', height);
+  const tip = d3.select(el).append('div').attr('class', 'dm-tip').style('display', 'none');
+  rows.forEach((r, i) => {
+    const y = top + i * (bar + gap);
+    svg.append('text').attr('x', left - 8).attr('y', y + bar / 2).attr('dy', '0.32em').attr('text-anchor', 'end').attr('fill', 'var(--color-fg-muted)').attr('font-size', 'var(--cds-font-size-caption)').text(r.label);
+    let acc = 0;
+    keys.forEach((k) => {
+      const v = Number(r[k]);
+      const x0 = x(acc), w = x(acc + v) - x0;
+      svg.append('rect').attr('x', x0 + 1).attr('y', y).attr('width', Math.max(0, w - 2)).attr('height', bar).attr('rx', 3).attr('fill', colors[k])
+        .on('mousemove', (ev) => {
+          const [mx, my] = d3.pointer(ev, el);
+          tip.node().replaceChildren();
+          tip.append('div').attr('class', 'dm-tip-date').text(r.label);
+          keys.forEach((kk) => tip.append('div').text(`${kk === 'ancora' ? 'Âncora' : kk === 'deriva' ? 'Deriva' : 'Estresse'}: ${nf(0).format(Number(r[kk]) * 100)}%`));
+          if (r.note) tip.append('div').attr('class', 'dm-tip-date').style('white-space', 'normal').style('max-width', '16rem').text(r.note);
+          tip.style('display', null).style('left', `${Math.min(mx + 12, width - 260)}px`).style('top', `${my + 12}px`);
+        })
+        .on('mouseleave', () => tip.style('display', 'none'));
+      if (w > 34) svg.append('text').attr('x', x0 + w / 2).attr('y', y + bar / 2).attr('dy', '0.32em').attr('text-anchor', 'middle').attr('fill', 'var(--cds-text-on-color, #fff)').attr('font-size', 'var(--cds-font-size-caption)').style('pointer-events', 'none').text(nf(0).format(v * 100) + '%');
+      acc += v;
+    });
+  });
+}
+
+dash.onData(() => {
+  const c = dash.colors;
+  // tiles
+  setText('[data-source="fiscal_now"]', 'fiscal_now', (f, v) => {
+    if (f === 'month') return monthName(v);
+    if (f === 'debt_change_12m') return signed(fmt1)(v);
+    if (f === 'r_minus_g') return signed(fmt1)(v);
+    if (f === 'primary_balance') return signed(fmt2)(v);
+    if (f === 'gross_debt_gdp' || f === 'stabilizing_primary') return fmt1.format(v) + '%';
+    return fmt1.format(v);
+  });
+  setText('[data-source="lft_now"]', 'lft_now', (f, v) => (f === 'month' ? monthName(v) : fmt2.format(Number(v)) + '%'));
+  setText('[data-source="anchor_now"]', 'anchor_now', (f, v) => {
+    if (f === 'date') return dayName(v);
+    if (f.endsWith('_bp')) return signed(nf(0))(v);
+    if (f === 'real_5y_avg') return fmt2.format(v);
+    return fmt2.format(v) + '%';
+  });
+  setText('[data-source="focus_now"]', 'focus_now', (f, v) => {
+    if (f === 'ipca_2027_change_4w') return signed(fmt2)(v);
+    if (f === 'ipca_2028') return fmt2.format(v);
+    return fmt2.format(v) + '%';
+  });
+
+  // r vs g
+  const fsEl = document.querySelector('.ch-rg');
+  const fs = dash.data('fiscal_series');
+  legend(document.querySelector('.lg-rg'), [{ label: 'r (juro implícito)', color: c[0] }, { label: 'g (PIB nominal)', color: c[1] }]);
+  if (fs.status === 'ok') lineChart(fsEl, [
+    { label: 'r', color: c[0], points: fs.data.map((r) => ({ x: parseDay(r.month), y: r.r })) },
+    { label: 'g', color: c[1], points: fs.data.map((r) => ({ x: parseDay(r.month), y: r.g })) },
+  ], { xFmt: d3.utcFormat('%Y'), tipX: d3.utcFormat('%m/%Y') });
+  else failBox(fsEl, fs.status);
+  const rmgEl = document.querySelector('.ch-rmg'), gapEl = document.querySelector('.ch-gap');
+  if (fs.status === 'ok') {
+    lineChart(rmgEl, [{ label: 'r − g', color: c[0], points: fs.data.map((r) => ({ x: parseDay(r.month), y: r.r_minus_g })) }],
+      { xFmt: d3.utcFormat('%Y'), tipX: d3.utcFormat('%m/%Y'), ySuffix: ' p.p.', refs: [{ y: 0, label: 'Gatilho: 0', kind: 'trigger' }] });
+    lineChart(gapEl, [{ label: 'Lacuna', color: c[0], points: fs.data.map((r) => ({ x: parseDay(r.month), y: r.primary_gap })) }],
+      { xFmt: d3.utcFormat('%Y'), tipX: d3.utcFormat('%m/%Y'), ySuffix: ' p.p.', refs: [{ y: 2, label: 'Gatilho: 2 p.p.', kind: 'trigger' }] });
+  } else { failBox(rmgEl, fs.status); failBox(gapEl, fs.status); }
+
+  // Focus debt path
+  const fdEl = document.querySelector('.ch-fd');
+  const fd = dash.data('focus_debt');
+  if (fd.status === 'ok') {
+    const surveys = [...new Set(fd.data.map((r) => r.survey_date))].sort();
+    const ser = surveys.map((s, i) => ({ label: `Pesquisa de ${dayName(s)}`, color: i === surveys.length - 1 ? c[0] : 'var(--cds-chart-muted)', points: fd.data.filter((r) => r.survey_date === s).map((r) => ({ x: parseDay(`${r.year}-01-01`), y: Number(r.median_gdp) })).sort((a, b) => a.x - b.x) }));
+    legend(document.querySelector('.lg-fd'), ser.map((s) => ({ label: s.label, color: s.color })));
+    lineChart(fdEl, ser, { xFmt: d3.utcFormat('%Y'), tipX: d3.utcFormat('%Y'), refs: [{ y: 70, label: 'FMI emergentes 70%', anchor: 'start' }] });
+  } else failBox(fdEl, fd.status);
+
+  // breakevens
+  const an = dash.data('anchor_series');
+  const beEl = document.querySelector('.ch-be'), reEl = document.querySelector('.ch-real'), chEl = document.querySelector('.ch-bechg');
+  legend(document.querySelector('.lg-bechg'), [{ label: 'Implícita 2 anos', color: c[0] }, { label: 'Implícita 5 anos', color: c[1] }, { label: 'Juro real 5 anos', color: c[2] }]);
+  legend(document.querySelector('.lg-be'), [{ label: '2 anos', color: c[0] }, { label: '5 anos', color: c[1] }]);
+  if (an.status === 'ok') {
+    lineChart(beEl, [
+      { label: '2 anos', color: c[0], points: an.data.map((r) => ({ x: parseDay(r.date), y: r.be_2y })) },
+      { label: '5 anos', color: c[1], points: an.data.map((r) => ({ x: parseDay(r.date), y: r.be_5y })) },
+    ], { yFmt: fmt1, refs: [{ y: 3, label: 'Meta 3%' }, { y: 4.5, label: 'Teto 4,5%' }] });
+    const now = dash.data('anchor_now');
+    const avg = now.status === 'ok' && now.data.length ? now.data[0].real_5y_avg : null;
+    lineChart(reEl, [{ label: 'Juro real 5 anos', color: c[0], points: an.data.map((r) => ({ x: parseDay(r.date), y: r.real_5y })) }],
+      { yFmt: fmt1, refs: [{ y: window.NEUTRAL_REAL, label: 'Neutro BCB 5,00%' }].concat(avg === null ? [] : [{ y: avg, label: `Média da janela ${fmt2.format(avg)}%`, anchor: 'start' }]) });
+    const chg = (k) => an.data.slice(20).map((r, i) => ({ x: parseDay(r.date), y: (r[k] - an.data[i][k]) * 100 }));
+    lineChart(chEl, [{ label: 'Implícita 2 anos', color: c[0], points: chg('be_2y') }, { label: 'Implícita 5 anos', color: c[1], points: chg('be_5y') }, { label: 'Juro real 5 anos', color: c[2], points: chg('real_5y') }],
+      { yFmt: nf(0), ySuffix: ' bp', refs: [{ y: 50, label: 'Gatilho: +50 bp', kind: 'trigger' }] });
+  } else { failBox(beEl, an.status); failBox(reEl, an.status); failBox(chEl, an.status); }
+
+  // Focus IPCA
+  const ipEl = document.querySelector('.ch-ipca');
+  const i27 = dash.data('ipca_2027'), i28 = dash.data('ipca_2028');
+  legend(document.querySelector('.lg-ipca'), [{ label: 'IPCA 2027', color: c[0] }, { label: 'IPCA 2028', color: c[1] }]);
+  if (i27.status === 'ok' && i28.status === 'ok') {
+    const pts = (rows) => rows.map((r) => ({ x: parseDay(r.survey_date), y: r.median })).sort((a, b) => a.x - b.x);
+    const refs = [{ y: 3, label: 'Meta 3%' }, { y: 4.5, label: 'Gatilho: teto 4,5%', kind: 'trigger' }];
+    lineChart(ipEl, [{ label: '2027', color: c[0], points: pts(i27.data) }, { label: '2028', color: c[1], points: pts(i28.data) }], { yFmt: fmt1, refs });
+  } else failBox(ipEl, i27.status === 'error' || i28.status === 'error' ? 'error' : 'loading');
+
+  // LFT
+  const lEl = document.querySelector('.ch-lft');
+  const l = dash.data('lft');
+  if (l.status === 'ok') {
+    const ls = l.data.slice().sort((a, b) => d3.ascending(a.month, b.month));
+    const base = Number(ls[Math.max(0, ls.length - 4)].floating_share_dpf);
+    barChart(lEl, ls, { ref: 53, ref2: ls.length > 1 ? base + 2 : null });
+  }
+  else failBox(lEl, l.status);
+
+  // scenarios
+  const sc = dash.data('scenarios'), sh = dash.data('scenario_history');
+  const scColor = { ancora: c[0], deriva: c[1], estresse: c[2] };
+  const pct = (v) => nf(0).format(v * 100) + '%';
+  const tl = document.querySelector('.tl-cen'), tbc = document.querySelector('.tb-cen tbody');
+  if (sc.status === 'ok') {
+    tl.replaceChildren(...sc.data.map((r) => {
+      const d = document.createElement('div'); d.className = 'dm-tile';
+      const a = document.createElement('span'); a.className = 'dm-tile-label'; a.textContent = r.cenario;
+      const b = document.createElement('span'); b.className = 'dm-big'; b.textContent = pct(r.probability); b.style.color = scColor[r.id];
+      const n = document.createElement('span'); n.className = 'dm-note';
+      n.textContent = `Partida ${pct(r.start)} · ${signed(nf(0))((r.probability - r.start) * 100)} p.p.`;
+      d.append(a, b, n); return d;
+    }));
+    tbc.replaceChildren(...sc.data.map((r) => {
+      const tr = document.createElement('tr');
+      [r.cenario, pct(r.probability), r.precisa, `+${r.di_jan29_move_bp} bp`, `R$ ${fmt2.format(r.usdbrl_6m)}`, fmt1.format(r.selic_end2027) + '%', fmt1.format(r.ipca_2027) + '%', fmt1.format(r.gross_debt_2030) + '% do PIB']
+        .forEach((v) => { const td = document.createElement('td'); td.textContent = v; tr.append(td); });
+      return tr;
+    }));
+    const cenTxt = {
+      ancora: 'O governo mostra compromisso com as contas e o mercado volta a confiar. Os juros longos e o dólar recuam aos poucos, e a dívida sobe mais devagar.',
+      deriva: 'As regras fiscais ficam frouxas, sem ruptura. A dívida continua a subir, os juros longos ficam altos e o Copom para de cortar a Selic.',
+      estresse: 'Crise política e fiscal ao mesmo tempo. O dólar e os juros sobem, o BC precisa subir a Selic e a dívida cresce mais rápido: é a espiral da dominância fiscal.',
+    };
+    document.querySelector('.cen-explica').replaceChildren(...sc.data.map((r) => {
+      const d = document.createElement('div'); d.className = 'cen-box'; d.style.borderLeftColor = scColor[r.id];
+      const h = document.createElement('h4'); h.textContent = `${r.cenario}: ${pct(r.probability)}`;
+      const t = document.createElement('p'); t.textContent = cenTxt[r.id] || '';
+      const q = document.createElement('p'); q.textContent = `Precisa: ${r.precisa}`;
+      const n = document.createElement('p'); n.className = 'dm-note';
+      n.textContent = `Partida ${pct(r.start)}; a regra do DI de hoje leva a ${pct(r.probability)} (${signed(nf(0))((r.probability - r.start) * 100)} p.p.). Marca do DI: +${r.di_jan29_move_bp} bp. Neste cenário: dólar R$ ${fmt2.format(r.usdbrl_6m)} em 6 meses, Selic ${fmt1.format(r.selic_end2027)}% no fim de 2027, dívida bruta ${fmt1.format(r.gross_debt_2030)}% do PIB em 2030.`;
+      d.append(h, t, q, n); return d;
+    }));
+  } else { tl.replaceChildren(); tbc.replaceChildren(); document.querySelector('.cen-explica').replaceChildren(); }
+  const cenEl = document.querySelector('.ch-cen');
+  const keys = [['ancora', 'Âncora retomada'], ['deriva', 'Deriva fiscal'], ['estresse', 'Estresse e espiral']];
+  legend(document.querySelector('.lg-cen'), keys.map(([k, l]) => ({ label: l, color: scColor[k] })));
+  if (sh.status === 'ok') stackChart(cenEl, sh.data, keys.map(([k]) => k), scColor);
+  else failBox(cenEl, sh.status);
+
+  // debt fan
+  setText('[data-source="debt_fan_now"]', 'debt_fan_now', (f, v) => (f === 'prob_100' ? nf(0).format(v) + '%' : nf(1).format(v) + '%'));
+  const fan = dash.data('debt_fan'), fanEl = document.querySelector('.ch-fan');
+  if (fan.status === 'ok' && fan.data.length) fanChart(fanEl, fan.data, { refs: [{ y: 100, label: '100% do PIB', kind: 'trigger' }] });
+  else failBox(fanEl, fan.status);
+
+  // rollover
+  setText('[data-source="rolagem_now"]', 'rolagem_now', (f, v) => (f === 'month' ? monthName(v) : f === 'prazo_medio_anos' ? fmt2.format(v) : fmt2.format(v) + '%'));
+  setText('[data-source="leiloes_resumo"]', 'leiloes_resumo', (f, v) => (f === 'ate' ? dayName(v) : String(v)));
+  const ro = dash.data('rolagem'), vEl = document.querySelector('.ch-venc'), pEl = document.querySelector('.ch-prazo');
+  if (ro.status === 'ok') {
+    const rs = ro.data.slice().sort((a, b) => d3.ascending(a.month, b.month));
+    lineChart(vEl, [{ label: 'Vence em 12 meses', color: c[0], points: rs.map((r) => ({ x: parseDay(r.month), y: Number(r.vincendo_12m_pct) })) }],
+      { yFmt: fmt1, tipX: d3.utcFormat('%m/%Y'), refs: [{ y: 22, label: 'Gatilho: teto PAF 22%', kind: 'trigger' }, { y: 18, label: 'Piso PAF 18%' }] });
+    lineChart(pEl, [{ label: 'Prazo médio', color: c[1], points: rs.map((r) => ({ x: parseDay(r.month), y: Number(r.prazo_medio_anos) })) }],
+      { yFmt: fmt2, tipX: d3.utcFormat('%m/%Y'), ySuffix: ' anos', refs: [{ y: 3.8, label: 'Gatilho: piso PAF 3,8', kind: 'trigger' }, { y: 4.2, label: 'Teto PAF 4,2' }] });
+  } else { failBox(vEl, ro.status); failBox(pEl, ro.status); }
+  const le = dash.data('leiloes'), tbl = document.querySelector('.tb-leiloes tbody');
+  if (le.status === 'ok') {
+    tbl.replaceChildren(...le.data.slice().sort((a, b) => d3.descending(a.date, b.date)).map((r) => {
+      const tr = document.createElement('tr');
+      tr.dataset.key = [r.date, r.evento].map(encodeURIComponent).join(',');
+      [dayName(r.date), r.tipo, r.evento, r.fonte].forEach((v) => { const td = document.createElement('td'); td.textContent = v; tr.append(td); });
+      return tr;
+    }));
+  } else tbl.replaceChildren();
+
+  // budget
+  const bu = dash.data('budget'), oi = dash.data('orcamento_impacto');
+  const bi = (v) => (v < 0 ? '−' : '') + 'R$ ' + nf(1).format(Math.abs(v)) + ' bi';
+  document.querySelectorAll('[data-source="budget"][data-where]').forEach((el) => {
+    const d = dash.data('budget');
+    if (d.status !== 'ok') return;
+    const id = el.dataset.where.split('=')[1];
+    const r = d.data.find((x) => x.id === id);
+    const v = r ? r[el.dataset.field] : null;
+    el.textContent = v === null || v === undefined ? '—' : el.dataset.field === 'pct_pib' ? nf(Math.abs(v) < 1 ? 2 : 1).format(v) + '%' : bi(Number(v));
+    el.classList.remove('dash-skeleton');
+  });
+  const tbo = document.querySelector('.tb-orc tbody');
+  if (bu.status === 'ok') {
+    tbo.replaceChildren(...bu.data.map((r) => {
+      const tr = document.createElement('tr');
+      [r.item, nf(1).format(r.valor_bi), r.pct_pib === null ? '—' : nf(Math.abs(r.pct_pib) < 1 ? 2 : 1).format(r.pct_pib) + '%', r.fonte]
+        .forEach((v) => { const td = document.createElement('td'); td.textContent = v; tr.append(td); });
+      return tr;
+    }));
+  } else tbo.replaceChildren();
+  const orcEl = document.querySelector('.ch-orc');
+  const orcTxt = document.querySelector('.orc-txt');
+  if (oi.status === 'ok' && oi.data.length) {
+    waterfallChart(orcEl, oi.data);
+    const tot = oi.data.find((r) => r.id === 'esforco'), disc = oi.data.find((r) => r.id === 'discricionarias');
+    orcTxt.textContent = tot && disc
+      ? `Para a dívida parar de subir em % do PIB, o governo precisaria poupar cerca de R$ ${nf(0).format(tot.valor_bi)} bi a mais por ano (dados até ${monthName(tot.mes)}). Todo o gasto que pode ser cortado soma R$ ${nf(0).format(disc.valor_bi)} bi. ${tot.valor_bi > disc.valor_bi ? `Mesmo zerando esse gasto, ainda faltariam R$ ${nf(0).format(tot.valor_bi - disc.valor_bi)} bi: esse é o buraco, a barra vermelha. Nenhuma fonte à mão cobre esse valor (tabela abaixo).` : 'Em tese, cortes nesse gasto cobririam a conta.'}`
+      : 'Sem dados fiscais.';
+    const gp = oi.data.find((r) => r.id === 'gap'), ct = oi.data.find((r) => r.id === 'contingenciamento'), tg = document.querySelector('.tb-gap tbody');
+    const bi0 = (v) => 'R$ ' + nf(0).format(v) + ' bi';
+    const gapRows = gp && disc ? [
+      ['Zerar todo o gasto discricionário', bi0(disc.valor_bi), `Não. Ainda faltam ${bi0(gp.valor_bi)}, e zerar custeio e investimento pararia a máquina pública.`],
+      ['Bloqueio que a IFI estima', ct ? bi0(ct.valor_bi) : '—', 'Não. É o corte em discussão, e cobre só uma parte pequena.'],
+      ['Cortar despesa obrigatória', 'Depende de lei ou emenda', 'Não no curto prazo. Previdência, salários e pisos de saúde e educação só mudam com reforma.'],
+      ['Juros menores', `Selic cerca de ${nf(1).format(gp.selic_pp)} p.p. abaixo por 12 meses`, 'Só com confiança fiscal, que é justamente o que falta. Conta aproximada com a elasticidade do BCB.'],
+      ['Mais crescimento', gp.g_pp === null ? '—' : `PIB nominal cerca de ${nf(1).format(gp.g_pp)} p.p. a mais por ano`, 'Não se decide por lei. Inflação maior também sobe o PIB nominal, mas sobe os juros junto.'],
+      ['Mais receita', 'Não medido aqui', 'Exige imposto novo ou maior, que precisa passar no Congresso. O painel não tem base de receita para medir.'],
+    ] : [];
+    tg.replaceChildren(...gapRows.map((r) => { const tr = document.createElement('tr'); r.forEach((v) => { const td = document.createElement('td'); td.textContent = v; tr.append(td); }); return tr; }));
+  } else { failBox(orcEl, oi.status); orcTxt.textContent = '—'; }
+
+  // budget in 4 parts, and debt in control or not per scenario
+  const bd = dash.data('budget'), pl = document.querySelector('.partes-list');
+  if (bd.status === 'ok') {
+    const b = Object.fromEntries(bd.data.map((r) => [r.id, r]));
+    const bi = (r) => `R$ ${nf(1).format(r.valor_bi)} bi`, pp = (r) => `${nf(Math.abs(r.pct_pib) < 1 ? 2 : 1).format(r.pct_pib)}% do PIB`;
+    const items = [
+      ['O teto.', `O arcabouço limita a despesa primária a ${bi(b.limite)} em 2027 (${pp(b.limite)}). O limite cresce no máximo 2,5% acima da inflação por ano.`],
+      ['O que dá para cortar.', `Quase tudo dentro do teto é obrigatório: aposentadorias, salários, pisos de saúde e educação. Só ${bi(b.discricionarias)} (${pp(b.discricionarias)}) são discricionárias, como custeio e investimento. Todo corte rápido sai daí.`],
+      ['A meta.', `O governo promete um superávit de ${bi(b.meta_centro)} (${pp(b.meta_centro)}) e aceita até ${bi(b.meta_piso)}, o piso. O PLOA prevê ${bi(b.primario_ploa)}. A IFI prevê ${b.primario_ifi.valor_bi < 0 ? 'um déficit de R$ ' + nf(1).format(-b.primario_ifi.valor_bi) + ' bi' : bi(b.primario_ifi)}, e calcula um bloqueio de ${bi(b.contingenciamento_ifi)} para chegar ao piso.`],
+      ['Os juros.', `Os juros da dívida ficam fora do teto e fora da meta. Eles vão direto para a dívida. Cada 1 p.p. a mais de Selic por 12 meses soma ${bi(b.selic_1pp)} à dívida bruta (BCB).`],
+    ];
+    pl.replaceChildren(...items.map(([h, t]) => { const li = document.createElement('li'); const s0 = document.createElement('b'); s0.textContent = h + ' '; li.append(s0, t); return li; }));
+  }
+  const fnw = dash.data('fiscal_now'), ctlEl = document.querySelector('.ch-ctl'), ctlTxt = document.querySelector('.ctl-txt'), ctlList = document.querySelector('.ctl-list');
+  const scd = dash.data('scenarios');
+  if (fnw.status === 'ok' && fnw.data.length && scd.status === 'ok' && oi.status === 'ok') {
+    const c2 = dash.colors, col = { ancora: c2[0], deriva: c2[1], estresse: c2[2] };
+    const f = fnw.data[0], now = { v: f.gross_debt_gdp, label: 'Hoje (' + monthName(f.month) + ')' };
+    const rows = scd.data.map((r) => ({ id: r.id, label: r.cenario, v: r.gross_debt_2030, p: r.probability }));
+    legend(document.querySelector('.lg-ctl'), rows.map((r) => ({ label: r.label, color: col[r.id] })));
+    slopeChart(ctlEl, now, rows, col);
+    const tot = oi.data.find((r) => r.id === 'esforco');
+    ctlList.replaceChildren(...rows.map((r) => {
+      const ex = oi.data.find((o) => o.id === 'juros_' + r.id), conta = tot ? tot.valor_bi + (ex ? ex.valor_bi : 0) : null, d = r.v - now.v;
+      const li = document.createElement('li'); const h = document.createElement('b'); h.textContent = `${r.label} (peso ${nf(0).format(r.p * 100)}%): `; h.style.color = col[r.id];
+      li.append(h, `a dívida vai de ${nf(1).format(now.v)}% para ${nf(1).format(r.v)}% do PIB em 2030 (${signed(nf(1))(d)} p.p.). ${d > 0 ? 'Sai do controle' : 'Fica no controle'}.${conta === null ? '' : ` Conta por ano para parar a dívida: cerca de R$ ${nf(0).format(conta)} bi.`}`);
+      return li;
+    }));
+    const up = rows.filter((r) => r.v > now.v), best = rows.slice().sort((a, b) => a.v - b.v)[0];
+    ctlTxt.textContent = up.length === rows.length
+      ? `Em nenhum dos três cenários a dívida para de subir até 2030. O ${best.label} é o que chega mais perto, e mesmo assim a dívida sobe ${nf(1).format(best.v - now.v)} p.p. Para ficar no controle, é preciso poupar mais, ter juros menores ou um PIB que cresça mais rápido.`
+      : `Em ${rows.length - up.length} dos três cenários a dívida para de subir até 2030.`;
+  } else { failBox(ctlEl, fnw.status === 'ok' ? scd.status : fnw.status); ctlTxt.textContent = '—'; ctlList.replaceChildren(); }
+
+  // channels from inflation to the budget
+  const cn = dash.data('canais'), tcn = document.querySelector('.tb-canais tbody');
+  if (cn.status === 'ok') {
+    tcn.replaceChildren(...cn.data.slice().sort((a, b) => a.ordem - b.ordem).map((r) => {
+      const tr = document.createElement('tr');
+      [r.choque, r.canal, r.ef_2027 || '—', r.ef_2030 || '—', r.onde, r.fonte].forEach((v) => { const td = document.createElement('td'); td.textContent = v; tr.append(td); });
+      return tr;
+    }));
+  } else tcn.replaceChildren();
+  const de = dash.data('desancoragem'), deEl = document.querySelector('.desanc-txt');
+  if (de.status === 'ok' && de.data.length) {
+    const r = de.data[0], rb = (v) => (v < 0 ? '−' : '+') + 'R$ ' + fmt1.format(Math.abs(v)) + ' bi';
+    deEl.textContent = `o Focus vê IPCA de ${fmt2.format(r.ipca_2027)}% em 2027, contra ${fmt1.format(r.ipca_ploa)}% no PLOA (${signed(fmt2)(r.gap_pp)} p.p., pesquisa de ${dayName(r.survey_date)}). Se isso se confirmar, pela tabela abaixo: juros da NTN-B ${rb(r.ntnb_2027_bi)} em 2027; benefícios ligados ao salário mínimo cerca de ${rb(r.beneficios_bi)} no ano seguinte, se o INPC andar junto.`;
+  } else deEl.textContent = 'sem pesquisa Focus.';
+  setupSim(de.status === 'ok' && de.data.length ? de.data[0].gap_pp : null);
+
+  // mandatory spending squeeze
+  const ob = dash.data('obrigatorias'), et = dash.data('espaco_teto');
+  const crEl = document.querySelector('.ch-obr-cresc'), dsEl = document.querySelector('.ch-obr-discr');
+  if (ob.status === 'ok') {
+    const lim = ob.data.find((r) => r.id === 'limite');
+    hbarChart(crEl, ob.data.filter((r) => r.grupo === 'crescimento' && r.id !== 'limite').map((r) => ({ id: r.id, item: r.item, valor_bi: r.valor })),
+      { ref: lim ? lim.valor : null, refLabel: 'Teto: 2,5%', fmt: (v) => nf(1).format(v) + '%' });
+  } else failBox(crEl, ob.status);
+  if (et.status === 'ok' && et.data.length) {
+    hbarChart(dsEl, et.data.map((r) => ({ id: r.id === 'ifi_2027' ? 'esforco' : r.id, item: r.item, valor_bi: r.valor_bi })));
+    const b = et.data.find((r) => r.id === 'pldo_2027'), a = et.data.find((r) => r.id === 'ifi_2027');
+    const pct = (v) => nf(1).format(v) + '%';
+    document.querySelector('.obr-share').textContent = b ? pct(b.share) : '—';
+    document.querySelector('.obr-share-ifi').textContent = a ? pct(a.share) : '—';
+    document.querySelector('.obr-ifi-note').textContent = a ? `R$ ${nf(1).format(a.ajuste_bi)} bi a mais em INSS e BPC saem das discricionárias` : '—';
+    document.querySelectorAll('.obr-share, .obr-share-ifi').forEach((e) => e.classList.remove('dash-skeleton'));
+  } else failBox(dsEl, et.status);
+
+  // creative accounting
+  const ct = dash.data('contab'), ctEl = document.querySelector('.ch-contab'), tct = document.querySelector('.tb-contab tbody');
+  if (ct.status === 'ok' && ct.data.length) {
+    const bv = (v) => (v === null || v === undefined ? '—' : (v < 0 ? '−' : '') + nf(1).format(Math.abs(v)));
+    hbarChart(ctEl, ct.data.map((r) => ({ id: r.ordem >= 5 ? 'esforco' : r.id, item: r.rotulo, valor_bi: r.deducoes_bi })));
+    tct.replaceChildren(...ct.data.map((r) => {
+      const tr = document.createElement('tr');
+      [r.rotulo, bv(r.efetivo_bi), bv(r.deducoes_bi), bv(r.apos_bi), bv(r.piso_bi), r.cumpre_sem === null ? '—' : r.cumpre_sem ? 'Sim' : `Não: faltam R$ ${nf(1).format(r.falta_sem_bi)} bi`]
+        .forEach((v) => { const td = document.createElement('td'); td.textContent = v; tr.append(td); });
+      return tr;
+    }));
+    const miss = ct.data.filter((r) => r.cumpre_sem === false);
+    document.querySelector('.contab-txt').textContent = miss.length
+      ? `sem as deduções, a meta não seria cumprida em ${miss.map((r) => r.rotulo).join('; ')}. Em 2027 o PLOA só fica acima do piso porque tira R$ ${nf(1).format((ct.data.find((r) => r.id === 'r2027_ploa') || {}).deducoes_bi || 0)} bi da conta.`
+      : 'com as projeções atuais, o resultado efetivo alcança o piso da meta mesmo sem as deduções.';
+    const under = ct.data.filter((r) => r.piso_bi !== null && r.piso_bi !== undefined && r.apos_bi < r.piso_bi);
+    if (under.length) document.querySelector('.contab-txt').textContent += ` Mesmo com as deduções, fica abaixo do piso em ${under.map((r) => r.rotulo).join('; ')}, o que obriga o governo a contingenciar gasto.`;
+    document.querySelector('.contab-src').textContent = ct.data.map((r) => `${r.rotulo}: ${r.fonte}`).join(' · ');
+  } else { failBox(ctEl, ct.status); tct.replaceChildren(); }
+
+  // calibration
+  const ca = dash.data('calib'), tcb = document.querySelector('.tb-calib tbody');
+  if (ca.status === 'ok') {
+    tcb.replaceChildren(...ca.data.map((r) => {
+      const tr = document.createElement('tr');
+      const pc = (v) => (v === null || v === undefined ? '—' : nf(1).format(Number(v)) + '%');
+      [r.regra, r.avisou || '—', r.antecedencia_mediana === null || r.antecedencia_mediana === undefined ? '—' : nf(0).format(Number(r.antecedencia_mediana)), pc(r.aceso_em_calma_pct), r.aceso_meses_pct === null || r.aceso_meses_pct === undefined ? '—' : nf(0).format(Number(r.aceso_meses_pct)) + '%', r.veredito]
+        .forEach((v) => { const td = document.createElement('td'); td.textContent = v; tr.append(td); });
+      return tr;
+    }));
+  } else tcb.replaceChildren();
+
+  // alerts table + takeaway
+  const al = dash.data('alertas');
+  const tbody = document.querySelector('.tb-alertas tbody');
+  const take = document.querySelector('.dm-takeaway');
+  if (al.status === 'ok') {
+    tbody.replaceChildren(...al.data.map((r) => {
+      const tr = document.createElement('tr');
+      ['indicador', 'grupo', 'leitura', 'regra', 'estado', 'desde'].forEach((k) => {
+        const td = document.createElement('td');
+        if (k === 'estado') {
+          const p = document.createElement('span');
+          p.className = 'dm-pill ' + (r.estado === 'Aceso' ? 'dm-on' : 'dm-off');
+          p.textContent = r.estado;
+          td.append(p);
+        } else td.textContent = r[k] || '—';
+        tr.append(td);
+      });
+      return tr;
+    }));
+    const on = al.data.filter((r) => r.estado === 'Aceso');
+    const debtOn = on.filter((r) => r.grupo === 'Conta da dívida').length;
+    const debtAll = al.data.filter((r) => r.grupo === 'Conta da dívida').length;
+    const ancOn = on.filter((r) => r.grupo === 'Âncora de inflação').length;
+    const ancAll = al.data.filter((r) => r.grupo === 'Âncora de inflação').length;
+    const rolOn = on.filter((r) => r.grupo === 'Rolagem da dívida').length;
+    const rolAll = al.data.filter((r) => r.grupo === 'Rolagem da dívida').length;
+    take.textContent = `${on.length} de ${al.data.length} alertas acesos: ${debtOn} de ${debtAll} na conta da dívida, ${rolOn} de ${rolAll} na rolagem e ${ancOn} de ${ancAll} na âncora de inflação. ` +
+      (debtOn > debtAll / 2 && ancOn === 0 ? 'A conta da dívida já está no regime de dominância. Até a última sessão carregada, a âncora de inflação ainda segurava.'
+        : debtOn > debtAll / 2 && ancOn > 0 ? 'A conta da dívida está ruim e a âncora de inflação começa a ceder.'
+        : 'A conta da dívida ainda não mostra dominância.') +
+      (rolOn > 0 ? ' A rolagem já mostra estresse: o Tesouro está cancelando leilões.' : '');
+    take.classList.remove('dash-skeleton');
+  } else {
+    tbody.replaceChildren();
+    if (al.status !== 'loading') { take.textContent = '—'; take.classList.remove('dash-skeleton'); }
+  }
+});
+
+})();</script>
+
+</div>
+<footer class="site-foot">Leitura de sinais de mercado e julgamento do autor, não recomendação de compra ou venda. Dados: SILO (CVM, BACEN, B3), BCB, B3, Tesouro Nacional. Tudo em horário de Brasília (UTC-3).</footer></body></html>

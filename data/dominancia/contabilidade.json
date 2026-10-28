@@ -1,0 +1,9 @@
+[
+ {"id":"r2025","ordem":1,"rotulo":"2025, realizado","efetivo_bi":-58.7,"deducoes_bi":48.7,"apos_bi":-10.0,"centro_bi":0.0,"piso_bi":-31.0,"composicao":"Precatórios R$ 41,1 bi; ressarcimento do INSS R$ 2,8 bi; defesa R$ 2,5 bi; Fundo Social R$ 2,2 bi","fonte":"PLDO 2027, Anexo IV.1 (Consultorias do Congresso, NTC 3/2026)"},
+ {"id":"r2026","ordem":2,"rotulo":"2026, projeção (set/26)","efetivo_bi":-80.9,"deducoes_bi":67.3,"apos_bi":-13.6,"centro_bi":34.3,"piso_bi":0.0,"composicao":"Precatórios (EC 136, ADPF 1236), defesa, Fundo Social e LC 235","fonte":"Relatório bimestral do 4º bimestre (Consultoria do Senado, 25/09/2026); meta: Câmara, Raio X 3º bim"},
+ {"id":"r2027_ploa","ordem":3,"rotulo":"2027, PLOA","efetivo_bi":18.6,"deducoes_bi":64.7,"apos_bi":83.4,"centro_bi":73.2,"piso_bi":36.6,"composicao":"Precatórios R$ 59,2 bi; defesa R$ 5,0 bi; Fundo Social R$ 0,6 bi","fonte":"IFI, RAF 116 (set/26), tabela 8"},
+ {"id":"r2027_ifi","ordem":4,"rotulo":"2027, IFI","efetivo_bi":-86.1,"deducoes_bi":87.0,"apos_bi":0.9,"centro_bi":73.2,"piso_bi":36.6,"composicao":"Mesmas regras, com mais precatórios nas contas da IFI","fonte":"IFI, RAF 113 (jun/26), via RAF 116"},
+ {"id":"r2028","ordem":5,"rotulo":"2028, PLDO","efetivo_bi":97.1,"deducoes_bi":60.1,"apos_bi":157.3,"centro_bi":157.3,"piso_bi":null,"composicao":"Projeção do governo","fonte":"PLDO 2027, tabela 6 (Consultorias do Congresso, NTC 3/2026)"},
+ {"id":"r2029","ordem":6,"rotulo":"2029, PLDO","efetivo_bi":157.5,"deducoes_bi":53.6,"apos_bi":211.1,"centro_bi":211.1,"piso_bi":null,"composicao":"Projeção do governo","fonte":"PLDO 2027, tabela 6"},
+ {"id":"r2030","ordem":7,"rotulo":"2030, PLDO","efetivo_bi":228.6,"deducoes_bi":43.6,"apos_bi":272.2,"centro_bi":272.2,"piso_bi":null,"composicao":"Projeção do governo","fonte":"PLDO 2027, tabela 6"}
+]

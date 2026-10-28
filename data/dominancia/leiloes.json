@@ -1,0 +1,7 @@
+[
+ {"date":"2026-10-26","tipo":"Cancelamento","evento":"Cancela os leilões de NTN-B (27/10) e de LTN e NTN-F (29/10); mantém o de LFT.","fonte":"Tesouro, via InfoMoney, Folha e Reuters (26/10)"},
+ {"date":"2026-10-26","tipo":"Recompra","evento":"Recompra 8,4 milhões de NTN-F (2031, 2033, 2037), cerca de R$ 7,1 bi, de até 15 milhões ofertados.","fonte":"Tesouro, via InfoMoney (27/10)"},
+ {"date":"2026-10-26","tipo":"Recompra","evento":"Recompra cerca de 1,76 milhão de NTN-B (2030, 2035, 2050), mais de R$ 7 bi, de até 3 milhões ofertados.","fonte":"Tesouro, via InfoMoney (27/10)"},
+ {"date":"2026-10-27","tipo":"Cancelamento","evento":"Cancela o leilão de LFT, o único de venda que restava na semana.","fonte":"Tesouro, via InfoMoney e Folha (27/10)"},
+ {"date":"2026-10-27","tipo":"Recompra","evento":"Anuncia nova recompra de NTN-B 2030, 2035, 2040 e 2045.","fonte":"Tesouro, via InfoMoney (27/10)"}
+]

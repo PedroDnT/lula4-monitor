@@ -1,0 +1,12 @@
+[
+ {"grupo":"crescimento","id":"educacao","item":"Piso da educação","valor":11.57,"fonte":"MPO, Relatório Bimestral (via Valor, 09/08/2026): 2025 contra a projeção de 2026, a preços de jun/26"},
+ {"grupo":"crescimento","id":"bpc","item":"BPC","valor":8.53,"fonte":"MPO, Relatório Bimestral (via Valor, 09/08/2026)"},
+ {"grupo":"crescimento","id":"saude","item":"Piso da saúde","valor":8.43,"fonte":"MPO, Relatório Bimestral (via Valor, 09/08/2026)"},
+ {"grupo":"crescimento","id":"previdencia","item":"Benefícios do INSS","valor":5.29,"fonte":"MPO, Relatório Bimestral (via Valor, 09/08/2026)"},
+ {"grupo":"crescimento","id":"limite","item":"Teto do arcabouço (máximo)","valor":2.5,"fonte":"LC 200/2023"},
+ {"grupo":"pldo","id":"pldo_2027","ano":2027,"obrigatorias_bi":2485.5,"primaria_bi":2760.2,"discr_limite_bi":264.1,"discr_executivo_bi":207.1,"fonte":"PLDO 2027, Anexo IV, tabela 5 (Consultorias do Congresso, Informativo PLDO 2027)"},
+ {"grupo":"pldo","id":"pldo_2028","ano":2028,"obrigatorias_bi":2635.3,"primaria_bi":2905.7,"discr_limite_bi":258.7,"discr_executivo_bi":198.8,"fonte":"PLDO 2027, Anexo IV, tabela 5"},
+ {"grupo":"pldo","id":"pldo_2029","ano":2029,"obrigatorias_bi":2784.4,"primaria_bi":3074.8,"discr_limite_bi":278.8,"discr_executivo_bi":215.8,"fonte":"PLDO 2027, Anexo IV, tabela 5"},
+ {"grupo":"pldo","id":"pldo_2030","ano":2030,"obrigatorias_bi":2959.8,"primaria_bi":3262.8,"discr_limite_bi":294.4,"discr_executivo_bi":228.3,"fonte":"PLDO 2027, Anexo IV, tabela 5"},
+ {"grupo":"ajuste","id":"ifi_subestimativa","item":"Previdência e BPC subestimados no PLDO para 2027 (R$ 16,1 bi + R$ 20,1 bi)","valor":36.2,"fonte":"IFI, RAF 112 (mai/26), via Valor 21/05/2026"}
+]

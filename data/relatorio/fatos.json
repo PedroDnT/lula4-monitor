@@ -1,0 +1,110 @@
+[
+ {
+  "id": "f1",
+  "data": "2026-10-25",
+  "fato": "Flávio Bolsonaro diz que vai pedir ao TSE a anulação do 2º turno; o TSE diz que o horário estendido não afetou a apuração.",
+  "fonte": "TSE",
+  "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Outubro/presidente-do-tse-anuncia-reeleicao-de-lula-e-faz-balanco-do-2o-turno-das-eleicoes-2026",
+  "f_ancora": 1,
+  "f_deriva": 1,
+  "f_estresse": 1.05,
+  "status": "Na partida",
+  "degrau": "Estresse fraco a favor: intenção anunciada, sem pedido protocolado; o TSE rejeita a tese."
+ },
+ {
+  "id": "f2",
+  "data": "2026-10-26",
+  "fato": "Governo vai mirar o centro da meta de 2027 (0,50% do PIB), segundo fontes sem nome.",
+  "fonte": "O Globo",
+  "url": "https://oglobo.globo.com/economia/noticia/2026/10/26/lula-tera-de-convencer-o-mercado-e-vai-mirar-centro-da-meta-fiscal-para-conter-gastos.ghtml",
+  "f_ancora": 1.05,
+  "f_deriva": 1,
+  "f_estresse": 1,
+  "status": "Na partida",
+  "degrau": "Âncora fraco a favor: fontes sem nome, sem ato formal."
+ },
+ {
+  "id": "f3",
+  "data": "2026-10-26",
+  "fato": "Flávio muda o pedido: agora vai pedir ao TSE a cassação da chapa Lula-Alckmin.",
+  "fonte": "BBC Brasil",
+  "url": "https://www.bbc.com/portuguese/articles/cr9dzne66j1go",
+  "f_ancora": 1,
+  "f_deriva": 1,
+  "f_estresse": 1.05,
+  "status": "Na partida",
+  "degrau": "Estresse fraco a favor: mesmo canal de f1 (contestação), então no máximo fraco."
+ },
+ {
+  "id": "f4",
+  "data": "2026-10-26",
+  "fato": "Tesouro cancela os leilões de NTN-B (27/10) e de prefixados (29/10), mantém a LFT e recompra mais de R$ 14 bi em títulos.",
+  "fonte": "InfoMoney",
+  "url": "https://www.infomoney.com.br/onde-investir/apos-vitoria-de-lula-tesouro-cancela-leiloes-de-prefixados-e-ipca-da-semana",
+  "f_ancora": 1,
+  "f_deriva": 1,
+  "f_estresse": 1.15,
+  "status": "Na partida",
+  "degrau": "Estresse moderado a favor: ato oficial do Tesouro, confirmado."
+ },
+ {
+  "id": "f5",
+  "data": "2026-10-27",
+  "fato": "Tesouro cancela também o leilão de LFT e anuncia nova recompra de NTN-B de 2030 a 2045.",
+  "fonte": "InfoMoney",
+  "url": "https://www.infomoney.com.br/onde-investir/tesouro-cancela-mais-um-leilao-e-anuncia-nova-recompra-de-titulos-de-inflacao/",
+  "f_ancora": 1,
+  "f_deriva": 1,
+  "f_estresse": 1.05,
+  "status": "Na partida",
+  "degrau": "Estresse fraco a favor: mesmo canal de f4 (leilões), então no máximo fraco."
+ },
+ {
+  "id": "f6",
+  "data": "2026-10-26",
+  "fato": "Lula sinaliza a aliados que pode indicar Rafael Fonteles para a Fazenda. Não há anúncio.",
+  "fonte": "Folha",
+  "url": "https://www1.folha.uol.com.br/mercado/2026/10/tesouro-cancela-leiloes-de-titulos-prefixados-e-atrelados-a-inflacao-previstos-para-esta-semana.shtml",
+  "f_ancora": 1,
+  "f_deriva": 1,
+  "f_estresse": 1,
+  "status": "Na partida",
+  "degrau": "Sem direção clara: sinal a aliados, sem anúncio."
+ },
+ {
+  "id": "f7",
+  "data": "2026-10-27",
+  "fato": "Moraes (STF) mandou Flávio entregar os passaportes; o prazo venceu sem entrega. A PF apura se ele saiu do país pela Argentina rumo aos EUA. Não confirmado; aliados negam.",
+  "fonte": "g1",
+  "url": "https://g1.globo.com/mundo/noticia/2026/10/27/suspeita-de-fuga-de-flavio-bolsonaro-repercute-na-imprensa-internacional.ghtml",
+  "f_ancora": 1,
+  "f_deriva": 1,
+  "f_estresse": 1.05,
+  "status": "Na partida",
+  "degrau": "Estresse fraco a favor: a ordem de Moraes é ato oficial, mas a fuga não está confirmada; canal novo (STF e oposição)."
+ },
+ {
+  "id": "f8",
+  "data": "2026-10-26",
+  "fato": "O PL diz que reconhece o resultado presidencial proclamado pelo TSE, mas quer que as dúvidas sejam esclarecidas. Flávio segue sem reconhecer e sem pedido protocolado.",
+  "fonte": "The Rio Times",
+  "url": "https://www.riotimesonline.com/the-big-read-brazil-28-october-2026",
+  "f_ancora": 1,
+  "f_deriva": 1,
+  "f_estresse": 0.95,
+  "status": "Na partida",
+  "degrau": "Estresse fraco contra: declaração do partido, mesmo canal de f1 e f3 (contestação), então no máximo fraco."
+ },
+ {
+  "id": "f9",
+  "data": "2026-10-27",
+  "fato": "Durigan (Fazenda) diz que as recompras do Tesouro visam normalizar o mercado e dar liquidez, não controlar preço, em coordenação com Galípolo. Lula reuniu Durigan e Moretti em 26/10.",
+  "fonte": "Brasil em Folhas (citando O Globo)",
+  "url": "https://brasilemfolhas.com.br/2026/10/lula-se-reune-com-ministros-apos-queda-da-bolsa-e-alta-do-dolar/",
+  "f_ancora": 1.05,
+  "f_deriva": 1,
+  "f_estresse": 1,
+  "status": "Na partida",
+  "degrau": "Âncora fraco a favor: declaração do ministro, sem ato formal novo; mesmo canal de f4 e f5 (leilões)."
+ }
+]

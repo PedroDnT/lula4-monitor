@@ -1,0 +1,50 @@
+[
+ {
+  "date": "2026-10-26",
+  "label": "Partida",
+  "ancora": 0.45,
+  "deriva": 0.33,
+  "estresse": 0.22,
+  "note": "Pesos de partida da revisão semanal de 26/10."
+ },
+ {
+  "date": "2026-10-26",
+  "label": "26/10",
+  "ancora": 0.31,
+  "deriva": 0.35,
+  "estresse": 0.34,
+  "note": "Regra diária de mercado sobre a partida (arquivo de cenários do monitor, 26/10 16h45)."
+ },
+ {
+  "date": "2026-10-27",
+  "label": "Partida 27/10",
+  "ancora": 0.43,
+  "deriva": 0.32,
+  "estresse": 0.25,
+  "note": "Fatos f1 a f7 aplicados na escala de 3 degraus (Pedro, 27/10), a partir de 45/35/20: contestação no TSE, leilões cancelados e recompras, passaportes de Flávio. Os degraus são julgamento."
+ },
+ {
+  "date": "2026-10-27",
+  "label": "27/10",
+  "ancora": 0.3,
+  "deriva": 0.36,
+  "estresse": 0.34,
+  "note": "Ajuste de 26/10: DI jan/29 a 15,22% (+258 bp sobre 23/10); regra de mercado sobre a partida nova 43/32/25."
+ },
+ {
+  "date": "2026-10-28",
+  "label": "Partida 28/10",
+  "ancora": 0.45,
+  "deriva": 0.32,
+  "estresse": 0.23,
+  "note": "Fatos f8 (PL reconhece o resultado do TSE, fraco contra Estresse) e f9 (Durigan diz que as recompras visam normalizar o mercado, fraco a favor de Âncora) aplicados sobre 43/32/25."
+ },
+ {
+  "date": "2026-10-28",
+  "label": "28/10",
+  "ancora": 0.31,
+  "deriva": 0.46,
+  "estresse": 0.23,
+  "note": "Ajuste de 27/10: DI jan/29 a 14,76% (+212 bp sobre 23/10, −46 bp no dia); mix do DI 0/77/23 sobre a partida nova 45/32/23."
+ }
+]

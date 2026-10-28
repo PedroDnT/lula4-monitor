@@ -1,0 +1,56 @@
+[
+ {
+  "id": "a6",
+  "data": "2026-10-30",
+  "evento": "Estatísticas fiscais de setembro (BCB): dívida bruta e resultado primário",
+  "ancora": "Dívida bruta até 83,5% do PIB e primário estável",
+  "deriva": "Dívida acima de 83,5% com primário pior",
+  "estresse": "Salto da dívida com custo de juros em alta",
+  "fonte": "Calendário do BCB, citado por The Rio Times (27/10)"
+ },
+ {
+  "id": "a1",
+  "data": "2026-11-04",
+  "evento": "Decisão do Copom (R7/2026)",
+  "ancora": "Corte de 25 bp com fala firme",
+  "deriva": "Pausa em 13,75%",
+  "estresse": "Alta de juro ou pausa com dólar sem freio",
+  "fonte": "Calendário do Copom (BCB)"
+ },
+ {
+  "id": "a2",
+  "data": "2026-12-09",
+  "evento": "Decisão do Copom (R8/2026)",
+  "ancora": "Volta aos cortes",
+  "deriva": "Juro parado",
+  "estresse": "Alta de juro",
+  "fonte": "Calendário do Copom (BCB)"
+ },
+ {
+  "id": "a3",
+  "data": "",
+  "evento": "Nome do ministro da Fazenda",
+  "ancora": "Nome com mandato fiscal claro",
+  "deriva": "Nome político sem plano fiscal",
+  "estresse": "Saída da equipe e nenhum nome",
+  "fonte": "Sem data oficial"
+ },
+ {
+  "id": "a4",
+  "data": "",
+  "evento": "Leilões do Tesouro da semana que vem",
+  "ancora": "Volta dos leilões de LTN e NTN-B",
+  "deriva": "Só LFT ou lotes pequenos",
+  "estresse": "Novos cancelamentos e recompras",
+  "fonte": "Tesouro Nacional, toda quinta"
+ },
+ {
+  "id": "a5",
+  "data": "",
+  "evento": "Pedido de Flávio Bolsonaro no TSE",
+  "ancora": "Arquivado rápido",
+  "deriva": "Tramita sem efeito",
+  "estresse": "Liminar ou crise entre poderes",
+  "fonte": "TSE"
+ }
+]

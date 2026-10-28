@@ -1,0 +1,106 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Método · Monitor LULA4</title><meta name="robots" content="index,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400&display=swap">
+<style>
+.m { max-width: 76ch; margin: 0 auto; padding: 24px 16px 8px; }
+.m h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: 30px; line-height: 1.15; margin: 0 0 8px; text-wrap: balance; }
+.m h2 { font-size: 20px; margin: 36px 0 6px; scroll-margin-top: 90px; }
+.m h3 { font-size: 15px; margin: 20px 0 4px; }
+.m p, .m li { color: var(--cds-text-secondary); }
+.m .lead { font-size: 17px; color: var(--color-fg); }
+.m table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 8px 0 12px; }
+.m th, .m td { padding: 8px; border-bottom: 1px solid var(--color-border); text-align: left; vertical-align: top; }
+.m th { font-size: 12px; font-weight: 500; color: var(--color-fg-muted); }
+.m .toc { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 14px; margin: 12px 0 0; }
+.m .tw { overflow-x: auto; }
+.m code { font-size: 12.5px; background: var(--cds-chart-grid); padding: 1px 4px; border-radius: 3px; }
+.m .warn { background: var(--cds-chart-grid); border-radius: 10px; padding: 10px 14px; font-size: 14px; }
+</style></head><body>
+<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html">Intraday</a><a href="dominancia.html">Dominância fiscal</a><a href="relatorio.html">Relatório diário</a><a href="metodo.html" aria-current="page">Método</a></nav></div></header>
+<main class="m">
+<h1>Como cada página funciona</h1>
+<p class="lead">O site acompanha o que o mercado de juros, o câmbio e as contas públicas dizem depois da reeleição de Lula, em 3 escalas de tempo. Esta página explica o método de cada uma, de onde vêm os números e o que eles não conseguem dizer.</p>
+<nav class="toc" aria-label="Nesta página"><a href="#visao">Visão geral</a><a href="#intraday">Intraday</a><a href="#dominancia">Dominância fiscal</a><a href="#relatorio">Relatório diário</a><a href="#dados">Dados e atualização</a><a href="#limites">Limites</a></nav>
+
+<h2 id="visao">Visão geral: fatos, preços e fundo</h2>
+<p>A pergunta central é qual de 3 cenários o mercado está precificando. Eles são os mesmos nas 3 páginas:</p>
+<div class="tw"><table><thead><tr><th>Cenário</th><th>Ideia</th><th>DI jan/29 sobe, desde 23/10</th></tr></thead><tbody>
+<tr><td><b>Âncora retomada</b></td><td>A equipe econômica ganha mandato fiscal e o Orçamento 2027 traz a meta de 0,50% do PIB (centro da banda).</td><td>cerca de +50 bp</td></tr>
+<tr><td><b>Deriva fiscal</b></td><td>O arcabouço é afrouxado e o Copom acomoda.</td><td>cerca de +180 bp</td></tr>
+<tr><td><b>Estresse e espiral</b></td><td>A contestação do resultado se arrasta, o rating cai, e juro e dólar sobem juntos.</td><td>cerca de +320 bp</td></tr></tbody></table></div>
+<p>Cada página cuida de uma coisa, para nenhum movimento contar duas vezes:</p>
+<ul>
+<li><b>Fatos</b> entram no <a href="relatorio.html">Relatório diário</a>, uma vez por dia. Eles fixam o peso de partida de cada cenário.</li>
+<li><b>Preços</b> entram no <a href="index.html">painel Intraday</a>, ao longo do dia. Eles movem o peso de agora a partir da partida.</li>
+<li><b>O fundo</b>, que muda devagar (dívida, rolagem, inflação implícita, orçamento), está no <a href="dominancia.html">Monitor de dominância fiscal</a>. Ele não muda os pesos.</li>
+</ul>
+<p class="warn">Os pesos são julgamento do autor, não previsão de modelo. Os fatores e as marcas do DI são escolhas, não estimativas estatísticas.</p>
+
+<h2 id="intraday">Intraday: o painel do choque pós-eleição</h2>
+<h3>O que mostra</h3>
+<p>Pesos de agora dos 3 cenários, os 6 sinais de dominância fiscal, o DI, o dólar, a bolsa e o histórico do dia. Atualiza a cada 2 minutos enquanto a página está aberta.</p>
+<h3>Peso de agora</h3>
+<p><code>agora = partida + 0,3 × (mix do DI − partida)</code>, com cada peso limitado a 15 pontos de mudança e a soma voltando a 100%. O "mix do DI" divide o peso entre os 2 cenários vizinhos, em linha reta, conforme a alta do DI jan/29 desde 23/10 (ajuste de 12,640%) fica entre +50, +180 e +320 bp. Acima de +320 bp, tudo vai para Estresse e o painel avisa que o mercado está além do pior cenário. O fator 0,3 reproduz um passo anterior, de 45 · 35 · 20 para 32 · 37 · 31.</p>
+<h3>Dólar</h3>
+<p>O choque é a cotação de agora contra a PTAX do último dia útil. Antes das 9h o câmbio oficial não negocia. O painel compara o USDT/BRL da Binance (menos um prêmio de 0,4%) com o USD/BRL do Yahoo e descarta o Yahoo se ele destoa mais de 1,5%. Dólar por cenário usa projeções locais com a PTAX de 2008 a 2026: o choque local do real quase não volta sozinho (fração que resta de 0,75). Em 12 meses, os 3 cenários se movem juntos para que a média ponderada seja igual ao dólar futuro, que embute cerca de 5,5% ao ano de diferencial de juros.</p>
+<h3>DI e prêmio</h3>
+<p>Nos dias de estresse, o DI de 2 anos subiu 7,1 bp para cada 1% de alta do dólar. A parte da alta do DI que o câmbio não explica (excesso, com faixa de cerca de ±60 bp) mistura prêmio fiscal, caminho da Selic e inflação esperada. O prêmio do DI jan/29 sobre a Selic do Focus compõe o CDI dia a dia pelo calendário do Copom e é só informação: não move os pesos.</p>
+<h3>Os 6 sinais de dominância</h3>
+<ol>
+<li>Juro e dólar sobem juntos: correlação de 20 dias dos movimentos diários acima de 0,4.</li>
+<li>Juro real de 2 anos sobe 25 bp ou mais desde 23/10.</li>
+<li>Inflação implícita de 2 anos sobe 25 bp ou mais desde 23/10.</li>
+<li>CDS de 5 anos sobe 10 bp ou mais no dia.</li>
+<li>Inclinação da curva (DI jan/33 menos jan/27) sobe 10 bp ou mais no dia.</li>
+<li>DI sobe mais de 60 bp além do que o câmbio explica.</li>
+</ol>
+<p>Os limites são julgamento. Em qualquer choque de risco, juro e dólar sobem juntos por alguns dias, então o sinal pesa mais quando dura semanas.</p>
+<h3>Bolsa</h3>
+<p>O EWZ é o Ibovespa em dólar. Antes das 9h o EWZ negocia, mas o dólar à vista é fino, então o painel dá 2 leituras: uma aceita o dólar de agora e divide a queda do Ibovespa em partes; a outra aceita o EWZ e calcula o dólar coerente com ele. Régua: nos 172 dias de estresse entre 2018 e 2026, <code>Ibovespa = −0,11% − 0,90 × dólar</code>. Cada ação tem a sua regressão (ADRs de Itaú, Petrobras e Vale), e o desvio mostra quanto cai além do normal. Em 7 eventos de 2018 a 2026, o modelo fora da amostra errou 1,4 p.p. em média, com todos dentro da faixa de 90%.</p>
+<h3>Precedentes</h3>
+<p>O dia de hoje é comparado com 8 choques passados (Dilma 2014, Joesley 2017, eleições de 2018 e 2022, fala de Lula sobre gasto, pacote fiscal de 2024 e o 1º turno de 2026) em 7 variáveis. 100% quer dizer igual a hoje.</p>
+
+<h2 id="dominancia">Monitor de dominância fiscal</h2>
+<p>Há dominância fiscal quando subir o juro deixa de proteger o real e de segurar a inflação, porque o mercado passa a duvidar da dívida. A ideia vem de Blanchard (2004). O monitor mede o fundo em 5 blocos, com 10 alertas:</p>
+<ol>
+<li><b>Conta da dívida.</b> Juro implícito r = juros nominais em 12 meses ÷ dívida bruta média de 12 meses. Crescimento nominal g = PIB de 12 meses contra 12 meses antes. Primário que estabiliza a dívida = dívida × (r − g) ÷ (1 + g). Alertas: r − g acima de zero, lacuna do primário acima de 2 p.p. do PIB e a dívida esperada pelo Focus subindo em todos os anos. Leque de 2.000 trajetórias até 2030, com choques sorteados dos meses desde 2015, sem mudança de política.</li>
+<li><b>Rolagem.</b> Antes de a dívida mudar, a crise aparece na rolagem: o Tesouro cancela leilões, encurta prazos ou só vende LFT. Faixas do Plano Anual de Financiamento 2026: vincendo em 12 meses até 22%, prazo médio acima de 3,8 anos.</li>
+<li><b>Âncora de inflação.</b> Inflação implícita = (1 + PRE) ÷ (1 + DPL) − 1, nos vértices de 720 e 1.800 dias das curvas da B3. Alertas: alta de 50 bp em 4 semanas na inflação implícita e no juro real, Focus IPCA 2027 acima de 4,5% (teto da meta) e LFT acima de 53% da dívida (teto do PAF).</li>
+<li><b>Cenários possíveis.</b> Histórico dos pesos. Esta página só copia os pesos do arquivo de cenários, não calcula nem muda nada.</li>
+<li><b>Orçamento 2027.</b> O PLOA e o PLDO por partes, a conta para estabilizar a dívida (cerca de R$ 416 bi, contra R$ 266,8 bi de discricionárias), o custo de juros extra de cada cenário (+1 p.p. de Selic = R$ 59,3 bi em 12 meses, na medida do BCB) e a contabilidade criativa da meta.</li>
+</ol>
+<p><b>Calibração.</b> Em 11 crises desde 2010 (DI de 2 anos +200 bp ou dólar +15% em 60 pregões), o alerta de inflação implícita (+50 bp em 4 semanas) acendeu antes em 7 ou 8, com cerca de 4% de falso alarme. O juro real de 5 anos acima de 5,00% (neutro do BCB) ficou aceso em 74% dos dias calmos, então o gatilho é a alta de 50 bp em 4 semanas, que acertou 9 de 11. r − g e a lacuna são condições de fundo, não alarme de curto prazo.</p>
+<p><b>Defasagem.</b> A B3 publica as curvas depois do fechamento e o SILO as carrega por volta das 03:00 do dia seguinte (06:00 UTC), então o pregão de hoje só entra amanhã. O Focus é semanal.</p>
+
+<h2 id="relatorio">Relatório diário de juros</h2>
+<ol>
+<li><b>Pesos de partida.</b> Só fatos, sem preços. Cada fato multiplica o peso de cada cenário e os pesos voltam a somar 100%. A escala tem 3 degraus: <b>fraco</b> ×1,05 (notícia não confirmada, fonte sem nome ou intenção sem ato formal), <b>moderado</b> ×1,15 (ato oficial ou declaração formal confirmada) e <b>forte</b> ×1,30 (decisão com efeito direto: tribunal, orçamento enviado ou votado, ministro nomeado, ação de rating). Contra um cenário, vale o inverso (0,95, 0,87 e 0,77). Um fato novo num canal que já entrou conta no máximo como fraco, para não contar duas vezes. A base de 27/10 foi 45 · 35 · 20 antes de qualquer fato.</li>
+<li><b>Fechamento da curva DI.</b> Ajustes do DI1 da B3, pelo SILO, contra a sessão anterior e contra 23/10, o último fechamento antes do 2º turno. Inclui a inclinação entre vértices.</li>
+<li><b>Copom contra o Focus.</b> Bootstrap da curva: cada contrato é o CDI composto até o vencimento, em dias úteis pelo calendário nacional. Com a Selic fixa entre reuniões, cada contrato novo dá a Selic de uma reunião, que o relatório compara com a mediana do Focus. Reuniões depois da próxima são ruidosas, porque os contratos curtos negociam pouco.</li>
+<li><b>Fatos e agenda.</b> Cada fato traz fonte, o degrau e o motivo. A agenda diz o que cada evento precisa mostrar para favorecer cada cenário.</li>
+</ol>
+<p>O relatório é atualizado em dias úteis, às 11:20 de Brasília (14:20 UTC). A revisão semanal, às segundas-feiras, aplica os gatilhos (equipe econômica, Orçamento 2027, Copom, contestação do resultado, rating) à partida. Os degraus são julgamento; a escala só deixa o julgamento explícito.</p>
+
+<h2 id="dados">Dados e atualização</h2>
+<div class="tw"><table><thead><tr><th>Dado</th><th>Fonte</th><th>Como chega</th></tr></thead><tbody>
+<tr><td>Curvas PRE e DPL, DI1, Focus, séries fiscais, PTAX, fluxo estrangeiro</td><td>SILO (CVM, BACEN, B3)</td><td>O navegador lê a API pública do SILO a cada visita</td></tr>
+<tr><td>DI, DOL e DAP intradiários (atraso de cerca de 15 min)</td><td>B3</td><td>Direto no navegador, a cada 2 a 8 min</td></tr>
+<tr><td>USDT/BRL</td><td>Binance</td><td>Direto no navegador, a cada 2 min</td></tr>
+<tr><td>PTAX e Focus</td><td>BCB (Olinda)</td><td>Direto no navegador</td></tr>
+<tr><td>EWZ, dólar, Ibovespa, ADRs; Selic; CDS 5 anos</td><td>Yahoo Finance; BCB SGS; OBM</td><td>Por uma função do próprio site, porque essas fontes não aceitam leitura direta</td></tr>
+<tr><td>Pesos, fatos, agenda, orçamento, rolagem, LFT, histórico</td><td>Arquivos em <code>data/</code> do repositório</td><td>Escritos pela rotina diária (dias úteis, 11:20 de Brasília) e publicados no deploy seguinte</td></tr>
+</tbody></table></div>
+<p>O histórico do Intraday tem um arquivo-base do site e, além dele, as leituras de 5 em 5 minutos feitas no seu navegador enquanto a página está aberta; essas leituras ficam só nele.</p>
+
+<h2 id="limites">Limites</h2>
+<ul>
+<li>As relações do dólar, do DI e da bolsa são lineares, estimadas em dias de estresse. Choques muito maiores que os da amostra (a maior alta do dólar foi +4,7%) ficam fora dela.</li>
+<li>O modelo vê só preços. Notícia entra pelos fatos do relatório, uma vez por dia.</li>
+<li>Antes das 9h o EWZ e o USDT têm pouco volume. A abertura do dólar à vista é o teste real.</li>
+<li>O DI jan/29 vence em pouco mais de 2 anos, e o modelo usa o vértice de 720 dias da curva PRE. São próximos, mas não iguais.</li>
+<li>Os limites dos sinais e os degraus dos fatos são julgamento. Os pesos são probabilidades subjetivas.</li>
+<li>Nada aqui é recomendação de compra ou venda.</li>
+</ul>
+</main>
+<footer class="site-foot">Leitura de sinais de mercado e julgamento do autor, não recomendação de compra ou venda. Tudo em horário de Brasília (UTC-3).</footer></body></html>

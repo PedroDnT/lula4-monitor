@@ -1,0 +1,8 @@
+[
+ {"id":"selic_juros","ordem":1,"choque":"Selic +1 p.p.","canal":"Juros da dívida pagos no orçamento","ef_2027":"+R$ 11,0 bi","ef_2030":"+R$ 54,3 bi","onde":"Fora do teto e da meta","sinal":"piora","fonte":"PLDO 2027, Anexo de Riscos Fiscais, tabela 12"},
+ {"id":"selic_divida","ordem":2,"choque":"Selic +1 p.p.","canal":"Dívida bruta (DBGG)","ef_2027":"+0,8 p.p. do PIB","ef_2030":"+2,6 p.p. do PIB","onde":"Fora do teto e da meta","sinal":"piora","fonte":"PLDO 2027, Anexo de Riscos Fiscais, tabela 13"},
+ {"id":"ipca_juros","ordem":3,"choque":"Inflação +1 p.p.","canal":"Juros da dívida indexada ao IPCA (NTN-B)","ef_2027":"+R$ 3,2 bi","ef_2030":"+R$ 24,4 bi","onde":"Fora do teto e da meta","sinal":"piora","fonte":"PLDO 2027, Anexo de Riscos Fiscais, tabela 12"},
+ {"id":"inpc_beneficios","ordem":4,"choque":"INPC +1 p.p.","canal":"Benefícios ligados ao salário mínimo (INSS, BPC, abono, seguro-desemprego)","ef_2027":"+R$ 13,5 bi (0,1% do PIB)","ef_2030":null,"onde":"Dentro do teto: tira espaço das discricionárias","sinal":"piora","fonte":"IFI, RAF 112 (mai/26), sobre o PLDO 2027"},
+ {"id":"ipca_limite","ordem":5,"choque":"IPCA +1 p.p. (12 meses até junho)","canal":"Limite de despesas do arcabouço","ef_2027":"+R$ 23,9 bi","ef_2030":null,"onde":"Teto: sobe no ano seguinte","sinal":"compensa","fonte":"PLDO 2027, Anexo de Riscos Fiscais, tabela 11 (R$ 2,39 bi por 0,1 p.p., vezes 10)"},
+ {"id":"ipca_receita","ordem":6,"choque":"Inflação +1 p.p.","canal":"Receita administrada pela Receita Federal","ef_2027":"+0,6% da receita","ef_2030":null,"onde":"Meta de primário: melhora","sinal":"compensa","fonte":"IFI, RAF 112 (média dos PLDOs e PLOAs desde 2019)"}
+]

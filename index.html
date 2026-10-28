@@ -1,0 +1,1338 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Painel intraday · Monitor LULA4</title><meta name="robots" content="index,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+/* Same look as the daily rates report: serif title and big numbers, light cards, sentence case. */
+:root {
+  --bg: #f7f6f3; --panel: #ffffff; --fg: #1f1e1c; --fg2: #4a4844; --muted: #6e6b65;
+  --rule: #e4e1db; --grid: #eeece7; --accent: #2f5f9e;
+  --s1: #2a78d6; --s1soft: #cfe0f6; --s2: #d0612f; --up: #b3261e; --down: #0f7b4f; --warn: #a15c00;
+  --warnbg: #fbf1df; --badbg: #fbe8e5; --okbg: #e5f3eb;
+  --f-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-mono: var(--f-body);
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1a1917; --panel: #23221f; --fg: #edebe7; --fg2: #c2bfb8; --muted: #9a968f;
+  --rule: #35332f; --grid: #2c2a27; --accent: #7fb0ee; --s1: #4a90e6; --s1soft: #1f3552; --s2: #e07a4a;
+  --up: #f2847a; --down: #4cc38a; --warn: #f0b45c; --warnbg: #33270f; --badbg: #3a1d1a; --okbg: #12301f; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #1a1917; --panel: #23221f; --fg: #edebe7; --fg2: #c2bfb8; --muted: #9a968f;
+  --rule: #35332f; --grid: #2c2a27; --accent: #7fb0ee; --s1: #4a90e6; --s1soft: #1f3552; --s2: #e07a4a;
+  --up: #f2847a; --down: #4cc38a; --warn: #f0b45c; --warnbg: #33270f; --badbg: #3a1d1a; --okbg: #12301f; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 15px; line-height: 1.5; -webkit-text-size-adjust: 100%; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px 56px; display: flex; flex-direction: column; gap: 32px; }
+a { color: var(--accent); }
+.head { display: flex; flex-direction: column; gap: 6px; padding-top: 24px; }
+h1 { font-family: var(--f-serif); font-weight: 400; font-size: 32px; line-height: 1.15; margin: 0; text-wrap: balance; }
+.take { font-size: 17px; color: var(--fg); margin: 2px 0 0; max-width: 70ch; }
+.sub { font-size: 13px; color: var(--muted); margin: 0; max-width: 80ch; }
+.links { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px; margin-top: 4px; }
+.links a { color: var(--muted); }
+.meta { font-size: 12px; color: var(--muted); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-variant-numeric: tabular-nums; }
+h2 { font-size: 20px; font-weight: 600; margin: 0; }
+.ct { font-family: var(--f-serif); font-weight: 400; font-size: 21px; margin: 0 0 4px; }
+h3 { font-size: 14px; font-weight: 600; margin: 16px 0 6px; }
+h4 { font-size: 13px; font-weight: 600; margin: 14px 0 4px; color: var(--fg); }
+p { margin: 0 0 8px; }
+button { font: inherit; font-size: 13px; min-height: 34px; padding: 4px 14px; border-radius: 999px; border: 1px solid var(--rule); background: var(--panel); color: var(--fg); cursor: pointer; }
+button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.up { color: var(--up); } .down { color: var(--down); }
+.sec { display: flex; flex-direction: column; gap: 12px; scroll-margin-top: 12px; }
+.sec > .lead { font-size: 13px; color: var(--muted); max-width: 80ch; margin: -4px 0 0; }
+
+/* tiles */
+.strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: 12px; }
+.strip a { text-decoration: none; color: inherit; background: var(--panel); border: 1px solid var(--rule); border-radius: var(--r); padding: 14px 16px; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.strip a:hover { border-color: var(--muted); }
+.strip .k { font-size: 12px; color: var(--muted); }
+.strip .v { font-family: var(--f-serif); font-weight: 400; font-size: 28px; line-height: 1.2; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.strip .s { font-size: 12px; color: var(--muted); }
+
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: var(--r); padding: 18px 20px; min-width: 0; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 12px; }
+.lead { color: var(--fg2); }
+.note { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+.err { font-size: 12px; color: var(--warn); margin-top: 4px; }
+.ph { border-style: dashed; background: transparent; }
+
+/* verdicts */
+.verdict { border-radius: var(--r); padding: 10px 12px; font-size: 14px; display: flex; gap: 10px; align-items: flex-start; }
+.verdict > b { font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 999px; white-space: nowrap; border: 1px solid currentColor; }
+.verdict.bad { background: var(--badbg); } .verdict.bad > b { color: var(--up); }
+.verdict.warn { background: var(--warnbg); } .verdict.warn > b { color: var(--warn); }
+.verdict.ok { background: var(--okbg); } .verdict.ok > b { color: var(--down); }
+.now { display: grid; gap: 0; }
+.item { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 4px 12px; padding: 11px 0; border-top: 1px solid var(--rule); }
+.item:first-of-type { border-top: 0; padding-top: 0; }
+.chip { font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 999px; text-align: center; align-self: start; color: var(--muted); border: 1px solid currentColor; }
+.chip.ok { color: var(--down); } .chip.warn { color: var(--warn); } .chip.bad { color: var(--up); }
+.item .what { font-weight: 600; }
+.item .do { color: var(--fg2); font-size: 14px; margin-top: 3px; }
+.item .do b { color: var(--fg); }
+
+.key { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px; color: var(--fg2); margin-bottom: 4px; }
+.stack { display: flex; height: 22px; border-radius: 6px; overflow: hidden; background: var(--grid); margin: 6px 0; }
+.stack span { display: block; height: 100%; }
+.mono { font-variant-numeric: tabular-nums; }
+.fxi { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: 10px; }
+.fxi > div { border: 1px solid var(--rule); border-radius: var(--r); padding: 10px 12px; min-width: 0; }
+.fxi .k { font-size: 12px; color: var(--muted); }
+.fxi .v { font-family: var(--f-serif); font-size: 24px; font-weight: 400; font-variant-numeric: tabular-nums; }
+.fxi .s { font-size: 12px; color: var(--fg2); }
+.key i { display: inline-block; width: 12px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+/* tables */
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { padding: 8px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+thead th { font-size: 12px; font-weight: 500; color: var(--muted); vertical-align: bottom; }
+td.n, th.n { text-align: right; white-space: nowrap; }
+th small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
+.tw { overflow-x: auto; }
+.okc, .badc { font-size: 11px; padding: 0 6px; border-radius: 999px; margin-left: 4px; border: 1px solid currentColor; }
+.okc { color: var(--down); } .badc { color: var(--up); }
+tr.hl th, tr.hl td { font-weight: 600; }
+.bar { display: inline-block; height: 8px; border-radius: 2px; background: var(--s1); vertical-align: middle; margin-right: 6px; }
+
+/* charts */
+.chart { position: relative; touch-action: pan-y; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart text { fill: var(--muted); font-family: var(--f-body); font-size: 10px; font-variant-numeric: tabular-nums; }
+.tip { position: absolute; pointer-events: none; background: var(--panel); color: var(--fg); border: 1px solid var(--rule); box-shadow: 0 2px 8px rgba(0,0,0,.12); font-size: 12px; font-variant-numeric: tabular-nums; padding: 4px 8px; border-radius: 6px; white-space: nowrap; transform: translate(-50%, -115%); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.legend span::before { content: ""; display: inline-block; width: 12px; height: 3px; border-radius: 2px; background: var(--c); vertical-align: middle; margin-right: 5px; }
+.legend span.dash::before { background: none; border-top: 2px dashed var(--c); height: 0; }
+
+/* similarity */
+.simlist { display: grid; gap: 6px; margin-top: 6px; }
+.sim { display: grid; grid-template-columns: minmax(0, 190px) minmax(0, 1fr) 46px; gap: 10px; align-items: center; font-size: 13px; }
+.sim .bar2 { height: 10px; border-radius: 3px; background: var(--grid); overflow: hidden; }
+.sim .bar2 span { display: block; height: 100%; background: var(--s1); }
+.sim.top .bar2 span { background: var(--up); }
+.sim.top .nm { font-weight: 600; }
+.sim .pc { text-align: right; font-variant-numeric: tabular-nums; }
+.sim .nm small { color: var(--muted); margin-left: 4px; }
+@media (max-width: 560px) { .sim { grid-template-columns: minmax(0, 1fr) 46px; } .sim .bar2 { grid-column: 1 / -1; grid-row: 2; } }
+
+/* collapsed details */
+details { border-top: 1px solid var(--rule); }
+details:first-of-type { border-top: 0; }
+summary { cursor: pointer; padding: 10px 0; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; min-height: 44px; align-items: center; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; color: var(--muted); font-size: 18px; font-weight: 400; }
+details[open] > summary::after { content: "−"; }
+details > div { padding: 0 0 12px; color: var(--fg2); font-size: 14px; }
+details > div p, details > div li { max-width: 72ch; }
+details.box { background: var(--panel); border: 1px solid var(--rule); border-radius: var(--r); padding: 4px 20px; }
+details.box > summary { font-family: var(--f-serif); font-weight: 400; font-size: 19px; }
+details.box > div { padding-bottom: 16px; }
+.how { font-size: 13px; color: var(--accent); white-space: nowrap; }
+code { font-size: 12.5px; background: var(--grid); padding: 1px 4px; border-radius: 3px; }
+
+/* dominance score */
+.dom { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 16px; align-items: start; margin-top: 6px; }
+.score { border-radius: var(--r); padding: 12px 10px; text-align: center; background: var(--grid); }
+.score .sn { display: block; font-family: var(--f-serif); font-size: 56px; line-height: 1; font-weight: 400; font-variant-numeric: tabular-nums; }
+.score .sd { display: block; font-size: 12px; color: var(--fg2); margin-top: 6px; }
+.score.ok { background: var(--okbg); } .score.ok .sn { color: var(--down); }
+.score.warn { background: var(--warnbg); } .score.warn .sn { color: var(--warn); }
+.score.bad { background: var(--badbg); } .score.bad .sn { color: var(--up); }
+.sig { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.sig li { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 7px 0; border-top: 1px solid var(--rule); font-size: 14px; }
+.sig li:first-child { border-top: 0; }
+.sig li::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--grid); border: 1px solid var(--rule); transform: translateY(1px); }
+.sig li.on::before { background: var(--up); border-color: var(--up); }
+.sig li.na { color: var(--muted); }
+.sig .v { font-size: 13px; color: var(--fg2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.sig li.on .t { font-weight: 600; }
+@media (max-width: 560px) { .sig li { grid-template-columns: 14px minmax(0, 1fr); } .sig .v { grid-column: 2; white-space: normal; } .dom { grid-template-columns: minmax(0, 1fr); } .score { display: flex; align-items: baseline; gap: 10px; text-align: left; } .score .sn { font-size: 40px; } }
+@media (max-width: 560px) {
+  body { font-size: 14.5px; }
+  .wrap { gap: 26px; }
+  h1 { font-size: 26px; }
+  .take { font-size: 16px; }
+  .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .strip a { padding: 10px 12px; }
+  .strip .v { font-size: 22px; }
+  .panel { padding: 14px; }
+  details.box { padding: 2px 14px; }
+  .item { grid-template-columns: minmax(0, 1fr); }
+  .chip { justify-self: start; }
+  .verdict { flex-direction: column; gap: 6px; }
+  table.cards thead { display: none; }
+  table.cards, table.cards tbody, table.cards tr, table.cards th, table.cards td { display: block; width: 100%; }
+  table.cards tr { border: 1px solid var(--rule); border-radius: var(--r); padding: 8px 10px; margin-bottom: 8px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 10px; }
+  table.cards th { border: 0; padding: 0 0 2px; font-size: 14px; grid-column: 1 / -1; }
+  table.cards th small { display: inline; margin-left: 6px; }
+  table.cards td { border: 0; padding: 0; text-align: left; white-space: normal; }
+  table.cards td::before { content: attr(data-label); display: block; font-size: 11px; color: var(--muted); }
+  table.cards td.cond { grid-column: 1 / -1; display: block; text-align: left; color: var(--fg2); font-size: 13px; white-space: normal; }
+  table.cards td.cond::before { content: none; }
+}
+table.compact th, table.compact td { padding: 7px 6px; }
+@media (max-width: 560px) { table.compact { font-size: 13px; } table.compact .hide-m { display: none; } table.compact th small { font-size: 11px; } }
+img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
+</style>
+<style>.site-head{background:var(--bg,#f7f6f3)} .wrap{padding-top:0}</style></head><body>
+<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html" aria-current="page">Intraday</a><a href="dominancia.html">Dominância fiscal</a><a href="relatorio.html">Relatório diário</a><a href="metodo.html">Método</a></nav></div></header>
+
+
+<div class="wrap">
+  <header class="head" id="topo">
+    <div class="meta"><span id="today"></span><span id="clock">Carregando dados…</span><button id="refresh" type="button">Atualizar</button></div>
+    <h1>Painel do choque pós-eleição</h1>
+    <p class="take" id="take">Aguardando os preços do dia…</p>
+    <p class="sub">Este painel lê os preços ao vivo e move os pesos dos 3 cenários ao longo do dia. Os pesos de partida vêm do <a href="relatorio.html">relatório diário de juros</a>. A dívida, a rolagem e a âncora de inflação estão no <a href="dominancia.html">monitor de dominância fiscal</a>. Não é recomendação de compra ou venda.</p>
+    <nav class="links"><a href="#s-sc">Pesos</a><a href="#s-dom">Dominância</a><a href="#s-live">Mercado</a><a href="#s-hist">Histórico</a><a href="#s-more">Detalhes</a></nav>
+  </header>
+
+  <section class="sec" aria-label="Resumo">
+  <nav class="strip" aria-label="Números principais">
+    <a href="#s-sc"><div class="k">Cenário que o DI precifica</div><div class="v" id="m-sc">–</div><div class="s" id="m-sc-s">–</div></a>
+    <a href="#s-dom"><div class="k">Dominância fiscal</div><div class="v" id="m-dom">–</div><div class="s" id="m-dom-s">sinais acesos</div></a>
+    <a href="#s-di"><div class="k">DI jan/29</div><div class="v" id="m-di">–</div><div class="s" id="m-di-s">abre às 9h</div></a>
+    <a href="#s-fx"><div class="k" id="m-fx-k">Dólar vs PTAX anterior</div><div class="v" id="m-fx">–</div><div class="s" id="m-fx-s">–</div></a>
+  </nav>
+  <div id="pagemsg" class="verdict warn" hidden></div>
+  <div class="panel now" aria-label="O que fazer agora">
+    <div class="item" id="n-fx"><span class="chip">…</span><div><div class="what">Câmbio: aguardando dados.</div></div></div>
+    <div class="item" id="n-eq"><span class="chip">…</span><div><div class="what">Bolsa: aguardando dados.</div></div></div>
+    <div class="item" id="n-who"><span class="chip">…</span><div><div class="what">Quem cai: aguardando ADRs.</div></div></div>
+    <div class="item" id="n-di"><span class="chip">…</span><div><div class="what">Juros: aguardando a B3.</div></div></div>
+    <p class="note">Leitura de sinais de mercado. Não é recomendação de compra ou venda.</p>
+  </div>
+  </section>
+
+  <section class="sec" id="s-sc" aria-labelledby="h-sc">
+    <h2 id="h-sc">Pesos de cenário</h2>
+    <p class="lead">O peso de partida vem do relatório diário de juros (só fatos, escala de 3 degraus). O peso de agora aplica a regra de mercado a ele. A coluna "O DI precifica" mostra o cenário que a alta do DI jan/29 desde <span id="el-d">23/10</span> já paga. <a class="how" href="#m6">Como funciona</a></p>
+    <div class="panel">
+    <div class="tw"><table class="cards">
+      <thead><tr><th>Cenário</th><th class="n">Início (relatório diário)</th><th class="n">Agora (mercado)</th><th class="n">O DI precifica</th><th class="n">DI jan/29 esperado</th><th class="n">1 mês</th><th class="n">3 meses</th><th class="n">12 meses</th><th>O que precisa acontecer</th></tr></thead>
+      <tbody id="scen"><tr><td>Aguardando o câmbio…</td></tr></tbody>
+    </table></div>
+    <div id="sc-out" class="verdict warn" style="margin-top:10px" hidden></div>
+    <p class="note"><b>Nota sobre 12 meses:</b> a coluna de 12 meses usa o dólar futuro (DOL) como âncora. O futuro inclui cerca de 5,5% ao ano de diferencial de juros. Ele é o preço para travar o dólar, não uma previsão pura. Na média, o dólar à vista sobe menos do que o futuro indica. <a class="how" href="#m7">Como funciona</a></p>
+    </div>
+    <div class="panel ph" id="s-facts">
+      <h3 style="margin-top:0">Fatos do dia: escala de 3 degraus</h3>
+      <p class="note" style="margin:0">Hoje os fatos do dia e os pesos de partida estão no <a href="relatorio.html">relatório diário de juros</a>. Quando o relatório entrar neste painel, a tabela de fatos fica aqui.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="s-dom" aria-labelledby="h-dom">
+    <h2 id="h-dom">Dominância fiscal</h2>
+    <p class="lead">Há dominância fiscal quando subir o juro deixa de proteger o real: o juro sobe, o real cai e a inflação esperada sobe, tudo junto. O placar acende cada um dos 6 sinais de mercado que mostram isso. <a class="how" href="#m10">Como funciona</a></p>
+    <div class="panel">
+    <div class="dom">
+      <div class="score" id="dom-score"><span class="sn" id="dom-n">–</span><span class="sd" id="dom-of">sinais acesos</span></div>
+      <ul class="sig" id="dom-list"><li class="na"><span class="t">Aguardando o SILO e a B3…</span></li></ul>
+    </div>
+    <div id="dom-out" class="verdict warn" style="margin-top:12px" hidden></div>
+    <h3>Juro de 2 anos: nominal, real e inflação implícita</h3>
+    <div class="tw"><table class="compact">
+      <thead><tr><th>Taxa</th><th class="n">23/10</th><th class="n">Último fech.</th><th class="n">Agora</th><th class="n">Desde 23/10</th></tr></thead>
+      <tbody id="dom-tab"><tr><td>Aguardando o SILO…</td></tr></tbody>
+    </table></div>
+    <h3>Correlação de 20 dias entre o DI de 2 anos e o dólar</h3>
+    <div class="legend"><span style="--c:var(--s1)">Correlação dos movimentos diários</span><span class="dash" style="--c:var(--muted)">Zero</span></div>
+    <div class="chart" id="c-corr"></div>
+    <div class="err" id="e-silo" hidden></div>
+    <p class="note" id="dom-src">Histórico: SILO (curvas PRE e DPL da B3, vértice de 720 dias, e PTAX do BCB), 2 anos de dados diários. Hoje: variação do DI jan/29 e do DAP de cerca de 2 anos (B3) e o dólar de agora.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="s-live" aria-labelledby="h-live">
+    <h2 id="h-live">Mercado ao vivo</h2>
+    <p class="lead">Juros, câmbio e bolsa, com cerca de 15 minutos de atraso na B3. Cada cartão diz de onde vem o número.</p>
+    <div class="panel" id="s-di"><h3 class="ct">Juros</h3>
+    <p class="lead">Um dólar mais alto já sobe o DI, porque traz mais inflação. A parte que sobra não é explicada pelo câmbio. Ela inclui prêmio fiscal, mas também Selic e inflação esperada. <a class="how" href="#m5">Como funciona</a></p>
+    <div class="fxi" style="margin-bottom:12px">
+      <div><div class="k">DI jan/29 (DI1F29)</div><div class="v" id="di29-v">–</div><div class="s" id="di29-s">–</div></div>
+      <div><div class="k">Vértice que mais subiu</div><div class="v" id="dimax-v">–</div><div class="s" id="dimax-s">–</div></div>
+    </div>
+    <h3>Curva de DI da B3: ajuste anterior contra agora</h3>
+    <div class="legend"><span class="dash" style="--c:var(--muted)">Ajuste anterior</span><span style="--c:var(--s1)">Agora (último negócio)</span><span style="--c:var(--s2)">Ponto = DI jan/29</span></div>
+    <div class="chart" id="c-di"></div>
+    <div class="tw"><table class="compact">
+      <thead><tr><th>Contrato</th><th class="n">Ajuste ant.</th><th class="n">Agora</th><th class="n">Variação</th></tr></thead>
+      <tbody id="di-tab"><tr><td>Carregando…</td></tr></tbody>
+    </table></div>
+    <h3>Choque local: sem o movimento global</h3>
+    <p style="font-size:14px">Parte global = o que o peso mexicano, o rand e o Treasury de 10 anos explicam hoje. O resto é local. O global explica pouco do DI; a maior parte do movimento é local.</p>
+    <div class="tw"><table class="compact">
+      <thead><tr><th>Hoje</th><th class="n">Bruto</th><th class="n">Global</th><th class="n">Local</th><th class="n">Local em desvios</th></tr></thead>
+      <tbody id="loc-tab"><tr><td>Aguardando o Yahoo…</td></tr></tbody>
+    </table></div>
+    <h3>Prêmio do DI jan/29 sobre a Selic do Focus</h3>
+    <div class="fxi">
+      <div><div class="k">DI jan/29 agora</div><div class="v" id="pr-di">–</div><div class="s" id="pr-di-s">–</div></div>
+      <div><div class="k">Taxa que o Focus implica</div><div class="v" id="pr-fo">–</div><div class="s" id="pr-fo-s">–</div></div>
+      <div><div class="k">Prêmio</div><div class="v" id="pr-bp">–</div><div class="s">prazo e risco, mais o erro do Focus</div></div>
+    </div>
+    <p class="note" id="pr-note">Só informação: o prêmio não entra na regra dos pesos.</p>
+    <div id="di-out" class="verdict warn" style="margin-top:10px"><b>Aguardando</b><span>O pregão de DI abre às 9h.</span></div>
+    <div class="err" id="e-di" hidden></div>
+    <p class="note" id="di-src">Fonte do DI: B3, API cotacao.b3.com.br/mds/api/v1/DerivativeQuotation/DI1 (contratos DI1F27, F28, F29, F31 e F33; "Ajuste ant." = preço de ajuste do pregão anterior, "Agora" = último preço negociado), lida a cada 2 min com cerca de 15 min de atraso.</p>
+    </div>
+    <div class="panel" id="s-fx"><h3 class="ct">Câmbio</h3>
+    <p class="lead">Antes das 9h o câmbio oficial não negocia. O painel compara as fontes e descarta a que destoa. <a class="how" href="#m1">Como funciona</a></p>
+    <div class="tw"><table class="compact">
+      <thead><tr><th>Fonte</th><th class="n">Cotação</th><th class="n">vs PTAX</th><th>Status</th></tr></thead>
+      <tbody id="fx-tab"><tr><td>Carregando…</td></tr></tbody>
+    </table></div>
+    <div id="fx-out" class="verdict warn" style="margin-top:10px" hidden></div>
+    <div class="err" id="e-ptax" hidden></div>
+    <p class="note" id="lim-note">Limite de alta do dólar futuro: aguardando a PTAX.</p>
+    <h3>USDT/BRL, últimas 48 horas</h3>
+    <div class="legend"><span style="--c:var(--s1)">USDT/BRL</span><span class="dash" style="--c:var(--muted)" id="lg-ptax">PTAX anterior</span></div>
+    <div class="chart" id="c-usdt"></div><div class="err" id="e-usdt" hidden></div>
+      <h3 id="s-cup" style="margin-top:22px">Curva do dólar e cupom cambial</h3>
+    <p class="lead">O dólar futuro até 2031 e o DI do mesmo mês dão o juro em dólar que o mercado embute no futuro. Se o cupom salta de um dia para o outro, o futuro e o spot descolaram. <a class="how" href="#m9">Como funciona</a></p>
+    <h3>Dólar futuro contra os 3 cenários</h3>
+    <div class="legend"><span class="dash" style="--c:var(--muted)">DOL, ajuste anterior</span><span style="--c:var(--s1)">DOL, último negócio</span><span style="--c:var(--down)">Âncora retomada</span><span style="--c:var(--warn)">Deriva fiscal</span><span style="--c:var(--up)">Estresse e espiral</span></div>
+    <div class="chart" id="c-dol"></div>
+    <p class="note" id="dol-note">Aguardando o dólar futuro e o câmbio…</p>
+    <h3>Cupom cambial implícito</h3>
+    <div class="legend"><span class="dash" style="--c:var(--muted)">Ajuste anterior</span><span style="--c:var(--s1)">Agora (onde o dólar futuro negociou)</span></div>
+    <div class="chart" id="c-cup"></div>
+    <div class="tw"><table class="compact">
+      <thead><tr><th>Contrato</th><th class="n">DOL ajuste ant.</th><th class="n">DOL agora</th><th class="n">Cupom ant.</th><th class="n">Cupom agora</th></tr></thead>
+      <tbody id="cup-tab"><tr><td>Carregando…</td></tr></tbody>
+    </table></div>
+    <div id="cup-out" class="verdict warn" style="margin-top:10px" hidden></div>
+    <div class="err" id="e-dol" hidden></div>
+    <p class="note">Fonte: B3, API cotacao.b3.com.br/mds/api/v1/DerivativeQuotation/DOL (dólar futuro) e DI1 (juros), lido pelo navegador; o DOL é lido a cada 8 min, com cerca de 15 min de atraso. * = menos de 20 dias úteis: cupom instável, fora do gráfico.</p>
+    </div>
+    <div class="panel" id="s-eq"><h3 class="ct">Bolsa</h3>
+    <p class="lead">O EWZ cai em dólar por dois motivos: o real perde valor e as ações caem em reais. Antes das 9h o dólar à vista não negocia, então há duas leituras possíveis. <a class="how" href="#m2">Como funciona</a></p>
+
+    <h3>Leitura 1: se o dólar de agora estiver certo</h3>
+    <p style="font-size:14px">Ibovespa implícito em reais: <b id="eq-tot" class="mono">–</b>. Partes da queda:</p>
+    <div class="stack" id="eq-bar" role="img" aria-label="Partes da queda do Ibovespa"></div>
+    <div class="key" id="eq-key"></div>
+
+    <h3>Leitura 2: se a bolsa estiver certa</h3>
+    <div class="fxi">
+      <div><div class="k">Dólar que torna o EWZ coerente</div><div class="v" id="fi-v">–</div><div class="s" id="fi-r">–</div></div>
+      <div><div class="k">Dólar de agora (USDT sem prêmio)</div><div class="v" id="fi-now">–</div><div class="s" id="fi-now-s">–</div></div>
+    </div>
+    <div id="eq-out" class="verdict warn" style="margin-top:12px" hidden></div>
+
+    <h3>Fluxo estrangeiro na bolsa (B3, ações)</h3>
+    <div class="fxi">
+      <div><div class="k">Último dia</div><div class="v" id="ff-1">–</div><div class="s" id="ff-1s">–</div></div>
+      <div><div class="k">Soma de 5 dias</div><div class="v" id="ff-5">–</div><div class="s" id="ff-5s">–</div></div>
+    </div>
+    <div class="err" id="e-flow" hidden></div>
+    <p class="note">Fonte: SILO (B3, investidor estrangeiro, R$). O dado sai com 2 dias úteis de atraso, e a B3 guarda só cerca de 21 dias, então não há teste histórico. "Saída forte" = soma de 5 dias abaixo de −3 bi, por julgamento. É só o fluxo em ações, não o de DI nem o de câmbio, e não move os pesos dos cenários.</p>
+    <h3>Ação por ação, pelas ADRs em Nova York</h3>
+    <p class="lead" style="font-size:14px">Cada ação tem a própria sensibilidade ao dólar. O desvio mostra quanto ela cai além do normal, em desvios padrão. <a class="how" href="#m4">Como funciona</a></p>
+    <div class="tw"><table class="compact">
+      <thead><tr><th>Ação</th><th class="n">Em reais</th><th class="n">Justo</th><th class="n">Desvio</th><th class="hide-m">Leitura</th></tr></thead>
+      <tbody id="stk"><tr><td>Carregando…</td></tr></tbody>
+    </table></div>
+    <h3>EWZ hoje, pré-mercado incluído</h3>
+    <div class="legend"><span style="--c:var(--s2)">EWZ</span><span class="dash" style="--c:var(--muted)">Fechamento anterior</span></div>
+    <div class="chart" id="c-ewz"></div><div class="err" id="e-y" hidden></div>
+    <p class="note">Pré-mercado: das 5h às 10h30 de Brasília, com pouco volume.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="s-hist" aria-labelledby="h-hist">
+    <h2 id="h-hist">Histórico</h2>
+    <p class="lead">O painel grava uma leitura a cada 5 minutos enquanto você o tem aberto, neste navegador. O histórico base vem de um arquivo do site, com as leituras feitas até 28/10/2026. <a class="how" href="#m11">Como funciona</a></p>
+    <div class="panel">
+    <div class="legend"><span style="--c:var(--s1)">Dólar (R$)</span></div>
+    <div class="chart" id="c-hist-fx"></div>
+    <div class="tw"><table class="compact">
+      <thead><tr><th>Dia</th><th class="n">Dólar</th><th class="n">DI jan/29</th><th class="n">CDS 5a</th><th class="n">Pesos agora</th><th class="n">Placar</th><th class="n">Leituras</th></tr></thead>
+      <tbody id="hist-tab"><tr><td>Aguardando o histórico…</td></tr></tbody>
+    </table></div>
+    <p class="note" id="hist-note">Cada linha mostra a última leitura do dia.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="s-more" aria-labelledby="h-more">
+    <h2 id="h-more">Detalhes</h2>
+    <details class="box" id="s-mon"><summary>Monitor: bolsa, FIIs, curva e CDS</summary><div>
+    <p class="lead">Quatro números de acompanhamento. Antes das 10h, IBOV e IFIX mostram o último fechamento.</p>
+    <div class="fxi">
+      <div><div class="k">Ibovespa (B3)</div><div class="v" id="mo-ibov">–</div><div class="s" id="mo-ibov-s">–</div></div>
+      <div><div class="k">IFIX (via ETF XFIX11)</div><div class="v" id="mo-ifix">–</div><div class="s" id="mo-ifix-s">–</div></div>
+      <div><div class="k">Inclinação da curva: DI jan/33 − jan/27</div><div class="v" id="mo-curve">–</div><div class="s" id="mo-curve-s">–</div></div>
+      <div><div class="k">Diferencial de câmbio: USDT − spot</div><div class="v" id="mo-fxd">–</div><div class="s" id="mo-fxd-s">–</div></div>
+      <div><div class="k">CDS Brasil 5 anos (OBM, ICE/DTCC)</div><div class="v" id="mo-cds">–</div><div class="s" id="mo-cds-s">–</div></div>
+    </div>
+    <div class="err" id="e-cds" hidden></div>
+    <p class="note">CDS: fechamento do dia anterior, atualizado uma vez por pregão; não há CDS intradiário gratuito. O EMBI+ foi descontinuado pelo J.P. Morgan em jul/2024, então o CDS de 5 anos é a medida de risco-país. Circuit breaker da B3: queda de 10% para 30 min, 15% para 1 h, 20% a critério da B3; durante a parada o Ibovespa do Yahoo fica congelado e o painel avisa. Inclinação: positiva quando o vértice longo paga mais que o curto. Se ela sobe no dia, o mercado cobra prêmio no longo (fiscal). Diferencial de câmbio: USDT/BRL contra o USD/BRL do Yahoo; o normal em dia útil é +0,4%. Acima de 1,5% o spot está parado ou o USDT tem prêmio de estresse. A linha menor mostra o dólar que o EWZ precifica contra o dólar de agora.</p>
+    </div></details>
+    <details class="box" id="s-pr"><summary>Precedentes: quão perto hoje está de cada choque</summary><div>
+    <p class="lead">Hoje é comparado com 8 choques em 7 variáveis do dia: dólar, Ibovespa, DI de 1, 2 e 5 anos, inclinação da curva e estatais contra privadas. 100% quer dizer igual a hoje. 0% quer dizer tão longe de hoje quanto um dia sem choque. <a class="how" href="#m8">Como funciona</a></p>
+    <div id="sim" class="simlist"><p class="note">Aguardando o câmbio e o DI…</p></div>
+    <div id="sim-out" class="verdict warn" style="margin-top:10px" hidden></div>
+    <h3>Os números de cada choque, no dia</h3>
+    <div class="tw"><table class="cards">
+      <thead><tr><th>Evento</th><th class="n">Dólar</th><th class="n">Ibovespa</th><th class="n">Ibovespa justo</th><th class="n">DI 1a</th><th class="n">DI 2a</th><th class="n">DI 5a</th><th class="n">Inclinação 5a − 1a</th><th class="n">Estatais − privadas</th><th class="n">DI 2a, 20 dias depois</th></tr></thead>
+      <tbody id="prec"></tbody>
+    </table></div>
+    <p><b>O que isso diz para hoje:</b> em choques fiscais (fala de Lula em 2022, pacote de 2024), o DI de 2 anos continuou a subir por semanas: +96 bp no dia e +102 bp em 20 dias em 2022, +28 bp no dia e +208 bp em 20 dias em 2024. No choque político pontual (Joesley), o DI devolveu cerca de 70% em 20 dias. <b>Ação:</b> o precedente mais próximo diz o que esperar das próximas semanas; se ele for um choque fiscal, não espere volta rápida do DI.</p>
+    <p class="note">* 2014 e 2017: dólar pela PTAX, porque o Silo tem o dólar futuro só a partir de 2018. Hoje: DI 1a = DI jan/28, DI 2a = DI jan/29, DI 5a = DI jan/31 (4 anos), contra o ajuste anterior; estatais − privadas pelas ADRs (Petrobras menos a média de Itaú e Vale). Precedentes: curva PRE da B3 (vértices de 360, 720 e 1.800 dias), Ibovespa, dólar futuro e ações do Silo (Delos Labs), dados diários de fechamento até 22/10/2026.</p>
+    </div></details>
+    <details class="box" id="h-obj"><summary>Sobre este painel</summary><div>
+      <p>Este painel é a <b>visão rápida</b>. Ele lê os preços de mercado ao longo do dia (câmbio, EWZ, ADRs, curva de DI, CDS) e aplica a regra de mercado aos pesos de partida.</p>
+      <p>A <b>visão lenta</b> é o <a href="relatorio.html">relatório diário de juros</a>: fatos e fechamento da B3, uma vez por dia. Dele saem os pesos de partida. A dívida, a rolagem e a âncora de inflação estão no <a href="dominancia.html">monitor de dominância fiscal</a>. Este painel não muda os pesos de partida; o relatório do dia seguinte decide.</p>
+    </div></details>
+    <details class="box" id="h-m"><summary>Método</summary><div>
+    <p>Cada número do painel vem de um destes 6 passos. Toque para abrir.</p>
+    <details id="g1"><summary>1. Cenários e dólar por cenário</summary><div><div id="m6">
+      <p>Os 3 cenários são os mesmos do monitor de juros e do documento "Dominância fiscal": Âncora retomada (Framework holds no monitor), Deriva fiscal (Fiscal drift) e Estresse e espiral (Institutional stress).</p>
+      <p><b>Início (relatório diário):</b> o relatório diário de juros fixa os pesos só com fatos, sem preços, pela escala de 3 degraus. Em 27/10: 43 · 32 · 25 (26/10: 45 · 33 · 22; antes da eleição: 45 · 35 · 20). <b>Agora (mercado):</b> o painel aplica a regra de mercado ao longo do dia: agora = início + 0,3 × (o que o DI precifica − início), cada peso muda no máximo 15 pontos, e a soma volta a 100%. O fator 0,3 reproduz o passo anterior de 45 · 35 · 20 para 32 · 37 · 31. A média ponderada do dólar usa os pesos de agora. O monitor diário aplica essa regra a cada fechamento e a revisão semanal aplica os gatilhos (equipe econômica, Orçamento 2027, Copom, contestação do resultado, rating). Nenhum peso muda mais de 15 pontos por dia.</p>
+      <p><b>O que o DI precifica:</b> cada cenário supõe uma alta do DI jan/29 desde 23/10 (ajuste 12,640%): +50, +180 e +320 bp. A alta de agora fica entre dois desses números, e o painel divide o peso em linha reta entre eles. Acima de +320 bp, tudo vai para o Estresse e o painel avisa que o mercado está além do pior cenário.</p>
+      <p><b>Por que não Bayes:</b> a versão anterior usava a regra de Bayes com incerteza de ±35 bp. Quando o DI passa muito do esperado, ela dá 100% a um cenário e esconde o tamanho do erro. A divisão em linha reta mostra onde o DI está entre os cenários e quanto ele passa do pior.</p>
+      <p>Dólar no prazo = PTAX de 23/10 × (1 + choque acumulado × fração que resta), com as frações do passo 2. A média ponderada usa os pesos de agora (mercado).</p>
+    </div><div id="m7"><h4>Dólar por cenário e limites gerais</h4>
+      <p>Dólar no prazo = PTAX de 23/10 × (1 + choque acumulado desde 23/10 × fração que resta). <b>Âncora: estimada.</b> Projeções locais (Jordà) com a PTAX de 2008 a out/2026 (4.664 dias). O choque local é o dólar menos 0,67 × a média de USD/MXN e USD/ZAR, para tirar o movimento global. Nos 213 dias com choque local acima de 2 desvios padrão, a fração que resta é 0,75 em 1 mês (erro padrão 0,17), 0,76 em 3 meses (0,24), 0,92 em 6 meses (0,34) e 0,73 em 12 meses (0,52); erros HAC. Em todos os dias ela fica perto de 1. Conclusão: o choque local do real quase não volta sozinho. A Âncora usa 0,75 nos 3 prazos. Faixa de 80% só do erro do coeficiente: 0,53 a 0,97 em 1 mês e 0,06 a 1,40 em 12 meses; a dispersão de cada evento é bem maior.</p>
+      <p><b>Deriva e Estresse: julgamento.</b> O teste com o excesso do DI (a parte não explicada pelo câmbio) não separa os cenários: a interação não é significativa em nenhum prazo, e há só 11 dias com excesso acima de 60 bp. Por isso as frações da Deriva (1,1 · 0,9 · 0,9) e do Estresse (1,4 · 1,8 · 2,2) são julgamento, com o piso da Âncora: um cenário pior não pode terminar com o dólar abaixo dela.</p>
+      <p><b>12 meses: âncora no dólar futuro.</b> Em 12 meses o painel mantém a diferença entre os cenários, mas move os 3 juntos para que a média ponderada (pesos de agora) seja igual ao DOL de cerca de 12 meses. Se esse contrato não negociou hoje, o painel usa o ajuste anterior × (dólar de agora ÷ PTAX anterior). Cuidado: o futuro inclui o diferencial de juros (cerca de 5,5% ao ano em 23/10), então este é o preço de mercado para travar o dólar, não uma previsão pura do dólar à vista. A cada dia o preço à vista costuma subir menos que o futuro indica, porque o investidor cobra para carregar o real. Em 1 e 3 meses os níveis seguem as frações acima.</p>
+      <p>Limites: (1) o EWZ no pré-mercado tem pouco volume, então a abertura do Ibovespa às 10h é o teste real; (2) todas as relações são lineares, e choques muito grandes podem ser maiores que o modelo prevê; (3) o modelo não vê notícias, só preços.</p>
+      <p>Dados ao vivo, lidos direto pelo seu navegador: Binance (USDT/BRL), B3 (DI, DOL e DAP, com cerca de 15 minutos de atraso), BCB (PTAX, Focus e Selic) e o SILO (curvas, PTAX e fluxo estrangeiro). Yahoo Finance (EWZ, dólar, Ibovespa, XFIX11, ADRs) e o CDS da OBM passam por uma função do próprio site, porque essas duas fontes não aceitam leitura direta do navegador. Cada leitura roda a cada 2 minutos, e a linha no topo mostra a hora da última leitura boa de cada fonte. Se uma fonte falha, o painel mantém o último dado. Dados históricos: SILO (Delos Labs), dados diários, não intradiários.</p>
+    </div></div></details>
+    <details id="g2"><summary>2. Dominância fiscal: os 6 sinais</summary><div><div id="m10">
+      <p>A ideia vem de Blanchard (2004), com dados do Brasil de 2002: quando a dívida é alta, um juro maior aumenta o risco de calote e o real perde valor, em vez de ganhar. O sinal no mercado é o juro e o dólar subirem juntos, com a inflação esperada também em alta.</p>
+      <ol>
+        <li><b>Juro e dólar sobem juntos.</b> Correlação de 20 dias entre a variação diária do DI de 2 anos (vértice PRE 720 d) e a do dólar (PTAX), com o dia de hoje incluído. Acende acima de 0,4.</li>
+        <li><b>Juro real de 2 anos sobe.</b> Curva DPL 720 d (juro real da B3). Acende com alta de 25 bp ou mais desde 23/10.</li>
+        <li><b>Inflação implícita de 2 anos sobe.</b> (1 + nominal) ÷ (1 + real) − 1. Acende com alta de 25 bp ou mais desde 23/10.</li>
+        <li><b>Risco-país sobe.</b> CDS de 5 anos (OBM). Acende com alta de 10 bp ou mais no dia.</li>
+        <li><b>O longo paga prêmio.</b> Inclinação DI jan/33 − jan/27. Acende com alta de 10 bp ou mais no dia.</li>
+        <li><b>DI sobe além do câmbio.</b> O excesso da seção do DI. Acende acima de 60 bp.</li>
+      </ol>
+      <p>Hoje: o SILO dá o último fechamento. O painel soma a variação de hoje do DI jan/29 e do DAP com vencimento mais perto de 2 anos (B3), e o dólar de agora contra a PTAX do mesmo dia do fechamento.</p>
+      <p>Limites: os limites de cada sinal são julgamento, não estimativa. Em qualquer choque de risco o juro e o dólar sobem juntos por alguns dias; o sinal pesa mais quando dura semanas. O DI jan/29 e o DAP não têm o mesmo prazo do vértice de 720 dias, então a variação de hoje é uma aproximação.</p>
+    </div></div></details>
+    <details id="g3"><summary>3. DI: câmbio, choque local e prêmio</summary><div><div id="m5">
+      <p>Nos mesmos dias de estresse, o DI de 2 anos subiu 7,1 bp para cada 1% de alta do dólar (erro padrão 1,2; erro típico do dia 30 bp).</p>
+      <p>DI explicado pelo câmbio = 2 + 7,1 × dólar. Excesso = alta do DI jan/29 − DI explicado. O painel mostra o DI explicado com uma faixa de ±2 erros típicos (cerca de ±60 bp). Um excesso acima de +60 bp mostra que o mercado cobra algo além do câmbio. Esse resto mistura prêmio fiscal, caminho da Selic e inflação esperada; o modelo não separa os três.</p>
+      <p>Revalidação com dados da Silo (jan/2018 a out/2026, 2.185 dias, vértice PRE 720 d contra o contrato DOL mais líquido): em todos os dias o beta é 7,0 bp por 1% (R² 0,20); nos 180 dias de estresse é 9,2 (erro 1,2; erro típico 29 bp); nos 71 dias com dólar acima de 2% é 7,1. Nos 11 dias acima de 3% a estimativa é 10,9, mas com erro de 4,4. O beta do painel (7,1) fica no centro dessas faixas.</p>
+      <p>Cuidado: o maior dia de alta do dólar na amostra foi +4,7%. Se o choque do dia passar bem disso, o modelo linear fica fora da amostra, e o excesso é um limite superior do prêmio fiscal.</p>
+      <p>Filtro na curva de DI: o painel ignora o "agora" de um contrato pouco negociado cujo último negócio fica a mais de 0,6 p.p. da mediana dos 4 vértices vizinhos que negociaram. Sem isso, um negócio isolado (como 1 contrato do DI nov/29 a 12,70% de manhã, com os vizinhos perto de 15,3%) desenha uma queda falsa na curva.</p>
+      <p>Limite: o DI jan/29 vence em pouco mais de 2 anos. O modelo usa o vértice de 720 dias da curva PRE. Os dois são próximos, mas não iguais.</p>
+    </div><div id="m12"><h4>Choque local, fluxo estrangeiro e prêmio do DI</h4>
+      <p><b>Choque local.</b> Regressões nas variações diárias de 2019 a set/2026 (1.929 dias, erros de Newey-West). EM = média da variação % de USD/MXN e USD/ZAR. Dólar: local = dólar % − 0,65 × EM % (erro 0,035; R² 0,29); a regra de 0,67 das frações (passo 2) fica igual. DI jan/29: local = ΔDI bp − 4,2 × EM % − 0,34 × ΔTreasury 10a bp (erros 0,77 e 0,086; R² 0,07). Desvio diário do resto: dólar 0,72%, DI 13 bp. Limite: o dólar do painel é contra a PTAX de ontem (13h), e o EM e o Treasury são contra o fechamento de ontem.</p>
+      <p><b>Fluxo estrangeiro.</b> Fluxo líquido diário do investidor estrangeiro em ações na B3, pelo SILO. Sai com 2 dias úteis de atraso. O limite de −3 bi em 5 dias é julgamento: a B3 guarda só cerca de 21 dias, então não há histórico para calibrar.</p>
+      <p><b>Prêmio do DI.</b> Caminho da Selic = mediana do Focus por reunião do Copom (BCB Olinda, última pesquisa), com a Selic de hoje (BCB SGS 432) até a 1ª reunião. A Selic fica constante entre reuniões e muda no dia útil seguinte à decisão. CDI = Selic − 0,10. O painel compõe o CDI dia a dia até o vencimento do DI jan/29 e anualiza em 252 dias úteis. Prêmio = DI jan/29 − essa taxa. Reuniões de 2026 e 2027: calendário do BC. Reuniões de 2028: estimadas pelo padrão de 2027, porque o BC ainda não publicou. Depois da última reunião do Focus, a Selic fica constante.</p>
+    </div></div></details>
+    <details id="g4"><summary>4. Câmbio e cupom cambial</summary><div><div id="m1">
+      <p>O choque do dólar é a cotação de agora contra a PTAX do último dia útil (<span id="m1-ptax">–</span>), lida do BCB (Olinda) a cada 30 min. O painel tem duas fontes antes das 9h:</p>
+      <ol>
+        <li><b>USDT/BRL (Binance).</b> Negocia 24 horas. Em dia útil fica 0,4% acima da PTAX (90% dos dias entre 0% e +1,2%, jun–out/2026). O painel tira esse prêmio de 0,4%.</li>
+        <li><b>USD/BRL (Yahoo).</b> Antes da abertura, esta cotação pode ficar parada por horas.</li>
+      </ol>
+      <p>Regra: se as duas fontes diferem menos de 1,5%, o painel usa o Yahoo, que não tem prêmio. Se diferem mais, o painel usa o USDT e marca o Yahoo como "parado".</p>
+      <p>Limite: a PTAX é fixada às 13h e o dólar negocia até as 17h. O choque medido inclui essa diferença, que costuma ser pequena.</p>
+    </div><div id="m9"><h4>Cupom cambial implícito</h4>
+      <p>Cupom (sujo) = ((1 + DI)^(du/252) ÷ (dólar futuro ÷ dólar à vista) − 1) × 360 ÷ dc. Aqui du são os dias úteis até o vencimento (feriados nacionais e o ciclo da Páscoa) e dc são os dias corridos. Dólar futuro e DI usam o mesmo mês de vencimento, que na B3 vence no 1º dia útil do mês.</p>
+      <p>Coluna "ajuste ant.": preço de ajuste do dólar futuro e do DI no pregão anterior, com a PTAX do dia anterior como à vista. Coluna "agora": último negócio de cada um, com o dólar à vista de agora. Só vale onde os dois negociaram.</p>
+      <p>Limites: vencimentos com menos de 20 dias úteis (marcados com *) dão cupom instável e ficam fora do gráfico. O cupom aqui é sujo: usa a PTAX do dia anterior ou o spot de agora, sem a data de liquidação D+2, e os preços de ajuste do futuro e da PTAX não são do mesmo horário. Use a forma da curva e a diferença entre antes e agora, não o nível exato.</p>
+    </div></div></details>
+    <details id="g5"><summary>5. Bolsa: EWZ, ADRs e validação</summary><div><div id="m2">
+      <p><b>O problema:</b> o EWZ é o Ibovespa em dólar: <code>EWZ = Ibovespa em reais ÷ dólar</code>. Antes das 9h o EWZ negocia com liquidez, mas o dólar à vista não. A única cotação do dólar é o USDT, que é fino. Então a queda do EWZ junta duas coisas que ainda não dá para separar com certeza.</p>
+      <p><b>A régua:</b> uma regressão do retorno diário do Ibovespa sobre o retorno do dólar futuro no fechamento, nos 172 dias de estresse entre 2018 e set/2026 (dias em que o dólar ou o DI de 2 anos se moveu mais de 2 desvios padrão). Resultado: <code>Ibovespa = −0,11% − 0,90 × dólar</code> (erro padrão 0,105; erros HAC). Depois das 9h o painel usa a versão com juros: <code>−0,01% − 0,55 × dólar − 0,049 × DI (bp)</code>.</p>
+      <p><b>Leitura 1</b> aceita o dólar de agora e divide a queda em reais em partes: risco país pelo câmbio, juros (depois das 9h) e outros fatores. "Outros fatores" não quer dizer exagero. Pode ser risco dos bancos, risco de crédito, saída de estrangeiros ou a liquidez baixa do pré-mercado.</p>
+      <p><b>Leitura 2</b> aceita o EWZ e calcula o dólar que o torna coerente com a régua. Ela resolve <code>(1 + EWZ) × (1 + x) − 1 = −0,11% − 0,90 × x</code>. A faixa usa ± 1,645 erros típicos do dia (2,69 p.p.).</p>
+      <p><b>O teste:</b> às 9h o dólar à vista abre. O lugar onde ele abre mostra qual leitura pesa mais.</p>
+      <p><b>Mudança contra a versão anterior:</b> antes a régua usava a PTAX e dava −0,65. A PTAX é fixada às 13h, e a bolsa fecha às 17h. Esse descasamento reduzia o número. Com o dólar futuro no fechamento, ela dá −0,90.</p>
+    </div><div id="m4"><h4>Ação por ação, pelas ADRs</h4>
+      <p>As ADRs de Itaú (ITUB), Petrobras (PBR) e Vale (VALE) negociam em Nova York antes da B3. O painel converte cada variação para reais com o mesmo choque do dólar.</p>
+      <p>Cada ação tem a própria regressão nos mesmos dias de estresse. Sensibilidade ao dólar: Itaú −0,92, Petrobras −0,97, Vale −0,58. Erro típico do dia: Itaú 2,4 p.p., Petrobras 4,4 p.p., Vale 3,6 p.p.</p>
+      <p>Desvio = (variação em reais − justo) ÷ erro típico. Um desvio abaixo de −2 acontece em menos de 5% dos dias de estresse.</p>
+      <p>Como ler: se a Petrobras tem o pior desvio, o mercado teme intervenção na estatal. Se o Itaú tem o pior desvio, o mercado teme juro e crédito, ou seja, risco fiscal. A Vale exporta, então o dólar alto a protege: se ela cai pouco, o canal do câmbio funciona.</p>
+    </div><div id="m3"><h4>Validação: o modelo erra quanto?</h4>
+      <p>Teste fora da amostra: o modelo é estimado sem o evento e depois prevê esse evento. Em 7 eventos políticos e fiscais de 2018 a 2026, o erro médio foi de 1,4 p.p. Todos os 7 ficaram dentro da faixa de 90%.</p>
+      <p>Joesley Day (2017, fora da amostra) teve dólar +8,8%, justo −8,0% e real −8,8%. O 1º turno de 2026 (out/2026, também fora da amostra) teve justo +3,8% e real +7,7%, e ficou dentro da faixa.</p>
+      <p>O único erro grande foi o circuit breaker da covid (mar/2020): justo −1,9% e real −12,2%. Esse choque foi global, não brasileiro.</p>
+      <p>A versão com o DI teve erro quase igual (1,3 p.p.), mas ela separa a parte dos juros. O painel usa essa versão depois das 9h.</p>
+    </div></div></details>
+    <details id="g6"><summary>6. Histórico e precedentes</summary><div><div id="m11">
+      <p>Enquanto a página está aberta, ela grava uma leitura a cada 5 minutos no banco da página: dólar, DI jan/29, CDS, pesos de agora e placar. Duas pessoas com a página aberta gravam a mesma leitura, sem duplicar. Sem ninguém com a página aberta, não há leitura.</p>
+      <p>A tabela mostra a última leitura de cada dia, e o gráfico mostra o dólar das leituras gravadas. O painel lê as 1.000 leituras mais recentes, cerca de 10 dias de pregão.</p>
+    </div><div id="m8"><h4>Precedentes: como a proximidade é medida</h4>
+      <p>Cada choque é um ponto em 7 variáveis do dia: dólar, Ibovespa, DI de 1, 2 e 5 anos, inclinação 5a − 1a e estatais − privadas. Cada variável é dividida pelo seu desvio padrão diário, para que todas pesem igual.</p>
+      <p>Distância = raiz da média dos quadrados das diferenças, só nas variáveis que existem nos dois dias. Proximidade = 1 − distância até o choque ÷ distância até um dia sem movimento. 100% quer dizer igual a hoje; 0% quer dizer tão longe quanto um dia parado.</p>
+    </div></div></details>
+    </div></details>
+  </section>
+</div>
+
+<script>
+// Reusable daily: PTAX is read from BCB; scenarios are anchored to the 23/10/2026 close (ELECT).
+// ---- model constants (silo/fair_value.json, estimated 2018-01 to 2026-09 on 172 stress days) ----
+let PTAX = null, PD = "";                       // last business day PTAX (BCB Olinda), set in render() from S.ptax
+const PREM = 0.004, TOL = 0.015;
+// Fixed pre-election anchor (close of Fri 23/10/2026): PTAX and DI1F29 adjustment. Scenario weights and levels use moves since this anchor.
+const ELECT = {ptax: 5.0377, di29: 12.640, iso: "2026-10-23"};
+// B3 daily limit of the dollar future as a share of the PTAX. Seen on 26/10/2026 (+5.4%); the B3 can change it, check the daily notice.
+const LIMIT_PCT = 0.054;
+const FV = {c: -0.11, b: -0.90, se: 0.105, sd: 2.69};                 // Ibovespa % on dollar %
+const FV2 = {c: -0.014, bfx: -0.55, bdi: -0.049, sd: 2.25};            // with DI 2y bp, once DI trades
+const STK = {ITUB: {n: "Itaú", b: -0.924, c: 0.027, sd: 2.38, kind: "banco privado"},
+             PBR:  {n: "Petrobras", b: -0.965, c: -0.109, sd: 4.45, kind: "estatal"},
+             VALE: {n: "Vale", b: -0.58, c: -0.115, sd: 3.61, kind: "exportadora"}};
+const DIFX = {c: 1.96, b: 7.11, sd: 29.9};                             // DI 2y bp on dollar %
+const PIB_PER_1 = -0.062, PT_BCB = 0.10, PT_VAR = 0.03;
+// Unified scenarios (26/10/2026): same names and weights as the monitor dataset "scenarios" and the doc "Dominância fiscal".
+// p = start weight from the daily report (facts only; 45/33/22 on 26/10). The market rule below moves it during the day; mu = DI jan/29 move since 23/10 the scenario implies (monitor di_jan29_move_bp).
+const SCEN = [
+  {n: "Âncora retomada", p: 0.43, mu: 50, f: [0.75, 0.75, 0.75], c: "Equipe econômica com mandato fiscal e Orçamento 2027 com a meta de 0,50% do PIB (centro; 0,25% é o piso da banda) em até 4 semanas; o BC sobe a Selic com apoio fiscal."},
+  {n: "Deriva fiscal", p: 0.32, mu: 180, f: [1.1, 0.9, 0.9], c: "O arcabouço é afrouxado; o Copom para de cortar ou acomoda. Dólar perto de R$ 5,80 em 6 meses (monitor)."},
+  {n: "Estresse e espiral", p: 0.25, mu: 320, f: [1.4, 1.8, 2.2], c: "Contestação do resultado se arrasta, rating cai; o BC sobe o juro e o dólar continua a subir. Dólar perto de R$ 6,20 em 6 meses (monitor)."},
+];
+let WEIGHTS_AT = "27/10/2026";
+// Market rule: now = start + LAMBDA x (DI mix - start), each change capped at CAP, then scaled to 100%.
+// LAMBDA 0.3 reproduces the earlier 45/35/20 -> 32/37/31 step; CAP keeps any weight from moving more than 15 points in a day.
+const LAMBDA = 0.3, CAP = 0.15;
+function nowW(M) {
+  if (!M) return SCEN.map(s => s.p);
+  const w = SCEN.map((s, i) => Math.max(0, s.p + Math.max(-CAP, Math.min(CAP, LAMBDA * (M.w[i] - s.p))))), t = w.reduce((a, b) => a + b, 0);
+  return w.map(x => x / t);
+}
+const LSD = 35;
+const PREC = {"sd": {"dol": 1.9219386886845715, "ibov": 3.011521160629353, "di1": 26.117599821599352, "di2": 35.11928625438554, "di5": 37.411068443216244, "slope": 18.665702745481145, "est": 2.1718684075479455}, "ev": [{"n": "Dilma reeleita", "dt": "26/10/2014", "dol": 2.16, "ptax": true, "ibov": -2.77, "di1": -8.0, "di2": -9.0, "di5": 19.0, "slope": 27.0, "est": null, "di2_20": 11.0, "ibov_20": 6.7, "dol_20": 1.9}, {"n": "Joesley Day", "dt": "17/05/2017", "dol": 8.79, "ptax": true, "ibov": -8.8, "di1": 132.0, "di2": 160.0, "di5": 180.0, "slope": 47.0, "est": null, "di2_20": 49.0, "ibov_20": -8.3, "dol_20": 5.7}, {"n": "Bolsonaro, 2º turno", "dt": "28/10/2018", "dol": 2.03, "ptax": false, "ibov": -2.24, "di1": -7.0, "di2": -4.0, "di5": -2.0, "slope": 5.0, "est": null, "di2_20": -30.0, "ibov_20": 4.1, "dol_20": 5.1}, {"n": "Lula, 1º turno", "dt": "02/10/2022", "dol": -4.2, "ptax": false, "ibov": 5.54, "di1": -6.0, "di2": -10.0, "di5": -25.0, "slope": -19.0, "est": 3.4, "di2_20": 5.0, "ibov_20": 5.5, "dol_20": -2.8}, {"n": "Lula eleito", "dt": "30/10/2022", "dol": -0.86, "ptax": false, "ibov": 1.31, "di1": -6.0, "di2": -12.0, "di5": -17.0, "slope": -11.0, "est": -7.8, "di2_20": 128.0, "ibov_20": -3.2, "dol_20": -0.7}, {"n": "Fala de Lula sobre gasto", "dt": "10/11/2022", "dol": 3.21, "ptax": false, "ibov": -3.35, "di1": 49.0, "di2": 96.0, "di5": 107.0, "slope": 58.0, "est": -2.5, "di2_20": 102.0, "ibov_20": -5.6, "dol_20": 0.9}, {"n": "Pacote fiscal", "dt": "27/11/2024", "dol": 0.85, "ptax": false, "ibov": -2.4, "di1": 28.0, "di2": 28.0, "di5": 30.0, "slope": 1.0, "est": 0.3, "di2_20": 208.0, "ibov_20": -5.8, "dol_20": 6.3}, {"n": "1º turno 2026", "dt": "04/10/2026", "dol": -4.34, "ptax": false, "ibov": 7.7, "di1": -69.0, "di2": -109.0, "di5": -134.0, "slope": -65.0, "est": 4.9, "di2_20": -99.0, "ibov_20": 6.2, "dol_20": -3.6}]};
+const SERVER = "Firecrawl", TOOL = "firecrawl_scrape", POLL = 120000;
+const brt = () => new Date().toLocaleDateString("sv-SE", {timeZone: "America/Sao_Paulo"});   // YYYY-MM-DD in Brasília
+const mdy = iso => iso.slice(5, 7) + "-" + iso.slice(8, 10) + "-" + iso.slice(0, 4);
+function ptaxUrl() {
+  const t = brt(), s = new Date(Date.parse(t + "T12:00:00Z") - 12 * 86400000).toISOString().slice(0, 10);
+  return "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarPeriodo(dataInicial=@i,dataFinalCotacao=@f)?@i='" + mdy(s) + "'&@f='" + mdy(t) + "'&$format=json&$select=cotacaoVenda,dataHoraCotacao";
+}
+function dolCode() {   // nearest dollar future: the contract of the next month (it matures on the first business day of its month)
+  const t = brt(), m = (+t.slice(5, 7)) % 12, y = (+t.slice(0, 4) + (m === 0 ? 1 : 0)) % 100;
+  return "DOL" + "FGHJKMNQUVXZ"[m] + String(y).padStart(2, "0");
+}
+const URLS = {
+  usdt: "https://data-api.binance.vision/api/v3/ticker/24hr?symbol=USDTBRL",
+  usdtK: "https://data-api.binance.vision/api/v3/klines?symbol=USDTBRL&interval=1h&limit=48",
+  y: "/api/yahoo",
+  di: "https://cotacao.b3.com.br/mds/api/v1/DerivativeQuotation/DI1",
+  cds: "/api/cds",
+  dol: "https://cotacao.b3.com.br/mds/api/v1/DerivativeQuotation/DOL",
+  dap: "https://cotacao.b3.com.br/mds/api/v1/DerivativeQuotation/DAP",
+  focus: "https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativasMercadoSelic?$top=40&$orderby=Data%20desc&$format=json&$filter=baseCalculo%20eq%200&$select=Data,Reuniao,Mediana",
+  selic: "/api/selic",
+};
+// Exa (web_fetch_exa) serves Binance and OBM live. It cannot read the Yahoo JSON, and its copy of the B3 DI API was 2 months old
+// (dtTm 2026-08-31 when tested 26/10), so Yahoo and the B3 DI stay on Firecrawl.
+const EXA = {usdt: 5000, usdtK: 20000, cds: 20000};   // key -> maxCharacters
+const POLLS = {cds: 1800000, ptax: 1800000, dol: 480000, dap: 480000, focus: 21600000, selic: 21600000};                    // CDS is end-of-day: poll every 30 min
+const SRCNAME = {usdt: "USDT Binance", usdtK: "USDT 48h", y: "Yahoo", di: "DI B3", cds: "CDS OBM", ptax: "PTAX BCB", dol: "DOL B3", dap: "DAP B3", focus: "Focus BCB", selic: "Selic BCB"};
+const SRCSRV = {};
+const S = {};
+const $ = id => document.getElementById(id);
+const nf = (x, d = 2) => x.toLocaleString("pt-BR", {minimumFractionDigits: d, maximumFractionDigits: d});
+const pct = (x, d = 1) => (x >= 0 ? "+" : "−") + nf(Math.abs(x) * 100, d) + "%";
+const pp = (x, d = 1) => (x >= 0 ? "+" : "−") + nf(Math.abs(x), d) + "%";       // x already in %
+const sgn = (x, d = 0) => (x >= 0 ? "+" : "−") + nf(Math.abs(x), d);
+const cls = (el, x) => { el.classList.toggle("up", x > 0); el.classList.toggle("down", x < 0); };
+const hm = t => new Date(t).toLocaleTimeString("pt-BR", {hour: "2-digit", minute: "2-digit"});
+
+function rawField(result, field) {
+  let p = result && result.payload;
+  if (typeof p === "string") { try { p = JSON.parse(p); } catch (e) {} }
+  let raw = p && (p[field] ?? (p.data && p.data[field]));
+  if (raw == null && result && Array.isArray(result.content)) {
+    for (const b of result.content) {
+      if (b.type === "text") { try { const j = JSON.parse(b.text); raw = j[field] ?? (j.data && j.data[field]); } catch (e) {} }
+      if (raw != null) break;
+    }
+  }
+  if (raw == null) throw new Error("resposta sem " + field);
+  return String(raw);
+}
+function parsePayload(result) {
+  const raw = rawField(result, "rawHtml");
+  const m = raw.match(/[\[{][\s\S]*[\]}]/);
+  return JSON.parse(m ? m[0] : raw);
+}
+function exaText(result) {
+  const p = result && result.payload;
+  if (typeof p === "string") return p;
+  const b = result && Array.isArray(result.content) && result.content.find(x => x.type === "text");
+  if (b) return b.text;
+  throw new Error("resposta sem texto");
+}
+function parseExaJson(result) {
+  const t = exaText(result), m = t.match(/[\[{][\s\S]*[\]}]/);
+  return JSON.parse(m ? m[0] : t);
+}
+function parseCds(result) {
+  const md = exaText(result);
+  const row = md.match(/CDS 5 Anos Brasil[^|]*\|\s*([\d.,]+)\s*\|\s*([+−\-\d.,]+)\s*\|\s*([\d.,]+%)/);
+  if (!row) throw new Error("linha do Brasil não encontrada");
+  const num = s => parseFloat(s.replace(/\./g, "").replace(",", ".").replace("−", "-"));
+  const d = md.match(/Atualização\s+(\d{2}\/\d{2}\/\d{4})/);
+  return {bp: num(row[1]), chg: num(row[2]), pd: row[3], date: d ? d[1] : null};
+}
+
+// Yahoo spark: base = last regular close when today's session has not started (fixes the Thursday-close bug).
+function spark(j) {
+  const out = {};
+  for (const r of j.spark.result) {
+    const x = r.response[0], m = x.meta, q = (x.indicators.quote[0] || {}).close || [];
+    const pts = (x.timestamp || []).map((t, i) => ({t: t * 1000, c: q[i]})).filter(p => p.c != null);
+    const regStart = m.currentTradingPeriod && m.currentTradingPeriod.regular && m.currentTradingPeriod.regular.start;
+    const sessionOpen = regStart && m.regularMarketTime >= regStart;
+    const last = pts.length ? pts[pts.length - 1] : null;
+    let price = m.fulldayPrice ?? (last ? last.c : m.regularMarketPrice);
+    let base = sessionOpen ? (m.previousClose ?? m.chartPreviousClose) : m.regularMarketPrice;
+    if (m.instrumentType === "INDEX" && !sessionOpen) price = m.regularMarketPrice;
+    const regEnd = m.currentTradingPeriod && m.currentTradingPeriod.regular && m.currentTradingPeriod.regular.end;
+    out[m.symbol] = {price, base, open: !!sessionOpen, closed: !!(sessionOpen && regEnd && Date.now() / 1000 >= regEnd), t: last ? last.t : m.regularMarketTime * 1000, mt: m.regularMarketTime * 1000, pts};
+  }
+  return out;
+}
+
+const ERRCOPY = {
+  needs_reauth: "Reconecte o Firecrawl em claude.ai → Configurações → Conectores.",
+  server_not_connected: "Adicione o conector Firecrawl em claude.ai → Configurações → Conectores para ver dados ao vivo.",
+  selection_required: "Escolha qual conector Firecrawl usar no aviso do claude.ai.",
+  not_in_manifest: "O Firecrawl não foi permitido para esta página. Libere em Permissões do artifact.",
+  approval_required: "Esta página precisa da sua aprovação para usar o Firecrawl.",
+  blocked_by_policy: "A política da organização bloqueia o Firecrawl nesta página.",
+};
+const DENY = new Set(Object.keys(ERRCOPY));
+const ERRID = {usdt: "e-usdt", usdtK: "e-usdt", y: "e-y", di: "e-di", cds: "e-cds", ptax: "e-ptax", dol: "e-dol", dap: "e-silo", silo: "e-silo", focus: "e-di", selic: "e-di", flow: "e-flow"};
+const ERRAT = {};
+function showErr(key, err) {
+  ERRAT[key] = {at: Date.now(), msg: err.message || err.code || "erro"};
+  const rl = /rate limit/i.test(err.message || "");
+  const sv = SRCSRV[key] || "Firecrawl";
+  const msg = (ERRCOPY[err.code] || (rl ? "Limite de requisições do " + sv + " atingido (o plano permite poucas chamadas por minuto). O painel mantém o último dado e tenta de novo em 2 min; feche outras abas deste painel." : err.code === "tool_error" ? "A fonte respondeu com erro: " + (err.message || "") : "Fonte indisponível agora; mantendo o último dado.")).replace(/Firecrawl/g, sv);
+  if (DENY.has(err.code)) { delete S[key]; const pm = $("pagemsg"); pm.hidden = false; pm.innerHTML = "<b>Conector</b><span></span>"; pm.querySelector("span").textContent = msg; }
+  const id = ERRID[key]; if (id) { $(id).hidden = false; $(id).textContent = msg; }
+}
+
+function item(id, kind, tag, what, todo) {
+  const el = $(id); el.textContent = "";
+  const c = document.createElement("span"); c.className = "chip " + kind; c.textContent = tag; el.appendChild(c);
+  const d = document.createElement("div");
+  const w = document.createElement("div"); w.className = "what"; w.textContent = what; d.appendChild(w);
+  if (todo) { const t = document.createElement("div"); t.className = "do"; const b = document.createElement("b"); b.textContent = "O que fazer: "; t.appendChild(b); t.appendChild(document.createTextNode(todo)); d.appendChild(t); }
+  el.appendChild(d);
+}
+function verdict(id, kind, tag, text) { const o = $(id); o.hidden = false; o.className = "verdict " + kind; o.innerHTML = "<b></b><span></span>"; o.firstChild.textContent = tag; o.lastChild.textContent = text; }
+function rows(tbodyId, data) {
+  const tb = $(tbodyId); tb.textContent = "";
+  for (const r of data) {
+    const tr = document.createElement("tr"); if (r.hl) tr.className = "hl";
+    r.cells.forEach((c, i) => {
+      const td = document.createElement(i ? "td" : "th"); if (!i) td.scope = "row";
+      if (c.n) td.className = "n"; if (c.cond) td.className = "cond"; if (c.label) td.dataset.label = c.label;
+      if (c.cls) td.classList.add(c.cls);
+      if (c.small) { td.textContent = c.t; const s = document.createElement("small"); s.textContent = c.small; td.appendChild(s); } else td.textContent = c.t;
+      tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  }
+}
+
+// ---- FX: choose the source ----
+function fxNow() {
+  const u = S.usdt, y = S.y && S.y["BRL=X"];
+  const ua = u ? u.last / (1 + PREM) : null, yv = y ? y.price : null;
+  let used = null, src = "", yahooOk = null;
+  if (ua != null && yv != null) { yahooOk = Math.abs(yv / ua - 1) < TOL; used = yahooOk ? yv : ua; src = yahooOk ? "Yahoo (confere com o USDT)" : "USDT menos prêmio (Yahoo parado)"; }
+  else if (ua != null) { used = ua; src = "USDT menos prêmio"; }
+  else if (yv != null) { used = yv; src = "Yahoo (sem checagem)"; }
+  return {level: used, fx: used != null ? used / PTAX - 1 : null, src, ua, yv, yahooOk, u, y};
+}
+
+function render() {
+  if (S.ptax) { PTAX = S.ptax.v; PD = S.ptax.d; }
+  $("today").textContent = new Date().toLocaleDateString("pt-BR", {weekday: "short", day: "2-digit", month: "2-digit", year: "numeric", timeZone: "America/Sao_Paulo"});
+  if (PTAX == null) { if (!ERRAT.ptax) $("clock").textContent = "Aguardando a PTAX do BCB…"; return; }
+  $("m-fx-k").textContent = "Dólar vs PTAX " + PD; $("lg-ptax").textContent = "PTAX de " + PD; $("m1-ptax").textContent = "R$ " + nf(PTAX, 4) + ", de " + PD;
+  const LIM = PTAX * (1 + LIMIT_PCT);
+  $("lim-note").textContent = "Limite de alta do dólar futuro hoje (" + dolCode() + "): R$ " + nf(LIM, 4) + ", +" + nf(LIMIT_PCT * 100, 1) + "% sobre a PTAX (percentual visto em 26/10/2026; confira o comunicado da B3). Acima disso o futuro trava. O spot e o USDT não têm limite.";
+  const F = fxNow(), Y = S.y || {};
+  // FX table
+  if (F.u || F.y) {
+    const data = [];
+    if (F.u) data.push({cells: [{t: "USDT/BRL (Binance)", small: "24 horas"}, {t: nf(F.u.last, 4), n: 1, label: "Cotação"}, {t: pct(F.u.last / PTAX - 1, 2), n: 1, label: "vs PTAX"}, {t: "ativa", label: "Status"}]});
+    if (F.u) data.push({cells: [{t: "USDT sem o prêmio de 0,4%", small: "estimativa do spot"}, {t: nf(F.ua, 4), n: 1, label: "Cotação"}, {t: pct(F.ua / PTAX - 1, 2), n: 1, label: "vs PTAX"}, {t: F.yahooOk === false ? "usada" : F.yahooOk ? "referência" : "usada", label: "Status"}], hl: F.yahooOk !== true});
+    if (F.y) data.push({cells: [{t: "USD/BRL (Yahoo)", small: "atualizado às " + hm(F.y.mt)}, {t: nf(F.yv, 4), n: 1, label: "Cotação"}, {t: pct(F.yv / PTAX - 1, 2), n: 1, label: "vs PTAX"}, {t: F.yahooOk === false ? "parado, descartado" : F.yahooOk ? "usada" : "sem checagem", label: "Status", cls: F.yahooOk === false ? "up" : ""}], hl: F.yahooOk === true});
+    rows("fx-tab", data);
+    if (F.yahooOk === false) verdict("fx-out", "warn", "Atenção", `O Yahoo mostra R$ ${nf(F.yv, 3)}, ${nf(Math.abs(F.yv / F.ua - 1) * 100, 1)}% longe do USDT. Antes das 9h essa cotação fica parada. O painel usa o USDT.`);
+    else $("fx-out").hidden = true;
+  }
+  if (F.fx != null) {
+    $("m-fx").textContent = pct(F.fx, 1); cls($("m-fx"), F.fx); $("m-fx-s").textContent = "R$ " + nf(F.level, 3) + " · " + F.src.split(" (")[0];
+    const fxp = F.fx * 100;
+    if (F.fx < 0.02) item("n-fx", "ok", "Calmo", `Câmbio: dólar ${pct(F.fx)} sobre a PTAX de ${PD} (R$ ${nf(F.level, 2)}).`, "nada de especial; acompanhe o DI.");
+    else if (F.fx < 0.05) item("n-fx", "warn", "Choque", `Câmbio: dólar ${pct(F.fx)} sobre a PTAX de ${PD} (R$ ${nf(F.level, 2)}).`, "choques assim não voltaram na 1ª semana em 2022 e 2024. Não conte com volta rápida; espere um sinal fiscal (equipe econômica, Orçamento 2027).");
+    else item("n-fx", "bad", "Choque forte", `Câmbio: dólar ${pct(F.fx)} sobre a PTAX de ${PD} (R$ ${nf(F.level, 2)}), ${F.level > LIM ? "acima" : "perto"} do limite de alta do dólar futuro (R$ ${nf(LIM, 2)}).`, "o futuro pode travar no limite; use o spot e o USDT como preço. Em 2022 e 2024 o dólar subiu mais na 1ª semana antes de voltar.");
+  }
+
+  // Equity: decomposition (lens 1) and implied dollar (lens 2). No verdict on "sense".
+  const e = Y.EWZ;
+  if (F.fx != null && e) {
+    const ewz = e.price / e.base - 1, ibi = (1 + ewz) * (1 + F.fx) - 1, fxp = F.fx * 100, ib = ibi * 100;
+    const r = S.di && S.di.c.DI1F29, diLive = r && r.cur != null && r.prev != null, dbp = diLive ? (r.cur - r.prev) * 100 : null;
+    // lens 1: parts of the BRL fall
+    let pFx, pDi = 0;
+    if (diLive) { pFx = FV2.c + FV2.bfx * fxp; pDi = FV2.bdi * dbp; } else pFx = FV.c + FV.b * fxp;
+    const rest = ib - pFx - pDi;
+    $("eq-tot").textContent = pp(ib); cls($("eq-tot"), -ib);
+    const parts = [{v: pFx, c: "var(--s1)", t: "Risco país pelo câmbio"}, ...(diLive ? [{v: pDi, c: "var(--s2)", t: "Juros (DI jan/29 " + sgn(dbp) + " bp)"}] : []), {v: rest, c: "var(--muted)", t: diLive ? "Outros fatores" : "Outros fatores, juros incluídos (DI abre às 9h)"}];
+    const neg = parts.map(p => Math.max(-p.v, 0)), tot = neg.reduce((a, b) => a + b, 0) || 1;
+    $("eq-bar").innerHTML = parts.map((p, i) => `<span style="width:${(neg[i] / tot * 100).toFixed(1)}%;background:${p.c}"></span>`).join("");
+    $("eq-key").innerHTML = parts.map(p => `<span><i style="background:${p.c}"></i>${p.t}: <b>${pp(p.v)}</b></span>`).join("");
+    // lens 2: dollar that makes EWZ consistent with the fair model
+    const solve = (adj) => diLive ? (FV2.c / 100 + FV2.bdi * dbp / 100 + adj / 100 - ewz) / (1 + ewz - FV2.bfx) : (FV.c / 100 + adj / 100 - ewz) / (1 + ewz - FV.b);
+    const x0 = solve(0), sd = diLive ? FV2.sd : Math.sqrt(FV.sd ** 2 + (FV.se * x0 * 100) ** 2), hw = 1.645 * sd;
+    const xl = solve(-hw), xh = solve(hw); const L = PTAX * (1 + x0), Llo = PTAX * (1 + Math.min(xl, xh)), Lhi = PTAX * (1 + Math.max(xl, xh));
+    $("fi-v").textContent = "R$ " + nf(L, 2); $("fi-r").textContent = pct(x0) + " · faixa R$ " + nf(Llo, 2) + " a " + nf(Lhi, 2);
+    $("fi-now").textContent = "R$ " + nf(F.level, 2); $("fi-now-s").textContent = pct(F.fx) + " · " + F.src.split(" (")[0];
+    const gapFx = L / F.level - 1, inside = F.level >= Llo && F.level <= Lhi;
+    if (inside) {
+      verdict("eq-out", "ok", "Coerentes", `Bolsa e câmbio contam a mesma história: o dólar de agora (R$ ${nf(F.level, 2)}) está dentro da faixa que o EWZ precifica (R$ ${nf(Llo, 2)} a ${nf(Lhi, 2)}).`);
+      item("n-eq", "warn", "Coerente", `Bolsa: EWZ ${pct(ewz)} em dólar. O dólar de agora explica a queda (dólar coerente com o EWZ: R$ ${nf(L, 2)}).`, "a bolsa já está alinhada com o câmbio. O próximo sinal é o DI.");
+    } else {
+      verdict("eq-out", "warn", "Divergem", `O EWZ precifica um dólar de R$ ${nf(L, 2)}, ${nf(Math.abs(gapFx) * 100, 1)}% ${gapFx > 0 ? "acima" : "abaixo"} do dólar de agora. Há duas explicações: (1) o dólar ainda vai subir, porque o spot não negociou e o USDT é fino; (2) as ações caem por fatores além do câmbio (bancos, juros, liquidez do pré-mercado). As duas podem ser verdadeiras ao mesmo tempo.`);
+      item("n-eq", "warn", "Divergem", `Bolsa: EWZ ${pct(ewz)} em dólar. Com o dólar de agora, o Ibovespa cairia ${pp(ib)} em reais, e ${pp(rest)} disso vem de outros fatores. Se a bolsa estiver certa, o dólar deveria estar em R$ ${nf(L, 2)}.`,
+        `às 9h o dólar à vista abre. Se ele for para perto de R$ ${nf(L, 2)}, o EWZ estava precificando o câmbio. Se ficar perto de R$ ${nf(F.level, 2)}, a queda é das ações: veja quais caem mais (abaixo) e o excesso do DI.`);
+    }
+    if (Y["^BVSP"] && Y["^BVSP"].open) { const b = Y["^BVSP"], rr = (b.price / b.base - 1) * 100; $("eq-tot").textContent = pp(ib) + (ibovFrozen(Y) ? " (B3 parada: leilão ou circuit breaker)" : b.closed ? " (B3 fechou em " + pp(rr) + ")" : " (B3 agora " + pp(rr) + ")"); }
+
+    // Stocks
+    const st = [];
+    for (const k of ["ITUB", "PBR", "VALE"]) {
+      const a = Y[k]; if (!a) continue; const s = STK[k];
+      const brl = ((1 + (a.price / a.base - 1)) * (1 + F.fx) - 1) * 100, fj = s.c + s.b * fxp, zz = (brl - fj) / s.sd;
+      st.push({k, s, brl, fj, zz});
+    }
+    if (st.length) {
+      const worst = st.slice().sort((a, b) => a.zz - b.zz)[0];
+      rows("stk", st.map(x => ({hl: x === worst, cells: [{t: x.s.n, small: x.s.kind}, {t: pp(x.brl), n: 1, label: "Em reais", cls: x.brl < 0 ? "up" : "down"}, {t: pp(x.fj), n: 1, label: "Justo"},
+        {t: sgn(x.zz, 1) + " dp", n: 1, label: "Desvio", cls: x.zz < -2 ? "up" : ""}, {t: x.zz < -2 ? "muito abaixo do normal" : x.zz < -1 ? "abaixo do normal" : x.zz > 1 ? "acima do normal" : "normal", label: "Leitura", cls: "hide-m"}]})));
+      const read = worst.k === "PBR" ? ["bad", "Intervenção", "O mercado teme intervenção na estatal. Em 2022, Petrobras e BB caíram 7,8 p.p. mais que Itaú e Vale no dia seguinte.", "olhe PETR4 e BBAS3 contra ITUB4 na abertura. Notícias sobre preço de combustível e dividendos movem esse risco."]
+        : worst.k === "ITUB" ? ["bad", "Juro/crédito", "O pior desvio é do banco privado, não da estatal. O mercado precifica juro mais alto e crédito pior, que é risco fiscal, não medo de intervenção.", "o sinal que decide é o DI jan/29 às 9h. Se o excesso fiscal passar de +60 bp, a queda dos bancos tem base."]
+        : ["warn", "Exportadora", "O pior desvio é da exportadora. Isso não é típico de choque fiscal.", "confira o minério e o mercado global antes de ler o choque como brasileiro."];
+      const vale = st.find(x => x.k === "VALE");
+      item("n-who", worst.zz < -2 ? read[0] : "warn", worst.zz < -2 ? read[1] : "Espalhado", `Quem cai: ${worst.s.n} ${pp(worst.brl)} em reais, ${sgn(worst.zz, 1)} desvios padrão. ${worst.zz < -2 ? read[2] : "Nenhuma ação está muito fora do normal."}${vale && vale.zz > 0.5 ? ` A Vale (${pp(vale.brl)}) sobe acima do justo: o dólar alto protege a exportadora, como esperado.` : ""}`, worst.zz < -2 ? read[3] : "nada de especial.");
+    }
+
+  }
+
+  // DI
+  const dd = S.di;
+  if (dd) {
+    const data = [];
+    for (const k of ["DI1F27", "DI1F28", "DI1F29", "DI1F31", "DI1F33"]) {
+      const r = dd.c[k]; if (!r) continue; const bp = r.cur != null && r.prev != null ? Math.round((r.cur - r.prev) * 100) : null;
+      data.push({hl: k === "DI1F29", cells: [{t: k.replace("DI1F", "jan/20")}, {t: r.prev != null ? nf(r.prev, 3) + "%" : "–", n: 1, label: "Ajuste anterior"}, {t: r.cur != null ? nf(r.cur, 3) + "%" : "–", n: 1, label: "Agora"}, {t: bp != null ? sgn(bp) + " bp" : "–", n: 1, label: "Variação", cls: bp > 0 ? "up" : bp < 0 ? "down" : ""}]});
+    }
+    rows("di-tab", data);
+    renderDiCurve(dd);
+    if (dd.ts) {
+      const day = dd.ts.slice(0, 10), today = new Date().toLocaleDateString("sv-SE", {timeZone: "America/Sao_Paulo"});
+      $("di-src").textContent = "Fonte do DI: B3, API cotacao.b3.com.br/mds/api/v1/DerivativeQuotation/DI1 (contratos DI1F27, F28, F29, F31 e F33), lida pelo navegador. Dado da B3 de " + dd.ts.slice(8, 10) + "/" + dd.ts.slice(5, 7) + " às " + dd.ts.slice(11, 16) + (day !== today ? ". ATENÇÃO: não é de hoje; não use como leitura de agora." : ", com cerca de 15 min de atraso.");
+    }
+    const r = dd.c.DI1F29;
+    if (r && r.cur != null && r.prev != null) {
+      const bp = Math.round((r.cur - r.prev) * 100);
+      $("m-di").textContent = sgn(bp) + " bp"; cls($("m-di"), bp);
+      if (F.fx != null) {
+        const exp = DIFX.c + DIFX.b * F.fx * 100, ex = bp - exp;
+        $("m-di-s").textContent = "câmbio explica " + sgn(exp) + " bp (faixa " + sgn(exp - 2 * DIFX.sd) + " a " + sgn(exp + 2 * DIFX.sd) + ")";
+        const k = ex > 60 ? "bad" : ex > 30 ? "warn" : "ok", t = ex > 60 ? "Além do câmbio" : ex > 30 ? "Atenção" : "Câmbio";
+        verdict("di-out", k, t, `DI jan/29 ${sgn(bp)} bp. O dólar de hoje explica ${sgn(exp)} bp (faixa de 2 erros típicos: ${sgn(exp - 2 * DIFX.sd)} a ${sgn(exp + 2 * DIFX.sd)}). Excesso: ${sgn(ex)} bp${ex > 60 ? ", acima de 2 erros típicos. O mercado cobra algo além do câmbio (prêmio fiscal, Selic ou inflação esperada)." : ex > 30 ? ", entre 1 e 2 erros típicos." : ". A alta do DI vem do câmbio, não de prêmio fiscal novo."}` + (dd.ts ? " (B3, " + dd.ts.slice(11, 16) + ")" : ""));
+        item("n-di", k, t, `Juros: DI jan/29 ${sgn(bp)} bp. O câmbio explica ${sgn(exp)} bp; excesso não explicado de ${sgn(ex)} bp.`,
+          ex > 60 ? "trate o choque como fiscal. Em 2022 e 2024 o DI subiu por semanas; não espere volta rápida dos juros nem do dólar." : ex > 30 ? "o mercado começa a cobrar prêmio fiscal. O sinal seguinte é o nome da equipe econômica." : "o mercado de juros não compra o pânico. Se a bolsa estiver fora da faixa, o exagero está na bolsa, não nos juros.");
+      }
+    } else {
+      $("m-di").textContent = "fechado"; $("m-di-s").textContent = "abre às 9h";
+      item("n-di", "", "Fechado", "Juros: o pregão de DI abre às 9h. A tabela mostra o último pregão.", "às 9h, veja quanto o DI jan/29 sobe além do que o dólar explica.");
+    }
+  }
+  if (F.fx != null) renderScen(F);
+  renderMon(F, Y, S.di);
+  renderPrec(F, Y);
+  try { renderDom(F); } catch (e) { console.error(e); }
+  try { renderLocal(F); renderPremium(); renderFlow(); } catch (e) { console.error(e); }
+  try { snap(F); renderHist(); } catch (e) { console.error(e); }
+  try { renderCupom(F); } catch (e) { console.error(e); }
+  try { renderDolScen(F); } catch (e) { console.error(e); }
+  if (S.usdtK) chart("c-usdt", S.usdtK, PTAX, "var(--s1)", 4);
+  if (e && e.pts.length > 1) chart("c-ewz", e.pts, e.base, "var(--s2)", 2);
+  // per-source status: time of the last good read, and whether it is stale
+  const now = Date.now(), parts = [];
+  for (const k of ["usdt", "y", "di", "dol", "cds"]) {
+    const s = S[k]; if (!s && !ERRAT[k]) continue;
+    const age = s ? (now - s.at) / 60000 : null;
+    let t = SRCNAME[k] + " " + (s ? hm(s.at) : "–");
+    if (ERRAT[k]) t += " (erro)"; else if (age != null && age > (k === "cds" ? 60 : k === "dol" ? 20 : 6)) t += " (parado há " + Math.round(age) + " min)";
+    parts.push(t);
+  }
+  if (parts.length) $("clock").textContent = parts.join(" · ") + " · poll 2 min";
+}
+
+// ---- monitor: IBOV, IFIX, curve slope, FX differential, CDS ----
+function ibovFrozen(Y) {
+  const b = Y["^BVSP"], e = Y.EWZ; if (!b || !b.open || b.closed) return false;
+  const chg = b.price / b.base - 1, ewz = e ? e.price / e.base - 1 : 0;
+  return (Date.now() - b.mt) / 60000 > 8 && Math.abs(chg) < 0.02 && ewz < -0.08;
+}
+function renderMon(F, Y, dd) {
+  const idx = (sym, vId, sId) => {
+    const a = Y[sym]; if (!a) return;
+    const chg = a.base ? a.price / a.base - 1 : 0;
+    const v = $(vId), s = $(sId);
+    if (a.open) { v.textContent = pct(chg, 2); cls(v, chg); s.textContent = nf(a.price, 0) + (a.closed ? " · fechamento de hoje" : " · B3 aberta, " + hm(a.t)); }
+    else { v.textContent = nf(a.price, 0); v.classList.remove("up", "down"); s.textContent = "fechado · último fechamento"; }
+  };
+  idx("^BVSP", "mo-ibov", "mo-ibov-s");
+  idx("XFIX11.SA", "mo-ifix", "mo-ifix-s");
+  // circuit breaker / halted index: Yahoo freezes ^BVSP while B3 is in auction or halted
+  const b = Y["^BVSP"], ewzA = Y.EWZ, ewzChg = ewzA ? ewzA.price / ewzA.base - 1 : 0;
+  if (b && b.closed) {
+    const pm = $("pagemsg"), chg = b.price / b.base - 1;
+    pm.hidden = false; pm.className = "verdict warn"; pm.innerHTML = "<b>B3 fechada</b><span></span>";
+    pm.querySelector("span").textContent = "Pregão encerrado. Ibovespa fechou em " + nf(b.price, 0) + " (" + pct(chg, 1) + " no dia). Os números da bolsa são do fechamento; o EWZ e o USDT seguem negociando.";
+  } else if (b && b.open) {
+    const chg = b.price / b.base - 1, ageMin = (Date.now() - b.mt) / 60000, v = $("mo-ibov"), s = $("mo-ibov-s");
+    const frozen = ibovFrozen(Y);
+    // the index is trading again if the last 3 bars are not all equal and the last tick is recent (Yahoo lags ~15 min)
+    const tail = (b.pts || []).slice(-3).map(p => p.c), trading = tail.length === 3 && new Set(tail).size > 1 && ageMin <= 25;
+    let cb = null;
+    if (trading) cb = null;
+    else if (chg <= -0.20) cb = "Ibovespa chegou a −20%: nível do 3º estágio do circuit breaker (a B3 define a parada).";
+    else if (chg <= -0.15) cb = "Ibovespa chegou a −15%: nível do 2º estágio do circuit breaker (parada de 1 hora). O Yahoo atrasa cerca de 15 min, então veja se o índice ainda negocia.";
+    else if (chg <= -0.10) cb = "Ibovespa −10%: circuit breaker acionado, pregão parado por 30 min.";
+    else if (frozen) cb = "Ibovespa sem atualização desde " + hm(b.mt) + " enquanto o EWZ cai " + pct(ewzChg) + ": leilão ou circuit breaker na B3 (índice congelado no Yahoo). Até a reabertura, use o EWZ e o Ibovespa futuro como preço.";
+    if (trading && chg <= -0.10) s.textContent = nf(b.price, 0) + " · negociando de novo após o circuit breaker, dado das " + hm(b.mt) + " (Yahoo atrasa ~15 min)";
+    if (frozen) { v.textContent = "parado"; v.classList.remove("up", "down"); s.textContent = "último tick " + hm(b.mt) + " · leilão ou circuit breaker"; }
+    const pm = $("pagemsg");
+    if (cb) { pm.hidden = false; pm.className = "verdict bad"; pm.innerHTML = "<b>B3</b><span></span>"; pm.querySelector("span").textContent = cb + " Fonte: Yahoo (^BVSP) e EWZ; confirme no comunicado da B3."; }
+    else if (pm.className === "verdict bad") pm.hidden = true;
+  }
+  const c = S.cds;
+  if (c) { const v = $("mo-cds"); v.textContent = nf(c.bp, 0) + " bp"; cls(v, c.chg); $("mo-cds-s").textContent = "no dia " + sgn(c.chg, 1) + " bp · PD 5a " + c.pd + (c.date ? " · fechamento de " + c.date : " · fechamento anterior"); }
+  if (dd && dd.c.DI1F33 && dd.c.DI1F27) {
+    const L = dd.c.DI1F33, C = dd.c.DI1F27, v = $("mo-curve"), s = $("mo-curve-s");
+    const live = L.cur != null && C.cur != null, prevS = L.prev != null && C.prev != null ? (L.prev - C.prev) * 100 : null;
+    const now = live ? (L.cur - C.cur) * 100 : prevS;
+    if (now != null) {
+      v.textContent = sgn(now) + " bp"; v.classList.remove("up", "down");
+      if (live && prevS != null) { const d = now - prevS; cls(v, d); s.textContent = "no dia " + sgn(d) + " bp (ajuste ant. " + sgn(prevS) + " bp)"; }
+      else s.textContent = "ajuste anterior · DI abre às 9h";
+    }
+  }
+  if (F.u && F.yv != null) {
+    const d = F.u.last / F.yv - 1, v = $("mo-fxd");
+    v.textContent = pct(d, 2); v.classList.toggle("up", d > TOL); v.classList.remove("down");
+    let extra = d > TOL ? "acima do normal (spot parado ou prêmio de estresse)" : "dentro do normal (+0,4% típico)";
+    const imp = $("fi-v").textContent; if (F.level != null && imp !== "–") extra += " · EWZ precifica " + imp + " vs agora R$ " + nf(F.level, 2);
+    $("mo-fxd-s").textContent = extra;
+  } else if (F.u) { $("mo-fxd").textContent = pct(F.u.last / PTAX - 1, 2); $("mo-fxd-s").textContent = "USDT vs PTAX · Yahoo indisponível"; }
+}
+
+// ---- B3 DI curve: previous adjustment vs last trade, DI jan/29 highlighted ----
+// ---- implied FX coupon (cupom cambial sujo): (1+DI)^(du/252) = (DOL/spot) x (1 + c x dc/360) ----
+function easterMs(y) { const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451), mo = Math.floor((h + l - 7 * m + 114) / 31), da = (h + l - 7 * m + 114) % 31 + 1; return Date.UTC(y, mo - 1, da); }
+const HOLC = {};
+function hols(y) { if (HOLC[y]) return HOLC[y]; const e = easterMs(y), s = new Set(), add = t => s.add(new Date(t).toISOString().slice(0, 10));
+  [[0, 1], [3, 21], [4, 1], [8, 7], [9, 12], [10, 2], [10, 15], [10, 20], [11, 25]].forEach(([m, d]) => add(Date.UTC(y, m, d)));
+  [-48, -47, -2, 60].forEach(k => add(e + k * 864e5)); return (HOLC[y] = s); }
+function bdays(a, b) { let n = 0; for (let t = a + 864e5; t <= b; t += 864e5) { const d = new Date(t), w = d.getUTCDay(); if (w === 0 || w === 6 || hols(d.getUTCFullYear()).has(d.toISOString().slice(0, 10))) continue; n++; } return n; }
+function cupom(F, S, i, d0, m) { const n = bdays(d0, m), dc = (m - d0) / 864e5; return {c: ((Math.pow(1 + i / 100, n / 252) / (F / S) - 1) * 360 / dc) * 100, du: n}; }
+function renderCupom(F) {
+  const D = S.dol, I = S.di, P = S.ptax; if (!D || !I || !P || !P.iso) return;
+  const dmap = {}; I.all.forEach(p => dmap[p.symb.slice(3)] = p);
+  const t0 = Date.parse(P.iso + "T00:00:00Z"), tn = Date.parse(brt() + "T00:00:00Z"), spot = F && F.level;
+  const R = D.all.map(p => { const di = dmap[p.symb.slice(3)]; if (!di) return null;
+    const a = cupom(p.prev, P.v, di.prev, t0, p.t);
+    const live = p.cur != null && di.cur != null && spot ? cupom(p.cur, spot, di.cur, tn, p.t) : null;
+    return {p, di, a, b: live}; }).filter(Boolean);
+  if (R.length < 3) return;
+  const G = R.filter(r => r.a.du >= 20 && r.p.t < Date.UTC(2031, 6, 1));
+  const box = $("c-cup"); box.textContent = "";
+  const W = Math.max(300, Math.round(box.clientWidth || 560)), H = W < 450 ? 200 : 240, m = {l: 44, r: 12, t: 12, b: 22}, NS = "http://www.w3.org/2000/svg";
+  const el = (t, a, par) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (par) par.appendChild(e); return e; };
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Cupom cambial implícito por vencimento"}, box);
+  const ys = G.flatMap(r => [r.a.c, r.b && r.b.du >= 20 ? r.b.c : null]).filter(v => v != null);
+  let y0 = Math.min(...ys), y1 = Math.max(...ys); const pad = (y1 - y0) * 0.12 || 0.5; y0 -= pad; y1 += pad;
+  const x0 = G[0].p.t, x1 = G[G.length - 1].p.t, X = t => m.l + (W - m.l - m.r) * (t - x0) / ((x1 - x0) || 1), Y = v => m.t + (H - m.t - m.b) * (y1 - v) / (y1 - y0);
+  for (let i = 0; i <= 4; i++) { const v = y0 + (y1 - y0) * i / 4; el("line", {x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), stroke: "var(--grid)"}, svg); el("text", {x: m.l - 5, y: Y(v) + 3, "text-anchor": "end"}, svg).textContent = nf(v, 1) + "%"; }
+  const yr0 = new Date(x0).getUTCFullYear(), yr1 = new Date(x1).getUTCFullYear(); for (let y = yr0 + 1; y <= yr1; y++) { const t = Date.UTC(y, 0, 1); if (t >= x0 && t <= x1) el("text", {x: X(t), y: H - 6, "text-anchor": "middle"}, svg).textContent = y; }
+  el("path", {d: G.map((r, i) => (i ? "L" : "M") + X(r.p.t).toFixed(1) + "," + Y(r.a.c).toFixed(1)).join(""), fill: "none", stroke: "var(--muted)", "stroke-width": 1.5, "stroke-dasharray": "4 3"}, svg);
+  G.filter(r => r.b && r.b.du >= 20).forEach(r => el("circle", {cx: X(r.p.t), cy: Y(r.b.c), r: 5, fill: "var(--s1)", stroke: "var(--panel)", "stroke-width": 2}, svg));
+  const fm = (x, d = 2) => x == null ? "–" : nf(x, d);
+  const pick = ["X26", "Z26", "F27", "N27", "F28", "F29", "F30", "F31"].map(k => R.find(r => r.p.symb === "DOL" + k)).filter(Boolean);
+  rows("cup-tab", pick.map(r => ({cells: [{t: r.p.symb}, {t: "R$ " + fm(r.p.prev, 4), n: 1, label: "DOL ajuste ant."}, {t: r.p.cur != null ? "R$ " + fm(r.p.cur, 4) : "sem negócio", n: 1, label: "DOL agora"},
+    {t: fm(r.a.c, 1) + "%" + (r.a.du < 20 ? " *" : ""), n: 1, label: "Cupom (ajuste ant.)"}, {t: r.b ? fm(r.b.c, 1) + "%" + (r.b.du < 20 ? " *" : "") : "–", n: 1, label: "Cupom agora"}]})));
+  const lng = G.filter(r => r.p.t >= Date.UTC(2027, 6, 1)), avg = lng.length ? lng.reduce((s, r) => s + r.a.c, 0) / lng.length : null;
+  const lb = G.filter(r => r.b && r.b.du >= 20).sort((a, b) => a.p.t - b.p.t)[0];
+  let txt = avg != null ? `No ajuste anterior, o cupom implícito de jul/27 a 2031 fica perto de ${fm(avg, 1)}% ao ano (${fm(Math.min(...lng.map(r => r.a.c)), 1)}% a ${fm(Math.max(...lng.map(r => r.a.c)), 1)}%). ` : "";
+  if (lb) txt += `Hoje só os vencimentos curtos do dólar negociam: ${lb.p.symb} tem cupom de ${fm(lb.b.c, 1)}%, contra ${fm(lb.a.c, 1)}% no ajuste anterior (${sgn(lb.b.c - lb.a.c)} p.p.). O cupom sobe quando o dólar futuro anda menos que o spot, ou quando o DI sobe mais que o futuro. É descolamento de preço, não um custo novo de carregar dólar.`;
+  else txt += "Hoje nenhum vencimento acima de 20 dias úteis negociou dólar futuro; a curva é a do ajuste anterior.";
+  verdict("cup-out", lb && Math.abs(lb.b.c - lb.a.c) > 3 ? "bad" : "warn", "Cupom cambial", txt);
+}
+function renderDolScen(F) {
+  const D = S.dol; if (!D || !F || F.level == null || !D.all.length) return;
+  const fx = F.level / ELECT.ptax - 1, tn = Date.parse(brt() + "T00:00:00Z"), HZ = [30, 91, 365];
+  const G = D.all.filter(p => p.t < tn + 480 * 864e5);
+  const SL = scenLv(F, nowW(diMix())).L, pts = SCEN.map((s, i) => s.f.map((f, k) => ({t: tn + HZ[k] * 864e5, v: SL[i][k]})));
+  const col = ["var(--down)", "var(--warn)", "var(--up)"];
+  const box = $("c-dol"); box.textContent = "";
+  const W = Math.max(300, Math.round(box.clientWidth || 560)), H = W < 450 ? 210 : 250, m = {l: 44, r: 12, t: 12, b: 22}, NS = "http://www.w3.org/2000/svg";
+  const el = (t, a, par) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (par) par.appendChild(e); return e; };
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Dólar futuro contra os cenários"}, box);
+  const ys = [...G.flatMap(p => [p.prev, p.cur]), ...pts.flat().map(p => p.v), F.level].filter(v => v != null);
+  let y0 = Math.min(...ys), y1 = Math.max(...ys); const pad = (y1 - y0) * 0.08 || 0.1; y0 -= pad; y1 += pad;
+  const x0 = tn, x1 = G[G.length - 1].t, X = t => m.l + (W - m.l - m.r) * (t - x0) / ((x1 - x0) || 1), Y = v => m.t + (H - m.t - m.b) * (y1 - v) / (y1 - y0);
+  for (let i = 0; i <= 4; i++) { const v = y0 + (y1 - y0) * i / 4; el("line", {x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), stroke: "var(--grid)"}, svg); el("text", {x: m.l - 5, y: Y(v) + 3, "text-anchor": "end"}, svg).textContent = nf(v, 2); }
+  const yr0 = new Date(x0).getUTCFullYear(), yr1 = new Date(x1).getUTCFullYear(); for (let y = yr0 + 1; y <= yr1; y++) { const t = Date.UTC(y, 0, 1); if (t > x0 && t <= x1) el("text", {x: X(t), y: H - 6, "text-anchor": "middle"}, svg).textContent = y; }
+  el("path", {d: G.map((p, i) => (i ? "L" : "M") + X(p.t).toFixed(1) + "," + Y(p.prev).toFixed(1)).join(""), fill: "none", stroke: "var(--muted)", "stroke-width": 1.5, "stroke-dasharray": "4 3"}, svg);
+  G.filter(p => p.cur != null).forEach(p => el("circle", {cx: X(p.t), cy: Y(p.cur), r: 4.5, fill: "var(--s1)", stroke: "var(--panel)", "stroke-width": 2}, svg));
+  pts.forEach((arr, i) => { el("path", {d: [{t: tn, v: F.level}, ...arr].map((p, j) => (j ? "L" : "M") + X(p.t).toFixed(1) + "," + Y(p.v).toFixed(1)).join(""), fill: "none", stroke: col[i], "stroke-width": 1.5}, svg);
+    arr.forEach(p => el("circle", {cx: X(p.t), cy: Y(p.v), r: 4, fill: col[i], stroke: "var(--panel)", "stroke-width": 2}, svg)); });
+  el("circle", {cx: X(tn), cy: Y(F.level), r: 4, fill: "var(--text)"}, svg);
+  const q = (t) => G.reduce((b, p) => Math.abs(p.t - t) < Math.abs(b.t - t) ? p : b, G[0]), f12 = q(tn + 365 * 864e5), s12 = pts.map(a => a[2].v);
+  $("dol-note").textContent = `O ponto escuro é o dólar de agora (R$ ${nf(F.level, 2)}). As linhas coloridas vão do dólar de agora até o dólar esperado em cada cenário (1, 3 e 12 meses). Em 12 meses: ${SCEN.map((s, i) => s.n + " R$ " + nf(s12[i], 2)).join(", ")}; o ${f12.symb} fecha o ajuste anterior em R$ ${nf(f12.prev, 2)}. Em 12 meses a média ponderada dos cenários é igual ao dólar futuro de 12 meses, que já inclui o diferencial de juros. O ajuste anterior é de antes do choque de hoje; só os pontos azuis são de hoje.`;
+}
+function renderDiCurve(dd) {
+  const A = dd.all || [], f29 = dd.c.DI1F29;
+  if (f29) {
+    const bp = f29.cur != null && f29.prev != null ? (f29.cur - f29.prev) * 100 : null, v = $("di29-v");
+    v.textContent = nf(f29.cur != null ? f29.cur : f29.prev, 3) + "%"; v.classList.remove("up", "down"); if (bp != null) cls(v, bp);
+    $("di29-s").textContent = bp != null ? "ajuste ant. " + nf(f29.prev, 3) + "% · " + sgn(bp) + " bp no dia" : "ajuste anterior · sem negócio ainda";
+  }
+  const mv = A.filter(p => p.cur != null).map(p => ({p, d: (p.cur - p.prev) * 100})).sort((a, b) => b.d - a.d)[0];
+  if (mv) { $("dimax-v").textContent = lbl(mv.p.t) + " " + sgn(mv.d) + " bp"; $("dimax-s").textContent = "de " + nf(mv.p.prev, 3) + "% para " + nf(mv.p.cur, 3) + "%"; }
+  else { $("dimax-v").textContent = "–"; $("dimax-s").textContent = "aguardando negócios"; }
+  if (A.length < 3) return;
+  const box = $("c-di"); box.textContent = "";
+  const W = Math.max(300, Math.round(box.clientWidth || 560)), H = W < 450 ? 200 : 240, m = {l: 44, r: 12, t: 12, b: 22};
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (t, a, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Curva de DI da B3: ajuste anterior e agora"}, box);
+  const x0 = A[0].t, x1 = A[A.length - 1].t, ys = A.flatMap(p => [p.prev, p.cur]).filter(v => v != null);
+  let y0 = Math.min(...ys), y1 = Math.max(...ys); const pad = (y1 - y0) * 0.1 || 0.1; y0 -= pad; y1 += pad;
+  const X = t => m.l + (W - m.l - m.r) * (t - x0) / ((x1 - x0) || 1), Y = v => m.t + (H - m.t - m.b) * (y1 - v) / (y1 - y0);
+  for (let i = 0; i <= 4; i++) { const v = y0 + (y1 - y0) * i / 4; el("line", {x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), stroke: "var(--grid)"}, svg);
+    el("text", {x: m.l - 5, y: Y(v) + 3, "text-anchor": "end"}, svg).textContent = nf(v, 1); }
+  const yr0 = new Date(x0).getUTCFullYear(), yr1 = new Date(x1).getUTCFullYear(), step = W < 450 ? 4 : 2;
+  for (let y = yr0 + 1; y <= yr1; y += step) { const t = Date.UTC(y, 0, 1); if (t < x0 || t > x1) continue; el("text", {x: X(t), y: H - 6, "text-anchor": "middle"}, svg).textContent = y; }
+  const path = (key) => { let d = "", on = false; for (const p of A) { if (p[key] == null) { on = false; continue; } d += (on ? "L" : "M") + X(p.t).toFixed(1) + "," + Y(p[key]).toFixed(1); on = true; } return d; };
+  el("path", {d: path("prev"), fill: "none", stroke: "var(--muted)", "stroke-width": 1.5, "stroke-dasharray": "4 3"}, svg);
+  el("path", {d: path("cur"), fill: "none", stroke: "var(--s1)", "stroke-width": 2, "stroke-linejoin": "round"}, svg);
+  const p29 = A.find(p => p.symb === "DI1F29");
+  if (p29) { el("circle", {cx: X(p29.t), cy: Y(p29.prev), r: 4, fill: "var(--muted)"}, svg);
+    if (p29.cur != null) el("circle", {cx: X(p29.t), cy: Y(p29.cur), r: 5, fill: "var(--s2)", stroke: "var(--panel)", "stroke-width": 2}, svg);
+    el("text", {x: X(p29.t), y: Y(p29.cur != null ? p29.cur : p29.prev) - 9, "text-anchor": "middle", style: "fill:var(--s2)"}, svg).textContent = "jan/29"; }
+  const cross = el("line", {y1: m.t, y2: H - m.b, stroke: "var(--muted)", "stroke-dasharray": "2 2", visibility: "hidden"}, svg);
+  const tip = document.createElement("div"); tip.className = "tip"; tip.hidden = true; box.appendChild(tip);
+  const hit = el("rect", {x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent"}, svg);
+  const move = ev => {
+    const r = svg.getBoundingClientRect(), t = x0 + ((ev.clientX - r.left) * W / r.width - m.l) / (W - m.l - m.r) * (x1 - x0);
+    let b = A[0]; for (const p of A) if (Math.abs(p.t - t) < Math.abs(b.t - t)) b = p;
+    cross.setAttribute("x1", X(b.t)); cross.setAttribute("x2", X(b.t)); cross.setAttribute("visibility", "visible");
+    tip.hidden = false; tip.textContent = lbl(b.t) + " · ant " + nf(b.prev, 3) + "%" + (b.cur != null ? " · agora " + nf(b.cur, 3) + "% (" + sgn((b.cur - b.prev) * 100) + " bp)" : " · sem negócio");
+    tip.style.left = Math.min(Math.max(X(b.t) / W * r.width, 90), r.width - 90) + "px"; tip.style.top = (m.t + 6) / H * r.height + "px";
+  };
+  hit.addEventListener("pointermove", move); hit.addEventListener("pointerdown", move);
+  hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); tip.hidden = true; });
+}
+function lbl(t) { return new Date(t).toLocaleDateString("pt-BR", {month: "short", year: "2-digit", timeZone: "UTC"}).replace(". de ", "/").replace(" de ", "/").replace(".", ""); }
+
+function todayVec(F, Y) {
+  const v = {dol: F.fx != null ? F.fx * 100 : null, ibov: null, di1: null, di2: null, di5: null, slope: null, est: null}, lim = [];
+  const b = Y["^BVSP"], e = Y.EWZ;
+  if (b && b.open && !ibovFrozen(Y)) v.ibov = (b.price / b.base - 1) * 100; else if (e && F.fx != null) v.ibov = ((1 + (e.price / e.base - 1)) * (1 + F.fx) - 1) * 100;
+  const dd = S.di && S.di.c, bp = k => { const r = dd && dd[k]; if (!r || r.cur == null || r.prev == null) return null; if (r.top != null && r.cur >= r.top) lim.push(k); return (r.cur - r.prev) * 100; };
+  v.di1 = bp("DI1F28"); v.di2 = bp("DI1F29"); v.di5 = bp("DI1F31");
+  if (v.di1 != null && v.di5 != null) v.slope = v.di5 - v.di1;
+  const r = k => Y[k] ? Y[k].price / Y[k].base - 1 : null, pb = r("PBR"), it = r("ITUB"), va = r("VALE");
+  if (pb != null && it != null && va != null) v.est = (pb - (it + va) / 2) * 100;
+  return {v, lim};
+}
+function renderPrec(F, Y) {
+  const {v, lim} = todayVec(F, Y), K = ["dol", "ibov", "di1", "di2", "di5", "slope", "est"], sd = PREC.sd;
+  const dist = (a, b) => { let s = 0, n = 0; for (const k of K) if (a[k] != null && b[k] != null) { s += ((a[k] - b[k]) / sd[k]) ** 2; n++; } return n ? Math.sqrt(s / n) : null; };
+  const zero = {}; K.forEach(k => zero[k] = 0);
+  const fmt = (x, u, d = 1) => x == null ? "–" : (x >= 0 ? "+" : "−") + nf(Math.abs(x), d) + u;
+  // table: today first
+  const fair = x => FV.c + FV.b * x, hw = x => 1.645 * Math.sqrt(FV.sd ** 2 + (FV.se * x) ** 2);
+  const row = (r, hl, star) => ({hl, cells: [{t: r.n, small: r.dt}, {t: fmt(r.dol, "%") + (star ? "*" : ""), n: 1, label: "Dólar"}, {t: fmt(r.ibov, "%"), n: 1, label: "Ibovespa"},
+    {t: r.dol == null ? "–" : fmt(fair(r.dol), "%") + (r.ibov == null ? "" : Math.abs(r.ibov - fair(r.dol)) <= hw(r.dol) ? " (dentro)" : " (fora)"), n: 1, label: "Ibovespa justo"},
+    {t: fmt(r.di1, " bp", 0), n: 1, label: "DI 1a"}, {t: fmt(r.di2, " bp", 0), n: 1, label: "DI 2a"}, {t: fmt(r.di5, " bp", 0), n: 1, label: "DI 5a"},
+    {t: fmt(r.slope, " bp", 0), n: 1, label: "Inclinação 5a − 1a"}, {t: fmt(r.est, " p.p."), n: 1, label: "Estatais − privadas"}, {t: r.di2_20 == null ? "ainda não" : fmt(r.di2_20, " bp", 0), n: 1, label: "DI 2a, 20 dias depois"}]});
+  const today = Object.assign({n: "Hoje", dt: lim.length ? "DI no limite: piso" : "ao vivo", di2_20: null}, v);
+  rows("prec", [row(today, true, false), ...PREC.ev.map(r => row(r, false, r.ptax))]);
+  // similarity
+  const d0 = dist(v, zero);
+  const box = $("sim"); if (d0 == null || d0 === 0) return;
+  const sims = PREC.ev.map(r => ({r, d: dist(v, r)})).filter(x => x.d != null).map(x => Object.assign(x, {s: Math.max(0, 1 - x.d / d0)})).sort((a, b) => b.s - a.s);
+  box.textContent = "";
+  sims.forEach((x, i) => { const el = document.createElement("div"); el.className = "sim" + (i === 0 ? " top" : "");
+    const nm = document.createElement("div"); nm.className = "nm"; nm.textContent = x.r.n; const sm = document.createElement("small"); sm.textContent = x.r.dt.slice(-4); nm.appendChild(sm);
+    const bar = document.createElement("div"); bar.className = "bar2"; const sp = document.createElement("span"); sp.style.width = (x.s * 100).toFixed(0) + "%"; bar.appendChild(sp);
+    const pc = document.createElement("div"); pc.className = "pc"; pc.textContent = nf(x.s * 100, 0) + "%";
+    el.append(nm, bar, pc); box.appendChild(el); });
+  const top = sims[0], r = top.r;
+  const nVars = K.filter(k => v[k] != null && r[k] != null).length;
+  const ratio = r.dol ? v.dol / r.dol : null;
+  verdict("sim-out", top.s > 0.6 ? "bad" : "warn", "Mais próximo", `${r.n} (${r.dt}), ${nf(top.s * 100, 0)}% de proximidade em ${nVars} variáveis.` +
+    (ratio && ratio > 0 ? ` O dólar de hoje é ${nf(ratio, 1)} vez o daquele dia.` : "") +
+    ` Em 20 dias, o DI de 2 anos ${r.di2_20 >= 0 ? "subiu" : "caiu"} ${nf(Math.abs(r.di2_20), 0)} bp e o Ibovespa ${r.ibov_20 >= 0 ? "subiu" : "caiu"} ${nf(Math.abs(r.ibov_20), 1)}%.` +
+    (lim.length ? " O DI de hoje está no limite de alta, então o valor real pode ser maior: trate a proximidade como aproximada." : ""));
+}
+
+// What the DI prices: put the cumulative DI jan/29 move since 23/10 between the two nearest scenario mu and split linearly.
+// 12-month dollar future: the DOL contract nearest to 12 months. Not traded today: previous adjustment x (spot now / previous PTAX), so the carry is kept and today's shock is added.
+function fwd12(F) {
+  const D = S.dol, P = S.ptax; if (!D || !D.all.length || !F || F.level == null) return null;
+  const t = Date.parse(brt() + "T00:00:00Z") + 365 * 864e5, c = D.all.reduce((b, p) => Math.abs(p.t - t) < Math.abs(b.t - t) ? p : b, D.all[0]);
+  if (Math.abs(c.t - t) > 45 * 864e5) return null;
+  if (c.cur != null) return {v: c.cur, symb: c.symb, live: true};
+  return P && P.v ? {v: c.prev * F.level / P.v, symb: c.symb, live: false} : null;
+}
+// Scenario dollar at 1, 3 and 12 months. At 12 months the spread between scenarios is kept, and the weighted average is moved to the 12-month dollar future.
+function scenLv(F, NW) {
+  const fx = F.level / ELECT.ptax - 1, L = SCEN.map(s => s.f.map(f => ELECT.ptax * (1 + fx * f))), FW = fwd12(F);
+  if (FW) { const avg = L.reduce((a, l, i) => a + NW[i] * l[2], 0); L.forEach(l => l[2] += FW.v - avg); }
+  return {L, FW};
+}
+function diMix() {
+  const r = S.di && S.di.c.DI1F29;
+  if (!r || r.prev == null) return null;
+  const last = r.cur != null ? r.cur : r.prev, bp = (last - ELECT.di29) * 100, lim = r.top != null && r.cur != null && r.cur >= r.top;
+  const w = SCEN.map(() => 0), mu = SCEN.map(s => s.mu);
+  if (bp <= mu[0]) w[0] = 1; else if (bp >= mu[mu.length - 1]) w[mu.length - 1] = 1;
+  else for (let i = 0; i < mu.length - 1; i++) if (bp >= mu[i] && bp <= mu[i + 1]) { const t = (bp - mu[i]) / (mu[i + 1] - mu[i]); w[i] = 1 - t; w[i + 1] = t; }
+  return {w, bp, lim, beyond: bp > mu[mu.length - 1], live: r.cur != null};
+}
+// Whole percents that sum to 100 (largest remainder), so the table never shows 101 or 99.
+function pct100(w) {
+  const x = w.map(v => v * 100), f = x.map(Math.floor), r = 100 - f.reduce((a, b) => a + b, 0);
+  x.map((v, i) => [v - f[i], i]).sort((a, b) => b[0] - a[0]).slice(0, r).forEach(([, i]) => f[i]++);
+  return f;
+}
+const TK = {sc: "", dom: ""};
+function setTake() { if (TK.sc || TK.dom) $("take").textContent = (TK.sc + TK.dom).trim(); }
+// "Como funciona" links: open the collapsed method step, then scroll to it.
+document.addEventListener("click", e => { const a = e.target.closest && e.target.closest("a.how"); if (!a) return; const t = document.querySelector(a.getAttribute("href")); if (!t) return; e.preventDefault(); for (let p = t; p; p = p.parentElement) if (p.tagName === "DETAILS") p.open = true; t.scrollIntoView({block: "start"}); });
+function renderScen(F) {
+  const M = diMix(), fx = F.level / ELECT.ptax - 1, NW = nowW(M), NP = pct100(NW), MP = M ? pct100(M.w) : null, SV = scenLv(F, NW), SL = SV.L;
+  const data = SCEN.map((s, i) => ({hl: M && M.w[i] === Math.max(...M.w), cells: [{t: s.n}, {t: nf(s.p * 100, 0) + "%", n: 1, label: "Início (relatório diário)"},
+    {t: M ? NP[i] + "%" : "aguarda DI", n: 1, label: "Agora (mercado)"},
+    {t: M ? MP[i] + "%" : "aguarda DI", n: 1, label: "O DI precifica"}, {t: "+" + s.mu + " bp", n: 1, label: "DI jan/29 esperado"},
+    ...s.f.map((f, k) => ({t: "R$ " + nf(SL[i][k], 2), n: 1, label: ["1 mês", "3 meses", "12 meses"][k]})), {t: s.c, cond: 1, label: ""}]}));
+  const w = [0, 1, 2].map(k => SCEN.reduce((a, s, i) => a + NW[i] * SL[i][k], 0));
+  data.push({hl: 1, cells: [{t: "Média ponderada"}, {t: "", n: 1, label: ""}, {t: "100%", n: 1, label: "Agora (mercado)"}, {t: "", n: 1, label: ""}, {t: "", n: 1, label: ""}, ...w.map((x, k) => ({t: "R$ " + nf(x, 2), n: 1, label: ["1 mês", "3 meses", "12 meses"][k]})), {t: "pesos de agora (mercado); início do relatório de " + WEIGHTS_AT + (SV.FW ? "; 12 meses = " + SV.FW.symb + " R$ " + nf(SV.FW.v, 2) + (SV.FW.live ? " (último negócio)" : " (ajuste anterior × choque de hoje)") : "; 12 meses sem o dólar futuro (aguardando a B3)"), cond: 1}]});
+  rows("scen", data);
+  const topJ = SCEN.reduce((b, s, i) => s.p > SCEN[b].p ? i : b, 0);
+  if (!M) { $("m-sc").textContent = SCEN[topJ].n; $("m-sc-s").textContent = nf(SCEN[topJ].p * 100, 0) + "% · julgamento"; return; }
+  const topM = M.w.indexOf(Math.max(...M.w));
+  $("m-sc").textContent = SCEN[topM].n; $("m-sc-s").textContent = "o DI precifica · agora " + NP.join("/") + " · DI jan/29 " + sgn(M.bp) + " bp desde 23/10";
+  TK.sc = "Pesos agora: " + SCEN.map((x, i) => x.n.split(" ")[0] + " " + NP[i] + "%").join(", ") + ". O DI jan/29 subiu " + sgn(M.bp) + " bp desde 23/10" + (M.beyond ? ", além do pior cenário." : ", mais perto de " + SCEN[topM].n + ".") ; setTake();
+  const gap = M.w.map((x, i) => x - SCEN[i].p), big = gap.reduce((b, g, i) => Math.abs(g) > Math.abs(gap[b]) ? i : b, 0);
+  let txt = `O DI jan/29 subiu ${sgn(M.bp)} bp desde 23/10.`;
+  if (M.beyond) txt += ` Isso passa dos +${SCEN[2].mu} bp do pior cenário: o mercado precifica Estresse e mais.${M.lim ? " O contrato está no limite de alta da B3, então a alta real pode ser ainda maior." : ""}`;
+  else txt += ` Isso fica entre ${SCEN.filter((s, i) => M.w[i] > 0).map(s => s.n + " (+" + s.mu + " bp)").join(" e ")}.`;
+  txt += ` O relatório diário começou com ${nf(SCEN[big].p * 100, 0)}% em ${SCEN[big].n}; o DI dá ${MP[big]}%; a regra de mercado leva a ${NP[big]}% agora.`;
+  txt += Math.abs(gap[big]) > 0.3 ? " A diferença é grande: ou o mercado exagera no 1º dia (como no Joesley, quando o DI devolveu 70% em 20 dias), ou o julgamento está atrasado. A regra de mercado move cada peso no máximo 15 pontos por dia, de propósito." : " Julgamento e mercado contam histórias parecidas.";
+  verdict("sc-out", M.beyond || Math.abs(gap[big]) > 0.3 ? "bad" : "warn", "Julgamento × DI", txt);
+}
+
+let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(render, 200); });
+
+function chart(id, pts, ref, color, dec, o = {}) {
+  const box = $(id); box.textContent = "";
+  const W = Math.max(300, Math.round(box.clientWidth || 560)), H = W < 450 ? 190 : 220, m = {l: 44, r: 8, t: 10, b: 22};
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (t, a, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Gráfico de preço"}, box);
+  const xs = pts.map(p => p.t), ys = pts.map(p => p.c).concat([ref]);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs); let y0 = Math.min(...ys), y1 = Math.max(...ys); const pad = (y1 - y0) * 0.08 || 0.01; y0 -= pad; y1 += pad; if (o.lim) { y0 = Math.max(y0, o.lim[0]); y1 = Math.min(y1, o.lim[1]); }
+  const X = t => m.l + (W - m.l - m.r) * (t - x0) / ((x1 - x0) || 1), Y = v => m.t + (H - m.t - m.b) * (y1 - v) / (y1 - y0);
+  for (let i = 0; i <= 4; i++) { const v = y0 + (y1 - y0) * i / 4; el("line", {x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), stroke: "var(--grid)"}, svg);
+    const tx = el("text", {x: m.l - 5, y: Y(v) + 3, "text-anchor": "end"}, svg); tx.textContent = nf(v, dec); }
+  const span = x1 - x0, nt = W < 450 ? 3 : 4;
+  for (let i = 0; i <= nt; i++) { const t = x0 + span * i / nt; const tx = el("text", {x: X(t), y: H - 6, "text-anchor": i === 0 ? "start" : i === nt ? "end" : "middle"}, svg);
+    tx.textContent = o.days ? new Date(t).toLocaleDateString("pt-BR", {day: "2-digit", month: "2-digit", year: "2-digit", timeZone: "UTC"}) : span > 86400000 ? new Date(t).toLocaleString("pt-BR", {weekday: "short", hour: "2-digit"}) : hm(t); }
+  el("line", {x1: m.l, x2: W - m.r, y1: Y(ref), y2: Y(ref), stroke: "var(--muted)", "stroke-dasharray": "4 3"}, svg);
+  el("path", {d: pts.map((p, i) => `${i ? "L" : "M"}${X(p.t).toFixed(1)},${Y(p.c).toFixed(1)}`).join(""), fill: "none", stroke: color, "stroke-width": 2, "stroke-linejoin": "round"}, svg);
+  const lp = pts[pts.length - 1]; el("circle", {cx: X(lp.t), cy: Y(lp.c), r: 4, fill: color, stroke: "var(--panel)", "stroke-width": 2}, svg);
+  const cross = el("line", {y1: m.t, y2: H - m.b, stroke: "var(--muted)", "stroke-dasharray": "2 2", visibility: "hidden"}, svg);
+  const dot = el("circle", {r: 4, fill: color, visibility: "hidden"}, svg);
+  const tip = document.createElement("div"); tip.className = "tip"; tip.hidden = true; box.appendChild(tip);
+  const hit = el("rect", {x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent"}, svg);
+  const move = ev => {
+    const r = svg.getBoundingClientRect(); const t = x0 + ((ev.clientX - r.left) * W / r.width - m.l) / (W - m.l - m.r) * (x1 - x0);
+    let best = pts[0]; for (const p of pts) if (Math.abs(p.t - t) < Math.abs(best.t - t)) best = p;
+    cross.setAttribute("x1", X(best.t)); cross.setAttribute("x2", X(best.t)); cross.setAttribute("visibility", "visible");
+    dot.setAttribute("cx", X(best.t)); dot.setAttribute("cy", Y(best.c)); dot.setAttribute("visibility", "visible");
+    tip.hidden = false; tip.textContent = (o.days ? new Date(best.t).toLocaleDateString("pt-BR", {timeZone: "UTC"}) : new Date(best.t).toLocaleString("pt-BR", {weekday: "short", hour: "2-digit", minute: "2-digit"})) + " · " + nf(best.c, dec) + (o.abs ? "" : " (" + pct(best.c / ref - 1, 1) + ")");
+    const px = X(best.t) / W * r.width; tip.style.left = Math.min(Math.max(px, 70), r.width - 70) + "px"; tip.style.top = (Y(best.c) / H * r.height) + "px";
+  };
+  hit.addEventListener("pointermove", move); hit.addEventListener("pointerdown", move);
+  hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); tip.hidden = true; });
+}
+
+
+// ---- fiscal dominance score: SILO history (PRE/DPL 720 d, PTAX) plus today's live move ----
+const DOMT = {corr: 0.4, real: 25, be: 25, cds: 10, slope: 10, ex: 60};   // thresholds: judgment, see method
+function siloRows(result) {
+  let p = result && result.payload;
+  if (typeof p === "string") { try { p = JSON.parse(p); } catch (e) {} }
+  if (Array.isArray(p)) return p;
+  if (p && Array.isArray(p.rows)) return p.rows;
+  if (p && Array.isArray(p.data)) return p.data;
+  const t = typeof p === "string" ? p : exaText(result), i = t.indexOf("\n[");
+  return JSON.parse(i >= 0 ? t.slice(i + 1) : t.slice(t.indexOf("[")));
+}
+function corr(a, b) {
+  const n = a.length, ma = a.reduce((x, y) => x + y, 0) / n, mb = b.reduce((x, y) => x + y, 0) / n;
+  let sab = 0, sa = 0, sb = 0; for (let i = 0; i < n; i++) { sab += (a[i] - ma) * (b[i] - mb); sa += (a[i] - ma) ** 2; sb += (b[i] - mb) ** 2; }
+  return sa && sb ? sab / Math.sqrt(sa * sb) : null;
+}
+const nearest = (arr, t) => arr && arr.length ? arr.reduce((b, p) => Math.abs(p.t - t) < Math.abs(b.t - t) ? p : b, arr[0]) : null;
+function domHist() {
+  const P = S.silo_pre, R = S.silo_dpl, X = S.silo_fx; if (!P || !R || !X) return null;
+  const rm = new Map(R.rows.map(r => [r.trade_date, +r.rate])), xm = new Map(X.rows.map(r => [r.date, +r.sell_rate]));
+  const rows = P.rows.map(r => ({d: r.trade_date, pre: +r.rate, dpl: rm.get(r.trade_date), fx: xm.get(r.trade_date)})).filter(r => r.dpl != null && r.fx != null).sort((a, b) => a.d < b.d ? -1 : 1);
+  if (rows.length < 25) return null;
+  const dp = [], dx = [], cs = [];
+  for (let i = 1; i < rows.length; i++) { dp.push((rows[i].pre - rows[i - 1].pre) * 100); dx.push(100 * Math.log(rows[i].fx / rows[i - 1].fx)); if (dp.length >= 20) cs.push({t: Date.parse(rows[i].d + "T12:00:00Z"), c: corr(dp.slice(-20), dx.slice(-20))}); }
+  return {rows, dp, dx, cs: cs.filter(x => x.c != null), last: rows[rows.length - 1], anchor: rows.find(r => r.d === ELECT.iso)};
+}
+function renderDom(F) {
+  const H = domHist(), sig = [], fmtbp = x => x == null ? "–" : sgn(x) + " bp";
+  let nowPre = null, nowDpl = null, cNow = null, live = false;
+  if (H) {
+    const L = H.last, f29 = S.di && S.di.c && S.di.c.DI1F29, tn = Date.parse(brt() + "T00:00:00Z");
+    const dap = S.dap && nearest(S.dap.all, tn + 720 * 864e5), today = L.d < brt();
+    const dPre = today && f29 && f29.cur != null && f29.prev != null ? (f29.cur - f29.prev) * 100 : null;
+    const dDpl = today && dap && dap.cur != null && dap.prev != null ? (dap.cur - dap.prev) * 100 : null;
+    const dFx = today && F && F.level != null ? 100 * Math.log(F.level / L.fx) : null;
+    nowPre = L.pre + (dPre || 0) / 100; nowDpl = L.dpl + (dDpl || 0) / 100;
+    live = dPre != null && dFx != null;
+    cNow = live ? corr(H.dp.slice(-19).concat([dPre]), H.dx.slice(-19).concat([dFx])) : H.cs[H.cs.length - 1].c;
+    const pctl = H.cs.filter(x => x.c <= cNow).length / H.cs.length;
+    const be = (n, r) => ((1 + n / 100) / (1 + r / 100) - 1) * 100, A = H.anchor;
+    const dReal = A ? (nowDpl - A.dpl) * 100 : null, dBe = A ? (be(nowPre, nowDpl) - be(A.pre, A.dpl)) * 100 : null;
+    sig.push({t: "Juro e dólar sobem juntos", v: cNow == null ? null : "correlação " + nf(cNow, 2) + " · acima de " + nf(pctl * 100, 0) + "% dos dias em 2 anos", on: cNow != null ? cNow >= DOMT.corr : null});
+    sig.push({t: "Juro real de 2 anos sobe", v: dReal == null ? null : fmtbp(dReal) + " desde 23/10" + (dDpl == null ? " (sem DAP hoje)" : ""), on: dReal != null ? dReal >= DOMT.real : null});
+    sig.push({t: "Inflação implícita de 2 anos sobe", v: dBe == null ? null : fmtbp(dBe) + " desde 23/10", on: dBe != null ? dBe >= DOMT.be : null});
+    const row = (n, a, l, x) => ({cells: [{t: n}, {t: a == null ? "–" : nf(a, 2) + "%", n: 1, label: "23/10"}, {t: nf(l, 2) + "%", n: 1, label: "Último fech. " + H.last.d.slice(8, 10) + "/" + H.last.d.slice(5, 7)}, {t: nf(x, 2) + "%", n: 1, label: "Agora"}, {t: a == null ? "–" : fmtbp((x - a) * 100), n: 1, label: "Desde 23/10"}]});
+    rows("dom-tab", [row("Nominal (PRE)", A && A.pre, L.pre, nowPre), row("Real (DPL)", A && A.dpl, L.dpl, nowDpl), row("Inflação implícita", A && be(A.pre, A.dpl), be(L.pre, L.dpl), be(nowPre, nowDpl))]);
+    const pts = H.cs.slice(); if (live) pts.push({t: Date.now(), c: cNow});
+    chart("c-corr", pts, 0, "var(--s1)", 1, {days: true, abs: true, lim: [-1, 1]});
+    $("dom-src").textContent = "Histórico: SILO (curvas PRE e DPL da B3, vértice de 720 dias, e PTAX do BCB), " + H.rows.length + " pregões até " + L.d.split("-").reverse().join("/") + ". Hoje: " + (live ? "DI jan/29" + (dap ? " e " + dap.symb : "") + " (B3) e o dólar de agora." : "a B3 ainda não negociou, então o placar usa o último fechamento.");
+  } else {
+    ["Juro e dólar sobem juntos", "Juro real de 2 anos sobe", "Inflação implícita de 2 anos sobe"].forEach(t => sig.push({t, v: null, on: null}));
+  }
+  const cds = S.cds, dd = S.di && S.di.c, sl = k => dd && dd[k] && dd[k].cur != null && dd[k].prev != null ? dd[k].cur - dd[k].prev : null;
+  const dS = sl("DI1F33") != null && sl("DI1F27") != null ? (sl("DI1F33") - sl("DI1F27")) * 100 : null;
+  const b29 = sl("DI1F29"), ex = b29 != null && F && F.fx != null ? b29 * 100 - (DIFX.c + DIFX.b * F.fx * 100) : null;
+  sig.push({t: "Risco-país (CDS 5 anos) sobe", v: cds ? fmtbp(cds.chg) + " no dia, " + nf(cds.bp, 0) + " bp" : null, on: cds ? cds.chg >= DOMT.cds : null});
+  sig.push({t: "O longo paga prêmio (jan/33 − jan/27)", v: dS == null ? null : fmtbp(dS) + " no dia", on: dS != null ? dS >= DOMT.slope : null});
+  sig.push({t: "DI sobe além do câmbio", v: ex == null ? null : "excesso " + fmtbp(ex), on: ex != null ? ex >= DOMT.ex : null});
+  const box = $("dom-list"); box.textContent = "";
+  for (const x of sig) { const li = document.createElement("li"); li.className = x.on == null ? "na" : x.on ? "on" : "";
+    const t = document.createElement("span"); t.className = "t"; t.textContent = x.t; const v = document.createElement("span"); v.className = "v"; v.textContent = x.v == null ? "sem dado" : x.v; li.append(t, v); box.appendChild(li); }
+  const known = sig.filter(x => x.on != null), n = known.filter(x => x.on).length, lvl = n >= 4 ? "bad" : n >= 2 ? "warn" : "ok";
+  if (!known.length) return;
+  $("dom-score").className = "score " + lvl; $("dom-n").textContent = n; $("dom-of").textContent = "de " + known.length + " sinais acesos";
+  $("m-dom").textContent = n + " de " + known.length; cls($("m-dom"), n >= 4 ? 1 : 0); $("m-dom-s").textContent = lvl === "bad" ? "padrão de dominância" : lvl === "warn" ? "atenção" : "sem padrão";
+  S.domN = n; TK.dom = " Dominância fiscal: " + n + " de " + known.length + " sinais acesos."; setTake();
+  verdict("dom-out", lvl, lvl === "bad" ? "Padrão de dominância" : lvl === "warn" ? "Atenção" : "Sem padrão",
+    lvl === "bad" ? `${n} de ${known.length} sinais acesos: o juro alto não segura o real, e o mercado cobra prêmio de inflação e de risco. Em 2002 e no fim de 2015 esse padrão durou semanas; ele só some com uma âncora fiscal crível.`
+    : lvl === "warn" ? `${n} de ${known.length} sinais acesos. Ainda pode ser só um choque de risco: veja se a correlação de 20 dias fica positiva por mais de 2 semanas.`
+    : `${n} de ${known.length} sinais acesos. O juro ainda funciona como defesa do real.`);
+}
+
+// ---- global control: local shock of the dollar and of DI jan/29 (OLS 2019 to Sep 2026, n 1929, Newey-West) ----
+const GLB = {fx: 0.65, fxsd: 0.72, diEm: 4.2, diUst: 0.34, disd: 13};
+function renderLocal(F) {
+  const Y = S.y || {}, mx = Y["MXN=X"], za = Y["ZAR=X"], tn = Y["^TNX"];
+  if (!mx || !za || !F || F.fx == null) return;
+  const ch = a => a.base ? (a.price / a.base - 1) * 100 : null, em = (ch(mx) + ch(za)) / 2, ust = tn && tn.base ? (tn.price - tn.base) * 100 : 0;
+  const fx = F.fx * 100, fxg = GLB.fx * em, fxl = fx - fxg, data = [];
+  data.push({cells: [{t: "Dólar", small: "EM " + pp(em, 2) + " (MXN e ZAR)"}, {t: pp(fx, 2), n: 1, label: "Bruto"}, {t: pp(fxg, 2), n: 1, label: "Global"}, {t: pp(fxl, 2), n: 1, label: "Local"}, {t: sgn(fxl / GLB.fxsd, 1) + " dp", n: 1, label: "Local em desvios"}]});
+  const r = S.di && S.di.c && S.di.c.DI1F29;
+  if (r && r.cur != null && r.prev != null) {
+    const bp = (r.cur - r.prev) * 100, g = GLB.diEm * em + GLB.diUst * ust, l = bp - g;
+    data.push({cells: [{t: "DI jan/29", small: "Treasury 10a " + sgn(ust, 0) + " bp"}, {t: sgn(bp) + " bp", n: 1, label: "Bruto"}, {t: sgn(g) + " bp", n: 1, label: "Global"}, {t: sgn(l) + " bp", n: 1, label: "Local"}, {t: sgn(l / GLB.disd, 1) + " dp", n: 1, label: "Local em desvios"}]});
+  } else data.push({cells: [{t: "DI jan/29"}, {t: "sem negócio", n: 1, label: "Bruto"}, {t: "–", n: 1, label: "Global"}, {t: "–", n: 1, label: "Local"}, {t: "–", n: 1, label: "Local em desvios"}]});
+  rows("loc-tab", data);
+}
+
+// ---- DI premium over the Focus Selic path ----
+// Copom decision day (2nd day of each meeting). 2026 and 2027: BCB calendar. 2028: estimated from the 2027 pattern (not published yet).
+const COPOM = {"R7/2026": "2026-11-04", "R8/2026": "2026-12-09",
+  "R1/2027": "2027-01-27", "R2/2027": "2027-03-17", "R3/2027": "2027-04-28", "R4/2027": "2027-06-16", "R5/2027": "2027-08-04", "R6/2027": "2027-09-22", "R7/2027": "2027-10-27", "R8/2027": "2027-12-08",
+  "R1/2028": "2028-01-26", "R2/2028": "2028-03-15", "R3/2028": "2028-04-26", "R4/2028": "2028-06-14", "R5/2028": "2028-08-02", "R6/2028": "2028-09-20", "R7/2028": "2028-10-25", "R8/2028": "2028-12-06"};
+function isBday(t) { const d = new Date(t), w = d.getUTCDay(); return !(w === 0 || w === 6 || hols(d.getUTCFullYear()).has(d.toISOString().slice(0, 10))); }
+function focusRate(mat) {
+  const Fo = S.focus, Se = S.selic; if (!Fo || !Se) return null;
+  const steps = Object.entries(COPOM).filter(([k]) => Fo.m[k] != null).map(([k, d]) => ({t: Date.parse(d + "T00:00:00Z"), v: Fo.m[k]})).sort((a, b) => a.t - b.t);
+  let sel = Se.v, i = 0, n = 0, acc = 0;
+  for (let t = Date.parse(brt() + "T00:00:00Z"); t < mat; t += 864e5) {
+    while (i < steps.length && steps[i].t < t) sel = steps[i++].v;   // a decision applies from the next business day
+    if (!isBday(t)) continue;
+    acc += Math.log(1 + (sel - 0.10) / 100) / 252; n++;
+  }
+  return n ? {r: (Math.exp(acc * 252 / n) - 1) * 100, n, last: steps.length ? steps[steps.length - 1] : null} : null;
+}
+function renderPremium() {
+  const r = S.di && S.di.c && S.di.c.DI1F29, all = S.di && S.di.all, c = all && all.find(p => p.symb === "DI1F29");
+  if (!r || !c) return;
+  const di = r.cur ?? r.prev, fo = focusRate(c.t);
+  $("pr-di").textContent = nf(di, 3) + "%"; $("pr-di-s").textContent = r.cur != null ? "último negócio" : "ajuste anterior";
+  if (!fo) { $("pr-fo-s").textContent = "aguardando o Focus e a Selic do BCB"; return; }
+  const bp = (di - fo.r) * 100;
+  $("pr-fo").textContent = nf(fo.r, 3) + "%"; $("pr-fo-s").textContent = "Focus de " + S.focus.d.split("-").reverse().join("/") + ", Selic hoje " + nf(S.selic.v, 2) + "%";
+  $("pr-bp").textContent = sgn(bp) + " bp"; cls($("pr-bp"), bp);
+  $("pr-note").textContent = "Só informação: o prêmio não entra na regra dos pesos. " + fo.n + " dias úteis até o vencimento; depois de " + (fo.last ? new Date(fo.last.t).toLocaleDateString("pt-BR", {timeZone: "UTC"}) : "–") + " a Selic fica constante. Reuniões de 2028 estimadas.";
+}
+
+// ---- foreign equity flow on B3 (SILO investor_flow, R$ thousands, T+2) ----
+function renderFlow() {
+  const f = S.flow; if (!f) return;
+  const r = f.rows.filter(x => x.net_value_thousands != null).sort((a, b) => a.reference_date < b.reference_date ? 1 : -1);
+  if (!r.length) return;
+  const bi = x => x / 1e6, fmt = x => (x >= 0 ? "+" : "−") + nf(Math.abs(x), 2) + " bi", dt = d => d.slice(8, 10) + "/" + d.slice(5, 7);
+  const l = bi(r[0].net_value_thousands), five = r.slice(0, 5), s5 = bi(five.reduce((a, x) => a + x.net_value_thousands, 0));
+  $("ff-1").textContent = fmt(l); cls($("ff-1"), -l); $("ff-1s").textContent = "R$, pregão de " + dt(r[0].reference_date);
+  $("ff-5").textContent = fmt(s5); cls($("ff-5"), -s5);
+  $("ff-5s").textContent = (s5 < -3 ? "saída forte · " : "") + dt(five[five.length - 1].reference_date) + " a " + dt(r[0].reference_date);
+}
+
+// ---- history: one shared reading every 5 minutes in the page database ----
+let db = null, HIST = [], lastSlot = null, histUnsub = null;
+function snap(F) {
+  if (!db || !F || F.level == null || !S.y) return;
+  const now = new Date(), slot = brt().replace(/-/g, "") + now.toLocaleTimeString("sv-SE", {timeZone: "America/Sao_Paulo", hour: "2-digit", minute: "2-digit"}).replace(":", "").slice(0, 3) + (Math.floor(now.getMinutes() / 5) * 5 % 10);
+  if (slot === lastSlot) return;
+  lastSlot = slot;
+  const f29 = S.di && S.di.c && S.di.c.DI1F29, M = diMix();
+  const data = {t: Date.now(), d: brt(), fx: +F.level.toFixed(4), di29: f29 ? (f29.cur ?? f29.prev) : null, cds: S.cds ? S.cds.bp : null, w: M ? pct100(nowW(M)) : null, dom: S.domN ?? null};
+  db.collection("snaps").doc("s" + slot).set(data).catch(e => { lastSlot = null; console.warn("histórico:", e.code || e.message); });
+}
+function renderHist() {
+  if (!HIST.length) return;
+  const days = new Map(); for (const h of HIST) { const c = days.get(h.d); days.set(h.d, c ? {last: h.t > c.last.t ? h : c.last, n: c.n + 1} : {last: h, n: 1}); }
+  const list = [...days.entries()].sort((a, b) => a[0] < b[0] ? 1 : -1);
+  rows("hist-tab", list.map(([d, x]) => ({hl: d === brt(), cells: [{t: d.slice(8, 10) + "/" + d.slice(5, 7), small: "última " + hm(x.last.t)}, {t: "R$ " + nf(x.last.fx, 4), n: 1, label: "Dólar"},
+    {t: x.last.di29 != null ? nf(x.last.di29, 3) + "%" : "–", n: 1, label: "DI jan/29"}, {t: x.last.cds != null ? nf(x.last.cds, 0) + " bp" : "–", n: 1, label: "CDS 5a"},
+    {t: x.last.w ? x.last.w.join("/") : "–", n: 1, label: "Pesos agora"}, {t: x.last.dom != null ? String(x.last.dom) : "–", n: 1, label: "Placar"}, {t: String(x.n), n: 1, label: "Leituras"}]})));
+  const pts = HIST.slice().sort((a, b) => a.t - b.t).map(h => ({t: h.t, c: h.fx}));
+  if (pts.length > 1) chart("c-hist-fx", pts, pts[0].c, "var(--s1)", 3);
+  $("hist-note").textContent = "Cada linha mostra a última leitura do dia. " + HIST.length + " leituras gravadas; a primeira é de " + new Date(pts[0].t).toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit"}) + ".";
+}
+
+function handle(key, fn) {
+  return ev => {
+    const id = ERRID[key];
+    if (ev.type === "error") { showErr(key, ev.error); render(); return; }
+    try { S[key] = Object.assign(fn(ev.json), {at: Date.now()}); delete ERRAT[key]; if (id) $(id).hidden = true; }
+    catch (err) { if (id) { $(id).hidden = false; $(id).textContent = "Formato inesperado da fonte: " + err.message; } }
+    render();
+  };
+}
+const PARSE = {
+  usdt: j => ({last: +j.lastPrice, chg: +j.priceChangePercent, high: +j.highPrice, low: +j.lowPrice}),
+  usdtK: j => j.map(k => ({t: k[0], c: +k[4]})),
+  y: spark,
+  di: j => { const out = {}; for (const x of j.Scty || []) { if (["DI1F27", "DI1F28", "DI1F29", "DI1F31", "DI1F33"].includes(x.symb)) { const q = x.SctyQtn || {}; out[x.symb] = {prev: q.prvsDayAdjstmntPric, cur: q.curPrc ?? null, top: q.topLmtPric ?? null}; } }
+    const all = (j.Scty || []).filter(x => /^DI1[FGHJKMNQUVXZ]\d\d$/.test(x.symb || "") && x.SctyQtn && x.SctyQtn.prvsDayAdjstmntPric != null && x.asset && x.asset.AsstSummry && x.asset.AsstSummry.mtrtyCode)
+      .map(x => ({symb: x.symb, t: Date.parse(x.asset.AsstSummry.mtrtyCode + "T00:00:00Z"), prev: x.SctyQtn.prvsDayAdjstmntPric, cur: x.SctyQtn.curPrc ?? null})).filter(p => p.t > Date.now()).sort((a, b) => a.t - b.t);
+    // drop isolated prints: a thin contract whose last trade is >0.6 pp from the median of its 4 nearest traded vertices (e.g. DI1X29 at 12.70% while its neighbours trade near 15.3%)
+    const cs = all.filter(p => p.cur != null);
+    all.forEach(p => { if (p.cur == null) return; const nb = cs.filter(q => q !== p).sort((a, b) => Math.abs(a.t - p.t) - Math.abs(b.t - p.t)).slice(0, 4).map(q => q.cur).sort((a, b) => a - b);
+      if (nb.length < 3) return; const med = nb.length % 2 ? nb[(nb.length - 1) / 2] : (nb[nb.length / 2 - 1] + nb[nb.length / 2]) / 2;
+      if (Math.abs(p.cur - med) > 0.6) { p.cur = null; p.out = true; } });
+    return {c: out, all, ts: j.Msg && j.Msg.dtTm}; },
+  cds: j => j,
+  ptax: j => {   // last PTAX dated before today (Brasília): the previous business day, or today's own once published is ignored
+    const t = brt(), r = (j.value || []).filter(x => x.dataHoraCotacao && x.dataHoraCotacao.slice(0, 10) < t && x.cotacaoVenda > 0).pop();
+    if (!r) throw new Error("sem PTAX no período");
+    const d = r.dataHoraCotacao.slice(0, 10);
+    return {v: +r.cotacaoVenda, d: d.slice(8, 10) + "/" + d.slice(5, 7), iso: d};
+  },
+  dol: j => ({all: (j.Scty || []).filter(x => /^DOL[FGHJKMNQUVXZ]\d\d$/.test(x.symb || "") && x.SctyQtn && x.SctyQtn.prvsDayAdjstmntPric != null && x.asset && x.asset.AsstSummry && x.asset.AsstSummry.mtrtyCode)
+    .map(x => ({symb: x.symb, t: Date.parse(x.asset.AsstSummry.mtrtyCode + "T00:00:00Z"), prev: x.SctyQtn.prvsDayAdjstmntPric / 1000, cur: x.SctyQtn.curPrc != null ? x.SctyQtn.curPrc / 1000 : null})).filter(p => p.t > Date.now()).sort((a, b) => a.t - b.t), ts: j.Msg && j.Msg.dtTm}),
+  focus: j => { const v = j.value || [], d = v.reduce((m, x) => x.Data > m ? x.Data : m, ""); const out = {}; v.filter(x => x.Data === d).forEach(x => out[x.Reuniao] = +x.Mediana); if (!d) throw new Error("Focus vazio"); return {d, m: out}; },
+  selic: j => { const r = Array.isArray(j) ? j[j.length - 1] : null; if (!r) throw new Error("sem Selic"); return {v: parseFloat(String(r.valor).replace(",", "."))}; },
+  dap: j => ({all: (j.Scty || []).filter(x => /^DAP[FGHJKMNQUVXZ]\d\d$/.test(x.symb || "") && x.SctyQtn && x.SctyQtn.prvsDayAdjstmntPric != null && x.asset && x.asset.AsstSummry && x.asset.AsstSummry.mtrtyCode)
+    .map(x => ({symb: x.symb, t: Date.parse(x.asset.AsstSummry.mtrtyCode + "T00:00:00Z"), prev: x.SctyQtn.prvsDayAdjstmntPric, cur: x.SctyQtn.curPrc ?? null})).filter(p => p.t > Date.now()).sort((a, b) => a.t - b.t), ts: j.Msg && j.Msg.dtTm}),
+};
+
+const SILO_REST = "https://zcjbtpxuhdekpwcxmepn.supabase.co/rest/v1/";
+const SILO_HDR = {apikey: "sb_publishable__yfFQsykAglrvc9GS6_PYw_B24ex437", "Accept-Profile": "api", "Content-Profile": "api"};
+let timers = [];
+async function getJson(url, opts) {
+  const r = await fetch(url, Object.assign({cache: "no-store"}, opts));
+  if (!r.ok) { const e = new Error("HTTP " + r.status + " em " + url.split("?")[0].replace(/^https?:\/\/[^/]+/, "")); e.code = "http_" + r.status; throw e; }
+  return r.json();
+}
+function every(ms, fn) { fn(); timers.push(setInterval(fn, ms)); }
+function start() {
+  timers.forEach(clearInterval); timers = [];
+  URLS.ptax = ptaxUrl();
+  for (const [key, url] of Object.entries(URLS)) {
+    every(POLLS[key] || POLL, async () => {
+      try { handle(key, PARSE[key])({type: "ok", json: await getJson(url)}); }
+      catch (e) { handle(key, PARSE[key])({type: "error", error: e}); }
+    });
+  }
+  // SILO: 2 years of daily history for the dominance score, refreshed every 6 h
+  const from = new Date(Date.now() - 730 * 864e5).toISOString().slice(0, 10);
+  const SILO = {
+    silo_pre: () => getJson(SILO_REST + "rpc/curve_history", {method: "POST", headers: Object.assign({"Content-Type": "application/json"}, SILO_HDR), body: JSON.stringify({p_curve: "PRE", p_tenor_days: 720, p_from: from})}),
+    silo_dpl: () => getJson(SILO_REST + "rpc/curve_history", {method: "POST", headers: Object.assign({"Content-Type": "application/json"}, SILO_HDR), body: JSON.stringify({p_curve: "DPL", p_tenor_days: 720, p_from: from})}),
+    flow: () => getJson(SILO_REST + "investor_flow?investor_type=eq.Investidor%20Estrangeiro&order=reference_date.desc&limit=10&select=reference_date,net_value_thousands,flow_basis", {headers: SILO_HDR}),
+    silo_fx: () => getJson(SILO_REST + "ptax_daily?currency=eq.USD&date=gte." + from + "&order=date.asc&limit=1000&select=date,sell_rate", {headers: SILO_HDR}),
+  };
+  for (const [key, get] of Object.entries(SILO)) {
+    every(21600000, async () => {
+      try { S[key] = {rows: await get(), at: Date.now()}; $(key === "flow" ? "e-flow" : "e-silo").hidden = true; }
+      catch (e) {
+        const el = $(key === "flow" ? "e-flow" : "e-silo"); el.hidden = false;
+        el.textContent = key === "flow" ? "Fluxo estrangeiro indisponível agora (" + (e.code || "erro") + ")." : "SILO indisponível agora (" + (e.code || "erro") + "): o placar usa só os sinais da B3 e do CDS.";
+      }
+      render();
+    });
+  }
+}
+$("refresh").addEventListener("click", () => { $("clock").textContent = "Atualizando…"; start(); });
+
+window.__inject = (k, j) => { S[k] = k.startsWith("silo_") || k === "flow" ? {rows: j, at: Date.now()} : Object.assign(PARSE[k](j), {at: Date.now()}); render(); };   // test hook
+
+// History: a base file from the site plus this browser's own 5-minute readings (localStorage).
+let LOCAL = {}, BASE = [];
+try { LOCAL = JSON.parse(localStorage.getItem("lula4_snaps") || "{}"); } catch (e) { LOCAL = {}; }
+const mergeHist = () => { const m = new Map(); BASE.concat(Object.values(LOCAL)).forEach(h => m.set(h.t, h)); return [...m.values()].sort((a, b) => b.t - a.t); };
+db = {collection: () => ({doc: slot => ({set: data => {
+  LOCAL[slot] = data; try { localStorage.setItem("lula4_snaps", JSON.stringify(LOCAL)); } catch (e) {}
+  HIST = mergeHist(); renderHist(); return Promise.resolve();
+}})})};
+(async () => {
+  try { BASE = await getJson("data/intraday/history.json"); } catch (e) { BASE = []; }
+  HIST = mergeHist(); renderHist();
+  // Start weights come from the daily report's file, so the daily task is the only place that changes them.
+  try {
+    const P = await getJson("data/relatorio/pesos.json", {cache: "no-cache"});
+    const ids = ["ancora", "deriva", "estresse"];
+    P.forEach(p => { const k = ids.indexOf(p.id); if (k >= 0) { SCEN[k].p = +p.start; if (p.di_jan29_move_bp != null) SCEN[k].mu = +p.di_jan29_move_bp; } });
+    if (P[0] && P[0].partida_em) WEIGHTS_AT = P[0].partida_em.split("-").reverse().join("/");
+  } catch (e) { console.warn("pesos de partida:", e.message); }
+  start();
+})();
+</script><footer class="site-foot">Leitura de sinais de mercado e julgamento do autor, não recomendação de compra ou venda. Dados: SILO (CVM, BACEN, B3), BCB, B3, Binance, Yahoo Finance, OBM. Tudo em horário de Brasília (UTC-3).</footer></body></html>

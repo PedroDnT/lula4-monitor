@@ -1,0 +1,7 @@
+[
+ {"month":"2026-04","vincendo_12m_pct":18.99,"prazo_medio_anos":4.12,"custo_medio_12m":null,"source":"Tesouro, RMD de mai/26 (apresentação)"},
+ {"month":"2026-05","vincendo_12m_pct":20.26,"prazo_medio_anos":4.07,"custo_medio_12m":null,"source":"Tesouro, RMD de mai/26 e jun/26"},
+ {"month":"2026-06","vincendo_12m_pct":20.07,"prazo_medio_anos":4.01,"custo_medio_12m":null,"source":"Tesouro, RMD de jun/26 e jul/26"},
+ {"month":"2026-07","vincendo_12m_pct":18.91,"prazo_medio_anos":4.05,"custo_medio_12m":12.45,"source":"Tesouro, RMD de jul/26 e ago/26"},
+ {"month":"2026-08","vincendo_12m_pct":16.39,"prazo_medio_anos":4.10,"custo_medio_12m":12.59,"source":"Tesouro, RMD de ago/26 (Fazenda, Agência Brasil)"}
+]
