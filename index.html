@@ -205,8 +205,6 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
     <div class="hv" id="hx-sc">–</div>
     <div class="hs"><b id="hx-bp">–</b> desde o ajuste de 23/10 (12,640%) · <span id="hx-d1">–</span> vs ontem · <span id="hx-d5">–</span> vs 5 pregões · <span id="hx-pos"></span></div>
     <div class="bars" id="hx-bars"></div>
-    <div class="legend" style="margin-top:8px"><span style="--c:var(--down)">Âncora</span><span style="--c:var(--warn)">Deriva</span><span style="--c:var(--up)">Estresse</span><span class="dash" style="--c:var(--muted)">Partida (fatos)</span></div>
-    <div class="chart" id="c-px"></div>
     <p class="src">Dado: ajuste do DI1F29 (B3, pelo SILO) e o contrato de agora (B3, cerca de 15 min de atraso). Escolha do monitor: as marcas +50, +180 e +320 bp. Dado: σ = 100 bp, dispersão do DI de 2 anos nas 20 a 40 sessões após 22 choques desde 2015. Julgamento: a partida, só com fatos. Agora = Bayes (partida × verossimilhança). <a class="how" href="#m6">Método</a></p>
   </div>
   </section>
@@ -1070,26 +1068,6 @@ function renderHero(M, NP) {
   $("hx-d5").textContent = rows.length > 5 ? d(M.live ? {bp: M.bp} : last, wk) : "–";
   const cols = ["var(--down)", "var(--warn)", "var(--up)"];
   $("hx-bars").innerHTML = SCEN.map((x, i) => `<div class="hbar"><span class="bn">${x.n}</span><span class="bt"><i style="width:${MP[i]}%;background:${cols[i]}"></i></span><span class="bv">${MP[i]}%</span><span class="bs">partida ${nf(x.p * 100, 0)}% · agora ${NP[i]}%</span></div>`).join("");
-  const pts = rows.map(r => ({t: Date.parse(r.d + "T20:00:00Z"), w: lik(r.bp)}));
-  const post = w => { const x = SCEN.map((s, i) => s.p * w[i]), t = x.reduce((a, b) => a + b, 0); return x.map(v => v / t); };
-  pts.forEach(p => p.w = post(p.w)); if (M.live) pts.push({t: Date.now(), w: post(M.w)});
-  if (pts.length > 1) stackChart("c-px", pts, cols, SCEN.map(x => x.p));
-}
-function stackChart(id, pts, cols, start) {
-  const box = $(id); box.textContent = "";
-  const W = Math.max(300, Math.round(box.clientWidth || 560)), H = W < 450 ? 150 : 170, m = {l: 36, r: 8, t: 8, b: 22}, NS = "http://www.w3.org/2000/svg";
-  const el = (t, a, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
-  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Pesos de agora, por dia"}, box);
-  const x0 = pts[0].t, x1 = pts[pts.length - 1].t, X = t => m.l + (W - m.l - m.r) * (t - x0) / ((x1 - x0) || 1), Y = v => m.t + (H - m.t - m.b) * (1 - v);
-  for (const v of [0, 0.5, 1]) { el("line", {x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), stroke: "var(--grid)"}, svg); const tx = el("text", {x: m.l - 5, y: Y(v) + 3, "text-anchor": "end"}, svg); tx.textContent = nf(v * 100, 0) + "%"; }
-  for (let i = 2; i >= 0; i--) {
-    const up = pts.map(p => p.w.slice(0, i + 1).reduce((a, b) => a + b, 0));
-    const dpath = pts.map((p, k) => (k ? "L" : "M") + X(p.t).toFixed(1) + " " + Y(up[k]).toFixed(1)).join(" ") + " L" + X(x1).toFixed(1) + " " + Y(0) + " L" + X(x0).toFixed(1) + " " + Y(0) + " Z";
-    el("path", {d: dpath, fill: cols[i], "fill-opacity": 0.55, stroke: "none"}, svg);
-  }
-  let acc = 0; for (let i = 0; i < 2; i++) { acc += start[i]; el("line", {x1: m.l, x2: W - m.r, y1: Y(acc), y2: Y(acc), stroke: "var(--fg)", "stroke-dasharray": "3 3", "stroke-opacity": 0.5}, svg); }
-  const nt = W < 450 ? 2 : 4;
-  for (let i = 0; i <= nt; i++) { const t = x0 + (x1 - x0) * i / nt; const tx = el("text", {x: X(t), y: H - 6, "text-anchor": i === 0 ? "start" : i === nt ? "end" : "middle"}, svg); tx.textContent = new Date(t).toLocaleDateString("pt-BR", {timeZone: "America/Sao_Paulo", day: "2-digit", month: "2-digit"}); }
 }
 function renderScen(F) {
   const M = diMix(), fx = F.level / ELECT.ptax - 1, NW = nowW(M), NP = pct100(NW), MP = M ? pct100(M.w) : null, SV = scenLv(F, NW), SL = SV.L;
