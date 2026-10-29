@@ -46,5 +46,21 @@
   "deriva": 0.46,
   "estresse": 0.23,
   "note": "Ajuste de 27/10: DI jan/29 a 14,76% (+212 bp sobre 23/10, −46 bp no dia); mix do DI 0/77/23 sobre a partida nova 45/32/23."
+ },
+ {
+  "date": "2026-10-29",
+  "label": "Partida 29/10",
+  "ancora": 0.46,
+  "deriva": 0.31,
+  "estresse": 0.23,
+  "note": "Fato f10 (Durigan anuncia PLP para mirar o centro da meta de 2027, fraco a favor de Âncora) aplicado sobre 45/32/23."
+ },
+ {
+  "date": "2026-10-29",
+  "label": "29/10",
+  "ancora": 0.21,
+  "deriva": 0.54,
+  "estresse": 0.25,
+  "note": "Regra nova de 29/10 (Bayes, sigma 100 bp): DI jan/29 a 14,82% em 28/10 (+218 bp sobre 23/10, +6 bp no dia); verossimilhança 0,24/0,93/0,59 sobre a partida 46/31/23."
  }
 ]

@@ -106,5 +106,17 @@
   "f_estresse": 1,
   "status": "Na partida",
   "degrau": "Âncora fraco a favor: declaração do ministro, sem ato formal novo; mesmo canal de f4 e f5 (leilões)."
+ },
+ {
+  "id": "f10",
+  "data": "2026-10-27",
+  "fato": "Durigan anuncia que o governo vai enviar ao Congresso um projeto de lei complementar para perseguir o centro da meta fiscal de 2027 (superávit de 0,50% do PIB, R$ 73,2 bi). O projeto ainda não foi protocolado.",
+  "fonte": "Exame",
+  "url": "https://exame.com/economia/apos-quedada-bolsa-durigan-promete-medida-para-reforcar-meta-fiscal/",
+  "f_ancora": 1.05,
+  "f_deriva": 1.0,
+  "f_estresse": 1.0,
+  "status": "Na partida",
+  "degrau": "Âncora fraco a favor: intenção declarada pelo ministro, sem ato formal; mesmo canal de f2 (meta de 2027), então no máximo fraco."
  }
 ]

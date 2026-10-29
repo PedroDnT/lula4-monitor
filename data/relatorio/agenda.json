@@ -52,5 +52,14 @@
   "deriva": "Tramita sem efeito",
   "estresse": "Liminar ou crise entre poderes",
   "fonte": "TSE"
+ },
+ {
+  "id": "a7",
+  "data": "",
+  "evento": "Envio do PLP que mira o centro da meta fiscal de 2027",
+  "ancora": "PLP protocolado em até 4 semanas com medidas de despesa",
+  "deriva": "PLP atrasa ou só muda a redação da meta",
+  "estresse": "PLP engavetado e meta afrouxada",
+  "fonte": "Fazenda, anúncio de 27/10 (Exame)"
  }
 ]
