@@ -65,14 +65,14 @@
         <g class="loop-edges"><path d="M485 80L535 152"/><path d="M610 209L590 263"/><path d="M455 300H305"/><path d="M160 263L150 209"/><path d="M235 152L275 80"/></g>
         <path class="loop-brake-edge" d="M470 243L500 263"/>
         <g class="loop-node" data-node="juro" data-go="ancora" tabindex="0"><rect x="275" y="33" width="210" height="74" rx="8"/><text class="nm" x="380" y="54" text-anchor="middle">Juro sobe</text><text class="vl" x="380" y="74" text-anchor="middle">—</text><text class="tg" x="380" y="92" text-anchor="middle">juro real 5 anos · Dado</text></g>
-        <g class="loop-node" data-node="conta" data-go="divida" tabindex="0"><rect x="535" y="135" width="210" height="74" rx="8"/><text class="nm" x="640" y="156" text-anchor="middle">Conta de juros sobe</text><text class="vl" x="640" y="176" text-anchor="middle">—</text><text class="tg" x="640" y="194" text-anchor="middle">r e g, 12 meses · Estimativa</text></g>
+        <g class="loop-node" data-node="conta" data-go="divida" tabindex="0"><rect x="535" y="135" width="210" height="74" rx="8"/><text class="nm" x="640" y="156" text-anchor="middle">Conta de juros sobe</text><text class="vl" x="640" y="176" text-anchor="middle">—</text><text class="tg" x="640" y="194" text-anchor="middle">r e g, 12 meses · Cálculo</text></g>
         <g class="loop-node" data-node="divida" data-go="divida" tabindex="0"><rect x="455" y="263" width="210" height="74" rx="8"/><text class="nm" x="560" y="284" text-anchor="middle">Dívida sobe</text><text class="vl" x="560" y="304" text-anchor="middle">—</text><text class="tg" x="560" y="322" text-anchor="middle">DBGG e Focus · Dado</text></g>
         <g class="loop-node" data-node="premio" data-go="rolagem" tabindex="0"><rect x="95" y="263" width="210" height="74" rx="8"/><text class="nm" x="200" y="284" text-anchor="middle">Prêmio de risco sobe</text><text class="vl" x="200" y="304" text-anchor="middle">—</text><text class="tg" x="200" y="322" text-anchor="middle">LFT e vencimentos · Dado</text></g>
-        <g class="loop-node" data-node="cambio" data-go="ancora" tabindex="0"><rect x="25" y="135" width="210" height="74" rx="8"/><text class="nm" x="130" y="156" text-anchor="middle">Dólar e inflação sobem</text><text class="vl" x="130" y="176" text-anchor="middle">—</text><text class="tg" x="130" y="194" text-anchor="middle">implícita e Focus IPCA · Estimativa</text></g>
+        <g class="loop-node" data-node="cambio" data-go="ancora" tabindex="0"><rect x="25" y="135" width="210" height="74" rx="8"/><text class="nm" x="130" y="156" text-anchor="middle">Dólar e inflação sobem</text><text class="vl" x="130" y="176" text-anchor="middle">—</text><text class="tg" x="130" y="194" text-anchor="middle">implícita e Focus IPCA · Cálculo</text></g>
         <g class="loop-brake" data-go="orcamento" tabindex="0"><rect x="270" y="187" width="220" height="56" rx="8"/><text class="nm" x="380" y="208" text-anchor="middle">Freio: primário suficiente</text><text class="vl" x="380" y="228" text-anchor="middle">—</text></g>
       </svg>
       <ol class="loop-list"></ol>
-      <p class="tag-legend">Etiquetas: <span class="tag tag-norma">Norma</span> lei, meta ou plano oficial <span class="tag tag-norma">Dado</span> número publicado pela fonte <span class="tag tag-est">Estimativa</span> conta nossa com dado oficial <span class="tag tag-sim">Simulação</span> hipótese "e se"</p>
+      <p class="tag-legend">Etiquetas: <span class="tag tag-norma">Norma</span> lei, meta ou plano oficial <span class="tag tag-dado">Dado</span> número publicado pela fonte <span class="tag tag-calc">Cálculo</span> conta direta com dados, sem hipótese <span class="tag tag-jul">Julgamento</span> escolha do autor <span class="tag tag-sim">Simulação</span> hipótese "e se", olha adiante</p>
     </div>
   </header>
   <section class="dm-section" id="divida">
@@ -80,48 +80,48 @@
     <p class="dm-sub">Juro implícito (r) = juros nominais em 12 meses ÷ dívida bruta média de 12 meses. Crescimento nominal (g) = PIB de 12 meses contra 12 meses antes. Primário que estabiliza = dívida × (r − g) ÷ (1 + g). Os juros do BCB seguem o conceito da dívida líquida, então r é uma aproximação.</p>
     <div class="dm-tiles">
       <div class="dm-tile" id="t-divida">
-        <span class="dm-tile-label">Dívida bruta (<button type="button" class="term" data-term="dbgg">DBGG</button>), % do PIB <span class="tag tag-norma">Dado</span></span>
+        <span class="dm-tile-label">Dívida bruta (<button type="button" class="term" data-term="dbgg">DBGG</button>), % do PIB <span class="tag tag-dado">Dado</span></span>
         <span class="dm-big dash-skeleton" data-source="fiscal_now" data-field="gross_debt_gdp" data-row="0">—</span>
         <span class="dm-note"><span data-source="fiscal_now" data-field="debt_change_12m" data-row="0">—</span> p.p. em 12 meses · <span data-source="fiscal_now" data-field="month" data-row="0">—</span></span>
       </div>
       <div class="dm-tile" id="t-rg">
-        <span class="dm-tile-label">r − g, pontos percentuais <span class="tag tag-est">Estimativa</span></span>
+        <span class="dm-tile-label">r − g, pontos percentuais <span class="tag tag-calc">Cálculo</span></span>
         <span class="dm-big dash-skeleton" data-source="fiscal_now" data-field="r_minus_g" data-row="0">—</span>
         <span class="dm-note">r <span data-source="fiscal_now" data-field="r" data-row="0">—</span>% · g <span data-source="fiscal_now" data-field="g" data-row="0">—</span>%</span>
       </div>
       <div class="dm-tile" id="t-primario">
-        <span class="dm-tile-label">Primário que estabiliza a dívida, % do PIB <span class="tag tag-est">Estimativa</span></span>
+        <span class="dm-tile-label">Primário que estabiliza a dívida, % do PIB <span class="tag tag-calc">Cálculo</span></span>
         <span class="dm-big dash-skeleton" data-source="fiscal_now" data-field="stabilizing_primary" data-row="0">—</span>
         <span class="dm-note">Hoje <span data-source="fiscal_now" data-field="primary_balance" data-row="0">—</span>% · lacuna <span data-source="fiscal_now" data-field="primary_gap" data-row="0">—</span> p.p.</span>
       </div>
       <div class="dm-tile" id="t-lft">
-        <span class="dm-tile-label">Fatia da <button type="button" class="term" data-term="dpf">DPF</button> em taxa flutuante (<button type="button" class="term" data-term="lft">LFT</button>) <span class="tag tag-norma">Dado</span></span>
+        <span class="dm-tile-label">Fatia da <button type="button" class="term" data-term="dpf">DPF</button> em taxa flutuante (<button type="button" class="term" data-term="lft">LFT</button>) <span class="tag tag-dado">Dado</span></span>
         <span class="dm-big dash-skeleton" data-source="lft_now" data-field="floating_share_dpf" data-row="0">—</span>
         <span class="dm-note">Teto do <button type="button" class="term" data-term="paf">PAF</button> 2026: 53% <span class="tag tag-norma">Norma</span> · <span data-source="lft_now" data-field="month" data-row="0">—</span></span>
       </div>
     </div>
     <div class="dm-grid">
       <div class="dm-card" id="c-rg">
-        <h3 class="dm-h2">Juro da dívida contra crescimento nominal <span class="tag tag-est">Estimativa</span></h3>
+        <h3 class="dm-h2">Juro da dívida contra crescimento nominal <span class="tag tag-calc">Cálculo</span></h3>
         <p class="dm-sub">Acumulado em 12 meses, %. Com r acima de g, a dívida cresce sem déficit primário.</p>
         <div class="dm-legend lg-rg"></div>
         <div class="dm-chart ch-rg" data-source="fiscal_series"></div>
       </div>
       <div class="dm-card" id="c-focus-divida">
-        <h3 class="dm-h2">Dívida bruta esperada pelo Focus <span class="tag tag-norma">Dado</span></h3>
+        <h3 class="dm-h2">Dívida bruta esperada pelo Focus <span class="tag tag-dado">Dado</span></h3>
         <p class="dm-sub">Mediana, % do PIB, por ano. Duas pesquisas: antes e depois de quatro semanas. Gatilho: a linha da última pesquisa sobe em todos os anos. A linha cinza de 70% é a referência do FMI para emergentes, não um gatilho.</p>
         <p class="porque"><b>Por que esta regra.</b> Escolha do monitor. O Focus é a mediana de mais de 100 instituições. Quando todos os anos sobem, não há ano em que o mercado veja a dívida parar de crescer.</p>
         <div class="dm-legend lg-fd"></div>
         <div class="dm-chart ch-fd" data-source="focus_debt"></div>
       </div>
       <div class="dm-card" id="c-rmg">
-        <h3 class="dm-h2">r − g <span class="tag tag-est">Estimativa</span></h3>
+        <h3 class="dm-h2">r − g <span class="tag tag-calc">Cálculo</span></h3>
         <p class="dm-sub">Pontos percentuais, por mês. Gatilho: acima de zero.</p>
         <p class="porque"><b>Por que esta regra.</b> Com r acima de g a dívida cresce sozinha, e só um superávit primário a segura (Blanchard, 2019). O zero não é escolha nossa; é a aritmética da dívida. Regra de fundo: diz se há pressão, não quando ela vira crise.</p>
         <div class="dm-chart ch-rmg" data-source="fiscal_series"></div>
       </div>
       <div class="dm-card" id="c-gap">
-        <h3 class="dm-h2">Lacuna do primário <span class="tag tag-est">Estimativa</span></h3>
+        <h3 class="dm-h2">Lacuna do primário <span class="tag tag-calc">Cálculo</span></h3>
         <p class="dm-sub">Primário que estabiliza a dívida menos o primário atual, p.p. do PIB. Gatilho: acima de 2 p.p.</p>
         <p class="porque"><b>Por que esta regra.</b> O limite de 2 p.p. é escolha do monitor, sem base em lei. A ideia: uma lacuna menor cabe em um ajuste de orçamento; maior que isso pede mudança de regra ou de receita, o que leva mais de um ano.</p>
         <div class="dm-chart ch-gap" data-source="fiscal_series"></div>
@@ -151,34 +151,34 @@
     <p class="dm-sub">Antes de a dívida mudar, a crise aparece na rolagem: o Tesouro cancela leilões, encurta prazos ou só vende LFT. As faixas vêm do <button type="button" class="term" data-term="paf">Plano Anual de Financiamento (PAF)</button> 2026: vincendo em 12 meses de 18% a 22%, prazo médio de 3,8 a 4,2 anos. Dados mensais do Relatório Mensal da Dívida (RMD); eventos de leilão da imprensa, com a fonte em cada linha.</p>
     <div class="dm-tiles">
       <div class="dm-tile">
-        <span class="dm-tile-label">DPF que vence em 12 meses <span class="tag tag-norma">Dado</span></span>
+        <span class="dm-tile-label">DPF que vence em 12 meses <span class="tag tag-dado">Dado</span></span>
         <span class="dm-big dash-skeleton" data-source="rolagem_now" data-field="vincendo_12m_pct" data-row="0">—</span>
         <span class="dm-note">Faixa do PAF: 18% a 22% · <span data-source="rolagem_now" data-field="month" data-row="0">—</span></span>
       </div>
       <div class="dm-tile">
-        <span class="dm-tile-label">Prazo médio da DPF, anos <span class="tag tag-norma">Dado</span></span>
+        <span class="dm-tile-label">Prazo médio da DPF, anos <span class="tag tag-dado">Dado</span></span>
         <span class="dm-big dash-skeleton" data-source="rolagem_now" data-field="prazo_medio_anos" data-row="0">—</span>
         <span class="dm-note">Faixa do PAF: 3,8 a 4,2</span>
       </div>
       <div class="dm-tile">
-        <span class="dm-tile-label">Leilões de venda cancelados <span class="tag tag-norma">Dado</span></span>
+        <span class="dm-tile-label">Leilões de venda cancelados <span class="tag tag-dado">Dado</span></span>
         <span class="dm-big dash-skeleton" data-source="leiloes_resumo" data-field="cancelamentos" data-row="0">—</span>
         <span class="dm-note">Nos 30 dias até <span data-source="leiloes_resumo" data-field="ate" data-row="0">—</span></span>
       </div>
       <div class="dm-tile">
-        <span class="dm-tile-label">Recompras do Tesouro <span class="tag tag-norma">Dado</span></span>
+        <span class="dm-tile-label">Recompras do Tesouro <span class="tag tag-dado">Dado</span></span>
         <span class="dm-big dash-skeleton" data-source="leiloes_resumo" data-field="recompras" data-row="0">—</span>
         <span class="dm-note">Nos mesmos 30 dias</span>
       </div>
     </div>
     <div class="dm-grid">
       <div class="dm-card" id="c-venc">
-        <h3 class="dm-h2">DPF que vence em 12 meses, % <span class="tag tag-norma">Dado</span></h3>
+        <h3 class="dm-h2">DPF que vence em 12 meses, % <span class="tag tag-dado">Dado</span></h3>
         <p class="dm-sub">Alerta acima do teto do PAF (22%).</p>
         <div class="dm-chart ch-venc" data-source="rolagem"></div>
       </div>
       <div class="dm-card" id="c-prazo">
-        <h3 class="dm-h2">Prazo médio da DPF, anos <span class="tag tag-norma">Dado</span></h3>
+        <h3 class="dm-h2">Prazo médio da DPF, anos <span class="tag tag-dado">Dado</span></h3>
         <p class="dm-sub">Alerta abaixo do piso do PAF (3,8 anos).</p>
         <div class="dm-chart ch-prazo" data-source="rolagem"></div>
       </div>
@@ -204,52 +204,52 @@
     <p class="porque"><b>Por que esta regra.</b> Os gatilhos de mercado deste bloco (alta de 50 bp em 4 semanas) foram calibrados em 11 crises desde 2010: o juro real avisou antes em 9, a inflação implícita em 7 ou 8, com cerca de 4% de falso alarme. O nível (juro real acima do neutro de 5% do BCB) ficou aceso em 74% dos dias calmos, por isso usamos a variação, não o nível. A tabela de calibração, abaixo, mostra a conta.</p>
     <div class="dm-tiles">
       <div class="dm-tile" id="t-be2">
-        <span class="dm-tile-label">Inflação implícita 2 anos <span class="tag tag-est">Estimativa</span></span>
+        <span class="dm-tile-label">Inflação implícita 2 anos <span class="tag tag-calc">Cálculo</span></span>
         <span class="dm-big dash-skeleton" data-source="anchor_now" data-field="be_2y" data-row="0">—</span>
         <span class="dm-note"><span data-source="anchor_now" data-field="be_2y_change_4w_bp" data-row="0">—</span> bp em 4 semanas</span>
       </div>
       <div class="dm-tile" id="t-be5">
-        <span class="dm-tile-label">Inflação implícita 5 anos <span class="tag tag-est">Estimativa</span></span>
+        <span class="dm-tile-label">Inflação implícita 5 anos <span class="tag tag-calc">Cálculo</span></span>
         <span class="dm-big dash-skeleton" data-source="anchor_now" data-field="be_5y" data-row="0">—</span>
         <span class="dm-note"><span data-source="anchor_now" data-field="be_5y_change_4w_bp" data-row="0">—</span> bp em 4 semanas</span>
       </div>
       <div class="dm-tile" id="t-real5">
-        <span class="dm-tile-label">Juro real 5 anos (DPL) <span class="tag tag-norma">Dado</span></span>
+        <span class="dm-tile-label">Juro real 5 anos (DPL) <span class="tag tag-dado">Dado</span></span>
         <span class="dm-big dash-skeleton" data-source="anchor_now" data-field="real_5y" data-row="0">—</span>
         <span class="dm-note">Média da janela <span data-source="anchor_now" data-field="real_5y_avg" data-row="0">—</span>%</span>
       </div>
       <div class="dm-tile" id="t-ipca27">
-        <span class="dm-tile-label">Focus IPCA 2027 (<button type="button" class="term" data-term="ancora">meta 3%</button>) <span class="tag tag-norma">Dado</span></span>
+        <span class="dm-tile-label">Focus IPCA 2027 (<button type="button" class="term" data-term="ancora">meta 3%</button>) <span class="tag tag-dado">Dado</span></span>
         <span class="dm-big dash-skeleton" data-source="focus_now" data-field="ipca_2027" data-row="0">—</span>
         <span class="dm-note"><span data-source="focus_now" data-field="ipca_2027_change_4w" data-row="0">—</span> p.p. em 4 semanas · 2028: <span data-source="focus_now" data-field="ipca_2028" data-row="0">—</span>%</span>
       </div>
     </div>
     <div class="dm-grid">
       <div class="dm-card" id="c-be">
-        <h3 class="dm-h2">Inflação implícita na curva <span class="tag tag-est">Estimativa</span></h3>
+        <h3 class="dm-h2">Inflação implícita na curva <span class="tag tag-calc">Cálculo</span></h3>
         <p class="dm-sub">% ao ano. Linhas cinza: meta de 3% e teto de 4,5% (referências). O gatilho está no gráfico ao lado, na mudança em 4 semanas.</p>
         <div class="dm-legend lg-be"></div>
         <div class="dm-chart ch-be" data-source="anchor_series"></div>
       </div>
       <div class="dm-card" id="c-be-chg">
-        <h3 class="dm-h2">Mudança em 4 semanas: inflação implícita e juro real <span class="tag tag-est">Estimativa</span></h3>
+        <h3 class="dm-h2">Mudança em 4 semanas: inflação implícita e juro real <span class="tag tag-calc">Cálculo</span></h3>
         <p class="dm-sub">Pontos-base contra a sessão de 20 pregões antes. Gatilho para as três linhas: acima de +50 bp.</p>
         <div class="dm-legend lg-bechg"></div>
         <div class="dm-chart ch-bechg" data-source="anchor_series"></div>
       </div>
       <div class="dm-card" id="c-real">
-        <h3 class="dm-h2">Juro real de 5 anos <span class="tag tag-norma">Dado</span></h3>
+        <h3 class="dm-h2">Juro real de 5 anos <span class="tag tag-dado">Dado</span></h3>
         <p class="dm-sub">% ao ano, curva DPL da B3. Linhas cinza: taxa real neutra do BCB, 5,00% (Relatório de Política Monetária), e média da janela. São referências: o nível ficou acima do neutro em 74% dos dias calmos desde 2010, então o gatilho é a alta de 50 bp em 4 semanas (gráfico ao lado).</p>
         <div class="dm-chart ch-real" data-source="anchor_series anchor_now"></div>
       </div>
       <div class="dm-card" id="c-ipca">
-        <h3 class="dm-h2">Focus: IPCA esperado <span class="tag tag-norma">Dado</span></h3>
+        <h3 class="dm-h2">Focus: IPCA esperado <span class="tag tag-dado">Dado</span></h3>
         <p class="dm-sub">Mediana, % no ano, por data da pesquisa. Linha cinza: meta de 3%. Gatilho: IPCA 2027 acima do teto da meta, 4,5% (linha vermelha).</p>
         <div class="dm-legend lg-ipca"></div>
         <div class="dm-chart ch-ipca" data-source="ipca_2027 ipca_2028"></div>
       </div>
       <div class="dm-card" id="c-lft">
-        <h3 class="dm-h2">Dívida em LFT <span class="tag tag-norma">Dado</span></h3>
+        <h3 class="dm-h2">Dívida em LFT <span class="tag tag-dado">Dado</span></h3>
         <p class="dm-sub">Fatia da DPF em taxa flutuante, %. Gatilhos: acima do teto de 53% do PAF 2026, ou alta de 2 p.p. em 3 meses.</p>
         <div class="dm-chart ch-lft" data-source="lft"></div>
       </div>
@@ -267,7 +267,7 @@
         <span class="dm-note"><span data-source="budget" data-field="pct_pib" data-where="id=limite">—</span> do PIB</span>
       </div>
       <div class="dm-tile">
-        <span class="dm-tile-label">Despesas discricionárias <span class="tag tag-norma">Dado</span></span>
+        <span class="dm-tile-label">Despesas discricionárias <span class="tag tag-dado">Dado</span></span>
         <span class="dm-big dash-skeleton" data-source="budget" data-field="valor_bi" data-where="id=discricionarias">—</span>
         <span class="dm-note"><span data-source="budget" data-field="pct_pib" data-where="id=discricionarias">—</span> do PIB · a única parte que se corta no curto prazo</span>
       </div>
@@ -277,7 +277,7 @@
         <span class="dm-note">Meta <span data-source="budget" data-field="valor_bi" data-where="id=meta_centro">—</span> · piso <span data-source="budget" data-field="valor_bi" data-where="id=meta_piso">—</span></span>
       </div>
       <div class="dm-tile">
-        <span class="dm-tile-label">Primário 2027 nas contas da IFI <span class="tag tag-norma">Dado</span></span>
+        <span class="dm-tile-label">Primário 2027 nas contas da IFI <span class="tag tag-dado">Dado</span></span>
         <span class="dm-big dash-skeleton" data-source="budget" data-field="valor_bi" data-where="id=primario_ifi">—</span>
         <span class="dm-note">Contingenciamento para o piso: <span data-source="budget" data-field="valor_bi" data-where="id=contingenciamento_ifi">—</span></span>
       </div>
@@ -299,7 +299,7 @@
     </div>
     <div class="dm-grid">
       <div class="dm-card" id="c-orc">
-        <h3 class="dm-h2">O tamanho da conta contra o gasto que se pode cortar <span class="tag tag-est">Estimativa</span></h3>
+        <h3 class="dm-h2">O tamanho da conta contra o gasto que se pode cortar <span class="tag tag-calc">Cálculo</span></h3>
         <p class="dm-note dm-live"><span class="orc-txt">—</span></p>
         <ol class="dm-steps">
           <li><b>Juros</b>: o que a dívida bruta cobra em um ano, ao custo médio dos últimos 12 meses.</li>
@@ -358,7 +358,7 @@
       </div>
     </div>
     <div class="dm-card" id="c-obrig">
-      <h3 class="dm-h2">Por que até as despesas obrigatórias ficam sem espaço <span class="tag tag-norma">Dado</span></h3>
+      <h3 class="dm-h2">Por que até as despesas obrigatórias ficam sem espaço <span class="tag tag-dado">Dado</span></h3>
       <ol class="dm-steps">
         <li>O arcabouço é um teto único para as obrigatórias e as discricionárias. Ele cresce no máximo 2,5% acima da inflação.</li>
         <li>As principais obrigatórias crescem de 2 a 5 vezes isso (gráfico da esquerda). Os pisos de saúde e educação seguem a receita. O INSS e o BPC seguem o salário mínimo e o número de beneficiários.</li>
@@ -368,12 +368,12 @@
       </ol>
       <div class="dm-tiles">
         <div class="dm-tile">
-          <span class="dm-tile-label">Obrigatórias / despesa primária, 2027 (PLDO) <span class="tag tag-norma">Dado</span></span>
+          <span class="dm-tile-label">Obrigatórias / despesa primária, 2027 (PLDO) <span class="tag tag-dado">Dado</span></span>
           <span class="dm-big dash-skeleton obr-share">—</span>
           <span class="dm-note">Trava legal em 95%</span>
         </div>
         <div class="dm-tile">
-          <span class="dm-tile-label">Mesma conta com a correção da IFI <span class="tag tag-norma">Dado</span></span>
+          <span class="dm-tile-label">Mesma conta com a correção da IFI <span class="tag tag-dado">Dado</span></span>
           <span class="dm-big dash-skeleton obr-share-ifi">—</span>
           <span class="dm-note obr-ifi-note">—</span>
         </div>
@@ -390,7 +390,7 @@
       </div>
     </div>
     <div class="dm-card" id="c-contab">
-      <h3 class="dm-h2">Contabilidade criativa: a meta cumprida no papel <span class="tag tag-norma">Dado</span></h3>
+      <h3 class="dm-h2">Contabilidade criativa: a meta cumprida no papel <span class="tag tag-dado">Dado</span></h3>
       <ol class="dm-steps">
         <li>A meta de primário não conta todo o gasto. Por lei, precatórios, projetos de defesa e gastos do Fundo Social saem da conta. O resultado "após deduções" é o que vale para a meta. O resultado "efetivo" é o que a dívida sente.</li>
         <li>O teto também tem saídas. Em 2027, R$ 249,5 bi da despesa primária ficam fora do limite (8,8% do total sem as transferências), entre eles R$ 95,4 bi de precatórios.</li>
@@ -436,7 +436,7 @@
 
   <section class="dm-section" id="alertas">
     <h2 class="dm-h2">Gatilhos</h2>
-    <p class="dm-sub">Dominância fiscal plena precisa das duas coisas: a conta da dívida ruim e a perda da <button type="button" class="term" data-term="ancora">âncora de inflação</button>. A coluna "Origem do limite" diz de onde vem cada gatilho: <b>Norma</b> é lei, meta ou plano oficial (o teto da meta de inflação, as faixas do PAF); <b>Mercado</b> é um limite calibrado nas crises passadas; <b>Regra nossa</b> é escolha do monitor, explicada no bloco de cada indicador.</p>
+    <p class="dm-sub">Dominância fiscal plena precisa das duas coisas: a conta da dívida ruim e a perda da <button type="button" class="term" data-term="ancora">âncora de inflação</button>. A coluna "Origem do limite" diz de onde vem cada gatilho: <b>Norma</b> é lei, meta ou plano oficial (o teto da meta de inflação, as faixas do PAF); <b>Mercado</b> é um limite calibrado nas crises passadas; <b>Julgamento</b> é escolha do monitor, explicada no bloco de cada indicador.</p>
     <div class="dm-card">
       <div class="dm-table-wrap">
         <table class="dm-table tb-alertas" data-source="alertas" data-row-key="indicador">
@@ -454,7 +454,7 @@
       </div>
     </div>
     <div class="dm-card" id="c-calib">
-      <h3 class="dm-h2">Calibração: os gatilhos avisaram nas crises passadas? <span class="tag tag-est">Estimativa</span></h3>
+      <h3 class="dm-h2">Calibração: os gatilhos avisaram nas crises passadas? <span class="tag tag-calc">Cálculo</span></h3>
       <p class="dm-sub">Teste com as curvas da B3 na SILO, de 2010 a 26/10/2026. Crise = o DI de 2 anos sobe 200 bp ou o dólar sobe 15% em 60 pregões; o teste achou 11, de set/2011 a nov/2024. "Avisou" = acendeu até 60 pregões antes do início ou no dia. "Aceso em calma" = parte dos dias fora das crises em que o alerta acendeu à toa. Limite do teste: a crise e os alertas de mercado vêm das mesmas curvas, então o teste favorece esses alertas.</p>
       <div class="dm-table-wrap">
         <table class="dm-table tb-calib" data-source="calib" data-row-key="regra">
@@ -477,7 +477,7 @@
     <div class="dm-tiles tl-cen"></div>
     <div class="dm-grid">
       <div class="dm-card" id="c-cen">
-        <h3 class="dm-h2">Pesos por dia <span class="tag tag-est">Estimativa</span></h3>
+        <h3 class="dm-h2">Pesos por dia <span class="tag tag-jul">Julgamento</span></h3>
         <p class="dm-sub">Cada barra soma 100%. A primeira é a partida da semana.</p>
         <div class="dm-legend lg-cen"></div>
         <div class="dm-chart ch-cen" data-source="scenario_history"></div>
@@ -517,7 +517,7 @@
     <h2 class="dm-h2">Método e limites</h2>
     <ol class="dm-list">
       <li>Os dados vêm da SILO (CVM, BACEN, B3), do BCB (Focus) e do Tesouro Nacional. Cada bloco tem a sua data. A data do dado é a da fonte, não a da atualização do site.</li>
-      <li>As etiquetas dizem de onde vem cada número: Norma e Dado são estabelecidos pela fonte; Estimativa é conta nossa; Simulação é hipótese. Os gatilhos dizem se o limite é de lei, de mercado ou escolha nossa.</li>
+      <li>As etiquetas dizem de onde vem cada número: Norma e Dado são estabelecidos pela fonte; Cálculo é conta direta com os dados; Julgamento é escolha do autor; Simulação é hipótese. Os gatilhos dizem se o limite é de lei, de mercado ou escolha nossa.</li>
       <li>Os gatilhos e os pesos dos cenários são julgamento do autor, não saída de um modelo. A tabela de calibração mostra se os gatilhos avisaram nas crises passadas. Poucas crises dão pouca prova.</li>
       <li>Esta página é uma cópia diária. A rotina das 11:20 atualiza os arquivos de dados e a rotina das 11:50 os publica. Pode haver um dia de atraso.</li>
       <li>Projeções de dívida e de resultado primário dependem das premissas do Focus e do arcabouço. Elas mostram um caminho, não uma previsão.</li>
@@ -758,9 +758,9 @@ dash.calc('alertas', {
       const lastSurvey = focus_debt.map((r) => r.survey_date).sort().pop();
       const path = focus_debt.filter((r) => r.survey_date === lastSurvey).sort((a, b) => a.year - b.year);
       const rising = path.length > 1 && path.every((r, i) => i === 0 || Number(r.median_gdp) > Number(path[i - 1].median_gdp));
-      rows.push({ indicador: 'Dívida bruta', origem: 'Regra nossa', grupo: 'Conta da dívida', leitura: `${f1(fz.gross_debt_gdp)}% do PIB; Focus vê ${f1(Number(path[path.length - 1]?.median_gdp))}% em ${path[path.length - 1]?.year}`, regra: 'Focus vê alta todo ano', estado: st(rising) });
-      rows.push({ indicador: 'r − g', origem: 'Regra nossa (aritmética da dívida)', grupo: 'Conta da dívida', leitura: `${sg(fz.r_minus_g, f1)} p.p.`, regra: 'Acima de zero', estado: st(fz.r_minus_g > 0), desde: since(fiscal_series.map((r) => ({ d: r.month, v: r.r_minus_g })), (v) => v > 0) });
-      rows.push({ indicador: 'Lacuna do primário', origem: 'Regra nossa', grupo: 'Conta da dívida', leitura: `${f1(fz.primary_gap)} p.p. do PIB`, regra: 'Acima de 2 p.p.', estado: st(fz.primary_gap > 2), desde: since(fiscal_series.map((r) => ({ d: r.month, v: r.primary_gap })), (v) => v > 2) });
+      rows.push({ indicador: 'Dívida bruta', origem: 'Julgamento: limite escolhido', grupo: 'Conta da dívida', leitura: `${f1(fz.gross_debt_gdp)}% do PIB; Focus vê ${f1(Number(path[path.length - 1]?.median_gdp))}% em ${path[path.length - 1]?.year}`, regra: 'Focus vê alta todo ano', estado: st(rising) });
+      rows.push({ indicador: 'r − g', origem: 'Cálculo: aritmética da dívida', grupo: 'Conta da dívida', leitura: `${sg(fz.r_minus_g, f1)} p.p.`, regra: 'Acima de zero', estado: st(fz.r_minus_g > 0), desde: since(fiscal_series.map((r) => ({ d: r.month, v: r.r_minus_g })), (v) => v > 0) });
+      rows.push({ indicador: 'Lacuna do primário', origem: 'Julgamento: limite escolhido', grupo: 'Conta da dívida', leitura: `${f1(fz.primary_gap)} p.p. do PIB`, regra: 'Acima de 2 p.p.', estado: st(fz.primary_gap > 2), desde: since(fiscal_series.map((r) => ({ d: r.month, v: r.primary_gap })), (v) => v > 2) });
     }
     const ls = lft.slice().sort((a, b) => (a.month < b.month ? -1 : 1));
     if (ls.length) {
@@ -785,7 +785,7 @@ dash.calc('alertas', {
     if (lr) {
       const cut = new Date(new Date(lr.ate + 'T00:00:00Z').getTime() - 30 * 864e5).toISOString().slice(0, 10);
       const firstCancel = leiloes.filter((x) => x.tipo === 'Cancelamento' && x.date > cut).map((x) => x.date).sort()[0];
-      rows.push({ indicador: 'Leilões do Tesouro', origem: 'Regra nossa', grupo: 'Rolagem da dívida', leitura: `${lr.cancelamentos} leilão(ões) de venda cancelado(s) e ${lr.recompras} recompra(s) em 30 dias`, regra: 'Algum leilão de venda cancelado em 30 dias', estado: st(lr.cancelamentos > 0), desde: lr.cancelamentos > 0 && firstCancel ? dmy(firstCancel) : '' });
+      rows.push({ indicador: 'Leilões do Tesouro', origem: 'Julgamento: limite escolhido', grupo: 'Rolagem da dívida', leitura: `${lr.cancelamentos} leilão(ões) de venda cancelado(s) e ${lr.recompras} recompra(s) em 30 dias`, regra: 'Algum leilão de venda cancelado em 30 dias', estado: st(lr.cancelamentos > 0), desde: lr.cancelamentos > 0 && firstCancel ? dmy(firstCancel) : '' });
     }
     if (fo) rows.push({ indicador: 'Focus IPCA 2027', origem: 'Norma: teto da meta, CMN', grupo: 'Âncora de inflação', leitura: `${f2(fo.ipca_2027)}%; ${sg(fo.ipca_2027_change_4w, f2)} p.p. em 4 semanas`, regra: 'Acima do teto da meta (4,5%)', estado: st(fo.ipca_2027 > 4.5), desde: since(ipca_2027.slice().sort((a, b) => (a.survey_date < b.survey_date ? -1 : 1)).map((r) => ({ d: r.survey_date, v: r.median })), (v) => v > 4.5) });
     return rows;
@@ -1563,7 +1563,7 @@ dash.onData(() => {
         if (k === 'origem') {
           const o = r.origem || '';
           const p = document.createElement('span');
-          p.className = 'tag ' + (o.startsWith('Norma') ? 'tag-norma' : o.startsWith('Mercado') ? 'tag-mkt' : 'tag-est');
+          p.className = 'tag ' + (o.startsWith('Norma') ? 'tag-norma' : o.startsWith('Mercado') ? 'tag-mkt' : o.startsWith('Cálculo') ? 'tag-calc' : 'tag-jul');
           p.textContent = o.split(':')[0];
           td.append(p, document.createTextNode(o.includes(':') ? ' ' + o.split(':')[1].trim() : ''));
         } else if (k === 'estado') {

@@ -11,17 +11,20 @@
 .sp { max-width: 680px; margin: 0 auto; padding: 20px 16px 8px; }
 .sp h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: 32px; line-height: 1.15; margin: 4px 0 10px; text-wrap: balance; }
 .sp .lead { font-size: 18px; line-height: 1.5; margin: 0 0 6px; }
+.legend { font-size: 12.5px; color: var(--color-fg-muted); margin: 0 0 12px; line-height: 2; }
 .sp .asof { font-size: 13px; color: var(--color-fg-muted); margin: 0 0 18px; }
 .card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 16px; margin: 0 0 16px; }
 .card h2 { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--color-fg-muted); margin: 0 0 8px; }
 .card .big { font-family: var(--font-anthropic-serif); font-size: 44px; line-height: 1.05; margin: 2px 0 6px; }
 .card .say { font-size: 17px; line-height: 1.5; margin: 0 0 8px; }
 .card p { margin: 0 0 8px; }
-.src { font-size: 12.5px; color: var(--color-fg-muted); margin: 8px 0 0 !important; }
-.src .tag { margin-right: 4px; }
-.tag-dado { color: var(--color-fg); border-color: var(--color-fg-muted); background: color-mix(in srgb, var(--color-fg-muted) 10%, transparent); }
 .tag-lit { color: var(--color-ok); border-color: var(--color-ok); background: color-mix(in srgb, var(--color-ok) 9%, transparent); }
-.tag-jul { color: var(--color-bad); border-color: var(--color-bad); background: color-mix(in srgb, var(--color-bad) 7%, transparent); }
+.from { margin: 10px 0 0; font-size: 12.5px; color: var(--color-fg-muted); }
+.from summary { cursor: pointer; list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; min-height: 28px; }
+.from summary::-webkit-details-marker { display: none; }
+.from summary::after { content: "De onde vem ▾"; margin-left: auto; text-decoration: underline; }
+.from[open] summary::after { content: "Fechar ▴"; }
+.from p { margin: 6px 0 0; }
 /* coins: R$ 100 of output, filled by what the government owes */
 .coins { display: grid; grid-template-columns: repeat(20, 1fr); gap: 3px; margin: 10px 0 6px; }
 .coins i { aspect-ratio: 1; border-radius: 50%; background: var(--color-border-line); }
@@ -62,66 +65,67 @@ dl.words dd { margin: 2px 0 0; font-size: 15px; }
 .more a { border: 1px solid var(--color-border-line); border-radius: 999px; padding: 6px 12px; text-decoration: none; font-size: 14px; background: var(--color-panel); }
 .na { color: var(--color-fg-muted); }
 @media (min-width: 700px) { .sp h1 { font-size: 40px; } .card { padding: 20px 22px; } }
+.words-card summary { cursor: pointer; list-style: none; } .words-card summary::-webkit-details-marker { display: none; } .words-card summary h2 { margin: 0; } .words-card summary h2::after { content: " ▾"; } .words-card[open] summary h2::after { content: " ▴"; }
 </style></head><body data-page="simples">
 <header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html">Agora</a><a href="dominancia.html">Fiscal</a><a href="metodo.html">Método</a><a href="simples.html" class="tab-simple" aria-current="page">Versão simples</a></nav></div></header>
 <main class="sp">
   <h1>A conta do governo, em português claro</h1>
-  <p class="lead" id="lead">O governo gasta mais do que arrecada, e a dívida cresce sozinha. Esta página mostra a conta em 6 passos, sem economês.</p>
-  <p class="asof" id="asof">Carregando os dados do BCB e da B3…</p>
+  <p class="legend">As etiquetas dizem de onde vem cada número: <span class="tag tag-norma">Norma</span> oficial <span class="tag tag-dado">Dado</span> publicado <span class="tag tag-calc">Cálculo</span> conta direta com dados <span class="tag tag-jul">Julgamento</span> escolha do autor <span class="tag tag-sim">Simulação</span> hipótese "e se"</p>
+  <p class="lead" id="lead">O governo gasta mais do que arrecada, e a dívida cresce sozinha. A conta em 6 passos.</p>
 
   <section class="card" id="c-divida">
     <h2>1. Quanto o governo deve</h2>
     <div class="big" id="d-big">—</div>
     <p class="say" id="d-say">—</p>
     <div class="coins" id="d-coins" aria-hidden="true"></div>
-    <p class="src"><span class="tag tag-dado">Dado</span>Dívida bruta do governo geral, em % do PIB. Fonte: BCB (série 13762), pelo <b>SILO</b>.</p>
+    <details class="from"><summary><span class="tag tag-dado">Dado</span></summary><p id="asof-d">Dívida bruta do governo geral, % do PIB. BCB (série 13762), pelo <b>SILO</b>.</p></details>
   </section>
 
   <section class="card" id="c-juro">
     <h2>2. Por que a dívida cresce sozinha</h2>
     <p class="say" id="j-say">—</p>
     <div class="duo" id="j-duo"></div>
-    <p class="analogy">É como um cartão de crédito. Se o juro da fatura sobe mais rápido que o seu salário, a dívida pesa mais a cada mês, mesmo sem compra nova.</p>
-    <p class="src"><span class="tag tag-est">Estimativa</span>Conta nossa com dados do BCB: juro = juros pagos em 12 meses ÷ dívida média; crescimento = PIB em reais de 12 meses contra os 12 meses anteriores. Fonte: BCB, pelo <b>SILO</b>.</p>
+    <p class="analogy">Como um cartão de crédito: se o juro da fatura sobe mais rápido que o salário, a dívida pesa mais a cada mês.</p>
+    <details class="from"><summary><span class="tag tag-dado">Dado</span><span class="tag tag-calc">Cálculo</span></summary><p>Juro = juros pagos em 12 meses ÷ dívida média. Crescimento = PIB em reais de 12 meses contra os 12 meses anteriores. BCB, pelo <b>SILO</b>.</p></details>
   </section>
 
   <section class="card" id="c-conta">
     <h2>3. Quanto falta por ano</h2>
-    <p class="say">Para a dívida parar de crescer em relação ao PIB, a conta de um ano fica assim:</p>
+    <p class="say">Para a dívida parar de crescer em relação ao PIB:</p>
     <table class="sum" id="k-sum"><tbody><tr><td class="na" colspan="2">—</td></tr></tbody></table>
-    <p class="src"><span class="tag tag-est">Estimativa</span>Conta nossa: juros = dívida × juro ÷ (1 + crescimento); o crescimento desconta dívida × crescimento ÷ (1 + crescimento). Reais ao PIB de 2027 implícito na meta. <span class="tag tag-norma">Norma</span>Economia prevista: Orçamento de 2027 (PLOA).</p>
+    <details class="from"><summary><span class="tag tag-calc">Cálculo</span><span class="tag tag-norma">Norma</span></summary><p>Juros = dívida × juro ÷ (1 + crescimento). Desconto = dívida × crescimento ÷ (1 + crescimento). Em reais ao PIB de 2027 implícito na meta. A economia prevista vem do Orçamento de 2027 (PLOA).</p></details>
   </section>
 
   <section class="card" id="c-corte">
     <h2>4. Dá para cortar?</h2>
     <p class="say" id="c-say">—</p>
     <div class="vs" id="c-vs"></div>
-    <p>O resto do gasto é obrigatório por lei: aposentadorias, salários, pisos de saúde e educação. Ele só muda com votação no Congresso.</p>
-    <p class="src"><span class="tag tag-norma">Norma</span>Gasto discricionário (custeio e investimento) no Orçamento de 2027, segundo a Carta de Conjuntura 72 do Ipea. <span class="tag tag-est">Estimativa</span>A diferença é conta nossa.</p>
+    <p>O resto é obrigatório por lei (aposentadorias, salários, pisos). Só muda com votação no Congresso.</p>
+    <details class="from"><summary><span class="tag tag-norma">Norma</span><span class="tag tag-calc">Cálculo</span></summary><p>Gasto discricionário no Orçamento de 2027 (Carta de Conjuntura 72, Ipea). A diferença para a conta é cálculo nosso.</p></details>
   </section>
 
   <section class="card" id="c-saidas">
     <h2>5. A aritmética deixa 4 saídas</h2>
-    <p class="say">A conta fecha de alguma forma. Uma destas 4 coisas acontece, sozinha ou junto com outra, ou a dívida continua a subir:</p>
+    <p class="say">A conta só fecha de 4 formas, sozinhas ou juntas. Senão, a dívida segue subindo.</p>
     <ol class="ways">
-      <li><b>Cortar gasto obrigatório</b><span>Mudar a lei de aposentadorias, salários ou pisos. Depende do Congresso.</span></li>
-      <li><b>Cobrar mais imposto</b><span>Imposto novo ou maior. Também depende do Congresso.</span></li>
+      <li><b>Cortar gasto obrigatório</b><span>Muda a lei. Depende do Congresso.</span></li>
+      <li><b>Cobrar mais imposto</b><span>Depende do Congresso.</span></li>
       <li><b>A economia crescer mais rápido</b><span id="w-g">Cada ponto a mais de crescimento ajuda, mas sozinho não cobre a conta.</span></li>
       <li><b>Inflação</b><span id="w-i">Preços mais altos diminuem o peso da dívida, e quem paga é quem vive de salário. Aqui funciona pouco: boa parte da dívida é corrigida pela Selic ou pela própria inflação.</span></li>
-      <li class="none"><b>Nada disso</b><span>A dívida continua a subir, e quem empresta ao governo cobra juro cada vez maior. É o que o passo 6 mede.</span></li>
+      <li class="none"><b>Nenhuma</b><span>Quem empresta ao governo cobra juro cada vez maior. O passo 6 mede isso.</span></li>
     </ol>
-    <p class="src"><span class="tag tag-lit">Literatura</span>A conta da dívida e as suas saídas: Blanchard (2019), Sargent e Wallace (1981). As fontes estão no <a href="metodo.html#m-referencias">Método</a>.</p>
+    <details class="from"><summary><span class="tag tag-lit">Literatura</span><span class="tag tag-calc">Cálculo</span></summary><p>Aritmética da dívida: Blanchard (2019), Sargent e Wallace (1981); fontes no <a href="metodo.html#m-referencias">Método</a>. Os números de crescimento e inflação são cálculo nosso com dados do BCB e do Tesouro.</p></details>
   </section>
 
   <section class="card" id="c-mercado">
     <h2>6. O que o mercado de juros está dizendo</h2>
     <p class="say" id="m-say">—</p>
     <div class="scen" id="m-scen"></div>
-    <p class="src"><span class="tag tag-dado">Dado</span>DI jan/29 (juro futuro da B3): o último negócio da B3, com cerca de 15 minutos de atraso, e fora do pregão o ajuste do dia, pelo <b>SILO</b>. A página lê de novo a cada 2 minutos. <span class="tag tag-jul">Julgamento</span>Os 3 caminhos e a chance de partida são escolhas do autor. A chance de agora junta a partida com a taxa do DI pela regra de Bayes (σ = 100 bp, medido em 22 choques desde 2015). <span class="tag tag-sim">Simulação</span>Dívida em 2030 por caminho. Detalhes no <a href="metodo.html#m-origem">Método</a>.</p>
+    <details class="from"><summary><span class="tag tag-dado">Dado</span><span class="tag tag-jul">Julgamento</span><span class="tag tag-calc">Cálculo</span><span class="tag tag-sim">Simulação</span></summary><p><b>Dado:</b> DI jan/29 da B3, último negócio com cerca de 15 minutos de atraso (fora do pregão, o ajuste do dia, pelo <b>SILO</b>); relido a cada 2 minutos. <b>Julgamento:</b> os 3 caminhos e a chance de partida são escolha do autor. <b>Cálculo:</b> a chance de agora combina a partida com o DI pela regra de Bayes (σ = 100 bp, medido em 22 choques desde 2015). <b>Simulação:</b> a dívida em 2030 de cada caminho. Detalhes no <a href="metodo.html#m-origem">Método</a>.</p></details>
   </section>
 
-  <section class="card">
-    <h2>As palavras desta página</h2>
+  <details class="card words-card">
+    <summary><h2>As palavras desta página</h2></summary>
     <dl class="words">
       <dt>PIB</dt><dd>Tudo o que o país produz em um ano, em reais.</dd>
       <dt>Dívida bruta</dt><dd>Tudo o que o governo (União, estados e municípios) deve.</dd>
@@ -129,7 +133,7 @@ dl.words dd { margin: 2px 0 0; font-size: 15px; }
       <dt>DI jan/29</dt><dd>O juro que a B3 negocia hoje para o período até janeiro de 2029. Ele sobe quando quem empresta vê mais risco.</dd>
       <dt>bp</dt><dd>Ponto-base: um centésimo de ponto percentual. 100 bp = 1 ponto.</dd>
     </dl>
-  </section>
+  </details>
 
   <section class="card">
     <h2>A versão completa</h2>
@@ -251,7 +255,7 @@ function renderMarket(rows, pesos, scen, live) {
   const raw = pesos.map((s, i) => s.start * lik[i]);
   const tot = raw.reduce((a, b) => a + b, 0);
   const now = raw.map((v) => v / tot);
-  $("m-say").textContent = `Desde a eleição, o juro para janeiro de 2029 foi de ${nf(2).format(ELECT.di29)}% para ${nf(2).format(rate)}% ao ano (${bp >= 0 ? "+" : "−"}${Math.abs(bp)} bp, ${useLive ? `último negócio de ${dayName(live.date)}, lido às ${live.time}` : `ajuste de ${dayName(last.trade_date)}`}). Quem empresta ao governo cobra mais caro porque vê mais risco. A chance de cada caminho:`;
+  $("m-say").textContent = `Desde a eleição, o juro para janeiro de 2029 foi de ${nf(2).format(ELECT.di29)}% para ${nf(2).format(rate)}% ao ano (${bp >= 0 ? "+" : "−"}${Math.abs(bp)} bp, ${useLive ? `último negócio de ${dayName(live.date)}, lido às ${live.time}` : `ajuste de ${dayName(last.trade_date)}`}). Quem empresta ao governo cobra mais caro porque vê mais risco. Chance de cada caminho:`;
   const sc = Object.fromEntries(scen.map((s) => [s.id, s]));
   $("m-scen").replaceChildren(...pesos.map((s, i) => {
     const pl = PLAIN[s.id] || [s.cenario, ""];
@@ -288,7 +292,6 @@ Promise.allSettled([
   if (lft.status === "fulfilled") renderLft(lft.value);
   if (di.status === "fulfilled" && pes.status === "fulfilled") renderMarket(di.value, pes.value, sce.status === "fulfilled" ? sce.value : [], liv.status === "fulfilled" ? liv.value : null);
   else fail("m-say", "O ajuste do DI jan/29 não carregou agora.");
-  $("asof").textContent = f ? `Dívida e juro: BCB, ${monthName(f.month)}. Juro futuro: B3, último negócio. Orçamento: PLOA 2027.` : "Parte dos dados não carregou.";
 });
 // Only the DI quote refreshes; a failed read keeps the last number on screen.
 setInterval(() => { if (!MKT || document.hidden) return; liveDi().then((l) => renderMarket(MKT.rows, MKT.pesos, MKT.scen, l)).catch(() => {}); }, 120000);

@@ -1,7 +1,9 @@
-/* Etiquetas: de onde vem cada número (Norma e Dado = estabelecido, Estimativa = conta nossa, Simulação = hipótese) */
+/* Etiquetas: de onde vem cada número (Norma e Dado = estabelecido pela fonte, Cálculo = conta direta com os dados, Julgamento = escolha do autor, Simulação = hipótese "e se") */
 .tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .02em; padding: 0 7px; border-radius: 999px; border: 1px solid; line-height: 1.6; vertical-align: middle; white-space: nowrap; font-family: var(--font-anthropic-sans); }
 .tag-norma { color: var(--color-accent); border-color: var(--color-accent); background: color-mix(in srgb, var(--color-accent) 9%, transparent); }
-.tag-est { color: var(--color-warn); border-color: var(--color-warn); background: color-mix(in srgb, var(--color-warn) 9%, transparent); }
+.tag-dado { color: var(--color-fg); border-color: var(--color-fg-muted); background: transparent; }
+.tag-calc { color: var(--color-calc); border-color: var(--color-calc); background: color-mix(in srgb, var(--color-calc) 9%, transparent); }
+.tag-jul { color: var(--color-warn); border-color: var(--color-warn); background: color-mix(in srgb, var(--color-warn) 9%, transparent); }
 .tag-sim { color: var(--color-sim); border-color: var(--color-sim); background: color-mix(in srgb, var(--color-sim) 9%, transparent); }
 .tag-mkt { color: var(--color-fg); border-color: var(--color-fg-muted); background: color-mix(in srgb, var(--color-fg-muted) 10%, transparent); }
 .tag-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 12.5px; color: var(--color-fg-muted); margin: 8px 0 0; }
