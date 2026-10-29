@@ -452,7 +452,7 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
       <p><b>O teste:</b> às 9h o dólar à vista abre. O lugar onde ele abre mostra qual leitura pesa mais.</p>
       <p><b>Mudança contra a versão anterior:</b> antes a régua usava a PTAX e dava −0,65. A PTAX é fixada às 13h, e a bolsa fecha às 17h. Esse descasamento reduzia o número. Com o dólar futuro no fechamento, ela dá −0,90.</p>
     </div><div id="m4"><h4>Ação por ação, pelas ADRs</h4>
-      <p>As ADRs de Itaú (ITUB), Bradesco (BBD), Petrobras (PBR), Sabesp (SBS), Ambev (ABEV), Vale (VALE) e Suzano (SUZ) negociam em Nova York antes da B3. O painel converte cada variação para reais com o mesmo choque do dólar.</p>
+      <p>As ADRs de Itaú (ITUB), Bradesco (BBD), Petrobras (PBR), Sabesp (SBS), Ambev (ABEV), Vale (VALE) e Suzano (SUZ) negociam em Nova York antes da B3. O painel converte cada variação para reais com o mesmo choque do dólar. O Banco do Brasil (BBAS3) não tem ADR: entra pelo preço da própria B3, só durante o pregão, sem conversão. Ele cobre o canal do banco estatal, que mistura risco de intervenção e de capital do Tesouro. Sensibilidade ao dólar −1,35, erro típico 3,7 p.p., estimada em 30/10/2026 com o mesmo método das demais (106 dias de estresse).</p>
       <p><b>Por que sete, e não três.</b> Cada uma cobre um canal diferente. Itaú e Bradesco medem juro e crédito. Petrobras mede risco de intervenção. Sabesp mede juro longo e risco regulatório. Ambev mede consumo doméstico. Vale e Suzano são exportadoras com receita em dólar e servem de controle do câmbio: se elas sobem enquanto o resto cai, o choque é brasileiro, não global. O critério de entrada é ter ADR líquida e ser o melhor representante de um canal.</p>
       <p><b>De onde vêm os números.</b> Cada ação tem uma regressão própria, estimada nos dias de estresse (variação do dólar maior que 2 desvios padrão, 106 dias entre 2018 e set/2026): variação diária da ação na B3 contra a variação do dólar futuro (ajuste do WDO, SILO). Sensibilidade ao dólar: Itaú −0,92, Bradesco −1,10, Petrobras −0,97, Sabesp −0,88, Ambev −0,59, Vale −0,58, Suzano +0,19. Erro típico do dia: Itaú 2,4 p.p., Bradesco 2,8, Petrobras 4,4, Sabesp 3,5, Ambev 2,1, Vale 3,6, Suzano 3,5. Itaú, Petrobras e Vale vêm da estimativa original; as outras quatro foram estimadas em 29/10/2026 com o mesmo método. Reestimar as três antigas com a série de ajustes do SILO dá Itaú −0,83, Petrobras −1,20 e Vale −0,42, com erros típicos próximos (2,5, 4,4 e 3,6): a ordem entre elas se mantém.</p>
       <p>Desvio = (variação em reais − justo) ÷ erro típico. Um desvio abaixo de −2 acontece em menos de 5% dos dias de estresse.</p>
@@ -492,7 +492,9 @@ const STK = {ITUB: {n: "Itaú", b: -0.924, c: 0.027, sd: 2.38, kind: "banco priv
              BBD:  {n: "Bradesco", b: -1.10, c: -0.30, sd: 2.76, kind: "banco privado"},
              ABEV: {n: "Ambev", b: -0.59, c: -0.55, sd: 2.10, kind: "consumo doméstico"},
              SBS:  {n: "Sabesp", b: -0.88, c: -0.37, sd: 3.45, kind: "saneamento regulado"},
-             SUZ:  {n: "Suzano", b: 0.19, c: -0.28, sd: 3.53, kind: "exportadora de celulose"}};
+             SUZ:  {n: "Suzano", b: 0.19, c: -0.28, sd: 3.53, kind: "exportadora de celulose"},
+             // No ADR: the B3 price itself, only while the B3 session is open (30/10/2026, same method, 106 stress days)
+             BBAS3: {n: "Banco do Brasil", b: -1.35, c: -0.41, sd: 3.74, kind: "banco estatal", y: "BBAS3.SA"}};
 const DIFX = {c: 1.96, b: 7.11, sd: 29.9};                             // DI 2y bp on dollar %
 const PIB_PER_1 = -0.062, PT_BCB = 0.10, PT_VAR = 0.03;
 // Unified scenarios (26/10/2026): same names and weights as the monitor dataset "scenarios" and the doc "Dominância fiscal".
@@ -720,9 +722,9 @@ function render() {
 
     // Stocks
     const st = [];
-    for (const k of ["ITUB", "BBD", "PBR", "SBS", "ABEV", "VALE", "SUZ"]) {
-      const a = Y[k]; if (!a) continue; const s = STK[k];
-      const brl = ((1 + (a.price / a.base - 1)) * (1 + F.fx) - 1) * 100, fj = s.c + s.b * fxp, zz = (brl - fj) / s.sd;
+    for (const k of ["ITUB", "BBD", "BBAS3", "PBR", "SBS", "ABEV", "VALE", "SUZ"]) {
+      const s = STK[k], a = s.y ? Y[s.y] : Y[k]; if (!a || (s.y && !a.open)) continue;
+      const brl = s.y ? (a.price / a.base - 1) * 100 : ((1 + (a.price / a.base - 1)) * (1 + F.fx) - 1) * 100, fj = s.c + s.b * fxp, zz = (brl - fj) / s.sd;
       st.push({k, s, brl, fj, zz});
     }
     if (st.length) {
@@ -731,6 +733,7 @@ function render() {
         {t: sgn(x.zz, 1) + " dp", n: 1, label: "Desvio", cls: x.zz < -2 ? "up" : ""}, {t: x.zz < -2 ? "muito abaixo do normal" : x.zz < -1 ? "abaixo do normal" : x.zz > 1 ? "acima do normal" : "normal", label: "Leitura", cls: "hide-m"}]})));
       const read = worst.k === "PBR" ? ["bad", "Intervenção", "O mercado teme intervenção na estatal. Em 2022, Petrobras e BB caíram 7,8 p.p. mais que Itaú e Vale no dia seguinte.", "PETR4 e BBAS3 contra ITUB4 na abertura mostram se a queda é da estatal. Preço de combustível e dividendos movem esse risco."]
         : worst.k === "ITUB" || worst.k === "BBD" ? ["bad", "Juro/crédito", "O pior desvio é do banco privado, não da estatal. O mercado precifica juro mais alto e crédito pior, que é risco fiscal, não medo de intervenção.", "o sinal que decide é o DI jan/29 às 9h. Se o excesso fiscal passar de +60 bp, a queda dos bancos tem base."]
+        : worst.k === "BBAS3" ? ["bad", "Estatal bancário", "O pior desvio é do banco estatal. O mercado precifica risco de intervenção no crédito e de capital do Tesouro, que é risco fiscal e político ao mesmo tempo.", "o Banco do Brasil contra o Itaú separa risco estatal de risco de juro e crédito."]
         : worst.k === "SBS" ? ["warn", "Regulada", "O pior desvio é da empresa regulada de saneamento. O mercado precifica risco regulatório e juro longo, que pesa em ativos de fluxo longo.", "o DI longo e a Sabesp contra o Itaú separam juro de risco regulatório."]
         : worst.k === "ABEV" ? ["warn", "Consumo doméstico", "O pior desvio é do consumo doméstico, que depende de renda e juro. É um canal mais lento que o câmbio.", "o desvio do consumo contra o dos bancos mostra se o mercado teme a economia ou o crédito."]
         : ["warn", "Exportadora", "O pior desvio é de uma exportadora. Isso não é típico de choque fiscal.", "minério, celulose e o mercado global explicam esse desvio antes de um choque brasileiro."];
