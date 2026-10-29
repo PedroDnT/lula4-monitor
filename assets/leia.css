@@ -66,3 +66,31 @@ html[data-leia="off"] .leia { display: none; }
 .gloss dd.r { color: var(--color-fg-muted); font-size: 14px; margin-top: 3px; }
 .gloss dd.r i { font-style: normal; font-weight: 600; color: var(--color-accent); margin-right: 4px; }
 .gloss .none { color: var(--color-fg-muted); }
+
+/* Phones: wide text tables as one card per row (class set by leia.js) */
+@media (max-width: 600px) {
+  table.as-cards, table.as-cards tbody, table.as-cards tr, table.as-cards td, table.as-cards th { display: block; width: auto !important; min-width: 0 !important; }
+  table.as-cards thead { display: none; }
+  table.as-cards tr { padding: 10px 0; border-bottom: 1px solid var(--color-border-line); }
+  table.as-cards td, table.as-cards th { border: 0 !important; padding: 2px 0 !important; text-align: left !important; white-space: normal !important; }
+  table.as-cards tr > :first-child { font-weight: 600; font-size: 15px; }
+  table.as-cards td[data-label]::before { content: attr(data-label); display: block; font-size: 12px; font-weight: 400; color: var(--color-fg-muted); margin-top: 4px; }
+}
+
+/* Fiscal loop: list on phones, where the diagram text would be too small */
+.loop-list { display: none; }
+@media (max-width: 600px) {
+  .loop-wrap svg { display: none; }
+  .loop-list { display: block; list-style: none; margin: 8px 0 4px; padding: 0; }
+  .loop-list li { position: relative; margin: 0 0 18px; }
+  .loop-list li:not(.brake):not(:nth-last-child(2))::after { content: "↓"; position: absolute; left: 50%; bottom: -17px; color: var(--cds-chart-axis); font-size: 13px; }
+  .loop-list li:nth-last-child(2)::after { content: "↺ volta ao juro"; position: absolute; left: 0; right: 0; text-align: center; bottom: -17px; color: var(--cds-chart-axis); font-size: 12px; }
+  .loop-list a { display: block; text-decoration: none; color: var(--color-fg); border: 1.25px solid var(--cds-chart-axis); border-radius: 8px; padding: 8px 12px; background: var(--color-panel); }
+  .loop-list a b { display: block; font-size: 15px; }
+  .loop-list a span { display: block; font-size: 14px; }
+  .loop-list a small { display: block; font-size: 12px; color: var(--color-fg-muted); }
+  .loop-list li.on a { border: 2px solid var(--color-bad); background: color-mix(in srgb, var(--color-bad) 8%, var(--color-panel)); }
+  .loop-list li.brake { margin-top: 26px; }
+  .loop-list li.brake a { border: 1.25px dashed var(--color-ok); }
+  .loop-list li.brake.off a { border-color: var(--color-bad); }
+}
