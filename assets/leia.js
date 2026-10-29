@@ -202,8 +202,9 @@
   function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
   function set(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-  // Explanations start hidden on the Agora page (prices first); the toggle remembers the reader's choice.
-  if (get() === "off" || (get() === null && /(^|\/)(index\.html)?$/.test(location.pathname))) root.setAttribute("data-leia", "off");
+  // Explanations start hidden on the Agora page (prices first) and on phones; the toggle remembers the reader's choice.
+  var phone = window.matchMedia && window.matchMedia("(max-width: 600px)").matches;
+  if (get() === "off" || (get() === null && (phone || /(^|\/)(index\.html)?$/.test(location.pathname)))) root.setAttribute("data-leia", "off");
 
   function block(d) {
     var h = '<div><b>O que é</b><p>' + esc(d.o) + '</p></div><div><b>O que mostra</b><p>' + esc(d.m) + '</p></div><div><b>O que implica</b><p>' + esc(d.i) + '</p></div>';
@@ -293,6 +294,36 @@
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
   }
 
-  function init() { inject(); gloss(); terms(); }
+  // On phones a table with long text becomes one card per row, each cell labelled by its column header.
+  // Pages render tables after load and on refresh, so a mutation observer labels new tables too.
+  function cards() {
+    document.querySelectorAll("table:not([data-cards])").forEach(function (t) {
+      var hs = Array.prototype.map.call(t.querySelectorAll("thead th"), function (th) { return th.textContent.trim(); });
+      var rows = t.querySelectorAll("tbody tr");
+      if (hs.length < 3 || !rows.length) return;
+      var long = Array.prototype.some.call(t.querySelectorAll("tbody td"), function (td) { return td.textContent.trim().length > 50; });
+      if (!long) return;
+      t.setAttribute("data-cards", "");
+      t.classList.add("as-cards");
+    });
+    document.querySelectorAll("table.as-cards").forEach(function (t) {
+      var hs = Array.prototype.map.call(t.querySelectorAll("thead th"), function (th) { return th.textContent.trim(); });
+      t.querySelectorAll("tbody tr").forEach(function (tr) {
+        Array.prototype.forEach.call(tr.children, function (c, i) { if (i > 0 && hs[i] && !c.hasAttribute("data-label")) c.setAttribute("data-label", hs[i]); });
+      });
+    });
+  }
+  function watchTables() {
+    if (!phone) return;
+    cards();
+    var queued = false;
+    new MutationObserver(function () {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(function () { queued = false; cards(); });
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+
+  function init() { inject(); gloss(); terms(); watchTables(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();

@@ -1,6 +1,6 @@
 # lula4-monitor
 
-Site estático público com 3 monitores sobre juros, câmbio e fiscal depois da eleição de 2026, mais uma aba de método.
+Site estático público com 3 monitores sobre juros, câmbio e fiscal depois da eleição de 2026, uma aba de método e uma versão simples para leigos. As páginas funcionam no celular: tabelas de texto viram cartões e o laço fiscal vira lista.
 
 | Aba | Arquivo | O que é |
 | --- | --- | --- |
@@ -8,13 +8,14 @@ Site estático público com 3 monitores sobre juros, câmbio e fiscal depois da 
 | Agora (segunda vista) | `relatorio.html` | Pesos de partida (só fatos), fechamento da curva DI, Copom contra Focus |
 | Fiscal | `dominancia.html` | Conta da dívida, rolagem, âncora de inflação, orçamento 2027 |
 | Método | `metodo.html` | De onde vem cada número, como cada página funciona, fontes, limites e conceitos |
+| Versão simples | `simples.html` | A conta do governo em 6 passos, para quem não é da área; página que pode ser compartilhada sozinha |
 
 Sem build e sem dependência de servidor próprio: HTML, CSS e JS puros. Os gráficos usam d3 pelo CDN.
 
 ## Estrutura
 
 ```
-index.html  dominancia.html  relatorio.html  metodo.html
+index.html  dominancia.html  relatorio.html  metodo.html  simples.html
 assets/style.css        tokens de cor e o cabeçalho com as abas
 assets/leia.js          blocos "o que é, o que mostra, o que implica" por seção e o glossário
 assets/leia.css         estilo desses blocos e da seção Conceitos do Método
