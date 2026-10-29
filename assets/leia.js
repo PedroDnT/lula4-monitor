@@ -106,7 +106,7 @@
     },
     "topo:dominancia": {
       o: "O fundo: o que muda devagar e decide se a dívida é sustentável.",
-      m: "O laço no topo, e 5 blocos: conta da dívida, rolagem, âncora de inflação, orçamento 2027 e gatilhos. Cada número tem uma etiqueta: Norma, Dado, Cálculo, Julgamento ou Simulação.",
+      m: "O laço no topo, e 5 blocos: conta da dívida, rolagem, âncora de inflação, orçamento 2027 e gatilhos. Cada número tem uma etiqueta: Norma, Dado, Cálculo, Julgamento ou Projeção.",
       i: "Aqui, alerta aceso quer dizer risco de médio prazo, não pânico do dia. O pânico do dia está no Intraday.",
       g: ["dominancia", "dbgg", "rg"]
     },

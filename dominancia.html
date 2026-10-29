@@ -72,7 +72,7 @@
         <g class="loop-brake" data-go="orcamento" tabindex="0"><rect x="270" y="187" width="220" height="56" rx="8"/><text class="nm" x="380" y="208" text-anchor="middle">Freio: primário suficiente</text><text class="vl" x="380" y="228" text-anchor="middle">—</text></g>
       </svg>
       <ol class="loop-list"></ol>
-      <p class="tag-legend">Etiquetas: <span class="tag tag-norma">Norma</span> lei, meta ou plano oficial <span class="tag tag-dado">Dado</span> número publicado pela fonte <span class="tag tag-calc">Cálculo</span> conta direta com dados, sem hipótese <span class="tag tag-jul">Julgamento</span> escolha do autor <span class="tag tag-sim">Simulação</span> hipótese "e se", olha adiante</p>
+      <p class="tag-legend">Etiquetas: <span class="tag tag-norma">Norma</span> lei, meta ou plano oficial <span class="tag tag-dado">Dado</span> número publicado pela fonte <span class="tag tag-calc">Cálculo</span> conta direta com dados, sem hipótese <span class="tag tag-jul">Julgamento</span> premissa ou metodologia de referência <span class="tag tag-sim">Projeção</span> olha adiante, com premissas</p>
     </div>
   </header>
   <section class="dm-section" id="divida">
@@ -128,16 +128,16 @@
       </div>
     </div>
     <div class="dm-card" id="c-fan">
-      <h3 class="dm-h2">Leque da dívida bruta até 2030, % do PIB <span class="tag tag-sim">Simulação</span></h3>
+      <h3 class="dm-h2">Leque da dívida bruta até 2030, % do PIB <span class="tag tag-sim">Projeção</span></h3>
       <p class="dm-sub">2.000 trajetórias de dívida = dívida × (1 + r) ÷ (1 + g) − primário, ano a ano. Ponto de partida: os valores de r, g e primário do último mês. Cada ano soma um choque conjunto de r, g e primário sorteado dos meses desde 2015, o que mantém a correlação entre eles (estilo FMI). Sem mudança de política: o primário fica no nível atual. Faixas: 10% a 90% e 25% a 75%; linha: mediana.</p>
       <div class="dm-tiles">
         <div class="dm-tile">
-          <span class="dm-tile-label">Dívida em 2030, mediana <span class="tag tag-sim">Simulação</span></span>
+          <span class="dm-tile-label">Dívida em 2030, mediana <span class="tag tag-sim">Projeção</span></span>
           <span class="dm-big dash-skeleton" data-source="debt_fan_now" data-field="p50" data-row="0">—</span>
           <span class="dm-note">10% a 90%: <span data-source="debt_fan_now" data-field="p10" data-row="0">—</span> a <span data-source="debt_fan_now" data-field="p90" data-row="0">—</span></span>
         </div>
         <div class="dm-tile">
-          <span class="dm-tile-label">Chance de passar de 100% do PIB em 2030 <span class="tag tag-sim">Simulação</span></span>
+          <span class="dm-tile-label">Chance de passar de 100% do PIB em 2030 <span class="tag tag-sim">Projeção</span></span>
           <span class="dm-big dash-skeleton" data-source="debt_fan_now" data-field="prob_100" data-row="0">—</span>
           <span class="dm-note">Partida: <span data-source="debt_fan_now" data-field="start" data-row="0">—</span> do PIB</span>
         </div>
@@ -289,7 +289,7 @@
         <p class="dm-sub">Fontes: PLOA e PLDO 2027, nas leituras da IFI e do Ipea (tabela de fontes abaixo).</p>
       </div>
       <div class="dm-card" id="c-controle">
-        <h3 class="dm-h2">A dívida fica ou sai do controle? <span class="tag tag-sim">Simulação</span></h3>
+        <h3 class="dm-h2">A dívida fica ou sai do controle? <span class="tag tag-sim">Projeção</span></h3>
         <p class="dm-note dm-live"><span class="ctl-txt">—</span></p>
         <div class="dm-legend lg-ctl"></div>
         <div class="dm-chart ch-ctl" data-source="scenarios" style="height:auto;min-height:0"></div>
@@ -319,7 +319,7 @@
       </div>
     </div>
     <div class="dm-card" id="c-canais">
-      <h3 class="dm-h2">Da inflação desancorada ao orçamento <span class="tag tag-sim">Simulação</span></h3>
+      <h3 class="dm-h2">Da inflação desancorada ao orçamento <span class="tag tag-sim">Projeção</span></h3>
       <ol class="dm-steps">
         <li>As expectativas sobem. O BCB mantém a Selic alta por mais tempo, e a inflação corrente sobe.</li>
         <li>A Selic e o IPCA encarecem a dívida (LFT e NTN-B). Esse juro fica fora do teto de gastos e fora da meta de primário.</li>
@@ -517,7 +517,7 @@
     <h2 class="dm-h2">Método e limites</h2>
     <ol class="dm-list">
       <li>Os dados vêm da SILO (CVM, BACEN, B3), do BCB (Focus) e do Tesouro Nacional. Cada bloco tem a sua data. A data do dado é a da fonte, não a da atualização do site.</li>
-      <li>As etiquetas dizem de onde vem cada número: Norma e Dado são estabelecidos pela fonte; Cálculo é conta direta com os dados; Julgamento é escolha do autor; Simulação é hipótese. Os gatilhos dizem se o limite é de lei, de mercado ou escolha nossa.</li>
+      <li>As etiquetas dizem de onde vem cada número: Norma e Dado são estabelecidos pela fonte; Cálculo é conta direta com os dados; Julgamento é premissa ou metodologia de referência; Projeção olha adiante com premissas. Os gatilhos dizem se o limite é de lei, de mercado ou escolha nossa.</li>
       <li>Os gatilhos e os pesos dos cenários são julgamento do autor, não saída de um modelo. A tabela de calibração mostra se os gatilhos avisaram nas crises passadas. Poucas crises dão pouca prova.</li>
       <li>Esta página é uma cópia diária. A rotina das 11:20 atualiza os arquivos de dados e a rotina das 11:50 os publica. Pode haver um dia de atraso.</li>
       <li>Projeções de dívida e de resultado primário dependem das premissas do Focus e do arcabouço. Elas mostram um caminho, não uma previsão.</li>
