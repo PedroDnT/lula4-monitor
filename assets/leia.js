@@ -89,7 +89,7 @@
     "s-cup": {
       o: "O cupom cambial é o juro em dólar embutido no dólar futuro.",
       m: "O dólar futuro contra os 3 cenários, e o cupom de cada vencimento.",
-      i: "Salto do cupom de um dia para o outro: o futuro e o dólar à vista descolaram. Não leia o número como sinal.",
+      i: "Salto do cupom de um dia para o outro: o futuro e o dólar à vista descolaram. O número não é um sinal.",
       g: ["dol", "cupom"]
     },
     "s-eq": {
