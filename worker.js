@@ -3,7 +3,7 @@
 // wrangler.jsonc runs this worker first only for /api/*; every other path goes straight to the assets.
 
 const YAHOO =
-  "https://query1.finance.yahoo.com/v7/finance/spark?symbols=EWZ,BRL=X,%5EBVSP,XFIX11.SA,ITUB,PBR,VALE,MXN=X,ZAR=X,%5ETNX&range=1d&interval=15m&includePrePost=true";
+  "https://query1.finance.yahoo.com/v7/finance/spark?symbols=EWZ,BRL=X,%5EBVSP,XFIX11.SA,ITUB,PBR,VALE,BBD,ABEV,SBS,SUZ,EEM,DX-Y.NYB,MXN=X,ZAR=X,%5ETNX&range=1d&interval=15m&includePrePost=true";
 const OBM = "https://obm.com.br/risco-pais";
 const SELIC = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json";
 const UA = { "User-Agent": "Mozilla/5.0 (compatible; lula4-monitor)" };

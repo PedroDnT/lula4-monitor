@@ -89,7 +89,7 @@
     "s-cup": {
       o: "O cupom cambial é o juro em dólar embutido no dólar futuro.",
       m: "O dólar futuro contra os 3 cenários, e o cupom de cada vencimento.",
-      i: "Salto do cupom de um dia para o outro: o futuro e o dólar à vista descolaram. Não leia o número como sinal.",
+      i: "Salto do cupom de um dia para o outro: o futuro e o dólar à vista descolaram. O número não é um sinal.",
       g: ["dol", "cupom"]
     },
     "s-eq": {
@@ -210,7 +210,7 @@
       h += '<div class="mv">' + (d.up ? '<span><i>▲ Sobe</i>' + esc(d.up) + '</span>' : '') + (d.dn ? '<span><i>▼ Cai</i>' + esc(d.dn) + '</span>' : '') + '</div>';
     }
     if (d.g && d.g.length) {
-      h += '<div class="gl">Conceitos:' + d.g.map(function (id) { return gmap[id] ? '<a href="conceitos.html#' + id + '">' + esc(gmap[id]) + '</a>' : ''; }).join('') + '</div>';
+      h += '<div class="gl">Conceitos:' + d.g.map(function (id) { return gmap[id] ? '<a href="metodo.html#' + id + '">' + esc(gmap[id]) + '</a>' : ''; }).join('') + '</div>';
     }
     var el = document.createElement("div");
     el.className = "leia";
@@ -283,7 +283,7 @@
       pop = document.createElement("div");
       pop.className = "term-pop"; pop.setAttribute("data-term", id); pop.setAttribute("role", "dialog");
       pop.innerHTML = "<b>" + esc(t[1]) + "</b>" + esc(t[2]) + " <i>Como ler:</i> " + esc(t[3]) +
-        '<span class="src">' + (s ? "Fonte: <a href=\"" + esc(s[1]) + "\" target=\"_blank\" rel=\"noopener\">" + esc(s[0]) + "</a> · " : "") + '<a href="conceitos.html#' + esc(id) + '">glossário</a></span>';
+        '<span class="src">' + (s ? "Fonte: <a href=\"" + esc(s[1]) + "\" target=\"_blank\" rel=\"noopener\">" + esc(s[0]) + "</a> · " : "") + '<a href="metodo.html#' + esc(id) + '">glossário</a></span>';
       document.body.appendChild(pop);
       var r = b.getBoundingClientRect(), w = pop.offsetWidth, vw = document.documentElement.clientWidth;
       pop.style.left = Math.max(8, Math.min(r.left, vw - w - 8) + window.scrollX) + "px";

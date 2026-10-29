@@ -2,7 +2,7 @@
 <title>Monitor de dominância fiscal · Monitor LULA4</title><meta name="robots" content="index,follow">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400&display=swap">
 <link rel="stylesheet" href="assets/style.css"><script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script><script>window.DATASETS={"budget": {"kind": "file", "url": "data/dominancia/budget.json"}, "calib": {"kind": "file", "url": "data/dominancia/calib.json"}, "canais": {"kind": "file", "url": "data/dominancia/canais.json"}, "contabilidade": {"kind": "file", "url": "data/dominancia/contabilidade.json"}, "dpl_2y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "DPL", "p_from": "{{start_curve}}", "p_tenor_days": 720}}, "dpl_5y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "DPL", "p_from": "{{start_curve}}", "p_tenor_days": 1800}}, "fiscal_dbgg": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "DBGG_PIB"}}, "fiscal_nom": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "NFSP_NOMINAL_12M"}}, "fiscal_pib": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "PIB"}}, "fiscal_prim": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "NFSP_PRIMARIO_12M"}}, "focus_debt": {"kind": "file", "url": "data/dominancia/focus_debt.json"}, "ipca_2027": {"kind": "query", "tool": "focus_expectations", "args": {"p_endpoint": "ExpectativasMercadoAnuais", "p_from": "{{start_focus}}", "p_horizon": "2027", "p_indicator": "IPCA"}}, "ipca_2028": {"kind": "query", "tool": "focus_expectations", "args": {"p_endpoint": "ExpectativasMercadoAnuais", "p_from": "{{start_focus}}", "p_horizon": "2028", "p_indicator": "IPCA"}}, "leiloes": {"kind": "file", "url": "data/dominancia/leiloes.json"}, "lft": {"kind": "file", "url": "data/dominancia/lft.json"}, "obrigatorias": {"kind": "file", "url": "data/dominancia/obrigatorias.json"}, "pre_2y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "PRE", "p_from": "{{start_curve}}", "p_tenor_days": 720}}, "pre_5y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "PRE", "p_from": "{{start_curve}}", "p_tenor_days": 1800}}, "rolagem": {"kind": "file", "url": "data/dominancia/rolagem.json"}, "scenario_history": {"kind": "file", "url": "data/dominancia/scenario_history.json"}, "scenarios": {"kind": "file", "url": "data/dominancia/scenarios.json"}};window.PARAMS_URL="data/dominancia/params.json";</script><script src="assets/dash-shim.js"></script><link rel="stylesheet" href="assets/leia.css"><script src="assets/leia.js" defer></script></head><body data-page="dominancia">
-<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html">Intraday</a><a href="dominancia.html" aria-current="page">Dominância fiscal</a><a href="relatorio.html">Relatório diário</a><a href="conceitos.html">Conceitos</a><a href="metodo.html">Método</a></nav></div></header>
+<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html">Intraday</a><a href="dominancia.html" aria-current="page">Dominância fiscal</a><a href="relatorio.html">Relatório diário</a><a href="metodo.html">Método</a></nav></div></header>
 <div id="dash-root">
 <style>
 #dash-root .dm { display: flex; flex-direction: column; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); }
@@ -314,7 +314,7 @@
             <tbody></tbody>
           </table>
         </div>
-        <p class="dm-sub">R$ bilhões por ano, ao PIB de 2027 implícito na meta. Leia de cima para baixo: os juros somam, o crescimento e o superávit previsto descontam, e a barra em negrito é a conta. As linhas "Se ..." mostram quanto a conta cresce em cada cenário: a Selic de fim de 2027 do cenário menos a do Âncora, por 12 meses, × a elasticidade do BCB (R$ 59,3 bi por 1 p.p.). As últimas linhas comparam a conta com o que dá para cortar: todo o gasto discricionário, o buraco que sobra mesmo zerando esse gasto (em vermelho) e o bloqueio que a IFI estima.</p>
+        <p class="dm-sub">R$ bilhões por ano, ao PIB de 2027 implícito na meta. De cima para baixo: os juros somam, o crescimento e o superávit previsto descontam, e a barra em negrito é a conta. As linhas "Se ..." mostram quanto a conta cresce em cada cenário: a Selic de fim de 2027 do cenário menos a do Âncora, por 12 meses, × a elasticidade do BCB (R$ 59,3 bi por 1 p.p.). As últimas linhas comparam a conta com o que dá para cortar: todo o gasto discricionário, o buraco que sobra mesmo zerando esse gasto (em vermelho) e o bloqueio que a IFI estima.</p>
       </div>
     </div>
     <div class="dm-card" id="c-canais">
@@ -341,13 +341,13 @@
         </table>
       </div>
       <div class="dm-sim">
-        <h4 class="dm-h3">Simule: mexa nos choques e veja onde a conta cai</h4>
+        <h4 class="dm-h3">Simulador: choques e onde a conta cai</h4>
         <div class="dm-sim-ctl">
           <label>Selic acima do cenário do PLDO: <b class="sim-s-v">0</b> p.p.
             <input type="range" class="sim-s" min="0" max="5" step="0.25" value="0" aria-label="Selic acima do cenário do PLDO, em pontos percentuais"></label>
           <label>Inflação acima do PLOA (3,6%): <b class="sim-i-v">0</b> p.p.
             <input type="range" class="sim-i" min="0" max="4" step="0.25" value="0" aria-label="Inflação acima do PLOA, em pontos percentuais"></label>
-          <button type="button" class="dm-btn sim-focus">Usar o Focus de hoje</button>
+          <button type="button" class="dm-btn sim-focus">Focus de hoje</button>
         </div>
         <p class="dm-sub flow-cap">—</p>
         <div class="dm-chart ch-flow" style="height:auto;min-height:0"></div>
@@ -454,7 +454,7 @@
     </div>
     <div class="dm-card" id="c-calib">
       <h3 class="dm-h2">Calibração: os gatilhos avisaram nas crises passadas? <span class="tag tag-est">Estimativa</span></h3>
-      <p class="dm-sub">Teste com as curvas da B3 na SILO, de 2010 a 26/10/2026. Crise = o DI de 2 anos sobe 200 bp ou o dólar sobe 15% em 60 pregões; o teste achou 11, de set/2011 a nov/2024. "Avisou" = acendeu até 60 pregões antes do início ou no dia. "Aceso em calma" = parte dos dias fora das crises em que o alerta acendeu à toa. Atenção: a crise e os alertas de mercado vêm das mesmas curvas, então o teste favorece esses alertas.</p>
+      <p class="dm-sub">Teste com as curvas da B3 na SILO, de 2010 a 26/10/2026. Crise = o DI de 2 anos sobe 200 bp ou o dólar sobe 15% em 60 pregões; o teste achou 11, de set/2011 a nov/2024. "Avisou" = acendeu até 60 pregões antes do início ou no dia. "Aceso em calma" = parte dos dias fora das crises em que o alerta acendeu à toa. Limite do teste: a crise e os alertas de mercado vêm das mesmas curvas, então o teste favorece esses alertas.</p>
       <div class="dm-table-wrap">
         <table class="dm-table tb-calib" data-source="calib" data-row-key="regra">
           <thead><tr>
@@ -520,7 +520,7 @@
       <li>Os gatilhos e os pesos dos cenários são julgamento do autor, não saída de um modelo. A tabela de calibração mostra se os gatilhos avisaram nas crises passadas. Poucas crises dão pouca prova.</li>
       <li>Esta página é uma cópia diária. A rotina das 11:20 atualiza os arquivos de dados e a rotina das 11:50 os publica. Pode haver um dia de atraso.</li>
       <li>Projeções de dívida e de resultado primário dependem das premissas do Focus e do arcabouço. Elas mostram um caminho, não uma previsão.</li>
-      <li>Para o método completo, abra a aba Método.</li>
+      <li>O método completo está na aba Método.</li>
     </ol>
   </section>
 </div>
