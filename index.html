@@ -66,6 +66,17 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px soli
 .verdict.warn { background: var(--warnbg); } .verdict.warn > b { color: var(--warn); }
 .verdict.ok { background: var(--okbg); } .verdict.ok > b { color: var(--down); }
 .now { display: grid; gap: 0; }
+.hero .hk { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.hero .hv { font-family: var(--f-serif); font-size: 36px; line-height: 1.15; margin: 2px 0 4px; }
+.hero .hs { font-size: 14px; color: var(--fg2); } .hero .hs b { font-size: 18px; color: var(--fg); }
+.hero .bars { display: grid; gap: 6px; margin-top: 14px; }
+.hero .hbar { display: grid; grid-template-columns: 9rem minmax(0, 1fr) 3.2rem; gap: 2px 10px; align-items: center; font-size: 14px; }
+.hero .bt { height: 14px; background: var(--grid); border-radius: 4px; overflow: hidden; } .hero .bt i { display: block; height: 100%; }
+.hero .bv { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.hero .bs { grid-column: 2 / 4; font-size: 12px; color: var(--muted); margin-top: -2px; }
+.hero .src { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+@media (max-width: 520px) { .hero .hbar { grid-template-columns: 6.5rem minmax(0, 1fr) 3rem; } .hero .hv { font-size: 28px; } }
+html[data-leia="off"] .sec > .lead { display: none; }
 .item { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 4px 12px; padding: 11px 0; border-top: 1px solid var(--rule); }
 .item:first-of-type { border-top: 0; padding-top: 0; }
 .chip { font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 999px; text-align: center; align-self: start; color: var(--muted); border: 1px solid currentColor; }
@@ -183,15 +194,25 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
 <div class="wrap">
   <header class="head" id="topo">
     <div class="meta"><span id="today"></span><span id="clock">Carregando dados…</span><button id="refresh" type="button">Atualizar</button></div>
-    <h1>Painel do choque pós-eleição</h1>
+    <h1>O que o mercado precifica hoje</h1>
     <p class="take" id="take">Aguardando os preços do dia…</p>
-    <p class="sub">Este painel lê os preços ao vivo e move os pesos dos 3 cenários ao longo do dia. Os pesos de partida vêm do <a href="relatorio.html">relatório diário de juros</a>. A dívida, a rolagem e a âncora de inflação estão no <a href="dominancia.html">monitor de dominância fiscal</a>. Não é recomendação de compra ou venda.</p>
-    <nav class="links"><a href="#s-sc">Pesos</a><a href="#s-dom">Dominância</a><a href="#s-live">Mercado</a><a href="#s-hist">Histórico</a><a href="#s-more">Detalhes</a></nav>
   </header>
+
+  <section class="sec" id="s-px" aria-label="O que o DI precifica">
+  <div class="panel hero">
+    <div class="hk">O DI jan/29 precifica</div>
+    <div class="hv" id="hx-sc">–</div>
+    <div class="hs"><b id="hx-bp">–</b> desde o ajuste de 23/10 (12,640%) · <span id="hx-d1">–</span> vs ontem · <span id="hx-d5">–</span> vs 5 pregões · <span id="hx-pos"></span></div>
+    <div class="bars" id="hx-bars"></div>
+    <div class="legend" style="margin-top:8px"><span style="--c:var(--down)">Âncora</span><span style="--c:var(--warn)">Deriva</span><span style="--c:var(--up)">Estresse</span><span class="dash" style="--c:var(--muted)">Partida (fatos)</span></div>
+    <div class="chart" id="c-px"></div>
+    <p class="src">Dado: ajuste do DI1F29 (B3, pelo SILO) e o contrato de agora (B3, cerca de 15 min de atraso). Escolha do monitor: as marcas +50, +180 e +320 bp. Dado: σ = 100 bp, dispersão do DI de 2 anos nas 20 a 40 sessões após 22 choques desde 2015. Julgamento: a partida, só com fatos. Agora = Bayes (partida × verossimilhança). <a class="how" href="#m6">Método</a></p>
+  </div>
+  </section>
 
   <section class="sec" aria-label="Resumo">
   <nav class="strip" aria-label="Números principais">
-    <a href="#s-sc"><div class="k">Cenário que o DI precifica</div><div class="v" id="m-sc">–</div><div class="s" id="m-sc-s">–</div></a>
+    <a href="#s-sc" hidden><div class="k">Cenário que o DI precifica</div><div class="v" id="m-sc">–</div><div class="s" id="m-sc-s">–</div></a>
     <a href="#s-dom"><div class="k">Dominância fiscal</div><div class="v" id="m-dom">–</div><div class="s" id="m-dom-s">sinais acesos</div></a>
     <a href="#s-di"><div class="k">DI jan/29</div><div class="v" id="m-di">–</div><div class="s" id="m-di-s">abre às 9h</div></a>
     <a href="#s-fx"><div class="k" id="m-fx-k">Dólar vs PTAX anterior</div><div class="v" id="m-fx">–</div><div class="s" id="m-fx-s">–</div></a>
@@ -209,11 +230,6 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
   <section class="sec" id="s-sc" aria-labelledby="h-sc">
     <h2 id="h-sc">Pesos de cenário</h2>
     <p class="lead">O peso de partida vem do relatório diário de juros (só fatos, escala de 3 degraus). O peso de agora aplica a regra de mercado a ele. A coluna "O DI precifica" mostra o cenário que a alta do DI jan/29 desde <span id="el-d">23/10</span> já paga. <a class="how" href="#m6">Como funciona</a></p>
-    <div class="panel" id="px-def">
-      <h3 style="margin-top:0">O que é "o mercado precifica"</h3>
-      <p style="font-size:14px">Um preço de mercado já embute um cenário. O DI jan/29 pagava <b>12,640%</b> no ajuste de 23/10, antes da eleição. Cada cenário abaixo supõe uma alta desse juro: <b>+50, +180 e +320 bp</b>. A alta que já aconteceu, medida contra essas três marcas, é o que o DI precifica. <span id="px-pos"></span></p>
-      <p class="note" style="margin:0">Origem dos números: ajuste do DI jan/29 e o contrato de agora vêm da B3, pelo SILO (dado). As três marcas são escolha nossa, não estimativa estatística. O peso de partida é julgamento sobre fatos, na escala de 3 degraus. A origem de cada parâmetro está no Método.</p>
-    </div>
     <div class="panel">
     <div class="tw"><table class="cards">
       <thead><tr><th>Cenário</th><th class="n">Início (relatório diário)</th><th class="n">Agora (mercado)</th><th class="n">O DI precifica</th><th class="n">DI jan/29 esperado</th><th class="n">1 mês</th><th class="n">3 meses</th><th class="n">12 meses</th><th>O que precisa acontecer</th></tr></thead>
@@ -384,7 +400,7 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
       <thead><tr><th>Evento</th><th class="n">Dólar</th><th class="n">Ibovespa</th><th class="n">Ibovespa justo</th><th class="n">DI 1a</th><th class="n">DI 2a</th><th class="n">DI 5a</th><th class="n">Inclinação 5a − 1a</th><th class="n">Estatais − privadas</th><th class="n">DI 2a, 20 dias depois</th></tr></thead>
       <tbody id="prec"></tbody>
     </table></div>
-    <p><b>O que isso diz para hoje:</b> em choques fiscais (fala de Lula em 2022, pacote de 2024), o DI de 2 anos continuou a subir por semanas: +96 bp no dia e +102 bp em 20 dias em 2022, +28 bp no dia e +208 bp em 20 dias em 2024. No choque político pontual (Joesley), o DI devolveu cerca de 70% em 20 dias. <b>Ação:</b> o precedente mais próximo diz o que esperar das próximas semanas; se ele for um choque fiscal, não espere volta rápida do DI.</p>
+    <p><b>O que isso diz para hoje:</b> em choques fiscais (fala de Lula em 2022, pacote de 2024), o DI de 2 anos continuou a subir por semanas: +96 bp no dia e +102 bp em 20 dias em 2022, +28 bp no dia e +208 bp em 20 dias em 2024. No choque político pontual (Joesley), o DI devolveu cerca de 70% em 20 dias. <b>Ação:</b> o precedente mais próximo diz o que esperar das próximas semanas; nos choques fiscais passados o DI não voltou rápido.</p>
     <p class="note">* 2014 e 2017: dólar pela PTAX, porque o Silo tem o dólar futuro só a partir de 2018. Hoje: DI 1a = DI jan/28, DI 2a = DI jan/29, DI 5a = DI jan/31 (4 anos), contra o ajuste anterior; estatais − privadas pelas ADRs (Petrobras menos a média de Itaú e Vale). Precedentes: curva PRE da B3 (vértices de 360, 720 e 1.800 dias), Ibovespa, dólar futuro e ações do Silo (Delos Labs), dados diários de fechamento até 22/10/2026.</p>
     </div></details>
     <details class="box" id="h-obj"><summary>Sobre este painel</summary><div>
@@ -395,9 +411,9 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
     <p>Cada número do painel vem de um destes 6 passos. Toque para abrir.</p>
     <details id="g1"><summary>1. Cenários e dólar por cenário</summary><div><div id="m6">
       <p>Os 3 cenários são os mesmos do monitor de juros e do documento "Dominância fiscal": Âncora retomada (Framework holds no monitor), Deriva fiscal (Fiscal drift) e Estresse e espiral (Institutional stress).</p>
-      <p><b>Início (relatório diário):</b> o relatório diário de juros fixa os pesos só com fatos, sem preços, pela escala de 3 degraus. Em 27/10: 43 · 32 · 25 (26/10: 45 · 33 · 22; antes da eleição: 45 · 35 · 20). <b>Agora (mercado):</b> o painel aplica a regra de mercado ao longo do dia: agora = início + 0,3 × (o que o DI precifica − início), cada peso muda no máximo 15 pontos, e a soma volta a 100%. O fator 0,3 reproduz o passo anterior de 45 · 35 · 20 para 32 · 37 · 31. A média ponderada do dólar usa os pesos de agora. O monitor diário aplica essa regra a cada fechamento e a revisão semanal aplica os gatilhos (equipe econômica, Orçamento 2027, Copom, contestação do resultado, rating). Nenhum peso muda mais de 15 pontos por dia.</p>
-      <p><b>O que o DI precifica:</b> cada cenário supõe uma alta do DI jan/29 desde 23/10 (ajuste 12,640%): +50, +180 e +320 bp. A alta de agora fica entre dois desses números, e o painel divide o peso em linha reta entre eles. Acima de +320 bp, tudo vai para o Estresse e o painel avisa que o mercado está além do pior cenário.</p>
-      <p><b>Por que não Bayes:</b> a versão anterior usava a regra de Bayes com incerteza de ±35 bp. Quando o DI passa muito do esperado, ela dá 100% a um cenário e esconde o tamanho do erro. A divisão em linha reta mostra onde o DI está entre os cenários e quanto ele passa do pior.</p>
+      <p><b>Início (relatório diário):</b> o relatório diário de juros fixa os pesos só com fatos, sem preços, pela escala de 3 degraus. Em 27/10: 43 · 32 · 25 (26/10: 45 · 33 · 22; antes da eleição: 45 · 35 · 20). <b>Agora (mercado):</b> regra de Bayes. A partida é a prior; a observação é o nível do DI jan/29 desde 23/10; cada cenário é uma normal centrada na sua marca, com σ = 100 bp. Agora = partida × verossimilhança, normalizado. Como a observação é o nível acumulado, a conta parte da partida todo dia e não conta nada duas vezes; um repricing que persiste continua sendo absorvido. A média ponderada do dólar usa os pesos de agora. A revisão semanal aplica os gatilhos (equipe econômica, Orçamento 2027, Copom, contestação do resultado, rating) à partida.</p>
+      <p><b>O que o DI precifica:</b> cada cenário supõe uma alta do DI jan/29 desde 23/10 (ajuste 12,640%): +50, +180 e +320 bp. A coluna "O DI precifica" é a verossimilhança de cada marca para a alta de agora, com prior igual entre os três (σ = 100 bp). Acima de +320 bp, o Estresse domina e o painel avisa que o mercado está além do pior cenário.</p>
+      <p><b>De onde vem o σ:</b> uma versão de outubro usava Bayes com σ = 35 bp e saturava: qualquer dia forte dava 100% a um cenário. Entre 27 e 29/10 valeu uma regra ad hoc, agora = partida + 0,3 × (DI − partida), com limite de 15 pontos; o 0,3 não tinha origem. Desde 29/10 o σ é medido: nas 20 a 40 sessões depois de 22 choques do DI de 2 anos desde 2015 (dias com movimento acima de 2 desvios, curva PRE de 720 dias, SILO), o desvio padrão do movimento é de 62 a 113 bp. σ = 100 bp fica nesse intervalo. Com σ = 80 a partida de 45 · 32 · 23 e +216 bp dariam 12 · 66 · 22; com 120, 27 · 48 · 25.</p>
       <p>Dólar no prazo = PTAX de 23/10 × (1 + choque acumulado × fração que resta), com as frações do passo 2. A média ponderada usa os pesos de agora (mercado).</p>
     </div><div id="m7"><h4>Dólar por cenário e limites gerais</h4>
       <p>Dólar no prazo = PTAX de 23/10 × (1 + choque acumulado desde 23/10 × fração que resta). <b>Âncora: estimada.</b> Projeções locais (Jordà) com a PTAX de 2008 a out/2026 (4.664 dias). O choque local é o dólar menos 0,67 × a média de USD/MXN e USD/ZAR, para tirar o movimento global. Nos 213 dias com choque local acima de 2 desvios padrão, a fração que resta é 0,75 em 1 mês (erro padrão 0,17), 0,76 em 3 meses (0,24), 0,92 em 6 meses (0,34) e 0,73 em 12 meses (0,52); erros HAC. Em todos os dias ela fica perto de 1. Conclusão: o choque local do real quase não volta sozinho. A Âncora usa 0,75 nos 3 prazos. Faixa de 80% só do erro do coeficiente: 0,53 a 0,97 em 1 mês e 0,06 a 1,40 em 12 meses; a dispersão de cada evento é bem maior.</p>
@@ -452,7 +468,7 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
       <p><b>O teste:</b> às 9h o dólar à vista abre. O lugar onde ele abre mostra qual leitura pesa mais.</p>
       <p><b>Mudança contra a versão anterior:</b> antes a régua usava a PTAX e dava −0,65. A PTAX é fixada às 13h, e a bolsa fecha às 17h. Esse descasamento reduzia o número. Com o dólar futuro no fechamento, ela dá −0,90.</p>
     </div><div id="m4"><h4>Ação por ação, pelas ADRs</h4>
-      <p>As ADRs de Itaú (ITUB), Bradesco (BBD), Petrobras (PBR), Sabesp (SBS), Ambev (ABEV), Vale (VALE) e Suzano (SUZ) negociam em Nova York antes da B3. O painel converte cada variação para reais com o mesmo choque do dólar.</p>
+      <p>As ADRs de Itaú (ITUB), Bradesco (BBD), Petrobras (PBR), Sabesp (SBS), Ambev (ABEV), Vale (VALE) e Suzano (SUZ) negociam em Nova York antes da B3. O painel converte cada variação para reais com o mesmo choque do dólar. O Banco do Brasil (BBAS3) não tem ADR: entra pelo preço da própria B3, só durante o pregão, sem conversão. Ele cobre o canal do banco estatal, que mistura risco de intervenção e de capital do Tesouro. Sensibilidade ao dólar −1,35, erro típico 3,7 p.p., estimada em 30/10/2026 com o mesmo método das demais (106 dias de estresse).</p>
       <p><b>Por que sete, e não três.</b> Cada uma cobre um canal diferente. Itaú e Bradesco medem juro e crédito. Petrobras mede risco de intervenção. Sabesp mede juro longo e risco regulatório. Ambev mede consumo doméstico. Vale e Suzano são exportadoras com receita em dólar e servem de controle do câmbio: se elas sobem enquanto o resto cai, o choque é brasileiro, não global. O critério de entrada é ter ADR líquida e ser o melhor representante de um canal.</p>
       <p><b>De onde vêm os números.</b> Cada ação tem uma regressão própria, estimada nos dias de estresse (variação do dólar maior que 2 desvios padrão, 106 dias entre 2018 e set/2026): variação diária da ação na B3 contra a variação do dólar futuro (ajuste do WDO, SILO). Sensibilidade ao dólar: Itaú −0,92, Bradesco −1,10, Petrobras −0,97, Sabesp −0,88, Ambev −0,59, Vale −0,58, Suzano +0,19. Erro típico do dia: Itaú 2,4 p.p., Bradesco 2,8, Petrobras 4,4, Sabesp 3,5, Ambev 2,1, Vale 3,6, Suzano 3,5. Itaú, Petrobras e Vale vêm da estimativa original; as outras quatro foram estimadas em 29/10/2026 com o mesmo método. Reestimar as três antigas com a série de ajustes do SILO dá Itaú −0,83, Petrobras −1,20 e Vale −0,42, com erros típicos próximos (2,5, 4,4 e 3,6): a ordem entre elas se mantém.</p>
       <p>Desvio = (variação em reais − justo) ÷ erro típico. Um desvio abaixo de −2 acontece em menos de 5% dos dias de estresse.</p>
@@ -492,7 +508,9 @@ const STK = {ITUB: {n: "Itaú", b: -0.924, c: 0.027, sd: 2.38, kind: "banco priv
              BBD:  {n: "Bradesco", b: -1.10, c: -0.30, sd: 2.76, kind: "banco privado"},
              ABEV: {n: "Ambev", b: -0.59, c: -0.55, sd: 2.10, kind: "consumo doméstico"},
              SBS:  {n: "Sabesp", b: -0.88, c: -0.37, sd: 3.45, kind: "saneamento regulado"},
-             SUZ:  {n: "Suzano", b: 0.19, c: -0.28, sd: 3.53, kind: "exportadora de celulose"}};
+             SUZ:  {n: "Suzano", b: 0.19, c: -0.28, sd: 3.53, kind: "exportadora de celulose"},
+             // No ADR: the B3 price itself, only while the B3 session is open (30/10/2026, same method, 106 stress days)
+             BBAS3: {n: "Banco do Brasil", b: -1.35, c: -0.41, sd: 3.74, kind: "banco estatal", y: "BBAS3.SA"}};
 const DIFX = {c: 1.96, b: 7.11, sd: 29.9};                             // DI 2y bp on dollar %
 const PIB_PER_1 = -0.062, PT_BCB = 0.10, PT_VAR = 0.03;
 // Unified scenarios (26/10/2026): same names and weights as the monitor dataset "scenarios" and the doc "Dominância fiscal".
@@ -503,12 +521,14 @@ const SCEN = [
   {n: "Estresse e espiral", p: 0.25, mu: 320, f: [1.4, 1.8, 2.2], c: "Contestação do resultado se arrasta, rating cai; o BC sobe o juro e o dólar continua a subir. Dólar perto de R$ 6,20 em 6 meses (monitor)."},
 ];
 let WEIGHTS_AT = "27/10/2026";
-// Market rule: now = start + LAMBDA x (DI mix - start), each change capped at CAP, then scaled to 100%.
-// LAMBDA 0.3 reproduces the earlier 45/35/20 -> 32/37/31 step; CAP keeps any weight from moving more than 15 points in a day.
-const LAMBDA = 0.3, CAP = 0.15;
+// Market rule (Bayes, since 29/10/2026): now_i = start_i x N(DI move | mu_i, SIGMA), scaled to 100%.
+// SIGMA = how far the 2-year DI wanders within one scenario: sd of the move 20 to 40 sessions after 22 shocks since 2015 is 62 to 113 bp (PRE 720 d, SILO). 100 bp.
+// The earlier rule, now = start + 0.3 x (DI mix - start) capped at 15 points, is kept in the Método page as history.
+const SIGMA = 100;
+const lik = bp => { const l = SCEN.map(s => Math.exp(-((bp - s.mu) ** 2) / (2 * SIGMA * SIGMA))), t = l.reduce((a, b) => a + b, 0); return l.map(x => x / t); };
 function nowW(M) {
   if (!M) return SCEN.map(s => s.p);
-  const w = SCEN.map((s, i) => Math.max(0, s.p + Math.max(-CAP, Math.min(CAP, LAMBDA * (M.w[i] - s.p))))), t = w.reduce((a, b) => a + b, 0);
+  const w = SCEN.map((s, i) => s.p * M.w[i]), t = w.reduce((a, b) => a + b, 0);
   return w.map(x => x / t);
 }
 const LSD = 35;
@@ -631,7 +651,7 @@ function item(id, kind, tag, what, todo) {
   const c = document.createElement("span"); c.className = "chip " + kind; c.textContent = tag; el.appendChild(c);
   const d = document.createElement("div");
   const w = document.createElement("div"); w.className = "what"; w.textContent = what; d.appendChild(w);
-  if (todo) { const t = document.createElement("div"); t.className = "do"; const b = document.createElement("b"); b.textContent = "O que fazer: "; t.appendChild(b); t.appendChild(document.createTextNode(todo)); d.appendChild(t); }
+  if (todo) { const t = document.createElement("div"); t.className = "do"; const b = document.createElement("b"); b.textContent = "O que decide: "; t.appendChild(b); t.appendChild(document.createTextNode(todo)); d.appendChild(t); }
   el.appendChild(d);
 }
 function verdict(id, kind, tag, text) { const o = $(id); o.hidden = false; o.className = "verdict " + kind; o.innerHTML = "<b></b><span></span>"; o.firstChild.textContent = tag; o.lastChild.textContent = text; }
@@ -682,8 +702,8 @@ function render() {
   if (F.fx != null) {
     $("m-fx").textContent = pct(F.fx, 1); cls($("m-fx"), F.fx); $("m-fx-s").textContent = "R$ " + nf(F.level, 3) + " · " + F.src.split(" (")[0];
     const fxp = F.fx * 100;
-    if (F.fx < 0.02) item("n-fx", "ok", "Calmo", `Câmbio: dólar ${pct(F.fx)} sobre a PTAX de ${PD} (R$ ${nf(F.level, 2)}).`, "nada de especial; o DI é o próximo sinal.");
-    else if (F.fx < 0.05) item("n-fx", "warn", "Choque", `Câmbio: dólar ${pct(F.fx)} sobre a PTAX de ${PD} (R$ ${nf(F.level, 2)}).`, "choques assim não voltaram na 1ª semana em 2022 e 2024. Não conte com volta rápida; espere um sinal fiscal (equipe econômica, Orçamento 2027).");
+    if (F.fx < 0.02) item("n-fx", "ok", "Calmo", `Câmbio: dólar ${pct(F.fx)} sobre a PTAX de ${PD} (R$ ${nf(F.level, 2)}).`, "o DI é o próximo sinal.");
+    else if (F.fx < 0.05) item("n-fx", "warn", "Choque", `Câmbio: dólar ${pct(F.fx)} sobre a PTAX de ${PD} (R$ ${nf(F.level, 2)}).`, "choques assim não voltaram na 1ª semana em 2022 e 2024. O que reverteu foi um sinal fiscal (equipe econômica, Orçamento 2027).");
     else item("n-fx", "bad", "Choque forte", `Câmbio: dólar ${pct(F.fx)} sobre a PTAX de ${PD} (R$ ${nf(F.level, 2)}), ${F.level > LIM ? "acima" : "perto"} do limite de alta do dólar futuro (R$ ${nf(LIM, 2)}).`, "o futuro pode travar no limite; o spot e o USDT passam a ser o preço. Em 2022 e 2024 o dólar subiu mais na 1ª semana antes de voltar.");
   }
 
@@ -720,9 +740,9 @@ function render() {
 
     // Stocks
     const st = [];
-    for (const k of ["ITUB", "BBD", "PBR", "SBS", "ABEV", "VALE", "SUZ"]) {
-      const a = Y[k]; if (!a) continue; const s = STK[k];
-      const brl = ((1 + (a.price / a.base - 1)) * (1 + F.fx) - 1) * 100, fj = s.c + s.b * fxp, zz = (brl - fj) / s.sd;
+    for (const k of ["ITUB", "BBD", "BBAS3", "PBR", "SBS", "ABEV", "VALE", "SUZ"]) {
+      const s = STK[k], a = s.y ? Y[s.y] : Y[k]; if (!a || (s.y && !a.open)) continue;
+      const brl = s.y ? (a.price / a.base - 1) * 100 : ((1 + (a.price / a.base - 1)) * (1 + F.fx) - 1) * 100, fj = s.c + s.b * fxp, zz = (brl - fj) / s.sd;
       st.push({k, s, brl, fj, zz});
     }
     if (st.length) {
@@ -731,6 +751,7 @@ function render() {
         {t: sgn(x.zz, 1) + " dp", n: 1, label: "Desvio", cls: x.zz < -2 ? "up" : ""}, {t: x.zz < -2 ? "muito abaixo do normal" : x.zz < -1 ? "abaixo do normal" : x.zz > 1 ? "acima do normal" : "normal", label: "Leitura", cls: "hide-m"}]})));
       const read = worst.k === "PBR" ? ["bad", "Intervenção", "O mercado teme intervenção na estatal. Em 2022, Petrobras e BB caíram 7,8 p.p. mais que Itaú e Vale no dia seguinte.", "PETR4 e BBAS3 contra ITUB4 na abertura mostram se a queda é da estatal. Preço de combustível e dividendos movem esse risco."]
         : worst.k === "ITUB" || worst.k === "BBD" ? ["bad", "Juro/crédito", "O pior desvio é do banco privado, não da estatal. O mercado precifica juro mais alto e crédito pior, que é risco fiscal, não medo de intervenção.", "o sinal que decide é o DI jan/29 às 9h. Se o excesso fiscal passar de +60 bp, a queda dos bancos tem base."]
+        : worst.k === "BBAS3" ? ["bad", "Estatal bancário", "O pior desvio é do banco estatal. O mercado precifica risco de intervenção no crédito e de capital do Tesouro, que é risco fiscal e político ao mesmo tempo.", "o Banco do Brasil contra o Itaú separa risco estatal de risco de juro e crédito."]
         : worst.k === "SBS" ? ["warn", "Regulada", "O pior desvio é da empresa regulada de saneamento. O mercado precifica risco regulatório e juro longo, que pesa em ativos de fluxo longo.", "o DI longo e a Sabesp contra o Itaú separam juro de risco regulatório."]
         : worst.k === "ABEV" ? ["warn", "Consumo doméstico", "O pior desvio é do consumo doméstico, que depende de renda e juro. É um canal mais lento que o câmbio.", "o desvio do consumo contra o dos bancos mostra se o mercado teme a economia ou o crédito."]
         : ["warn", "Exportadora", "O pior desvio é de uma exportadora. Isso não é típico de choque fiscal.", "minério, celulose e o mercado global explicam esse desvio antes de um choque brasileiro."];
@@ -764,7 +785,7 @@ function render() {
         const k = ex > 60 ? "bad" : ex > 30 ? "warn" : "ok", t = ex > 60 ? "Além do câmbio" : ex > 30 ? "Em alerta" : "Câmbio";
         verdict("di-out", k, t, `DI jan/29 ${sgn(bp)} bp. O dólar de hoje explica ${sgn(exp)} bp (faixa de 2 erros típicos: ${sgn(exp - 2 * DIFX.sd)} a ${sgn(exp + 2 * DIFX.sd)}). Excesso: ${sgn(ex)} bp${ex > 60 ? ", acima de 2 erros típicos. O mercado cobra algo além do câmbio (prêmio fiscal, Selic ou inflação esperada)." : ex > 30 ? ", entre 1 e 2 erros típicos." : ". A alta do DI vem do câmbio, não de prêmio fiscal novo."}` + (dd.ts ? " (B3, " + dd.ts.slice(11, 16) + ")" : ""));
         item("n-di", k, t, `Juros: DI jan/29 ${sgn(bp)} bp. O câmbio explica ${sgn(exp)} bp; excesso não explicado de ${sgn(ex)} bp.`,
-          ex > 60 ? "trate o choque como fiscal. Em 2022 e 2024 o DI subiu por semanas; não espere volta rápida dos juros nem do dólar." : ex > 30 ? "o mercado começa a cobrar prêmio fiscal. O sinal seguinte é o nome da equipe econômica." : "o mercado de juros não compra o pânico. Se a bolsa estiver fora da faixa, o exagero está na bolsa, não nos juros.");
+          ex > 60 ? "o choque é fiscal. Em 2022 e 2024 o DI subiu por semanas antes de voltar." : ex > 30 ? "o mercado começa a cobrar prêmio fiscal. O sinal seguinte é o nome da equipe econômica." : "o mercado de juros não compra o pânico. Bolsa fora da faixa significa exagero na bolsa, não nos juros.");
       }
     } else {
       $("m-di").textContent = "fechado"; $("m-di-s").textContent = "abre às 9h";
@@ -1024,9 +1045,7 @@ function diMix() {
   const r = S.di && S.di.c.DI1F29;
   if (!r || r.prev == null) return null;
   const last = r.cur != null ? r.cur : r.prev, bp = (last - ELECT.di29) * 100, lim = r.top != null && r.cur != null && r.cur >= r.top;
-  const w = SCEN.map(() => 0), mu = SCEN.map(s => s.mu);
-  if (bp <= mu[0]) w[0] = 1; else if (bp >= mu[mu.length - 1]) w[mu.length - 1] = 1;
-  else for (let i = 0; i < mu.length - 1; i++) if (bp >= mu[i] && bp <= mu[i + 1]) { const t = (bp - mu[i]) / (mu[i + 1] - mu[i]); w[i] = 1 - t; w[i + 1] = t; }
+  const w = lik(bp), mu = SCEN.map(s => s.mu);
   return {w, bp, lim, beyond: bp > mu[mu.length - 1], live: r.cur != null};
 }
 // Whole percents that sum to 100 (largest remainder), so the table never shows 101 or 99.
@@ -1039,6 +1058,41 @@ const TK = {sc: "", dom: ""};
 function setTake() { if (TK.sc || TK.dom) $("take").textContent = (TK.sc + TK.dom).trim(); }
 // "Como funciona" links: open the collapsed method step, then scroll to it.
 document.addEventListener("click", e => { const a = e.target.closest && e.target.closest("a.how"); if (!a) return; const t = document.querySelector(a.getAttribute("href")); if (!t) return; e.preventDefault(); for (let p = t; p; p = p.parentElement) if (p.tagName === "DETAILS") p.open = true; t.scrollIntoView({block: "start"}); });
+// Hero: the scenario the DI jan/29 prices now, how it moved, and its path since 23/10 (settlements from the SILO, today from the B3).
+function renderHero(M, NP) {
+  const top = M.w.indexOf(Math.max(...M.w)), MP = pct100(M.w);
+  $("hx-sc").textContent = SCEN[top].n + (M.beyond ? " e além" : "");
+  $("hx-bp").textContent = sgn(M.bp) + " bp";
+  const pos = (M.bp - SCEN[0].mu) / (SCEN[2].mu - SCEN[0].mu) * 100;
+  $("hx-pos").textContent = M.beyond ? "além do pior cenário" : nf(Math.max(0, pos), 0) + "% do caminho de Âncora a Estresse";
+  const rows = (S.silo_di && S.silo_di.rows || []).filter(r => r.trade_date >= ELECT.iso && r.settlement_rate != null).map(r => ({d: r.trade_date, bp: (+r.settlement_rate - ELECT.di29) * 100}));
+  const last = rows.length ? rows[rows.length - 1] : null, prev = rows.length > 1 ? rows[rows.length - 2] : null, wk = rows.length > 5 ? rows[rows.length - 6] : rows[0];
+  const d = (a, b) => a && b ? sgn(a.bp - b.bp) + " bp" : "–";
+  $("hx-d1").textContent = last ? d(M.live ? {bp: M.bp} : last, M.live ? last : prev) : "–";
+  $("hx-d5").textContent = rows.length > 5 ? d(M.live ? {bp: M.bp} : last, wk) : "–";
+  const cols = ["var(--down)", "var(--warn)", "var(--up)"];
+  $("hx-bars").innerHTML = SCEN.map((x, i) => `<div class="hbar"><span class="bn">${x.n}</span><span class="bt"><i style="width:${MP[i]}%;background:${cols[i]}"></i></span><span class="bv">${MP[i]}%</span><span class="bs">partida ${nf(x.p * 100, 0)}% · agora ${NP[i]}%</span></div>`).join("");
+  const pts = rows.map(r => ({t: Date.parse(r.d + "T20:00:00Z"), w: lik(r.bp)}));
+  const post = w => { const x = SCEN.map((s, i) => s.p * w[i]), t = x.reduce((a, b) => a + b, 0); return x.map(v => v / t); };
+  pts.forEach(p => p.w = post(p.w)); if (M.live) pts.push({t: Date.now(), w: post(M.w)});
+  if (pts.length > 1) stackChart("c-px", pts, cols, SCEN.map(x => x.p));
+}
+function stackChart(id, pts, cols, start) {
+  const box = $(id); box.textContent = "";
+  const W = Math.max(300, Math.round(box.clientWidth || 560)), H = W < 450 ? 150 : 170, m = {l: 36, r: 8, t: 8, b: 22}, NS = "http://www.w3.org/2000/svg";
+  const el = (t, a, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Pesos de agora, por dia"}, box);
+  const x0 = pts[0].t, x1 = pts[pts.length - 1].t, X = t => m.l + (W - m.l - m.r) * (t - x0) / ((x1 - x0) || 1), Y = v => m.t + (H - m.t - m.b) * (1 - v);
+  for (const v of [0, 0.5, 1]) { el("line", {x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), stroke: "var(--grid)"}, svg); const tx = el("text", {x: m.l - 5, y: Y(v) + 3, "text-anchor": "end"}, svg); tx.textContent = nf(v * 100, 0) + "%"; }
+  for (let i = 2; i >= 0; i--) {
+    const up = pts.map(p => p.w.slice(0, i + 1).reduce((a, b) => a + b, 0));
+    const dpath = pts.map((p, k) => (k ? "L" : "M") + X(p.t).toFixed(1) + " " + Y(up[k]).toFixed(1)).join(" ") + " L" + X(x1).toFixed(1) + " " + Y(0) + " L" + X(x0).toFixed(1) + " " + Y(0) + " Z";
+    el("path", {d: dpath, fill: cols[i], "fill-opacity": 0.55, stroke: "none"}, svg);
+  }
+  let acc = 0; for (let i = 0; i < 2; i++) { acc += start[i]; el("line", {x1: m.l, x2: W - m.r, y1: Y(acc), y2: Y(acc), stroke: "var(--fg)", "stroke-dasharray": "3 3", "stroke-opacity": 0.5}, svg); }
+  const nt = W < 450 ? 2 : 4;
+  for (let i = 0; i <= nt; i++) { const t = x0 + (x1 - x0) * i / nt; const tx = el("text", {x: X(t), y: H - 6, "text-anchor": i === 0 ? "start" : i === nt ? "end" : "middle"}, svg); tx.textContent = new Date(t).toLocaleDateString("pt-BR", {timeZone: "America/Sao_Paulo", day: "2-digit", month: "2-digit"}); }
+}
 function renderScen(F) {
   const M = diMix(), fx = F.level / ELECT.ptax - 1, NW = nowW(M), NP = pct100(NW), MP = M ? pct100(M.w) : null, SV = scenLv(F, NW), SL = SV.L;
   const data = SCEN.map((s, i) => ({hl: M && M.w[i] === Math.max(...M.w), cells: [{t: s.n}, {t: nf(s.p * 100, 0) + "%", n: 1, label: "Início (relatório diário)"},
@@ -1051,7 +1105,7 @@ function renderScen(F) {
   const topJ = SCEN.reduce((b, s, i) => s.p > SCEN[b].p ? i : b, 0);
   if (!M) { $("m-sc").textContent = SCEN[topJ].n; $("m-sc-s").textContent = nf(SCEN[topJ].p * 100, 0) + "% · julgamento"; return; }
   const topM = M.w.indexOf(Math.max(...M.w));
-  { const pos = (M.bp - SCEN[0].mu) / (SCEN[2].mu - SCEN[0].mu) * 100; $("px-pos").innerHTML = "Hoje: <b>" + sgn(M.bp) + " bp</b>, ou <b>" + nf(Math.max(0, pos), 0) + "%</b> do caminho entre " + SCEN[0].n + " (+" + SCEN[0].mu + " bp) e " + SCEN[2].n + " (+" + SCEN[2].mu + " bp)" + (M.beyond ? ", já além do pior cenário." : "."); }
+  renderHero(M, NP);
   $("m-sc").textContent = SCEN[topM].n; $("m-sc-s").textContent = "o DI precifica · agora " + NP.join("/") + " · DI jan/29 " + sgn(M.bp) + " bp desde 23/10";
   TK.sc = "Pesos agora: " + SCEN.map((x, i) => x.n.split(" ")[0] + " " + NP[i] + "%").join(", ") + ". O DI jan/29 subiu " + sgn(M.bp) + " bp desde 23/10" + (M.beyond ? ", além do pior cenário." : ", mais perto de " + SCEN[topM].n + ".") ; setTake();
   const gap = M.w.map((x, i) => x - SCEN[i].p), big = gap.reduce((b, g, i) => Math.abs(g) > Math.abs(gap[b]) ? i : b, 0);
@@ -1059,7 +1113,7 @@ function renderScen(F) {
   if (M.beyond) txt += ` Isso passa dos +${SCEN[2].mu} bp do pior cenário: o mercado precifica Estresse e mais.${M.lim ? " O contrato está no limite de alta da B3, então a alta real pode ser ainda maior." : ""}`;
   else txt += ` Isso fica entre ${SCEN.filter((s, i) => M.w[i] > 0).map(s => s.n + " (+" + s.mu + " bp)").join(" e ")}.`;
   txt += ` O relatório diário começou com ${nf(SCEN[big].p * 100, 0)}% em ${SCEN[big].n}; o DI dá ${MP[big]}%; a regra de mercado leva a ${NP[big]}% agora.`;
-  txt += Math.abs(gap[big]) > 0.3 ? " A diferença é grande: ou o mercado exagera no 1º dia (como no Joesley, quando o DI devolveu 70% em 20 dias), ou o julgamento está atrasado. A regra de mercado move cada peso no máximo 15 pontos por dia, de propósito." : " Julgamento e mercado contam histórias parecidas.";
+  txt += Math.abs(gap[big]) > 0.3 ? " A diferença é grande: ou o mercado exagera no 1º dia (como no Joesley, quando o DI devolveu 70% em 20 dias), ou o julgamento está atrasado. Com σ = 100 bp, um dia só não leva nenhum cenário a 100%." : " Julgamento e mercado contam histórias parecidas.";
   verdict("sc-out", M.beyond || Math.abs(gap[big]) > 0.3 ? "bad" : "warn", "Julgamento × DI", txt);
 }
 
@@ -1336,7 +1390,7 @@ function start() {
   };
   for (const [key, get] of Object.entries(SILO)) {
     every(21600000, async () => {
-      try { S[key] = {rows: await get(), at: Date.now()}; $(key === "flow" ? "e-flow" : "e-silo").hidden = true; if (key === "silo_fx" || key === "silo_di") renderHist(); }
+      try { S[key] = {rows: await get(), at: Date.now()}; $(key === "flow" ? "e-flow" : "e-silo").hidden = true; if (key === "silo_fx" || key === "silo_di") renderHist(); if (key === "silo_di" && S.y) { const F = fxNow(); if (F && F.fx != null) renderScen(F); } }
       catch (e) {
         const el = $(key === "flow" ? "e-flow" : "e-silo"); el.hidden = false;
         el.textContent = key === "flow" ? "Fluxo estrangeiro indisponível agora (" + (e.code || "erro") + ")." : "SILO indisponível agora (" + (e.code || "erro") + "): o placar usa só os sinais da B3 e do CDS.";

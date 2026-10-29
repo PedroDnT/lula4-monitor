@@ -58,7 +58,7 @@
 
   <section class="dm-section" id="pesos">
     <h2 class="dm-h2">Pesos de partida</h2>
-    <p class="dm-sub">A partida vem só de fatos: cada fato multiplica o peso de cada cenário, e os pesos voltam a somar 100%. A rotina diária aplica os fatos novos à partida; a revisão semanal aplica os gatilhos e não conta de novo um fato já aplicado. Durante o dia, o intraday soma a reação do DI jan/29: agora = partida + 0,3 × (mix do DI − partida), no máximo 15 pontos por peso.</p>
+    <p class="dm-sub">A partida vem só de fatos: cada fato multiplica o peso de cada cenário, e os pesos voltam a somar 100%. A rotina diária aplica os fatos novos à partida; a revisão semanal aplica os gatilhos e não conta de novo um fato já aplicado. Durante o dia, o Agora atualiza a partida por Bayes com o nível do DI jan/29 desde 23/10 (σ = 100 bp).</p>
     <div class="dm-tiles">
       <div class="dm-tile" id="t-ancora">
         <span class="dm-tile-label">Âncora retomada</span>

@@ -45,7 +45,7 @@
     ["Como o painel calcula", [
       ["cenario", "Cenário", "Uma história possível para os próximos meses: Âncora retomada, Deriva fiscal ou Estresse e espiral.", "O painel não prevê. Ele mede qual história o preço de hoje paga."],
       ["partida", "Peso de partida", "A probabilidade inicial de cada cenário, definida só por fatos no relatório diário.", "Muda uma vez por dia."],
-      ["agora", "Peso de agora", "A partida ajustada pelo movimento do DI jan/29: partida mais 0,3 vez a diferença, com limite de 15 pontos.", "Muda ao longo do dia, com os preços."],
+      ["agora", "Peso de agora", "A partida atualizada por Bayes com o nível do DI jan/29 desde 23/10: partida × verossimilhança de cada marca, com σ = 100 bp.", "Muda ao longo do dia, com os preços."],
       ["degrau", "Degrau do fato", "Força do fato: fraco ×1,05, moderado ×1,15 e forte ×1,30. Contra o cenário, vale o inverso.", "Boato pesa pouco. Decisão oficial pesa muito."],
       ["sinais", "6 sinais de dominância", "Juro e dólar sobem juntos; juro real; inflação implícita; CDS; inclinação da curva; DI além do que o câmbio explica.", "Quanto mais acesos e por mais tempo, mais perto de dominância."],
       ["correlacao", "Correlação de 20 dias", "O quanto o DI e o dólar andam juntos nos últimos 20 pregões. Vai de −1 a +1.", "Acima de 0,4 é sinal aceso. Em qualquer susto os dois sobem juntos por alguns dias; semanas pesam mais."],
@@ -202,7 +202,8 @@
   function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
   function set(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-  if (get() === "off") root.setAttribute("data-leia", "off");
+  // Explanations start hidden on the Agora page (prices first); the toggle remembers the reader's choice.
+  if (get() === "off" || (get() === null && /(^|\/)(index\.html)?$/.test(location.pathname))) root.setAttribute("data-leia", "off");
 
   function block(d) {
     var h = '<div><b>O que é</b><p>' + esc(d.o) + '</p></div><div><b>O que mostra</b><p>' + esc(d.m) + '</p></div><div><b>O que implica</b><p>' + esc(d.i) + '</p></div>';
