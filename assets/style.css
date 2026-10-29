@@ -41,3 +41,9 @@ a { color: var(--color-accent); }
 #dash-root { max-width: 1120px; margin: 0 auto; padding: 24px 16px 8px; }
 .dash-skeleton { opacity: .5; }
 @media (max-width: 560px) { #dash-root { padding-top: 16px; } }
+
+/* Second level of the Agora tab: live prices and the daily report */
+.subtabs { display: flex; gap: 6px; max-width: 1100px; margin: 0 auto; padding: 10px 16px 0; overflow-x: auto; scrollbar-width: none; }
+.subtabs a { white-space: nowrap; text-decoration: none; font-size: 13px; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--color-border); color: var(--color-fg-muted); }
+.subtabs a:hover { color: var(--color-fg); }
+.subtabs a[aria-current="page"] { color: var(--color-fg); background: var(--color-panel); border-color: var(--color-accent); font-weight: 600; }
