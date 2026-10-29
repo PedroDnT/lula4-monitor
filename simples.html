@@ -117,7 +117,7 @@ dl.words dd { margin: 2px 0 0; font-size: 15px; }
     <h2>6. O que o mercado de juros está dizendo</h2>
     <p class="say" id="m-say">—</p>
     <div class="scen" id="m-scen"></div>
-    <p class="src"><span class="tag tag-dado">Dado</span>Taxa de ajuste do DI jan/29 (juro futuro da B3), pelo <b>SILO</b>. <span class="tag tag-jul">Julgamento</span>Os 3 caminhos e a chance de partida são escolhas do autor. A chance de agora junta a partida com a taxa do DI pela regra de Bayes (σ = 100 bp, medido em 22 choques desde 2015). <span class="tag tag-sim">Simulação</span>Dívida em 2030 por caminho. Detalhes no <a href="metodo.html#m-origem">Método</a>.</p>
+    <p class="src"><span class="tag tag-dado">Dado</span>DI jan/29 (juro futuro da B3): o último negócio da B3, com cerca de 15 minutos de atraso, e fora do pregão o ajuste do dia, pelo <b>SILO</b>. A página lê de novo a cada 2 minutos. <span class="tag tag-jul">Julgamento</span>Os 3 caminhos e a chance de partida são escolhas do autor. A chance de agora junta a partida com a taxa do DI pela regra de Bayes (σ = 100 bp, medido em 22 choques desde 2015). <span class="tag tag-sim">Simulação</span>Dívida em 2030 por caminho. Detalhes no <a href="metodo.html#m-origem">Método</a>.</p>
   </section>
 
   <section class="card">
@@ -143,6 +143,7 @@ const HDR = { apikey: "sb_publishable__yfFQsykAglrvc9GS6_PYw_B24ex437", "Accept-
 // Same anchor and rule as the Agora page: DI jan/29 settlement of 23/10 and Bayes with sigma = 100 bp.
 const ELECT = { di29: 12.640, iso: "2026-10-23" };
 const SIGMA = 100;
+const B3_DI = "https://cotacao.b3.com.br/mds/api/v1/DerivativeQuotation/DI1";
 // Plain names for the 3 paths; the scenario ids come from the data files.
 const PLAIN = {
   ancora: ["Plano crível", "O governo apresenta um plano fiscal que convence e o Orçamento de 2027 cumpre a meta."],
@@ -225,16 +226,32 @@ function renderLft(lft) {
   $("w-i").textContent = `Preços mais altos diminuem o peso da dívida, e quem paga é quem vive de salário. Aqui funciona pouco: ${nf(0).format(last.floating_share_dpf)}% da dívida federal é corrigida pela Selic (LFT, ${monthName(last.month)}), e outra parte pela própria inflação.`;
 }
 
-function renderMarket(rows, pesos, scen) {
+// The B3 public quote for DI1F29: last trade, about 15 minutes late. Null when there is no trade today.
+async function liveDi() {
+  const r = await fetch(B3_DI);
+  if (!r.ok) throw new Error("B3 " + r.status);
+  const j = await r.json();
+  const c = (j.Scty || []).find((x) => x.symb === "DI1F29");
+  const q = c && c.SctyQtn && Number(c.SctyQtn.curPrc);
+  const at = j.Msg && j.Msg.dtTm;
+  return q > 0 && at ? { rate: q, date: at.slice(0, 10), time: at.slice(11, 16) } : null;
+}
+
+let MKT = null;
+function renderMarket(rows, pesos, scen, live) {
+  MKT = { rows, pesos, scen };
   rows = rows.filter((r) => r.trade_date >= ELECT.iso && r.settlement_rate != null).sort((a, b) => (a.trade_date < b.trade_date ? -1 : 1));
-  if (!rows.length) { fail("m-say", "O ajuste do DI jan/29 não carregou agora."); return; }
-  const last = rows[rows.length - 1];
-  const bp = Math.round((last.settlement_rate - ELECT.di29) * 100);
+  if (!rows.length && !live) { fail("m-say", "O ajuste do DI jan/29 não carregou agora."); return; }
+  const last = rows[rows.length - 1] || {};
+  // A live trade is used only when it is newer than the last settlement in SILO.
+  const useLive = live && (!last.trade_date || live.date > last.trade_date);
+  const rate = useLive ? live.rate : last.settlement_rate;
+  const bp = Math.round((rate - ELECT.di29) * 100);
   const lik = pesos.map((s) => Math.exp(-Math.pow(bp - s.di_jan29_move_bp, 2) / (2 * SIGMA * SIGMA)));
   const raw = pesos.map((s, i) => s.start * lik[i]);
   const tot = raw.reduce((a, b) => a + b, 0);
   const now = raw.map((v) => v / tot);
-  $("m-say").textContent = `Desde a eleição, o juro para janeiro de 2029 foi de ${nf(2).format(ELECT.di29)}% para ${nf(2).format(last.settlement_rate)}% ao ano (${bp >= 0 ? "+" : "−"}${Math.abs(bp)} bp, ajuste de ${dayName(last.trade_date)}). Quem empresta ao governo cobra mais caro porque vê mais risco. A chance de cada caminho:`;
+  $("m-say").textContent = `Desde a eleição, o juro para janeiro de 2029 foi de ${nf(2).format(ELECT.di29)}% para ${nf(2).format(rate)}% ao ano (${bp >= 0 ? "+" : "−"}${Math.abs(bp)} bp, ${useLive ? `último negócio de ${dayName(live.date)}, lido às ${live.time}` : `ajuste de ${dayName(last.trade_date)}`}). Quem empresta ao governo cobra mais caro porque vê mais risco. A chance de cada caminho:`;
   const sc = Object.fromEntries(scen.map((s) => [s.id, s]));
   $("m-scen").replaceChildren(...pesos.map((s, i) => {
     const pl = PLAIN[s.id] || [s.cenario, ""];
@@ -248,13 +265,14 @@ function renderMarket(rows, pesos, scen) {
 }
 
 Promise.allSettled([
+  liveDi(),
   Promise.all(["DBGG_PIB", "NFSP_PRIMARIO_12M", "NFSP_NOMINAL_12M", "PIB"].map(series)),
   file("data/dominancia/budget.json"),
   file("data/dominancia/lft.json"),
   rpc("future_series", { p_ticker: "DI1F29", p_from: ELECT.iso }),
   file("data/relatorio/pesos.json"),
   file("data/dominancia/scenarios.json"),
-]).then(([mac, bud, lft, di, pes, sce]) => {
+]).then(([liv, mac, bud, lft, di, pes, sce]) => {
   let f = null;
   if (mac.status === "fulfilled") f = debtNow(...mac.value);
   if (f) {
@@ -268,9 +286,11 @@ Promise.allSettled([
     ["d-say", "j-say", "c-say"].forEach((id) => fail(id, "Os dados do BCB não carregaram agora."));
   }
   if (lft.status === "fulfilled") renderLft(lft.value);
-  if (di.status === "fulfilled" && pes.status === "fulfilled") renderMarket(di.value, pes.value, sce.status === "fulfilled" ? sce.value : []);
+  if (di.status === "fulfilled" && pes.status === "fulfilled") renderMarket(di.value, pes.value, sce.status === "fulfilled" ? sce.value : [], liv.status === "fulfilled" ? liv.value : null);
   else fail("m-say", "O ajuste do DI jan/29 não carregou agora.");
-  $("asof").textContent = f ? `Dívida e juro: BCB, ${monthName(f.month)}. Juro futuro: B3, último ajuste. Orçamento: PLOA 2027.` : "Parte dos dados não carregou.";
+  $("asof").textContent = f ? `Dívida e juro: BCB, ${monthName(f.month)}. Juro futuro: B3, último negócio. Orçamento: PLOA 2027.` : "Parte dos dados não carregou.";
 });
+// Only the DI quote refreshes; a failed read keeps the last number on screen.
+setInterval(() => { if (!MKT || document.hidden) return; liveDi().then((l) => renderMarket(MKT.rows, MKT.pesos, MKT.scen, l)).catch(() => {}); }, 120000);
 })();</script>
 </body></html>
