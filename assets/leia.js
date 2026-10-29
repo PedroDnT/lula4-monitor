@@ -106,7 +106,7 @@
     },
     "topo:dominancia": {
       o: "O fundo: o que muda devagar e decide se a dívida é sustentável.",
-      m: "5 blocos: conta da dívida, rolagem, âncora de inflação, cenários e orçamento 2027.",
+      m: "O laço no topo, e 5 blocos: conta da dívida, rolagem, âncora de inflação, orçamento 2027 e gatilhos. Cada número tem uma etiqueta: Norma, Dado, Estimativa ou Simulação.",
       i: "Aqui, alerta aceso quer dizer risco de médio prazo, não pânico do dia. O pânico do dia está no Intraday.",
       g: ["dominancia", "dbgg", "rg"]
     },
@@ -141,8 +141,8 @@
       g: ["arcabouco", "ploa", "primario", "contab"]
     },
     "alertas": {
-      o: "Os 10 alertas do monitor, num só lugar.",
-      m: "Cada alerta acende quando o dado passa do limite combinado.",
+      o: "Os 10 gatilhos do monitor, num só lugar.",
+      m: "Cada gatilho acende quando o dado passa do limite. A coluna Origem diz se o limite é de lei, de mercado (calibrado) ou escolha nossa.",
       i: "Em 11 crises desde 2010, o alerta de inflação implícita acendeu antes em 7 ou 8. Alertas de fundo (r − g, lacuna) são condição, não alarme de curto prazo.",
       g: ["infimp", "rg"]
     },
@@ -184,6 +184,17 @@
     }
   };
 
+  // Sources for the terms that are a law, a target or an official plan (the popups cite them).
+  var SRC = {
+    ancora: ["BCB, Metas para a inflação", "https://www.bcb.gov.br/controleinflacao/metainflacao"],
+    arcabouco: ["Lei Complementar 200/2023", "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp200.htm"],
+    paf: ["Tesouro Nacional, Plano Anual de Financiamento", "https://www.gov.br/tesouronacional"],
+    lft: ["Tesouro Direto", "https://www.tesourodireto.com.br"],
+    dpf: ["Tesouro Nacional, Relatório Mensal da Dívida", "https://www.gov.br/tesouronacional"],
+    dbgg: ["BCB, Estatísticas fiscais", "https://www.bcb.gov.br/estatisticas/estatisticasfiscais"],
+    focus: ["BCB, Boletim Focus", "https://www.bcb.gov.br/publicacoes/focus"],
+    ploa: ["Ministério do Planejamento e Orçamento", "https://www.gov.br/planejamento"]
+  };
   var gmap = {};
   GLOSS.forEach(function (grp) { grp[1].forEach(function (t) { gmap[t[0]] = t[1]; }); });
   var root = document.documentElement;
@@ -255,6 +266,32 @@
     draw();
   }
 
-  function init() { inject(); gloss(); }
+  // Popups: a .term button opens the glossary entry under it, with its source when there is one.
+  function terms() {
+    var pop = null;
+    function find(id) { var out = null; GLOSS.forEach(function (grp) { grp[1].forEach(function (t) { if (t[0] === id) out = t; }); }); return out; }
+    function close() { if (pop) { pop.remove(); pop = null; } }
+    document.addEventListener("click", function (e) {
+      var b = e.target.closest(".term");
+      if (!b) { if (pop && !e.target.closest(".term-pop")) close(); return; }
+      e.preventDefault();
+      var id = b.getAttribute("data-term"), t = find(id);
+      if (!t) return;
+      if (pop && pop.getAttribute("data-term") === id) { close(); return; }
+      close();
+      var s = SRC[id];
+      pop = document.createElement("div");
+      pop.className = "term-pop"; pop.setAttribute("data-term", id); pop.setAttribute("role", "dialog");
+      pop.innerHTML = "<b>" + esc(t[1]) + "</b>" + esc(t[2]) + " <i>Como ler:</i> " + esc(t[3]) +
+        '<span class="src">' + (s ? "Fonte: <a href=\"" + esc(s[1]) + "\" target=\"_blank\" rel=\"noopener\">" + esc(s[0]) + "</a> · " : "") + '<a href="conceitos.html#' + esc(id) + '">glossário</a></span>';
+      document.body.appendChild(pop);
+      var r = b.getBoundingClientRect(), w = pop.offsetWidth, vw = document.documentElement.clientWidth;
+      pop.style.left = Math.max(8, Math.min(r.left, vw - w - 8) + window.scrollX) + "px";
+      pop.style.top = (r.bottom + window.scrollY + 6) + "px";
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+  }
+
+  function init() { inject(); gloss(); terms(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();
