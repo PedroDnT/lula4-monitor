@@ -7,7 +7,7 @@ Site estático público com 3 monitores sobre juros, câmbio e fiscal depois da 
 | Agora | `index.html` | Preços ao vivo, pesos de agora dos 3 cenários, 6 sinais de dominância |
 | Agora (segunda vista) | `relatorio.html` | Pesos de partida (só fatos), fechamento da curva DI, Copom contra Focus |
 | Fiscal | `dominancia.html` | Conta da dívida, rolagem, âncora de inflação, orçamento 2027 |
-| Cenário Lara | `lara.html` | Plano Lara Resende (Selic a 7,5% e banda de 3% a 5,5%) contra 4 casos parecidos; não usa preço de mercado nem dá peso |
+| Cenário Lara | `lara.html` | Plano Lara Resende (Selic a 7,5% e banda de 3% a 5,5%) projetado até 2030 nos números do monitor, com premissas a favor e contra de fontes publicadas; casos parecidos em anexo; não usa preço de mercado nem dá peso |
 | Método | `metodo.html` | De onde vem cada número, como cada página funciona, fontes, limites e conceitos |
 | Versão simples | `simples.html` | A conta do governo em 6 passos, para quem não é da área; página que pode ser compartilhada sozinha |
 
@@ -23,7 +23,7 @@ assets/leia.css         estilo desses blocos e da seção Conceitos do Método
 assets/dash-shim.js     lê os arquivos de data/ e a API pública do SILO para as 2 páginas de dashboard
 data/relatorio/*.json   pesos, fatos, agenda, calendário do Copom, feriados, params
 data/dominancia/*.json  cenários, histórico, LFT, rolagem, orçamento, calibração, params
-data/lara/*.json        casos (BIS) e impactos do cenário Lara; gerados por docs/lara/build.py
+data/lara/*.json        projeção 2026-2030, casos (BIS) e impactos do cenário Lara; gerados por docs/lara/build.py
 data/intraday/history.json   histórico-base do painel intraday
 worker.js  wrangler.jsonc  3 rotas /api/yahoo, /api/cds, /api/selic (fontes sem CORS)
 docs/ATUALIZACAO.md     quem escreve cada arquivo de dados e quando
