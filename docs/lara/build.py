@@ -103,3 +103,101 @@ json.dump({"br": BR, "repasse": PASS, "resumo": resumo, "impactos": imp, "selic"
            "divida": divida, "lft_pib": round(lft, 1), "lara_economia_plena": lara_full},
           open("data/lara/impactos.json", "w"), ensure_ascii=False, indent=1)
 print(json.dumps({"resumo": resumo, "impactos": imp, "divida": divida, "lft": lft, "lara_full": lara_full}, indent=1))
+
+# ---------------------------------------------------------------------------
+# Projection 2027-2030: the monitor's numbers under 3 paths (sem plano, a favor, contra).
+# Every parameter below carries its source in PREMISSAS (shown on the page).
+P = {
+    "g_real": 2.5,          # Lara Resende (2026): crescimento real potencial; igual nos 3 caminhos
+    "pb": 0.52,             # déficit primário 12m, % PIB, set/26 (BCB SGS 5793, SILO); constante: sem mudança de política
+    "nfsp_nom": 9.51,       # déficit nominal 12m, % PIB, set/26 (BCB SGS 5727, SILO)
+    "matur": 3.8,           # prazo médio da DPF, anos (Tesouro, PAF 2026): parte não Selic que rola por ano = 1/3.8
+    "rho_hoje": 7.97,       # juro real de 5 anos (DPL 1800 dias, B3, SILO, 30/10/2026)
+    "rho_favor": 2.5,       # Lara Resende (2026): juro real converge ao crescimento real
+    "selic_ipca": 0.27,     # BCB (2024), RI jun/24: +1 p.p. de Selic por 4 trimestres tira 0,27 p.p. do IPCA em 4 trimestres
+    "pressao": 1.25,        # Drechsel (2024): choque de pressão política eleva o nível de preços em 5% em 4 anos -> 1,25 p.p./ano
+    "meta": 3.0,            # CMN: meta de inflação
+    "comp": {"selic": 52.74, "ipca": 23.22, "pre": 20.31, "cambio": 3.74},  # Tesouro (2026), RMD ago/26: composição da DPF, %
+    "cupom_usd": 6.0,       # custo em dólar da dívida externa, % a.a. (julgamento); soma-se a desvalorização do ano
+    "neutro_real": 5.0,     # BCB (2026), RPM jun/26: juro real neutro de 5,0%
+    "meses_neutro": 36,     # sem plano: a Selic chega ao neutro nominal (5,0 + 3,0) em 36 meses, em linha reta (julgamento)
+}
+YEARS = [2027, 2028, 2029, 2030]
+
+def monthly(path_fn, n=48):
+    return [path_fn(k) for k in range(1, n + 1)]
+
+def contra_selic(k):  # plano até o mês da 1ª alta de Brasil 2011 (20), depois sobe na proporção de 2011 (12,5 -> 14,25) até o mês 48
+    at, top = resumo["br2011"]["mes_alta"], BR["selic"] * resumo["br2011"]["juro_48"] / resumo["br2011"]["juro_ini"]
+    if k <= at: return plan(k)
+    a = plan(at); return a + (top - a) * min(1, (k - at) / (48 - at))
+def plan48(k): return plan(k) if k <= 36 else 5.5
+def base_selic(k):
+    alvo = P["neutro_real"] + P["meta"]
+    return BR["selic"] + (alvo - BR["selic"]) * min(1, k / P["meses_neutro"])
+SEL = {"sem": monthly(base_selic), "favor": monthly(plan48), "contra": monthly(contra_selic)}
+
+# dólar no fim de cada ano
+br11 = {r["t"]: r for r in casos if r["caso"] == "br2011"}
+FX = {"sem": [BR["ptax"]] * 4, "favor": [BR["ptax"]] * 4,
+      "contra": [round(BR["ptax"] * br11[m]["cambio_rel"] / 100, 2) for m in (12, 24, 36, 48)]}
+
+def base_infl(i):  # sem plano: IPCA converge da taxa de hoje à meta em 3 anos (linha reta), depois fica na meta
+    return max(P["meta"], BR["ipca12"] + (P["meta"] - BR["ipca12"]) * (i + 1) / 3)
+
+proj = {}
+C = {k: v / 100 for k, v in P["comp"].items()}
+# custo inicial: juro real do estoque de NTN-B e de prefixados (mesmo juro real, julgamento) calibrado para dar o custo médio de hoje
+c_real0 = (BR["debt_cost"] - C["selic"] * BR["selic"] - C["cambio"] * P["cupom_usd"]) / (C["ipca"] + C["pre"]) - BR["ipca12"]
+P["c_real0"] = round(c_real0, 2)
+for pid in ("sem", "favor", "contra"):
+    d, c_real, c_pre = BR["dbgg"], c_real0, c_real0 + BR["ipca12"]
+    rows, prev_fx, dep_prev = [], BR["ptax"], 0.0
+    for i, y in enumerate(YEARS):
+        sel = SEL[pid][i * 12:(i + 1) * 12]
+        sel_avg, sel_end = sum(sel) / 12, sel[-1]
+        fx_end = FX[pid][i]; dep = (fx_end / prev_fx - 1) * 100
+        pi = base_infl(i)
+        if pid == "contra":
+            pi += P["selic_ipca"] * (BR["selic"] - sel_avg)                 # canal da demanda (BCB, 2024)
+            pi += PASS["12"] * dep + (PASS["24"] - PASS["12"]) * dep_prev    # repasse cambial (BCB, 2026)
+            pi += P["pressao"]                                                # pressão política sobre o BC (Drechsel, 2024)
+        rho = P["rho_favor"] if pid == "favor" else P["rho_hoje"]
+        c_real += (rho - c_real) / P["matur"]                 # NTN-B: o estoque rola para o juro real novo
+        c_pre += (rho + pi - c_pre) / P["matur"]              # prefixados: rolam para juro real novo + inflação
+        r = C["selic"] * sel_avg + C["ipca"] * (c_real + pi) + C["pre"] * c_pre + C["cambio"] * (P["cupom_usd"] + dep)
+        g = ((1 + P["g_real"] / 100) * (1 + pi / 100) - 1) * 100
+        juros = d * r / 100 / (1 + g / 100)
+        estab = d * (r - g) / 100 / (1 + g / 100)
+        d_new = d * (1 + r / 100) / (1 + g / 100) + P["pb"]
+        rows.append({"ano": y, "selic_media": round(sel_avg, 2), "selic_fim": round(sel_end, 2), "dolar": round(fx_end, 2),
+                     "ipca": round(pi, 2), "juro_real": round(sel_avg - pi, 2), "r": round(r, 2), "g": round(g, 2),
+                     "r_menos_g": round(r - g, 2), "juros_pib": round(juros, 2), "deficit_nominal": round(juros + P["pb"], 2),
+                     "primario_estab": round(estab, 2), "divida": round(d_new, 2)})
+        d, prev_fx, dep_prev = d_new, fx_end, dep
+    proj[pid] = rows
+
+# hoje, pelo mesmo método
+g0 = ((1 + P["g_real"] / 100) * (1 + BR["ipca12"] / 100) - 1) * 100
+hoje = {"selic_media": BR["selic"], "selic_fim": BR["selic"], "dolar": BR["ptax"], "ipca": BR["ipca12"],
+        "juro_real": round(BR["selic"] - BR["ipca12"], 2), "r": BR["debt_cost"], "g": round(g0, 2),
+        "r_menos_g": round(BR["debt_cost"] - g0, 2), "juros_pib": round(BR["dbgg"] * BR["debt_cost"] / 100 / (1 + g0 / 100), 2),
+        "deficit_nominal": P["nfsp_nom"], "primario_estab": round(BR["dbgg"] * (BR["debt_cost"] - g0) / 100 / (1 + g0 / 100), 2),
+        "divida": BR["dbgg"]}
+
+# DI jan/29 que cada caminho implica (CDI médio composto nov/26 a dez/28 = 26 meses; CDI = Selic - 0,10)
+def di29(pid):
+    f = 1.0
+    for k in range(26):
+        x = BR["selic"] if k == 0 else SEL[pid][k - 1]
+        f *= (1 + (x - 0.10) / 100) ** (1 / 12)
+    return round((f ** (12 / 26) - 1) * 100, 2)
+di = {pid: di29(pid) for pid in SEL}
+
+json.dump({"br": BR, "param": P, "repasse": PASS, "hoje": hoje, "proj": proj, "di29": di,
+           "selic_mensal": {k: [round(x, 2) for x in v] for k, v in SEL.items()}},
+          open("data/lara/projecao.json", "w"), ensure_ascii=False, indent=1)
+for pid, rows in proj.items():
+    print(pid, di[pid])
+    for r in rows: print("  ", r)
+print("hoje", hoje)
