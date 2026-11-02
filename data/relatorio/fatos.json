@@ -118,5 +118,41 @@
   "f_estresse": 1.0,
   "status": "Na partida",
   "degrau": "Âncora fraco a favor: intenção declarada pelo ministro, sem ato formal; mesmo canal de f2 (meta de 2027), então no máximo fraco."
+ },
+ {
+  "id": "f11",
+  "data": "2026-10-31",
+  "fato": "A Folha informa que a proposta de André Lara Resende de limitar a Selic (Conselho Fiscal e Monetário Nacional, Selic a 7,5% em 12 meses) entrou no radar de Lula; o Brasil 247 fala em encontro nesta semana. Relato de fontes do governo, não confirmado.",
+  "fonte": "Folha, via PIRANOT e Brasil 247",
+  "url": "https://www.brasil247.com/economia/lula-deve-se-reunir-com-andre-lara-resende-nesta-semana",
+  "f_ancora": 1.0,
+  "f_deriva": 1.05,
+  "f_estresse": 1.05,
+  "status": "Na partida",
+  "degrau": "Deriva e Estresse fraco a favor: relato sem fonte nomeada, sem ato formal; canal novo (autonomia do BC)."
+ },
+ {
+  "id": "f12",
+  "data": "2026-11-01",
+  "fato": "Durigan diz que o tabelamento da Selic não está na mesa de Lula e que não há reunião marcada com Lara Resende; Mercadante diz que não há discussão no governo.",
+  "fonte": "Folha, via PIRANOT",
+  "url": "https://www.piranot.com.br/2026/11/02/noticias/economia/fazenda-nega-teto-taxa-selic/",
+  "f_ancora": 1.05,
+  "f_deriva": 0.95,
+  "f_estresse": 0.95,
+  "status": "Na partida",
+  "degrau": "Âncora fraco a favor, Deriva e Estresse fraco contra: declaração confirmada do ministro, mas mesmo canal de f11, então no máximo fraco."
+ },
+ {
+  "id": "f13",
+  "data": "2026-10-30",
+  "fato": "A defesa de Flávio Bolsonaro pede a Fachin (STF) que Moraes seja declarado impedido, que o inquérito passe a Mendonça e que as cautelares caiam. O STF não decidiu. Flávio está nos EUA desde 27/10.",
+  "fonte": "Folha, via PIRANOT",
+  "url": "https://www.piranot.com.br/2026/11/02/noticias/politica/flavio-bolsonaro-stf-moraes-mendonca/",
+  "f_ancora": 1.0,
+  "f_deriva": 1.0,
+  "f_estresse": 1.05,
+  "status": "Na partida",
+  "degrau": "Estresse fraco a favor: pedido protocolado, mas mesmo canal de f7 (STF e oposição), então no máximo fraco."
  }
 ]

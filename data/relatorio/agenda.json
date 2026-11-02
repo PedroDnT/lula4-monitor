@@ -1,14 +1,5 @@
 [
  {
-  "id": "a6",
-  "data": "2026-10-30",
-  "evento": "Estatísticas fiscais de setembro (BCB): dívida bruta e resultado primário",
-  "ancora": "Dívida bruta até 83,5% do PIB e primário estável",
-  "deriva": "Dívida acima de 83,5% com primário pior",
-  "estresse": "Salto da dívida com custo de juros em alta",
-  "fonte": "Calendário do BCB, citado por The Rio Times (27/10)"
- },
- {
   "id": "a1",
   "data": "2026-11-04",
   "evento": "Decisão do Copom (R7/2026)",
@@ -61,5 +52,32 @@
   "deriva": "PLP atrasa ou só muda a redação da meta",
   "estresse": "PLP engavetado e meta afrouxada",
   "fonte": "Fazenda, anúncio de 27/10 (Exame)"
+ },
+ {
+  "id": "a8",
+  "data": "",
+  "evento": "Decisão de Fachin (STF) sobre o pedido de impedimento de Moraes no inquérito de Flávio Bolsonaro",
+  "ancora": "Pedido negado sem ruído; cautelares mantidas",
+  "deriva": "Pedido fica sem decisão por semanas",
+  "estresse": "Troca de relator ou choque público entre ministros",
+  "fonte": "Folha, via PIRANOT (02/11)"
+ },
+ {
+  "id": "a9",
+  "data": "2026-11-03",
+  "evento": "Boletim Focus com a pesquisa de 30/10, a primeira após o 2º turno",
+  "ancora": "Selic 2027 e IPCA 2027 pouco mexidos",
+  "deriva": "IPCA 2027 acima de 4,5% e Selic 2027 mais alta",
+  "estresse": "Dólar 2026 acima de 5,50 e dívida 2030 acima de 96% do PIB",
+  "fonte": "Calendário do Focus (BCB); 02/11 é feriado"
+ },
+ {
+  "id": "a10",
+  "data": "",
+  "evento": "Encontro de Lula com Lara Resende (proposta de teto para a Selic)",
+  "ancora": "Encontro não acontece ou sem desdobramento",
+  "deriva": "Encontro acontece e a ideia segue em estudo",
+  "estresse": "Governo adota a ideia de conselho sobre o BC",
+  "fonte": "Brasil 247 (01/11); Durigan nega reunião marcada"
  }
 ]
