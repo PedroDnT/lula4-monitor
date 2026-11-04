@@ -2,24 +2,23 @@
 
 ## Ao vivo (sem commit)
 
-O navegador lê estas fontes a cada visita: API pública do SILO (curvas, Focus, séries fiscais, PTAX, fluxo estrangeiro), B3 (DI, DOL e DAP), Binance, BCB Olinda. O `worker.js` cobre Yahoo, CDS da OBM e Selic (rotas `/api/*`).
+O navegador lê SILO (API pública, sem Postgres direto), B3, Binance e BCB. O `worker.js` cobre as rotas Yahoo, CDS e Selic. Esse comportamento não foi alterado pela rotina diária.
 
-## Por arquivo (a rotina diária faz commit)
+## Rotina por arquivos
 
-Estes arquivos vêm de julgamento ou de fontes sem API aberta. A rotina "Brazil rates daily monitor" (dias úteis, 11:20 de Brasília, 14:20 UTC) deve gravá-los e fazer commit na `main`. O Cloudflare publica sozinho.
+A tarefa “Brazil rates daily monitor” foi removida por Pedro. Não há substituta agendada. A implementação e a proposta de execução diária às 11h20 de Brasília (Julgamento operacional, ainda a confirmar), fontes, cálculos, bloqueios e pendências estão em [rotina/README.md](rotina/README.md).
 
-| Arquivo | O que muda | Quem escreve |
-| --- | --- | --- |
-| `data/relatorio/pesos.json` | pesos de partida e "agora" dos 3 cenários | rotina diária. O painel intraday também lê `start` e `di_jan29_move_bp` daqui |
-| `data/relatorio/fatos.json` | fatos novos, com degrau e motivo | rotina diária |
-| `data/relatorio/agenda.json` | agenda e gatilhos | rotina diária / revisão semanal |
-| `data/relatorio/params.json` | `m1`, `m2`, `m3` (próximas 3 reuniões do Copom) e `focus_from` | rotina diária, a cada reunião |
-| `data/relatorio/copom_cal.json`, `feriados.json` | calendário | manual, 1 vez por ano |
-| `data/dominancia/scenarios.json`, `scenario_history.json` | cópia dos pesos e histórico | rotina diária (copia de `pesos.json`; o monitor não calcula pesos) |
-| `data/dominancia/lft.json`, `rolagem.json`, `leiloes.json`, `focus_debt.json` | dados mensais do Tesouro e do Focus | rotina diária ou mensal |
-| `data/dominancia/budget.json`, `canais.json`, `contabilidade.json`, `obrigatorias.json`, `calib.json` | orçamento 2027, calibração | manual, quando sair a LOA ou uma revisão |
-| `data/intraday/history.json` | histórico-base do painel intraday | opcional |
+A nova rotina prepara um lote validado diretamente para este repositório, independente de artifacts do claude.ai. Atualização por branch e PR, sem commit direto na main. O agendador e qualquer provedor de IA continuam por escolher.
 
-Cada arquivo é um array JSON de linhas, no mesmo formato de antes. Não mude os nomes das colunas.
+| Arquivo | Responsabilidade |
+| --- | --- |
+| `data/relatorio/pesos.json` | Partida aprovada e agora calculado deterministicamente |
+| `data/relatorio/fatos.json` | Fatos com fonte, fatores aprovados e controle contra reaplicação |
+| `data/dominancia/scenarios.json` | Mesmos pesos e marcas de `pesos.json` |
+| `data/dominancia/scenario_history.json` | Histórico de partida e agora; lacunas legadas preservadas |
+| `docs/rotina/state.json` | Ledger de aplicações, hashes, fontes e mudanças |
+| `data/relatorio/agenda.json`, `params.json`, `copom_cal.json`, `feriados.json` | Revisão manual, fora da escrita automática deste PR |
+| Demais arquivos fiscais e `data/intraday/history.json` | Responsabilidade anterior; sem novo coletor neste PR |
+| `data/lara/*`, `lara.html`, `docs/lara/*` | Parking Lot; não alterar nem remover |
 
-Os pesos de partida vêm só de fatos, nunca de preço. A coluna `probability` (peso de agora) vem da regra do DI.
+As colunas existentes são preservadas. Os pesos de partida usam somente fatos e julgamento aprovado; preço entra apenas no cálculo de agora. Pesos, marcas e metodologia não podem ser alterados pela rotina por iniciativa própria.
