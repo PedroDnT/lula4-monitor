@@ -203,6 +203,7 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
   <section class="sec" id="s-px" aria-label="O que o DI precifica">
   <div class="panel hero">
     <div class="hk">Leitura de mercado · DI jan/29</div>
+    <p class="src" id="di-status" role="status">DI jan/29: aguardando fonte.</p>
     <div class="hv" id="hx-sc">–</div>
     <div class="hs"><b id="hx-bp">–</b> desde o ajuste de 23/10 (12,640%) · <span id="hx-d1">–</span> vs ontem · <span id="hx-d5">–</span> vs 5 pregões · <span id="hx-pos"></span></div>
     <p class="src" id="weights-status" role="status">Partida: aguardando arquivo de pesos.</p>
@@ -783,7 +784,7 @@ function draw() {
         const k = ex > 60 ? "bad" : ex > 30 ? "warn" : "ok", t = ex > 60 ? "Além do câmbio" : ex > 30 ? "Em alerta" : "Câmbio";
         verdict("di-out", k, t, `DI jan/29 ${sgn(bp)} bp. O dólar de hoje explica ${sgn(exp)} bp (faixa de 2 erros típicos: ${sgn(exp - 2 * DIFX.sd)} a ${sgn(exp + 2 * DIFX.sd)}). Excesso: ${sgn(ex)} bp${ex > 60 ? ", acima de 2 erros típicos. O mercado cobra algo além do câmbio (prêmio fiscal, Selic ou inflação esperada)." : ex > 30 ? ", entre 1 e 2 erros típicos." : ". O excesso fica dentro da faixa de referência; isso não identifica separadamente o prêmio fiscal."}` + (dd.ts ? " (B3, " + dd.ts.slice(11, 16) + ")" : ""));
         item("n-di", k, t, `Juros: DI jan/29 ${sgn(bp)} bp. O câmbio explica ${sgn(exp)} bp; excesso não explicado de ${sgn(ex)} bp.`,
-          ex > 60 ? "o choque é fiscal. Em 2022 e 2024 o DI subiu por semanas antes de voltar." : ex > 30 ? "o mercado começa a cobrar prêmio fiscal. O sinal seguinte é o nome da equipe econômica." : "o mercado de juros não compra o pânico. Bolsa fora da faixa significa exagero na bolsa, não nos juros.");
+          ex > 60 ? "o excesso está acima da faixa de referência; pode refletir fatores fiscais, Selic ou inflação, que a regressão não separa." : ex > 30 ? "o excesso é positivo e está entre um e dois erros típicos; sua origem não é identificada pela regressão." : "o excesso está dentro da faixa de referência; a regressão não identifica separadamente o prêmio fiscal.");
       }
     } else {
       $("m-di").textContent = "fechado"; $("m-di-s").textContent = "abre às 9h";
@@ -1059,6 +1060,7 @@ function setTake() { if (TK.sc || TK.dom) $("take").textContent = (TK.sc + TK.do
 document.addEventListener("click", e => { const a = e.target.closest && e.target.closest("a.how"); if (!a) return; const t = document.querySelector(a.getAttribute("href")); if (!t) return; e.preventDefault(); for (let p = t; p; p = p.parentElement) if (p.tagName === "DETAILS") p.open = true; t.scrollIntoView({block: "start"}); });
 // Hero: the scenario the DI jan/29 prices now, how it moved, and its path since 23/10 (settlements from the SILO, today from the B3).
 function renderHero(M, NP) {
+  $("di-status").textContent = M.live ? "Dado: último negócio informado pela B3, com atraso aproximado de 15 minutos." : "Dado: último ajuste anterior informado pela B3; não há negócio atual disponível.";
   const top = M.w.indexOf(Math.max(...M.w)), MP = pct100(M.w);
   $("hx-sc").textContent = SCEN[top].n + (M.beyond ? " e além" : "");
   $("hx-bp").textContent = sgn(M.bp) + " bp";
