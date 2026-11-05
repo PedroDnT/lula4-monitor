@@ -190,7 +190,7 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
 </style>
 <link rel="stylesheet" href="assets/remake.css">
 <style>.site-head{background:var(--bg,#f7f6f3)} .wrap{padding-top:0}</style><link rel="stylesheet" href="assets/leia.css"><script src="assets/leia.js" defer></script></head><body>
-<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html" aria-current="page">Agora</a><a href="dominancia.html">Fiscal</a><a href="lara.html">Cenário Lara</a><a href="metodo.html">Método</a><a href="simples.html" class="tab-simple">Versão simples</a></nav></div></header><nav class="subtabs" aria-label="Agora"><a href="index.html" aria-current="page">Preços de agora</a><a href="relatorio.html">Fatos e relatório do dia</a></nav>
+<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html" aria-current="page">Agora</a><a href="dominancia.html">Fiscal</a><a href="metodo.html">Método</a><a href="simples.html" class="tab-simple">Versão simples</a></nav></div></header><nav class="subtabs" aria-label="Agora"><a href="index.html" aria-current="page">Preços de agora</a><a href="relatorio.html">Fatos e relatório do dia</a></nav>
 
 
 <div class="wrap">
@@ -205,6 +205,7 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
     <div class="hk">Leitura de mercado · DI jan/29</div>
     <div class="hv" id="hx-sc">–</div>
     <div class="hs"><b id="hx-bp">–</b> desde o ajuste de 23/10 (12,640%) · <span id="hx-d1">–</span> vs ontem · <span id="hx-d5">–</span> vs 5 pregões · <span id="hx-pos"></span></div>
+    <p class="src" id="weights-status" role="status">Partida: aguardando arquivo de pesos.</p>
     <div class="bars" id="hx-bars"></div>
     <p class="src">Cálculo baseado no DI; as marcas são julgamento. A leitura de preço pode divergir dos pesos registrados no Relatório e em Fiscal.</p>
     <p class="src">Dado: ajuste do DI1F29 (B3, pelo SILO) e o contrato de agora (B3, cerca de 15 min de atraso). Escolha do monitor: as marcas +50, +180 e +320 bp. Julgamento: σ = 100 bp, escolhido a partir da dispersão do DI de 2 anos nas 20 a 40 sessões após 22 choques desde 2015 (Dado, SILO). Julgamento: a partida, só com fatos. Agora = Bayes (partida × verossimilhança). <a class="how" href="#m6">Método</a></p>
@@ -509,14 +510,13 @@ const STK = {ITUB: {n: "Itaú", b: -0.924, c: 0.027, sd: 2.38, kind: "banco priv
              BBAS3: {n: "Banco do Brasil", b: -1.35, c: -0.41, sd: 3.74, kind: "banco estatal", y: "BBAS3.SA"}};
 const DIFX = {c: 1.96, b: 7.11, sd: 29.9};                             // DI 2y bp on dollar %
 const PIB_PER_1 = -0.062, PT_BCB = 0.10, PT_VAR = 0.03;
-// Unified scenarios (26/10/2026): same names and weights as the monitor dataset "scenarios" and the doc "Dominância fiscal".
-// p = start weight from the daily report (facts only; 45/33/22 on 26/10). The market rule below moves it during the day; mu = DI jan/29 move since 23/10 the scenario implies (monitor di_jan29_move_bp).
+// Scenario start weights and marks are loaded from the daily report. A failed or invalid file disables dependent calculations.
 const SCEN = [
-  {n: "Âncora retomada", p: 0.43, mu: 50, f: [0.75, 0.75, 0.75], c: "Equipe econômica com mandato fiscal e Orçamento 2027 com a meta de 0,50% do PIB (centro; 0,25% é o piso da banda) em até 4 semanas; o BC sobe a Selic com apoio fiscal."},
-  {n: "Deriva fiscal", p: 0.32, mu: 180, f: [1.1, 0.9, 0.9], c: "O arcabouço é afrouxado; o Copom para de cortar ou acomoda. Dólar perto de R$ 5,80 em 6 meses (monitor)."},
-  {n: "Estresse e espiral", p: 0.25, mu: 320, f: [1.4, 1.8, 2.2], c: "Contestação do resultado se arrasta, rating cai; o BC sobe o juro e o dólar continua a subir. Dólar perto de R$ 6,20 em 6 meses (monitor)."},
+  {n: "Âncora retomada", p: null, mu: 50, f: [0.75, 0.75, 0.75], c: "Equipe econômica com mandato fiscal e Orçamento 2027 com a meta de 0,50% do PIB (centro; 0,25% é o piso da banda) em até 4 semanas; o BC sobe a Selic com apoio fiscal."},
+  {n: "Deriva fiscal", p: null, mu: 180, f: [1.1, 0.9, 0.9], c: "O arcabouço é afrouxado; o Copom para de cortar ou acomoda. Dólar perto de R$ 5,80 em 6 meses (monitor)."},
+  {n: "Estresse e espiral", p: null, mu: 320, f: [1.4, 1.8, 2.2], c: "Contestação do resultado se arrasta, rating cai; o BC sobe o juro e o dólar continua a subir. Dólar perto de R$ 6,20 em 6 meses (monitor)."},
 ];
-let WEIGHTS_AT = "27/10/2026";
+let WEIGHTS_AT = null, WEIGHTS_READY = false;
 // Market rule (Bayes, since 29/10/2026): now_i = start_i x N(DI move | mu_i, SIGMA), scaled to 100%.
 // SIGMA = how far the 2-year DI wanders within one scenario: sd of the move 20 to 40 sessions after 22 shocks since 2015 is 62 to 113 bp (PRE 720 d, SILO). 100 bp.
 // The earlier rule, now = start + 0.3 x (DI mix - start) capped at 15 points, is kept in the Método page as history.
@@ -781,7 +781,7 @@ function draw() {
         const exp = DIFX.c + DIFX.b * F.fx * 100, ex = bp - exp;
         $("m-di-s").textContent = "câmbio explica " + sgn(exp) + " bp (faixa " + sgn(exp - 2 * DIFX.sd) + " a " + sgn(exp + 2 * DIFX.sd) + ")";
         const k = ex > 60 ? "bad" : ex > 30 ? "warn" : "ok", t = ex > 60 ? "Além do câmbio" : ex > 30 ? "Em alerta" : "Câmbio";
-        verdict("di-out", k, t, `DI jan/29 ${sgn(bp)} bp. O dólar de hoje explica ${sgn(exp)} bp (faixa de 2 erros típicos: ${sgn(exp - 2 * DIFX.sd)} a ${sgn(exp + 2 * DIFX.sd)}). Excesso: ${sgn(ex)} bp${ex > 60 ? ", acima de 2 erros típicos. O mercado cobra algo além do câmbio (prêmio fiscal, Selic ou inflação esperada)." : ex > 30 ? ", entre 1 e 2 erros típicos." : ". A alta do DI vem do câmbio, não de prêmio fiscal novo."}` + (dd.ts ? " (B3, " + dd.ts.slice(11, 16) + ")" : ""));
+        verdict("di-out", k, t, `DI jan/29 ${sgn(bp)} bp. O dólar de hoje explica ${sgn(exp)} bp (faixa de 2 erros típicos: ${sgn(exp - 2 * DIFX.sd)} a ${sgn(exp + 2 * DIFX.sd)}). Excesso: ${sgn(ex)} bp${ex > 60 ? ", acima de 2 erros típicos. O mercado cobra algo além do câmbio (prêmio fiscal, Selic ou inflação esperada)." : ex > 30 ? ", entre 1 e 2 erros típicos." : ". O excesso fica dentro da faixa de referência; isso não identifica separadamente o prêmio fiscal."}` + (dd.ts ? " (B3, " + dd.ts.slice(11, 16) + ")" : ""));
         item("n-di", k, t, `Juros: DI jan/29 ${sgn(bp)} bp. O câmbio explica ${sgn(exp)} bp; excesso não explicado de ${sgn(ex)} bp.`,
           ex > 60 ? "o choque é fiscal. Em 2022 e 2024 o DI subiu por semanas antes de voltar." : ex > 30 ? "o mercado começa a cobrar prêmio fiscal. O sinal seguinte é o nome da equipe econômica." : "o mercado de juros não compra o pânico. Bolsa fora da faixa significa exagero na bolsa, não nos juros.");
       }
@@ -914,6 +914,7 @@ function renderCupom(F) {
   verdict("cup-out", lb && Math.abs(lb.b.c - lb.a.c) > 3 ? "bad" : "warn", "Cupom cambial", txt);
 }
 function renderDolScen(F) {
+  if (!WEIGHTS_READY) return;
   const D = S.dol; if (!D || !F || F.level == null || !D.all.length) return;
   const fx = F.level / ELECT.ptax - 1, tn = Date.parse(brt() + "T00:00:00Z"), HZ = [30, 91, 365];
   const G = D.all.filter(p => p.t < tn + 480 * 864e5);
@@ -1072,6 +1073,7 @@ function renderHero(M, NP) {
   $("hx-bars").innerHTML = SCEN.map((x, i) => `<div class="hbar"><span class="bn">${x.n}</span><span class="bt"><i style="width:${MP[i]}%;background:${cols[i]}"></i></span><span class="bv">${MP[i]}%</span><span class="bs">partida ${nf(x.p * 100, 0)}% · agora ${NP[i]}%</span></div>`).join("");
 }
 function renderScen(F) {
+  if (!WEIGHTS_READY) return;
   const M = diMix(), fx = F.level / ELECT.ptax - 1, NW = nowW(M), NP = pct100(NW), MP = M ? pct100(M.w) : null, SV = scenLv(F, NW), SL = SV.L;
   const data = SCEN.map((s, i) => ({hl: M && M.w[i] === Math.max(...M.w), cells: [{t: s.n}, {t: nf(s.p * 100, 0) + "%", n: 1, label: "Início (relatório diário)"},
     {t: M ? NP[i] + "%" : "aguarda DI", n: 1, label: "Agora (mercado)"},
@@ -1278,7 +1280,7 @@ function snap(F) {
   if (slot === lastSlot) return;
   lastSlot = slot;
   const f29 = S.di && S.di.c && S.di.c.DI1F29, M = diMix();
-  const data = {t: Date.now(), d: brt(), fx: +F.level.toFixed(4), di29: f29 ? (f29.cur ?? f29.prev) : null, cds: S.cds ? S.cds.bp : null, w: M ? pct100(nowW(M)) : null, dom: S.domN ?? null};
+  const data = {t: Date.now(), d: brt(), fx: +F.level.toFixed(4), di29: f29 ? (f29.cur ?? f29.prev) : null, cds: S.cds ? S.cds.bp : null, w: M && WEIGHTS_READY ? pct100(nowW(M)) : null, dom: S.domN ?? null};
   db.collection("snaps").doc("s" + slot).set(data).catch(e => { lastSlot = null; console.warn("histórico:", e.code || e.message); });
 }
 function renderHist() {
@@ -1399,9 +1401,18 @@ db = {collection: () => ({doc: slot => ({set: data => {
   try {
     const P = await getJson("data/relatorio/pesos.json", {cache: "no-cache"});
     const ids = ["ancora", "deriva", "estresse"];
-    P.forEach(p => { const k = ids.indexOf(p.id); if (k >= 0) { SCEN[k].p = +p.start; if (p.di_jan29_move_bp != null) SCEN[k].mu = +p.di_jan29_move_bp; } });
-    if (P[0] && P[0].partida_em) WEIGHTS_AT = P[0].partida_em.split("-").reverse().join("/");
-  } catch (e) { console.warn("pesos de partida:", e.message); }
+    if (!Array.isArray(P) || P.length !== ids.length || new Set(P.map(p => p.id)).size !== ids.length || !ids.every(id => P.some(p => p.id === id))) throw new Error("cenários inválidos");
+    const ordered = ids.map(id => P.find(p => p.id === id));
+    if (!ordered.every(p => typeof p.start === "number" && Number.isFinite(p.start) && p.start >= 0 && p.start <= 1 && typeof p.di_jan29_move_bp === "number" && Number.isFinite(p.di_jan29_move_bp) && /^\d{4}-\d{2}-\d{2}$/.test(p.partida_em) && p.partida_em === ordered[0].partida_em) || Math.abs(ordered.reduce((t, p) => t + p.start, 0) - 1) > 1e-9) throw new Error("pesos ou data inválidos");
+    ordered.forEach((p, k) => { SCEN[k].p = p.start; SCEN[k].mu = p.di_jan29_move_bp; });
+    WEIGHTS_AT = ordered[0].partida_em.split("-").reverse().join("/");
+    WEIGHTS_READY = true;
+    $("weights-status").textContent = "Julgamento: partida registrada em " + WEIGHTS_AT + ". Pode estar defasada; a leitura de preço é atualizada separadamente.";
+  } catch (e) {
+    $("weights-status").textContent = "Partida indisponível ou inválida. Os pesos de cenário não estão disponíveis.";
+    $("hx-sc").textContent = "Pesos indisponíveis";
+    console.warn("pesos de partida:", e.message);
+  }
   start();
 })();
 </script><footer class="site-foot">Leitura de sinais de mercado e julgamento do autor, não recomendação de compra ou venda. Dados abertos do Brasil servidos pelo <b>SILO</b> (CVM, BACEN, B3), BCB, B3, Binance, Yahoo Finance, OBM. Tudo em horário de Brasília (UTC-3).</footer></body></html>

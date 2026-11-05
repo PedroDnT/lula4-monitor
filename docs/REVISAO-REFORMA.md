@@ -1,6 +1,6 @@
 # Revisão e plano da reforma
 
-Base: main após PR #17. A reforma preserva pesos, marcas, datasets e Cenário Lara.
+Base: main após PR #17. A reforma preserva pesos e marcas. Por decisão posterior de Pedro, o Cenário Lara foi retirado do site.
 
 ## Análise e metodologia
 
@@ -16,4 +16,7 @@ Base: main após PR #17. A reforma preserva pesos, marcas, datasets e Cenário L
 - **Alta, erro:** Método e Fiscal descreviam tarefas automáticas removidas. Textos atualizados para indicar revisão operacional e possível defasagem.
 - **Média, apresentação:** pesos registrados e leitura ao vivo podiam parecer equivalentes. A identificação agora acompanha as duas leituras.
 - **Média, apresentação:** reforçada a hierarquia visual do cabeçalho e do painel principal, com adaptações para celular e foco de teclado.
-- **Limites da entrega:** não foi feita auditoria completa de fontes externas, regressões, links, contraste ou todos os estados de falha; não há nova calibração nem números publicados novos. O Cenário Lara segue no Parking Lot. A revisão completa e a definição do executor continuam pendentes.
+- **Limites da entrega:** não foi feita auditoria completa de fontes externas, regressões, links, contraste ou todos os estados de falha; não há nova calibração nem números publicados novos. A revisão completa e a definição do executor continuam pendentes.
+
+- **Alta, erro corrigido:** se `pesos.json` falhava, o site usava silenciosamente uma partida antiga embutida. Agora a leitura de cenário e as projeções ponderadas ficam indisponíveis até o arquivo válido carregar; demais preços continuam independentes.
+- **Média, interpretação corrigida:** um resíduo dentro da faixa da regressão não identifica a origem do movimento do DI. O texto deixa explícito o limite em vez de atribuir o movimento ao câmbio.

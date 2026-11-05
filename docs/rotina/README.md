@@ -1,6 +1,6 @@
 # Rotina diária única
 
-Estado: implementação local, sem agendamento ativo. Não depende de artifacts do claude.ai nem de provedor de IA. A tarefa “Brazil rates daily monitor” foi removida por Pedro. Cenário Lara permanece no Parking Lot, sem mudanças neste trabalho.
+Estado: implementação local, sem agendamento ativo. Não depende de artifacts do claude.ai nem de provedor de IA. A tarefa “Brazil rates daily monitor” foi removida por Pedro.
 
 ## Desenho mínimo e decisões pendentes
 
@@ -38,7 +38,7 @@ git diff --check
 git diff -- data/relatorio data/dominancia docs/rotina/state.json
 ```
 
-`apply` confere o hash de cada entrada e saída, monta uma cópia candidata e valida antes de escrever. Recusa checkout que mudou e lote alterado. Escreve apenas pesos, fatos, cenários, histórico e ledger; não toca agenda, parâmetros, páginas, intraday ou Lara. Substitui arquivos individualmente e tenta restaurar os originais em exceções; uma interrupção abrupta do processo pode deixar aplicação parcial. Usar checkout exclusivo e nunca publicar durante essa etapa. Recuperar do Git e reaplicar o lote validado após interrupção. O executor futuro precisa impedir concorrência.
+`apply` confere o hash de cada entrada e saída, monta uma cópia candidata e valida antes de escrever. Recusa checkout que mudou e lote alterado. Escreve apenas pesos, fatos, cenários, histórico e ledger; não toca agenda, parâmetros, páginas, intraday. Substitui arquivos individualmente e tenta restaurar os originais em exceções; uma interrupção abrupta do processo pode deixar aplicação parcial. Usar checkout exclusivo e nunca publicar durante essa etapa. Recuperar do Git e reaplicar o lote validado após interrupção. O executor futuro precisa impedir concorrência.
 
 Depois da validação, o operador pode fazer commit e abrir PR na branch. Não aplicar na main. A main publica automaticamente segundo o README existente; este PR não executa essa publicação.
 
@@ -93,4 +93,4 @@ Consulta somente de leitura: SILO retornou `settlement_rate=12.642` para 23/10 (
 
 O histórico Git disponível tem `78adf4d` (29/10) com partida 46/31/23 e `6b023ca` (02/11) com 49/31/20. Não há commit de dados de 30/10. No commit de 02/11 foram acrescentadas retroativamente as linhas de 30/10 ao histórico, com a ressalva explícita de que o arquivo de fatos não contém a justificativa de 48/32/20. Os fatos novos nesse commit são f11–f13. Isso não permite recuperar uma justificativa para a mudança de 30/10. A referência à sessão do claude.ai no commit não foi usada como dependência nem como prova de fato.
 
-A lacuna fica preservada e visível nos relatórios; o bootstrap parte do snapshot aceito, sem reaplicar f1–f13, sem inventar f14 nem ajustar pesos para fechar a conta. A tarefa semanal permanece pendente de inspeção do prompt. Demais achados da revisão e o Parking Lot estão fora deste PR.
+A lacuna fica preservada e visível nos relatórios; o bootstrap parte do snapshot aceito, sem reaplicar f1–f13, sem inventar f14 nem ajustar pesos para fechar a conta. A tarefa semanal permanece pendente de inspeção do prompt. Demais achados da revisão estão fora deste PR.
