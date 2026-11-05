@@ -20,3 +20,7 @@ Base: main após PR #17. A reforma preserva pesos e marcas. Por decisão posteri
 
 - **Alta, erro corrigido:** se `pesos.json` falhava, o site usava silenciosamente uma partida antiga embutida. Agora a leitura de cenário e as projeções ponderadas ficam indisponíveis até o arquivo válido carregar; demais preços continuam independentes.
 - **Média, interpretação corrigida:** um resíduo dentro da faixa da regressão não identifica a origem do movimento do DI. O texto deixa explícito o limite em vez de atribuir o movimento ao câmbio.
+
+- **Alta, erro corrigido:** Fiscal identificava 0,25% como meta, enquanto o Método e Agora identificam o centro de 0,50% e o piso de 0,25%. O texto de cenário agora distingue os dois; nenhum peso foi alterado.
+- **Média, interpretação corrigida:** o resumo do DI atribuía o excesso a risco fiscal como fato. A linguagem agora registra que o resíduo pode conter outras causas e não as identifica.
+- **Média, apresentação:** o painel principal distingue último negócio de ajuste anterior; Fiscal mostra as datas dos pesos registrados.
