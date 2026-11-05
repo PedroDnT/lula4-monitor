@@ -19,6 +19,5 @@ A nova rotina prepara um lote validado diretamente para este repositório, indep
 | `docs/rotina/state.json` | Ledger de aplicações, hashes, fontes e mudanças |
 | `data/relatorio/agenda.json`, `params.json`, `copom_cal.json`, `feriados.json` | Revisão manual, fora da escrita automática deste PR |
 | Demais arquivos fiscais e `data/intraday/history.json` | Responsabilidade anterior; sem novo coletor neste PR |
-| `data/lara/*`, `lara.html`, `docs/lara/*` | Parking Lot; não alterar nem remover |
 
 As colunas existentes são preservadas. Os pesos de partida usam somente fatos e julgamento aprovado; preço entra apenas no cálculo de agora. Pesos, marcas e metodologia não podem ser alterados pela rotina por iniciativa própria.
