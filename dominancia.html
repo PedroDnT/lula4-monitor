@@ -473,7 +473,7 @@
   </section>
   <section class="dm-section" id="cenarios">
     <h2 class="dm-h2">Cenários possíveis</h2>
-    <p class="dm-sub">Peso de cada cenário, dia a dia. A partida vem da revisão semanal dos fatos; cada dia útil soma a regra de mercado do DI jan/29. A rotina diária copia aqui os pesos do arquivo de cenários do monitor; este painel não calcula nem muda os pesos. Os pesos são julgamento, não previsão de modelo.</p>
+    <p class="dm-sub">Pesos registrados no último arquivo de cenários, com a partida baseada em fatos e o ajuste de mercado calculado a partir do DI jan/29. Estes valores podem diferir da leitura ao vivo da aba Agora. Os pesos são julgamento, não previsão de modelo.</p>
     <div class="dm-tiles tl-cen"></div>
     <div class="dm-grid">
       <div class="dm-card" id="c-cen">
@@ -507,8 +507,8 @@
       <ol class="dm-steps">
         <li><b>Partida.</b> Em 26/10 o monitor fixou a primeira partida por julgamento: 45% Âncora, 33% Deriva, 22% Estresse. Não é saída de modelo. Depois disso, só fatos mudam a partida.</li>
         <li><b>Fatos movem a partida.</b> Cada fato político ou fiscal novo, com fonte, multiplica o peso de cada cenário por um fator. Fraco 1,05 (notícia não confirmada), moderado 1,15 (ato oficial), forte 1,30 (decisão com efeito direto, como sentença, Orçamento votado, ministro nomeado, rating). Contra um cenário, o inverso: 0,95, 0,87 ou 0,77. Depois os três voltam a somar 100%. Preço de mercado nunca conta como fato.</li>
-        <li><b>O mercado ajusta o dia.</b> A regra lê quanto o DI jan/29 subiu desde 23/10. Cada cenário tem uma marca: +50 bp para Âncora, +180 bp para Deriva, +320 bp para Estresse. A alta do dia vira uma mistura entre os dois cenários mais próximos. Exemplo: +250 bp fica no meio entre Deriva e Estresse.</li>
-        <li><b>O peso que aparece.</b> Peso = partida + 30% da distância até essa mistura, com limite de 15 p.p. por cenário. Os três voltam a somar 100%. Como a regra parte sempre da partida, rodar duas vezes no mesmo dia dá o mesmo número.</li>
+        <li><b>O mercado ajusta o dia.</b> A regra lê quanto o DI jan/29 subiu desde 23/10. Cada cenário tem uma marca: +50 bp para Âncora, +180 bp para Deriva, +320 bp para Estresse. O nível acumulado é comparado às marcas por verossimilhanças normais com σ = 100 bp.</li>
+        <li><b>O peso que aparece.</b> Peso = partida multiplicada pela verossimilhança do nível acumulado do DI; os três resultados são normalizados. A conta recomeça da partida para não reaplicar o nível acumulado anterior.</li>
       </ol>
       <p class="dm-sub">Os fatores e as marcas do DI são escolhas do monitor, não estimativas estatísticas. Os fatos aplicados ficam listados no Relatório diário de juros.</p>
     </div>
@@ -519,7 +519,7 @@
       <li>Os dados vêm da SILO (CVM, BACEN, B3), do BCB (Focus) e do Tesouro Nacional. Cada bloco tem a sua data. A data do dado é a da fonte, não a da atualização do site.</li>
       <li>As etiquetas dizem de onde vem cada número: Norma e Dado são estabelecidos pela fonte; Cálculo é conta direta com os dados; Julgamento é premissa ou metodologia de referência; Projeção olha adiante com premissas. Os gatilhos dizem se o limite é de lei, de mercado ou escolha nossa.</li>
       <li>Os gatilhos e os pesos dos cenários são julgamento do autor, não saída de um modelo. A tabela de calibração mostra se os gatilhos avisaram nas crises passadas. Poucas crises dão pouca prova.</li>
-      <li>Esta página é uma cópia diária. A rotina das 11:20 atualiza os arquivos de dados e a rotina das 11:50 os publica. Pode haver um dia de atraso.</li>
+      <li>Esta página usa arquivos registrados no repositório. Sua atualização automática está em revisão e os dados podem estar defasados.</li>
       <li>Projeções de dívida e de resultado primário dependem das premissas do Focus e do arcabouço. Elas mostram um caminho, não uma previsão.</li>
       <li>O método completo está na aba Método.</li>
     </ol>
@@ -1372,7 +1372,7 @@ dash.onData(() => {
       const t = document.createElement('p'); t.textContent = cenTxt[r.id] || '';
       const q = document.createElement('p'); q.textContent = `Precisa: ${r.precisa}`;
       const n = document.createElement('p'); n.className = 'dm-note';
-      n.textContent = `Partida ${pct(r.start)}; a regra do DI de hoje leva a ${pct(r.probability)} (${signed(nf(0))((r.probability - r.start) * 100)} p.p.). Marca do DI: +${r.di_jan29_move_bp} bp. Neste cenário: dólar R$ ${fmt2.format(r.usdbrl_6m)} em 6 meses, Selic ${fmt1.format(r.selic_end2027)}% no fim de 2027, dívida bruta ${fmt1.format(r.gross_debt_2030)}% do PIB em 2030.`;
+      n.textContent = `Partida ${pct(r.start)}; o peso registrado com a regra do DI é ${pct(r.probability)} (${signed(nf(0))((r.probability - r.start) * 100)} p.p.). Marca do DI: +${r.di_jan29_move_bp} bp. Neste cenário: dólar R$ ${fmt2.format(r.usdbrl_6m)} em 6 meses, Selic ${fmt1.format(r.selic_end2027)}% no fim de 2027, dívida bruta ${fmt1.format(r.gross_debt_2030)}% do PIB em 2030.`;
       d.append(h, t, q, n); return d;
     }));
   } else { tl.replaceChildren(); tbc.replaceChildren(); document.querySelector('.cen-explica').replaceChildren(); }
