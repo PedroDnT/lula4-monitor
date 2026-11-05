@@ -41,7 +41,7 @@
 <p>O que importa em cada parâmetro é a origem, mais do que o valor. Cada linha diz de onde o número vem: <b>norma</b> (lei, meta ou plano oficial), <b>dado</b> (observação direta), <b>cálculo</b> (conta direta com dados, sem hipótese: juro implícito, r − g, inflação implícita), <b>regressão</b> (estimado em dados históricos), <b>literatura</b> (o método vem de um trabalho publicado), <b>julgamento</b> (premissa ou metodologia de referência, explícita e testável) ou <b>projeção</b> (olha adiante, como a dívida em 2030). Cálculo e projeção são diferentes: o cálculo repete o que os dados dizem hoje; a projeção depende de premissas.</p>
 <div class="tw"><table><thead><tr><th>Parâmetro</th><th>Valor</th><th>Origem</th><th>Como foi definido</th></tr></thead><tbody>
 <tr><td>Incerteza σ de cada cenário (Bayes)</td><td>100 bp</td><td>Dado, com método da literatura</td><td>Agora = partida × verossimilhança normal do nível do DI jan/29 desde 23/10, centrada na marca de cada cenário. σ é a dispersão do DI de 2 anos dentro de um mesmo cenário: nas 20 a 40 sessões depois de 22 choques desde 2015 (dias com movimento acima de 2 desvios, curva PRE de 720 dias, SILO), o desvio padrão do movimento é de 62 a 113 bp. Com a partida de 45 · 32 · 23 e o DI em +216 bp: σ = 80 dá 12 · 66 · 22, σ = 100 dá 21 · 55 · 24, σ = 120 dá 27 · 48 · 25. Regras anteriores: Bayes com σ = 35 bp (saturava) e, de 27 a 29/10, agora = partida + 0,3 × (DI − partida) com limite de 15 pontos, cujo 0,3 não tinha origem.</td></tr>
-<tr><td>Marcas do DI jan/29 por cenário</td><td>+50, +180 e +320 bp desde 23/10</td><td>Julgamento</td><td>Escolha do autor, não estimativa estatística. As marcas dividem o espaço entre os 3 cenários; o painel interpola em linha reta entre elas. São as hipóteses que o DI testa, não previsões.</td></tr>
+<tr><td>Marcas do DI jan/29 por cenário</td><td>+50, +180 e +320 bp desde 23/10</td><td>Julgamento</td><td>Escolha do autor, não estimativa estatística. As marcas são centros de verossimilhanças normais; o painel normaliza essas verossimilhanças para comparar os cenários. São as hipóteses que o DI testa, não previsões.</td></tr>
 <tr><td>Degraus dos fatos</td><td>×1,05, ×1,15, ×1,30 (contra: ×0,95, ×0,87, ×0,77)</td><td>Julgamento, ancorado em literatura</td><td>Fato fraco, moderado e forte, definidos por critério (fonte, ato formal, efeito direto). Fazem o papel de razões de verossimilhança. A literatura chama de evidência positiva uma razão acima de 3 e de forte uma acima de 20 (Kass e Raftery, 1995); os degraus daqui ficam bem abaixo disso, ou seja, um fato isolado move pouco.</td></tr>
 <tr><td>Banda de 4,5% para o IPCA</td><td>4,5%</td><td>Norma</td><td>A meta de inflação é 3% com tolerância de 1,5 ponto para cada lado, definida pelo Conselho Monetário Nacional. O teto da banda é 4,5%. O gatilho acende quando o Focus para o IPCA de 2027 passa desse teto.</td></tr>
 <tr><td>Meta primária de 2027</td><td>0,50% do PIB; 0,25% no piso da banda</td><td>Norma</td><td>Meta do arcabouço fiscal (Lei Complementar 200/2023) e da lei de diretrizes orçamentárias.</td></tr>
@@ -104,8 +104,9 @@
 <li><b>Copom contra o Focus.</b> Bootstrap da curva: cada contrato é o CDI composto até o vencimento, em dias úteis pelo calendário nacional. Com a Selic fixa entre reuniões, cada contrato novo dá a Selic de uma reunião, que o relatório compara com a mediana do Focus. Reuniões depois da próxima são ruidosas, porque os contratos curtos negociam pouco.</li>
 <li><b>Fatos e agenda.</b> Cada fato traz fonte, o degrau e o motivo. A agenda diz o que cada evento precisa mostrar para favorecer cada cenário.</li>
 </ol>
-<p>O relatório é atualizado em dias úteis, às 11:20 de Brasília (14:20 UTC). A revisão semanal, às segundas-feiras, aplica os gatilhos (equipe econômica, Orçamento 2027, Copom, contestação do resultado, rating) à partida. Os degraus são julgamento; a escala só deixa o julgamento explícito.</p>
+<p>A partida depende de fatos com fontes e julgamento. A atualização automática está em revisão; a data de cada arquivo indica sua última atualização. Os degraus são julgamento; a escala só deixa o julgamento explícito.</p>
 
+<p><b>Limites da inferência.</b> A partida é julgamento e o DI também reage aos fatos: separar as entradas não elimina a possibilidade de contar a mesma informação duas vezes. A dispersão histórica entre episódios é uma referência para σ, não uma medida comprovada da dispersão dentro de cada cenário. As marcas são fixas e o DI bruto também responde a fatores globais e à passagem do tempo.</p>
 <h2 id="m-dados">Dados e atualização</h2>
 <div class="tw"><table><thead><tr><th>Dado</th><th>Fonte</th><th>Como chega</th></tr></thead><tbody>
 <tr><td>Curvas PRE e DPL, DI1, Focus, séries fiscais, PTAX, fluxo estrangeiro</td><td>SILO (CVM, BACEN, B3)</td><td>O navegador lê a API pública do SILO a cada visita</td></tr>
@@ -113,7 +114,7 @@
 <tr><td>USDT/BRL</td><td>Binance</td><td>Direto no navegador, a cada 2 min</td></tr>
 <tr><td>PTAX e Focus</td><td>BCB (Olinda)</td><td>Direto no navegador</td></tr>
 <tr><td>EWZ, dólar, Ibovespa, ADRs; Selic; CDS 5 anos</td><td>Yahoo Finance; BCB SGS; OBM</td><td>Por uma função do próprio site, porque essas fontes não aceitam leitura direta</td></tr>
-<tr><td>Pesos, fatos, agenda, orçamento, rolagem, LFT, histórico</td><td>Arquivos em <code>data/</code> do repositório</td><td>Escritos pela rotina diária (dias úteis, 11:20 de Brasília) e publicados no deploy seguinte</td></tr>
+<tr><td>Pesos, fatos, agenda, orçamento, rolagem, LFT, histórico</td><td>Arquivos em <code>data/</code> do repositório</td><td>Arquivos versionados no repositório; a atualização automática está em revisão</td></tr>
 </tbody></table></div>
 <p>O histórico do Intraday tem um arquivo-base do site e, além dele, as leituras de 5 em 5 minutos feitas no seu navegador enquanto a página está aberta; essas leituras ficam só nele.</p>
 
@@ -124,7 +125,7 @@
 <li>Antes das 9h o EWZ e o USDT têm pouco volume. A abertura do dólar à vista é o teste real.</li>
 <li>O DI jan/29 vence em pouco mais de 2 anos, e o modelo usa o vértice de 720 dias da curva PRE. São próximos, mas não iguais.</li>
 <li>Os limites dos sinais e os degraus dos fatos são julgamento. Os pesos são probabilidades subjetivas.</li>
-<li>As páginas Relatório e Dominância são cópias diárias, não ao vivo. A rotina das 11:20 atualiza os dados e a rotina das 11:50 publica. Pode haver até um dia de atraso. O Intraday busca preços a cada poucos minutos.</li>
+<li>Relatório e Fiscal mostram pesos registrados nos arquivos, que podem estar defasados. O Intraday busca preços a cada poucos minutos; as duas leituras podem divergir.</li>
 <li>O Intraday depende de fontes públicas: B3, Binance, BCB, SILO, Yahoo e OBM (CDS). Yahoo, OBM e Selic passam por rotas do próprio site (/api). Se uma fonte cair ou limitar o acesso, o painel mantém o último dado, avisa na tela e tenta de novo. Ele não inventa número.</li>
 <li>O histórico do Intraday tem uma base fixa do site (29 leituras iniciais) mais as leituras de cada navegador, guardadas no próprio aparelho. Dois leitores veem gráficos um pouco diferentes até o histórico crescer.</li>
 <li>Nada aqui é recomendação de compra ou venda.</li>

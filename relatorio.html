@@ -58,22 +58,22 @@
 
   <section class="dm-section" id="pesos">
     <h2 class="dm-h2">Pesos de partida</h2>
-    <p class="dm-sub">A partida vem só de fatos: cada fato multiplica o peso de cada cenário, e os pesos voltam a somar 100%. A rotina diária aplica os fatos novos à partida; a revisão semanal aplica os gatilhos e não conta de novo um fato já aplicado. Durante o dia, o Agora atualiza a partida por Bayes com o nível do DI jan/29 desde 23/10 (σ = 100 bp).</p>
+    <p class="dm-sub">A partida vem só de fatos: cada fato multiplica o peso de cada cenário, e os pesos voltam a somar 100%. Fatos com fonte podem alterar a partida; a atualização automática está em revisão. Durante o dia, o Agora atualiza a partida por Bayes com o nível do DI jan/29 desde 23/10 (σ = 100 bp).</p>
     <div class="dm-tiles">
       <div class="dm-tile" id="t-ancora">
         <span class="dm-tile-label">Âncora retomada</span>
         <span class="dm-big dash-skeleton" data-source="pesos_fmt" data-field="start" data-where="id=ancora">—</span>
-        <span class="dm-note">Agora <span data-source="pesos_fmt" data-field="probability" data-where="id=ancora">—</span> · se o DI jan/29 subir até <span data-source="pesos" data-field="di_jan29_move_bp" data-where="id=ancora">—</span> bp</span>
+        <span class="dm-note">Último peso registrado <span data-source="pesos_fmt" data-field="probability" data-where="id=ancora">—</span> · se o DI jan/29 subir até <span data-source="pesos" data-field="di_jan29_move_bp" data-where="id=ancora">—</span> bp</span>
       </div>
       <div class="dm-tile" id="t-deriva">
         <span class="dm-tile-label">Deriva fiscal</span>
         <span class="dm-big dash-skeleton" data-source="pesos_fmt" data-field="start" data-where="id=deriva">—</span>
-        <span class="dm-note">Agora <span data-source="pesos_fmt" data-field="probability" data-where="id=deriva">—</span> · DI jan/29 perto de +<span data-source="pesos" data-field="di_jan29_move_bp" data-where="id=deriva">—</span> bp</span>
+        <span class="dm-note">Último peso registrado <span data-source="pesos_fmt" data-field="probability" data-where="id=deriva">—</span> · DI jan/29 perto de +<span data-source="pesos" data-field="di_jan29_move_bp" data-where="id=deriva">—</span> bp</span>
       </div>
       <div class="dm-tile" id="t-estresse">
         <span class="dm-tile-label">Estresse e espiral</span>
         <span class="dm-big dash-skeleton" data-source="pesos_fmt" data-field="start" data-where="id=estresse">—</span>
-        <span class="dm-note">Agora <span data-source="pesos_fmt" data-field="probability" data-where="id=estresse">—</span> · DI jan/29 acima de +<span data-source="pesos" data-field="di_jan29_move_bp" data-where="id=estresse">—</span> bp</span>
+        <span class="dm-note">Último peso registrado <span data-source="pesos_fmt" data-field="probability" data-where="id=estresse">—</span> · DI jan/29 acima de +<span data-source="pesos" data-field="di_jan29_move_bp" data-where="id=estresse">—</span> bp</span>
       </div>
       <div class="dm-tile" id="t-proposta">
         <span class="dm-tile-label">Partida com os fatos pendentes</span>
@@ -192,7 +192,7 @@
       <li>Bootstrap: cada contrato é o CDI composto até o vencimento. Com a Selic fixa entre reuniões, cada contrato novo dá a Selic de uma reunião. Dias úteis pelo calendário nacional; confere com o PU da B3.</li>
       <li>Reuniões depois da próxima são ruidosas, porque os contratos curtos negociam pouco.</li>
       <li>Escala de 3 degraus para os fatos (escolha de Pedro, 27/10). O fator diz quanto o fato é mais provável num cenário. Fraco ×1,05: notícia não confirmada, fonte sem nome, ou intenção sem ato formal. Moderado ×1,15: ato oficial ou declaração formal confirmada (aviso do Tesouro, pedido protocolado, nome confirmado pelo governo). Forte ×1,30: decisão com efeito direto no resultado ou na trajetória fiscal (decisão de tribunal, orçamento enviado ou votado, ministro nomeado, ação de rating). Contra um cenário: o inverso (0,95, 0,87, 0,77). Um fato novo num canal que já entrou recebe no máximo fraco, para não contar duas vezes. Sem direção clara: 1,00.</li>
-      <li>A rotina diária (11:20) aplica os fatos pendentes à partida, como na atualização bayesiana: peso × fator, e os pesos voltam a somar 100%. Base de 27/10: 45 · 35 · 20 antes de qualquer fato, com f1 a f7 aplicados na escala. Os degraus são julgamento; a escala só deixa o julgamento explícito.</li>
+      <li>Os fatos aprovados podem ser aplicados à partida, como na atualização bayesiana: peso × fator, e os pesos voltam a somar 100%. Base de 27/10: 45 · 35 · 20 antes de qualquer fato, com f1 a f7 aplicados na escala. Os degraus são julgamento; a escala só deixa o julgamento explícito.</li>
       <li>Não está aqui: juro real, inflação implícita, Focus IPCA, dívida e o histórico dos pesos (monitor de dominância); dólar, CDS e DI ao vivo (intraday).</li>
     </ol>
   </section>

@@ -49,3 +49,19 @@ a { color: var(--color-accent); }
 .subtabs a { white-space: nowrap; text-decoration: none; font-size: 13px; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--color-border); color: var(--color-fg-muted); }
 .subtabs a:hover { color: var(--color-fg); }
 .subtabs a[aria-current="page"] { color: var(--color-fg); background: var(--color-panel); border-color: var(--color-accent); font-weight: 600; }
+
+/* Shared editorial hierarchy */
+.site-head { backdrop-filter: blur(14px); }
+.site-head .in { padding-top: 16px; }
+.site-title { font-size: 21px; letter-spacing: -.02em; }
+.tabs a { padding-top: 10px; padding-bottom: 11px; }
+.subtabs { padding-top: 14px; }
+.subtabs a { padding: 6px 14px; }
+#dash-root { padding-top: 32px; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+@media (max-width: 560px) {
+  .site-head .in { padding-top: 10px; }
+  .site-title small { display: block; margin: 2px 0 0; }
+  .tabs a { padding-left: 10px; padding-right: 10px; }
+  #dash-root { padding-top: 20px; }
+}

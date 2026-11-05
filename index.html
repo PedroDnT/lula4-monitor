@@ -188,6 +188,7 @@ table.compact th, table.compact td { padding: 7px 6px; }
 @media (max-width: 560px) { table.compact { font-size: 13px; } table.compact .hide-m { display: none; } table.compact th small { font-size: 11px; } }
 img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
 </style>
+<link rel="stylesheet" href="assets/remake.css">
 <style>.site-head{background:var(--bg,#f7f6f3)} .wrap{padding-top:0}</style><link rel="stylesheet" href="assets/leia.css"><script src="assets/leia.js" defer></script></head><body>
 <header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html" aria-current="page">Agora</a><a href="dominancia.html">Fiscal</a><a href="lara.html">Cenário Lara</a><a href="metodo.html">Método</a><a href="simples.html" class="tab-simple">Versão simples</a></nav></div></header><nav class="subtabs" aria-label="Agora"><a href="index.html" aria-current="page">Preços de agora</a><a href="relatorio.html">Fatos e relatório do dia</a></nav>
 
@@ -201,11 +202,12 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
 
   <section class="sec" id="s-px" aria-label="O que o DI precifica">
   <div class="panel hero">
-    <div class="hk">O DI jan/29 precifica</div>
+    <div class="hk">Leitura de mercado · DI jan/29</div>
     <div class="hv" id="hx-sc">–</div>
     <div class="hs"><b id="hx-bp">–</b> desde o ajuste de 23/10 (12,640%) · <span id="hx-d1">–</span> vs ontem · <span id="hx-d5">–</span> vs 5 pregões · <span id="hx-pos"></span></div>
     <div class="bars" id="hx-bars"></div>
-    <p class="src">Dado: ajuste do DI1F29 (B3, pelo SILO) e o contrato de agora (B3, cerca de 15 min de atraso). Escolha do monitor: as marcas +50, +180 e +320 bp. Dado: σ = 100 bp, dispersão do DI de 2 anos nas 20 a 40 sessões após 22 choques desde 2015. Julgamento: a partida, só com fatos. Agora = Bayes (partida × verossimilhança). <a class="how" href="#m6">Método</a></p>
+    <p class="src">Cálculo baseado no DI; as marcas são julgamento. A leitura de preço pode divergir dos pesos registrados no Relatório e em Fiscal.</p>
+    <p class="src">Dado: ajuste do DI1F29 (B3, pelo SILO) e o contrato de agora (B3, cerca de 15 min de atraso). Escolha do monitor: as marcas +50, +180 e +320 bp. Julgamento: σ = 100 bp, escolhido a partir da dispersão do DI de 2 anos nas 20 a 40 sessões após 22 choques desde 2015 (Dado, SILO). Julgamento: a partida, só com fatos. Agora = Bayes (partida × verossimilhança). <a class="how" href="#m6">Método</a></p>
   </div>
   </section>
 
@@ -405,7 +407,7 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
     <p>Cada número do painel vem de um destes 6 passos. Toque para abrir.</p>
     <details id="g1"><summary>1. Cenários e dólar por cenário</summary><div><div id="m6">
       <p>Os 3 cenários são os mesmos do monitor de juros e do documento "Dominância fiscal": Âncora retomada (Framework holds no monitor), Deriva fiscal (Fiscal drift) e Estresse e espiral (Institutional stress).</p>
-      <p><b>Início (relatório diário):</b> o relatório diário de juros fixa os pesos só com fatos, sem preços, pela escala de 3 degraus. Em 27/10: 43 · 32 · 25 (26/10: 45 · 33 · 22; antes da eleição: 45 · 35 · 20). <b>Agora (mercado):</b> regra de Bayes. A partida é a prior; a observação é o nível do DI jan/29 desde 23/10; cada cenário é uma normal centrada na sua marca, com σ = 100 bp. Agora = partida × verossimilhança, normalizado. Como a observação é o nível acumulado, a conta parte da partida todo dia e não conta nada duas vezes; um repricing que persiste continua sendo absorvido. A média ponderada do dólar usa os pesos de agora. A revisão semanal aplica os gatilhos (equipe econômica, Orçamento 2027, Copom, contestação do resultado, rating) à partida.</p>
+      <p><b>Início (relatório diário):</b> o relatório diário de juros fixa os pesos só com fatos, sem preços, pela escala de 3 degraus. Em 27/10: 43 · 32 · 25 (26/10: 45 · 33 · 22; antes da eleição: 45 · 35 · 20). <b>Agora (mercado):</b> regra de Bayes. A partida é a prior; a observação é o nível do DI jan/29 desde 23/10; cada cenário é uma normal centrada na sua marca, com σ = 100 bp. Agora = partida × verossimilhança, normalizado. Como a observação é o nível acumulado, a conta parte da partida todo dia para não reaplicar o nível anterior; fatos também podem afetar o DI, de modo que a independência das informações não está garantida; um repricing que persiste continua sendo absorvido. A média ponderada do dólar usa os pesos de agora. A revisão semanal aplica os gatilhos (equipe econômica, Orçamento 2027, Copom, contestação do resultado, rating) à partida.</p>
       <p><b>O que o DI precifica:</b> cada cenário supõe uma alta do DI jan/29 desde 23/10 (ajuste 12,640%): +50, +180 e +320 bp. A coluna "O DI precifica" é a verossimilhança de cada marca para a alta de agora, com prior igual entre os três (σ = 100 bp). Acima de +320 bp, o Estresse domina e o painel avisa que o mercado está além do pior cenário.</p>
       <p><b>De onde vem o σ:</b> uma versão de outubro usava Bayes com σ = 35 bp e saturava: qualquer dia forte dava 100% a um cenário. Entre 27 e 29/10 valeu uma regra ad hoc, agora = partida + 0,3 × (DI − partida), com limite de 15 pontos; o 0,3 não tinha origem. Desde 29/10 o σ é medido: nas 20 a 40 sessões depois de 22 choques do DI de 2 anos desde 2015 (dias com movimento acima de 2 desvios, curva PRE de 720 dias, SILO), o desvio padrão do movimento é de 62 a 113 bp. σ = 100 bp fica nesse intervalo. Com σ = 80 a partida de 45 · 32 · 23 e +216 bp dariam 12 · 66 · 22; com 120, 27 · 48 · 25.</p>
       <p>Dólar no prazo = PTAX de 23/10 × (1 + choque acumulado × fração que resta), com as frações do passo 2. A média ponderada usa os pesos de agora (mercado).</p>
