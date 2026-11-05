@@ -14,7 +14,7 @@ Antes de ativar: escolher executor, retenção de logs, autenticação para bran
 
 ## Executar
 
-Python 3.11 ou superior, apenas biblioteca padrão. Sem instalação de pacotes e sem acesso direto a Postgres.
+Python 3.11 ou superior, apenas biblioteca padrão. Sem instalação de pacotes e sem acesso direto a Postgres. A execução precisa receber `SILO_USER_JWT` como secret de ambiente; o valor não entra em argumentos, arquivos ou logs.
 
 ```sh
 python3 -m unittest discover -s tests -v
@@ -77,7 +77,7 @@ Identificador já aplicado e conteúdo idêntico é ignorado. Conteúdo diferent
 
 ## Fontes, validações e falhas
 
-Mercado: SILO API `api.future_series`, `p_ticker=DI1F29`, `p_from=2026-10-23`, mesma rota pública usada em `index.html`. Headers de schema `api`, chave pública de leitura já usada pelo site. Não usa Postgres nem segredo de banco. Valida unidade percentual, base, datas únicas, último pregão esperado e números finitos; nenhuma substituição por preço ao vivo ou valor anterior em caso de falha. O calendário usa `feriados.json` e fins de semana; cobertura operacional limitada de 03/11/2026 a 31/12/2027 (Norma operacional desta implementação), sujeita à revisão do calendário da B3. Não presume feriado desconhecido como dia sem pregão.
+Mercado: SILO REST v2 privada, recurso `derivatives`, `kind=futures`, `id=DI1F29`, `from=2026-10-23`. Autenticação por JWT de usuário Supabase Auth em `SILO_USER_JWT`. Não usa Postgres nem chave publicável. Valida envelope, paginação, unidade percentual, base, datas únicas, último pregão esperado e números finitos; nenhuma substituição por preço ao vivo ou valor anterior em caso de falha. O calendário usa `feriados.json` e fins de semana; cobertura operacional limitada de 03/11/2026 a 31/12/2027 (Norma operacional desta implementação), sujeita à revisão do calendário da B3. Não presume feriado desconhecido como dia sem pregão.
 
 Fatos: URL, fonte, trecho literal, hash da resposta, aprovação e canal. Origem do relato não se confunde com origem do fator: o fator é sempre Julgamento; o peso derivado é Cálculo.
 

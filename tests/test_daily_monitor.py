@@ -122,7 +122,7 @@ class BatchTests(unittest.TestCase):
 
     def test_market_failure_no_batch(self):
         output = Path(self.tmp.name) / 'output'
-        with patch.object(m, 'fetch', side_effect=OSError('SILO caiu')), self.assertRaises(OSError):
+        with patch.dict(m.os.environ, {'SILO_USER_JWT': 'test-token'}), patch.object(m, 'fetch', side_effect=OSError('SILO caiu')), self.assertRaises(OSError):
             m.stage(self.root, output, '2026-11-04', [])
         self.assertFalse(output.exists())
 
@@ -145,7 +145,8 @@ class BatchTests(unittest.TestCase):
         output = Path(self.tmp.name) / 'output'
         rows = [{'trade_date': m.BASE_DATE, 'settlement_rate': m.BASE_RATE, 'ticker': 'DI1F29', 'settlement_status': 'F'},
                 {'trade_date': '2026-11-03', 'settlement_rate': 14.96, 'ticker': 'DI1F29', 'settlement_status': 'F'}]
-        with patch.object(m, 'fetch', return_value=json.dumps(rows).encode()):
+        payload = json.dumps({'data': rows, 'meta': {}, 'next_page_url': None}).encode()
+        with patch.dict(m.os.environ, {'SILO_USER_JWT': 'test-token'}), patch.object(m, 'fetch', return_value=payload):
             m.stage(self.root, output, '2026-11-04', [])
         self.assertEqual({str(p.relative_to(output)) for p in (output / 'data').rglob('*.json')},
                          {m.WEIGHTS, m.SCENARIOS, m.FACTS, m.HISTORY})
@@ -201,11 +202,20 @@ class SourceTests(unittest.TestCase):
                [good[0], dict(good[1], settlement_status='P')],
                [good[0], dict(good[1], ticker='DI1F30')]]
         for rows in bad:
-            with self.subTest(rows=rows), patch.object(m, 'fetch', return_value=json.dumps(rows).encode()), self.assertRaises(ValueError):
+            payload = json.dumps({'data': rows, 'meta': {}, 'next_page_url': None}).encode()
+            with self.subTest(rows=rows), patch.dict(m.os.environ, {'SILO_USER_JWT': 'test-token'}), patch.object(m, 'fetch', return_value=payload), self.assertRaises(ValueError):
                 m.collect_market('2026-11-04', '2026-11-03')
-        with patch.object(m, 'fetch', return_value=json.dumps(good).encode()):
+        payload = json.dumps({'data': good, 'meta': {}, 'next_page_url': None}).encode()
+        with patch.dict(m.os.environ, {'SILO_USER_JWT': 'test-token'}), patch.object(m, 'fetch', return_value=payload):
             result, _ = m.collect_market('2026-11-04', '2026-11-03')
             self.assertEqual(result['rate_pct'], 14.96)
+
+    def test_silo_requires_auth_and_rejects_foreign_cursor(self):
+        with patch.dict(m.os.environ, {}, clear=True), self.assertRaisesRegex(ValueError, 'SILO_USER_JWT'):
+            m.silo_rows('derivatives', {'kind': 'futures'})
+        payload = {'data': [], 'next_page_url': 'https://example.org/stolen'}
+        with patch.dict(m.os.environ, {'SILO_USER_JWT': 'test-token'}), patch.object(m, 'fetch', return_value=json.dumps(payload).encode()), self.assertRaisesRegex(ValueError, 'Cursor SILO'):
+            m.silo_rows('derivatives', {'kind': 'futures'})
 
     def test_evidence_and_http_error(self):
         f = fact()

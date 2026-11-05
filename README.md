@@ -33,7 +33,10 @@ O site roda como um Worker com arquivos estáticos (`wrangler.jsonc`). O `worker
 
 1. Cloudflare, Workers & Pages, Create, Import a repository, escolha este repositório.
 2. Build command vazio. Deploy command: `npx wrangler deploy`. Branch `main`.
-3. Depois do deploy, em Settings, Domains & Routes, adicione o domínio próprio e siga o passo de DNS.
+3. Grave um JWT de usuário Supabase Auth em `SILO_USER_JWT` nos Secrets do Worker
+   (`npx wrangler secret put SILO_USER_JWT`). O token precisa estar válido; a
+   política de expiração e renovação deve ser definida antes de ativar a rotina.
+4. Depois do deploy, em Settings, Domains & Routes, adicione o domínio próprio e siga o passo de DNS.
 
 Cada commit na `main` publica de novo. O `.assetsignore` impede que `worker.js`, `docs/` e `README.md` sejam servidos como arquivos.
 
@@ -43,4 +46,5 @@ Para ver local: `npx wrangler dev` (serve as 3 abas e as rotas `/api/*`).
 
 - Leitura de sinais de mercado e julgamento do autor. Não é recomendação de compra ou venda.
 - Os pesos dos cenários são julgamento, não previsão de modelo.
-- O SILO é lido com a chave pública (`sb_publishable_…`), que só dá leitura ao schema `api`. Ela pode ficar no código.
+- O SILO é lido pela API REST v2 autenticada. O JWT de usuário fica no secret
+  `SILO_USER_JWT` do Cloudflare Worker e nunca é enviado ao navegador.

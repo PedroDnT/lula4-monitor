@@ -1,10 +1,9 @@
 /* Minimal stand-in for the claude.ai Dashboard runtime ("dash").
    It lets the dashboard pages run unchanged on a plain static host.
    Datasets: window.DATASETS = { id: {kind:"file", url} | {kind:"query", tool, args} }.
-   Query datasets call the public SILO read API (schema api) with the publishable key. */
+   Query datasets call the authenticated SILO relay in this site's Worker. */
 (function () {
-  const SILO_URL = "https://zcjbtpxuhdekpwcxmepn.supabase.co/rest/v1/rpc/";
-  const SILO_KEY = "sb_publishable__yfFQsykAglrvc9GS6_PYw_B24ex437";
+  const SILO_URL = "/api/silo";
   const defs = window.DATASETS || {};
   const state = new Map();      // id -> {status, data, columns, message, refreshing, meta}
   const loaders = new Map();
@@ -42,7 +41,7 @@
         rows = toRows(await r.json());
       } else {
         const args = {}; Object.keys(d.args || {}).forEach((k) => { args[k] = fill(d.args[k]); });
-        const r = await fetch(SILO_URL + d.tool, { method: "POST", headers: { apikey: SILO_KEY, "Accept-Profile": "api", "Content-Profile": "api", "Content-Type": "application/json" }, body: JSON.stringify(args) });
+        const r = await fetch(SILO_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({operation: d.tool, args}) });
         const j = await r.json();
         if (!r.ok) throw new Error((j && (j.message || j.details)) || ("SILO " + r.status));
         rows = j;

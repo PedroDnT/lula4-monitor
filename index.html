@@ -1343,8 +1343,8 @@ const PARSE = {
 };
 
 const HIST_FROM = "2026-09-01";
-const SILO_REST = "https://zcjbtpxuhdekpwcxmepn.supabase.co/rest/v1/";
-const SILO_HDR = {apikey: "sb_publishable__yfFQsykAglrvc9GS6_PYw_B24ex437", "Accept-Profile": "api", "Content-Profile": "api"};
+const SILO_REST = "/api/silo";
+const silo = (operation, args) => getJson(SILO_REST, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({operation, args})});
 let timers = [];
 async function getJson(url, opts) {
   const r = await fetch(url, Object.assign({cache: "no-store"}, opts));
@@ -1364,11 +1364,11 @@ function start() {
   // SILO: 2 years of daily history for the dominance score, refreshed every 6 h
   const from = new Date(Date.now() - 730 * 864e5).toISOString().slice(0, 10);
   const SILO = {
-    silo_pre: () => getJson(SILO_REST + "rpc/curve_history", {method: "POST", headers: Object.assign({"Content-Type": "application/json"}, SILO_HDR), body: JSON.stringify({p_curve: "PRE", p_tenor_days: 720, p_from: from})}),
-    silo_dpl: () => getJson(SILO_REST + "rpc/curve_history", {method: "POST", headers: Object.assign({"Content-Type": "application/json"}, SILO_HDR), body: JSON.stringify({p_curve: "DPL", p_tenor_days: 720, p_from: from})}),
-    flow: () => getJson(SILO_REST + "investor_flow?investor_type=eq.Investidor%20Estrangeiro&order=reference_date.desc&limit=10&select=reference_date,net_value_thousands,flow_basis", {headers: SILO_HDR}),
-    silo_fx: () => getJson(SILO_REST + "ptax_daily?currency=eq.USD&date=gte." + from + "&order=date.asc&limit=1000&select=date,sell_rate", {headers: SILO_HDR}),
-    silo_di: () => getJson(SILO_REST + "rpc/future_series", {method: "POST", headers: Object.assign({"Content-Type": "application/json"}, SILO_HDR), body: JSON.stringify({p_ticker: "DI1F29", p_from: HIST_FROM})}),
+    silo_pre: () => silo("curve_history", {p_curve: "PRE", p_tenor_days: 720, p_from: from}),
+    silo_dpl: () => silo("curve_history", {p_curve: "DPL", p_tenor_days: 720, p_from: from}),
+    flow: () => silo("investor_flow", {p_investor_type: "Investidor Estrangeiro"}),
+    silo_fx: () => silo("ptax_daily", {p_currency: "USD", p_from: from}),
+    silo_di: () => silo("future_series", {p_ticker: "DI1F29", p_from: HIST_FROM}),
   };
   for (const [key, get] of Object.entries(SILO)) {
     every(21600000, async () => {

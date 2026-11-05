@@ -24,3 +24,4 @@ Base: main após PR #17. A reforma preserva pesos e marcas. Por decisão posteri
 - **Alta, erro corrigido:** Fiscal identificava 0,25% como meta, enquanto o Método e Agora identificam o centro de 0,50% e o piso de 0,25%. O texto de cenário agora distingue os dois; nenhum peso foi alterado.
 - **Média, interpretação corrigida:** o resumo do DI atribuía o excesso a risco fiscal como fato. A linguagem agora registra que o resíduo pode conter outras causas e não as identifica.
 - **Média, apresentação:** o painel principal distingue último negócio de ajuste anterior; Fiscal mostra as datas dos pesos registrados.
+- **Alta, segurança e origem:** as chamadas do SILO saíram do PostgREST com chave publicável no navegador. O Worker agora usa a REST v2 privada com JWT de usuário em secret, operações e parâmetros permitidos e paginação limitada. A rotina usa o mesmo contrato por `SILO_USER_JWT`.

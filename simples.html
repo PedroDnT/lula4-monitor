@@ -142,8 +142,7 @@ dl.words dd { margin: 2px 0 0; font-size: 15px; }
 </main>
 <footer class="site-foot">Leitura de sinais de mercado e julgamento do autor, não recomendação de compra ou venda. Dados abertos do Brasil servidos pelo <b>SILO</b> (BCB e B3). Orçamento: PLOA e PLDO 2027 (IFI, Ipea). Horários de Brasília (UTC-3).</footer>
 <script>(function () {
-const SILO = "https://zcjbtpxuhdekpwcxmepn.supabase.co/rest/v1/rpc/";
-const HDR = { apikey: "sb_publishable__yfFQsykAglrvc9GS6_PYw_B24ex437", "Accept-Profile": "api", "Content-Profile": "api", "Content-Type": "application/json" };
+const SILO = "/api/silo";
 // Same anchor and rule as the Agora page: DI jan/29 settlement of 23/10 and Bayes with sigma = 100 bp.
 const ELECT = { di29: 12.640, iso: "2026-10-23" };
 const SIGMA = 100;
@@ -163,7 +162,7 @@ const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) 
 const monthName = (m) => { const [y, mo] = m.split("-"); return ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"][Number(mo) - 1] + "/" + y; };
 const dayName = (s) => s.slice(8, 10) + "/" + s.slice(5, 7);
 
-const rpc = (tool, args) => fetch(SILO + tool, { method: "POST", headers: HDR, body: JSON.stringify(args) }).then((r) => { if (!r.ok) throw new Error("SILO " + r.status); return r.json(); });
+const rpc = (operation, args) => fetch(SILO, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({operation, args}) }).then((r) => { if (!r.ok) throw new Error("SILO " + r.status); return r.json(); });
 const file = (u) => fetch(u).then((r) => { if (!r.ok) throw new Error(u + " " + r.status); return r.json(); });
 const series = (s) => rpc("macro_series", { p_series: s, p_from: "2023-01-01" }).then((rows) => new Map(rows.filter((r) => r.value !== null).map((r) => [r.reference_date.slice(0, 7), Number(r.value)])));
 

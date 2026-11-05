@@ -2,7 +2,10 @@
 
 ## Ao vivo (sem commit)
 
-O navegador lê SILO (API pública, sem Postgres direto), B3, Binance e BCB. O `worker.js` cobre as rotas Yahoo, CDS e Selic. Esse comportamento não foi alterado pela rotina diária.
+O navegador lê os dados do SILO pela rota `/api/silo` do próprio Worker. O Worker
+autentica na API REST v2 privada com `SILO_USER_JWT`; não há acesso direto a
+Postgres nem credencial no navegador. B3, Binance e BCB completam as fontes ao vivo.
+O `worker.js` também cobre Yahoo, CDS e Selic.
 
 ## Rotina por arquivos
 

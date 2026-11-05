@@ -6,11 +6,13 @@ from datetime import date, datetime, timedelta
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import shutil
 import sys
 import tempfile
 from urllib.request import Request, urlopen
+from urllib.parse import urlencode, urljoin, urlparse
 from zoneinfo import ZoneInfo
 
 IDS = ('ancora', 'deriva', 'estresse')
@@ -18,8 +20,7 @@ MARKS = (50, 180, 320)
 BASE_DATE = '2026-10-23'
 BASE_RATE = 12.640
 SIGMA = 100
-SILO = 'https://zcjbtpxuhdekpwcxmepn.supabase.co/rest/v1/rpc/future_series'
-KEY = 'sb_publishable__yfFQsykAglrvc9GS6_PYw_B24ex437'
+SILO = 'https://zcjbtpxuhdekpwcxmepn.supabase.co/functions/v1/silo-api/v2'
 TZ = ZoneInfo('America/Sao_Paulo')
 WEIGHTS = 'data/relatorio/pesos.json'
 SCENARIOS = 'data/dominancia/scenarios.json'
@@ -146,10 +147,9 @@ def previous_session(run_date, holidays):
     return d.isoformat()
 
 
-def fetch(url, body=None):
-    headers = {'User-Agent': 'lula4-monitor/1.0'}
-    if body is not None:
-        headers.update({'apikey': KEY, 'Accept-Profile': 'api', 'Content-Profile': 'api', 'Content-Type': 'application/json'})
+def fetch(url, body=None, headers=None):
+    headers = {'User-Agent': 'lula4-monitor/1.0', **(headers or {})}
+    if body is not None: headers['Content-Type'] = 'application/json'
     request = Request(url, data=json.dumps(body).encode() if body is not None else None, headers=headers)
     with urlopen(request, timeout=30) as response:
         require(response.status == 200, 'Fonte sem resposta 200')
@@ -158,10 +158,31 @@ def fetch(url, body=None):
         return raw
 
 
+def silo_rows(resource, params):
+    token = os.environ.get('SILO_USER_JWT')
+    require(token, 'SILO_USER_JWT ausente')
+    headers = {'Authorization': 'Bearer ' + token, 'Accept': 'application/json'}
+    url = SILO + '/' + resource + '?' + urlencode({**params, 'limit': 100})
+    rows, responses = [], []
+    for _ in range(10):
+        raw = fetch(url, headers=headers)
+        payload = json.loads(raw)
+        responses.append(payload)
+        require(isinstance(payload, dict) and isinstance(payload.get('data'), list), 'Resposta SILO inválida')
+        rows.extend(payload['data'])
+        next_url = payload.get('next_page_url')
+        if not next_url:
+            evidence = json.dumps({'responses': responses}, ensure_ascii=False, separators=(',', ':')).encode()
+            return rows, evidence
+        url = urljoin(SILO + '/', next_url)
+        expected, actual = urlparse(SILO), urlparse(url)
+        require(actual.scheme == expected.scheme and actual.netloc == expected.netloc and actual.path.startswith(expected.path + '/'), 'Cursor SILO inválido')
+    raise ValueError('Paginação SILO excedeu o limite')
+
+
 def collect_market(run_date, expected):
-    args = {'p_ticker': 'DI1F29', 'p_from': BASE_DATE}
-    raw = fetch(SILO, args)
-    rows = json.loads(raw)
+    args = {'kind': 'futures', 'id': 'DI1F29', 'from': BASE_DATE}
+    rows, raw = silo_rows('derivatives', args)
     require(isinstance(rows, list) and rows, 'SILO sem série')
     by_date = {}
     for r in rows:
