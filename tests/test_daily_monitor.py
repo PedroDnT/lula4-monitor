@@ -59,6 +59,8 @@ class BatchTests(unittest.TestCase):
         self.root = Path(self.tmp.name) / 'repo'
         shutil.copytree(ROOT / 'data', self.root / 'data')
         shutil.copytree(ROOT / 'docs/rotina', self.root / 'docs/rotina')
+        # Frozen ledger snapshot of 02/11, so real daily batches do not change the fixture.
+        shutil.copytree(ROOT / 'tests/fixtures/baseline-2026-11-02', self.root, dirs_exist_ok=True)
 
     def tearDown(self): self.tmp.cleanup()
 
@@ -143,8 +145,9 @@ class BatchTests(unittest.TestCase):
 
     def test_staging_allowlist_and_validation(self):
         output = Path(self.tmp.name) / 'output'
-        rows = [{'trade_date': m.BASE_DATE, 'settlement_rate': m.BASE_RATE, 'ticker': 'DI1F29', 'settlement_status': 'F'},
-                {'trade_date': '2026-11-03', 'settlement_rate': 14.96, 'ticker': 'DI1F29', 'settlement_status': 'F'}]
+        rows = [{'trade_date': m.BASE_DATE, 'settlement_rate': 12.642, 'ticker': 'DI1F29', 'settlement_status': 'F'},
+                {'trade_date': '2026-11-03', 'settlement_rate': 14.96, 'prev_settlement_rate': m.BASE_RATE,
+                 'ticker': 'DI1F29', 'settlement_status': 'F'}]
         with patch.object(m, 'fetch', return_value=json.dumps(rows).encode()):
             m.stage(self.root, output, '2026-11-04', [])
         self.assertEqual({str(p.relative_to(output)) for p in (output / 'data').rglob('*.json')},
@@ -191,10 +194,12 @@ class SourceTests(unittest.TestCase):
         with self.assertRaises(ValueError): m.previous_session('2028-01-03', set())
 
     def test_market_validation(self):
-        good = [{'trade_date': m.BASE_DATE, 'settlement_rate': m.BASE_RATE, 'ticker': 'DI1F29', 'settlement_status': 'F'},
-                {'trade_date': '2026-11-03', 'settlement_rate': 14.96, 'ticker': 'DI1F29', 'settlement_status': 'F'}]
+        good = [{'trade_date': m.BASE_DATE, 'settlement_rate': 12.642, 'ticker': 'DI1F29', 'settlement_status': 'F'},
+                {'trade_date': '2026-11-03', 'settlement_rate': 14.96, 'prev_settlement_rate': m.BASE_RATE,
+                 'ticker': 'DI1F29', 'settlement_status': 'F'}]
         bad = [[], {}, good[:1], good + [good[-1]],
-               [dict(good[0], settlement_rate=12.65), good[1]],
+               [good[0], dict(good[1], prev_settlement_rate=12.642)],
+               [good[0], {k: v for k, v in good[1].items() if k != 'prev_settlement_rate'}],
                [good[0], dict(good[1], settlement_rate=None)],
                [good[0], dict(good[1], settlement_rate='14.96')],
                [good[0], dict(good[1], settlement_rate=1496)],

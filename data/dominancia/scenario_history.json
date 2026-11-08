@@ -1,98 +1,114 @@
 [
- {
-  "date": "2026-10-26",
-  "label": "Partida",
-  "ancora": 0.45,
-  "deriva": 0.33,
-  "estresse": 0.22,
-  "note": "Pesos de partida da revisão semanal de 26/10."
- },
- {
-  "date": "2026-10-26",
-  "label": "26/10",
-  "ancora": 0.31,
-  "deriva": 0.35,
-  "estresse": 0.34,
-  "note": "Regra diária de mercado sobre a partida (arquivo de cenários do monitor, 26/10 16h45)."
- },
- {
-  "date": "2026-10-27",
-  "label": "Partida 27/10",
-  "ancora": 0.43,
-  "deriva": 0.32,
-  "estresse": 0.25,
-  "note": "Fatos f1 a f7 aplicados na escala de 3 degraus (Pedro, 27/10), a partir de 45/35/20: contestação no TSE, leilões cancelados e recompras, passaportes de Flávio. Os degraus são julgamento."
- },
- {
-  "date": "2026-10-27",
-  "label": "27/10",
-  "ancora": 0.3,
-  "deriva": 0.36,
-  "estresse": 0.34,
-  "note": "Ajuste de 26/10: DI jan/29 a 15,22% (+258 bp sobre 23/10); regra de mercado sobre a partida nova 43/32/25."
- },
- {
-  "date": "2026-10-28",
-  "label": "Partida 28/10",
-  "ancora": 0.45,
-  "deriva": 0.32,
-  "estresse": 0.23,
-  "note": "Fatos f8 (PL reconhece o resultado do TSE, fraco contra Estresse) e f9 (Durigan diz que as recompras visam normalizar o mercado, fraco a favor de Âncora) aplicados sobre 43/32/25."
- },
- {
-  "date": "2026-10-28",
-  "label": "28/10",
-  "ancora": 0.31,
-  "deriva": 0.46,
-  "estresse": 0.23,
-  "note": "Ajuste de 27/10: DI jan/29 a 14,76% (+212 bp sobre 23/10, −46 bp no dia); mix do DI 0/77/23 sobre a partida nova 45/32/23."
- },
- {
-  "date": "2026-10-29",
-  "label": "Partida 29/10",
-  "ancora": 0.46,
-  "deriva": 0.31,
-  "estresse": 0.23,
-  "note": "Fato f10 (Durigan anuncia PLP para mirar o centro da meta de 2027, fraco a favor de Âncora) aplicado sobre 45/32/23."
- },
- {
-  "date": "2026-10-29",
-  "label": "29/10",
-  "ancora": 0.21,
-  "deriva": 0.54,
-  "estresse": 0.25,
-  "note": "Regra nova de 29/10 (Bayes, sigma 100 bp): DI jan/29 a 14,82% em 28/10 (+218 bp sobre 23/10, +6 bp no dia); verossimilhança 0,24/0,93/0,59 sobre a partida 46/31/23."
- },
- {
-  "date": "2026-10-30",
-  "label": "Partida 30/10",
-  "ancora": 0.48,
-  "deriva": 0.32,
-  "estresse": 0.2,
-  "note": "Partida gravada pela rotina de 30/10 no arquivo de cenários do monitor (48/32/20); o arquivo de fatos não tem a linha que a justifica. Registrado em 02/11."
- },
- {
-  "date": "2026-10-30",
-  "label": "30/10",
-  "ancora": 0.22,
-  "deriva": 0.56,
-  "estresse": 0.22,
-  "note": "Pesos publicados no monitor em 30/10 (ajuste de 29/10: DI jan/29 a 14,80%, +216 bp sobre 23/10). Registrado em 02/11."
- },
- {
-  "date": "2026-11-02",
-  "label": "Partida 02/11",
-  "ancora": 0.49,
-  "deriva": 0.31,
-  "estresse": 0.2,
-  "note": "Fatos f11 (proposta de teto para a Selic no radar de Lula, relato), f12 (Durigan nega) e f13 (defesa de Flávio pede troca de relator no STF) aplicados sobre 48/32/20, todos fracos."
- },
- {
-  "date": "2026-11-02",
-  "label": "02/11",
-  "ancora": 0.19,
-  "deriva": 0.54,
-  "estresse": 0.27,
-  "note": "Ajuste de 30/10: DI jan/29 a 14,96% (+232 bp sobre 23/10, +16 bp no dia); verossimilhança 0,19/0,87/0,68 sobre a partida 49/31/20. 02/11 é feriado, sem pregão."
- }
+  {
+    "date": "2026-10-26",
+    "label": "Partida",
+    "ancora": 0.45,
+    "deriva": 0.33,
+    "estresse": 0.22,
+    "note": "Pesos de partida da revisão semanal de 26/10."
+  },
+  {
+    "date": "2026-10-26",
+    "label": "26/10",
+    "ancora": 0.31,
+    "deriva": 0.35,
+    "estresse": 0.34,
+    "note": "Regra diária de mercado sobre a partida (arquivo de cenários do monitor, 26/10 16h45)."
+  },
+  {
+    "date": "2026-10-27",
+    "label": "Partida 27/10",
+    "ancora": 0.43,
+    "deriva": 0.32,
+    "estresse": 0.25,
+    "note": "Fatos f1 a f7 aplicados na escala de 3 degraus (Pedro, 27/10), a partir de 45/35/20: contestação no TSE, leilões cancelados e recompras, passaportes de Flávio. Os degraus são julgamento."
+  },
+  {
+    "date": "2026-10-27",
+    "label": "27/10",
+    "ancora": 0.3,
+    "deriva": 0.36,
+    "estresse": 0.34,
+    "note": "Ajuste de 26/10: DI jan/29 a 15,22% (+258 bp sobre 23/10); regra de mercado sobre a partida nova 43/32/25."
+  },
+  {
+    "date": "2026-10-28",
+    "label": "Partida 28/10",
+    "ancora": 0.45,
+    "deriva": 0.32,
+    "estresse": 0.23,
+    "note": "Fatos f8 (PL reconhece o resultado do TSE, fraco contra Estresse) e f9 (Durigan diz que as recompras visam normalizar o mercado, fraco a favor de Âncora) aplicados sobre 43/32/25."
+  },
+  {
+    "date": "2026-10-28",
+    "label": "28/10",
+    "ancora": 0.31,
+    "deriva": 0.46,
+    "estresse": 0.23,
+    "note": "Ajuste de 27/10: DI jan/29 a 14,76% (+212 bp sobre 23/10, −46 bp no dia); mix do DI 0/77/23 sobre a partida nova 45/32/23."
+  },
+  {
+    "date": "2026-10-29",
+    "label": "Partida 29/10",
+    "ancora": 0.46,
+    "deriva": 0.31,
+    "estresse": 0.23,
+    "note": "Fato f10 (Durigan anuncia PLP para mirar o centro da meta de 2027, fraco a favor de Âncora) aplicado sobre 45/32/23."
+  },
+  {
+    "date": "2026-10-29",
+    "label": "29/10",
+    "ancora": 0.21,
+    "deriva": 0.54,
+    "estresse": 0.25,
+    "note": "Regra nova de 29/10 (Bayes, sigma 100 bp): DI jan/29 a 14,82% em 28/10 (+218 bp sobre 23/10, +6 bp no dia); verossimilhança 0,24/0,93/0,59 sobre a partida 46/31/23."
+  },
+  {
+    "date": "2026-10-30",
+    "label": "Partida 30/10",
+    "ancora": 0.48,
+    "deriva": 0.32,
+    "estresse": 0.2,
+    "note": "Partida gravada pela rotina de 30/10 no arquivo de cenários do monitor (48/32/20); o arquivo de fatos não tem a linha que a justifica. Registrado em 02/11."
+  },
+  {
+    "date": "2026-10-30",
+    "label": "30/10",
+    "ancora": 0.22,
+    "deriva": 0.56,
+    "estresse": 0.22,
+    "note": "Pesos publicados no monitor em 30/10 (ajuste de 29/10: DI jan/29 a 14,80%, +216 bp sobre 23/10). Registrado em 02/11."
+  },
+  {
+    "date": "2026-11-02",
+    "label": "Partida 02/11",
+    "ancora": 0.49,
+    "deriva": 0.31,
+    "estresse": 0.2,
+    "note": "Fatos f11 (proposta de teto para a Selic no radar de Lula, relato), f12 (Durigan nega) e f13 (defesa de Flávio pede troca de relator no STF) aplicados sobre 48/32/20, todos fracos."
+  },
+  {
+    "date": "2026-11-02",
+    "label": "02/11",
+    "ancora": 0.19,
+    "deriva": 0.54,
+    "estresse": 0.27,
+    "note": "Ajuste de 30/10: DI jan/29 a 14,96% (+232 bp sobre 23/10, +16 bp no dia); verossimilhança 0,19/0,87/0,68 sobre a partida 49/31/20. 02/11 é feriado, sem pregão."
+  },
+  {
+    "date": "2026-11-08",
+    "label": "Partida 2026-11-08",
+    "note": "Cálculo: fatores aprovados dos fatos f14, f15; ver ledger.",
+    "ancora": 0.48039215686274506,
+    "deriva": 0.3328664799253034,
+    "estresse": 0.18674136321195142
+  },
+  {
+    "date": "2026-11-08",
+    "label": "Agora 2026-11-08",
+    "note": "Cálculo: partida × verossimilhança normal; DI1F29 SILO de 2026-11-06; ver ledger.",
+    "ancora": 0.26234532390751203,
+    "deriva": 0.5714062059443659,
+    "estresse": 0.16624847014812208
+  }
 ]
