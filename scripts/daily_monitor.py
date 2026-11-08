@@ -172,11 +172,18 @@ def collect_market(run_date, expected):
         by_date[d] = value
     selected = [r for r in rows if r['trade_date'] in (BASE_DATE, expected)]
     require(all(r.get('ticker') == 'DI1F29' and r.get('settlement_status') == 'F' for r in selected), 'Contrato errado ou ajuste não final')
-    require(BASE_DATE in by_date and abs(by_date[BASE_DATE] - BASE_RATE) < 1e-9, 'Base de 23/10 divergente')
+    # The base is B3's own figure: the session after 23/10 prints it as prev_settlement_rate
+    # (12.640 on 26/10), while the 23/10 row prints 12.642. Decision of Pedro, 08/11/2026.
+    require(BASE_DATE in by_date, 'SILO sem a sessão base')
+    base_next = min((d for d in by_date if d > BASE_DATE), default=None)
+    require(base_next is not None, 'SILO sem a sessão seguinte à base')
+    base_row = next(r for r in rows if r['trade_date'] == base_next)
+    require(abs(number(base_row.get('prev_settlement_rate')) - BASE_RATE) < 1e-9, 'Base de 23/10 divergente')
     eligible = [d for d in by_date if d < run_date]
     require(eligible and max(eligible) == expected, 'SILO atrasado ou calendário divergente')
     return {'origin': 'Dado', 'url': SILO, 'args': args, 'date': expected,
             'rate_pct': by_date[expected], 'baseline_date': BASE_DATE, 'baseline_pct': BASE_RATE,
+            'baseline_source': 'prev_settlement_rate de ' + base_next + ' (B3 Price Report via SILO)',
             'response_sha256': hashlib.sha256(raw).hexdigest()}, raw
 
 

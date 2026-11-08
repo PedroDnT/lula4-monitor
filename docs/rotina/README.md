@@ -10,7 +10,7 @@ Proposta operacional (Julgamento, a confirmar): execução diária às **11h20 d
 
 **Onde agendar:** em um único executor externo que obtenha o checkout, execute o comando e abra um PR, com armazenamento de logs e execução serial. O produto de agendamento ainda não foi escolhido. Opções para decisão de Pedro: automação do Codex com ambiente configurado; cron em executor próprio; GitHub Actions. Nenhuma foi configurada. Não há arquivo de workflow, cron, credencial de escrita ou provedor de IA novo neste PR. Se houver IA futuramente, ela poderá propor fatos e trechos; não escolherá fatores nem escreverá números de mercado.
 
-Antes de ativar: escolher executor, retenção de logs, autenticação para branches/PRs e processo de revisão dos fatos; conciliar a divergência da base SILO; confirmar o calendário; inspecionar a tarefa semanal e retirar a regra antiga somente com autorização. O relato de que ela usa `0,3` não foi verificado neste chat. Evitar duas rotinas escrevendo os mesmos arquivos.
+Antes de ativar: escolher executor, retenção de logs, autenticação para branches/PRs e processo de revisão dos fatos; confirmar o calendário; inspecionar a tarefa semanal e retirar a regra antiga somente com autorização. O relato de que ela usa `0,3` não foi verificado neste chat. Evitar duas rotinas escrevendo os mesmos arquivos.
 
 ## Executar
 
@@ -88,6 +88,10 @@ Falha retorna status diferente de zero e JSON em stderr com data de Brasília e 
 ### Ensaio real de 04/11/2026
 
 Consulta somente de leitura: SILO retornou `settlement_rate=12.642` para 23/10 (Dado: B3 `b3_price_report`, `settlement_status=F`). A diferença para a base fixada de 12,640% é **0,2 bp** (Cálculo). O fechamento de 03/11 veio como 15,132% (Dado, mesma API). A rotina recusou a base divergente e **não gerou pesos**. Não alterar a base automaticamente nem relaxar a validação para liberar publicação. Decisão de conciliação pendente de Pedro.
+
+**Conciliação (Pedro, 08/11/2026):** a base continua 12,640%. A origem é Dado: o Price Report da B3 de 26/10 publica esse valor como `prev_settlement_rate` do DI1F29, via a mesma série do SILO. A rotina agora confere a base nesse campo da sessão seguinte a 23/10. A linha de 23/10 (12,642%) segue sem uso. A diferença de 0,2 bp fica registrada aqui.
+
+Primeiro lote real: 08/11/2026, fatos f14 (Copom 04/11) e f15 (Fazenda, centro da meta), aprovados por Pedro no chat do projeto. Os testes usam uma cópia fixa do ledger de 02/11 em `tests/fixtures/baseline-2026-11-02/`, para que lotes reais não alterem os testes.
 
 ## Investigação da partida de 30/10
 

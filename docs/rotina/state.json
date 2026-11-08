@@ -1,9 +1,9 @@
 {
-  "as_of": "2026-11-02",
+  "as_of": "2026-11-08",
   "start": [
-    0.49,
-    0.31,
-    0.2
+    0.48039215686274506,
+    0.3328664799253034,
+    0.18674136321195142
   ],
   "applied_ids": [
     "f1",
@@ -18,22 +18,230 @@
     "f10",
     "f11",
     "f12",
-    "f13"
+    "f13",
+    "f14",
+    "f15"
   ],
   "channels": [
+    "autonomia-bc",
     "contestacao",
-    "meta-2027",
-    "leiloes",
+    "copom",
     "fazenda",
-    "stf-oposicao",
-    "autonomia-bc"
+    "leiloes",
+    "meta-2027",
+    "stf-oposicao"
   ],
-  "facts_sha256": "2ec2491e66685bdf3462361240d3bc65820b20d18d3219d07cb9afbf9b7bd5e9",
-  "weights_sha256": "89994853531109521ce5b2e00f7ca750872fc5952b044c55afce48b4f6cba339",
-  "history_sha256": "0167d31a5143b0309c73847b9c12a78bef69aacc5d6cf201fad7f42b7c2a8308",
+  "facts_sha256": "434d4447d094a7fd0c1e49319da18fabf24390866eeffe13dea6ab44e3764558",
+  "weights_sha256": "fb8edf9ec14789c8356888a76db04a75d975cb8e141a21b30b7ce6aab3df0b18",
+  "history_sha256": "bfc8d3d875e7145c6da84e30406eaaa03817cda18ed17388fc21d0668f79075c",
   "baseline_origin": "Julgamento",
   "baseline_source": "6b023ca; decisão de Pedro em 04/11/2026",
   "unresolved": [
     "Partida 30/10: 48/32/20 sem fato justificativo; não recalcular retroativamente."
-  ]
+  ],
+  "runs": {
+    "2026-11-08": {
+      "market": {
+        "origin": "Dado",
+        "url": "https://zcjbtpxuhdekpwcxmepn.supabase.co/rest/v1/rpc/future_series",
+        "args": {
+          "p_ticker": "DI1F29",
+          "p_from": "2026-10-23"
+        },
+        "date": "2026-11-06",
+        "rate_pct": 14.671,
+        "baseline_date": "2026-10-23",
+        "baseline_pct": 12.64,
+        "baseline_source": "prev_settlement_rate de 2026-10-26 (B3 Price Report via SILO)",
+        "response_sha256": "fec11a5a59b9b90fdd53688b27ea41e24b1bf59cb72fbef4a9a57f7a39276de0"
+      },
+      "changes": [
+        {
+          "id": "f14",
+          "before": [
+            0.49,
+            0.31,
+            0.2
+          ],
+          "factors": [
+            1.0,
+            1.15,
+            1.0
+          ],
+          "after": [
+            0.4682274247491639,
+            0.34065934065934067,
+            0.19111323459149548
+          ],
+          "factor_origin": "Julgamento",
+          "weight_origin": "Cálculo",
+          "approval": {
+            "by": "Pedro",
+            "reference": "https://claude.ai/code/project/chan_01PHRR234GYxjr12aKa2PR3R?thread=cmsg_01PHRR234GYxjr12aKa2PR3RRqmJZKAKp7Qqou5R1a52Pm",
+            "origin": "Julgamento"
+          }
+        },
+        {
+          "id": "f15",
+          "before": [
+            0.4682274247491639,
+            0.34065934065934067,
+            0.19111323459149548
+          ],
+          "factors": [
+            1.05,
+            1.0,
+            1.0
+          ],
+          "after": [
+            0.48039215686274506,
+            0.3328664799253034,
+            0.18674136321195142
+          ],
+          "factor_origin": "Julgamento",
+          "weight_origin": "Cálculo",
+          "approval": {
+            "by": "Pedro",
+            "reference": "https://claude.ai/code/project/chan_01PHRR234GYxjr12aKa2PR3R?thread=cmsg_01PHRR234GYxjr12aKa2PR3RRqmJZKAKp7Qqou5R1a52Pm",
+            "origin": "Julgamento"
+          }
+        }
+      ],
+      "start": [
+        0.48039215686274506,
+        0.3328664799253034,
+        0.18674136321195142
+      ],
+      "now": [
+        0.26234532390751203,
+        0.5714062059443659,
+        0.16624847014812208
+      ],
+      "report": {
+        "run_date_brt": "2026-11-08",
+        "prepared_at_brt": "2026-11-07T23:18:31.209728-03:00",
+        "market": {
+          "origin": "Dado",
+          "url": "https://zcjbtpxuhdekpwcxmepn.supabase.co/rest/v1/rpc/future_series",
+          "args": {
+            "p_ticker": "DI1F29",
+            "p_from": "2026-10-23"
+          },
+          "date": "2026-11-06",
+          "rate_pct": 14.671,
+          "baseline_date": "2026-10-23",
+          "baseline_pct": 12.64,
+          "baseline_source": "prev_settlement_rate de 2026-10-26 (B3 Price Report via SILO)",
+          "response_sha256": "fec11a5a59b9b90fdd53688b27ea41e24b1bf59cb72fbef4a9a57f7a39276de0"
+        },
+        "move_bp": {
+          "origin": "Cálculo",
+          "value": 203.09999999999988
+        },
+        "start": {
+          "origin": "Cálculo",
+          "value": [
+            0.48039215686274506,
+            0.3328664799253034,
+            0.18674136321195142
+          ]
+        },
+        "now": {
+          "origin": "Cálculo",
+          "value": [
+            0.26234532390751203,
+            0.5714062059443659,
+            0.16624847014812208
+          ]
+        },
+        "changes": [
+          {
+            "id": "f14",
+            "before": [
+              0.49,
+              0.31,
+              0.2
+            ],
+            "factors": [
+              1.0,
+              1.15,
+              1.0
+            ],
+            "after": [
+              0.4682274247491639,
+              0.34065934065934067,
+              0.19111323459149548
+            ],
+            "factor_origin": "Julgamento",
+            "weight_origin": "Cálculo",
+            "approval": {
+              "by": "Pedro",
+              "reference": "https://claude.ai/code/project/chan_01PHRR234GYxjr12aKa2PR3R?thread=cmsg_01PHRR234GYxjr12aKa2PR3RRqmJZKAKp7Qqou5R1a52Pm",
+              "origin": "Julgamento"
+            }
+          },
+          {
+            "id": "f15",
+            "before": [
+              0.4682274247491639,
+              0.34065934065934067,
+              0.19111323459149548
+            ],
+            "factors": [
+              1.05,
+              1.0,
+              1.0
+            ],
+            "after": [
+              0.48039215686274506,
+              0.3328664799253034,
+              0.18674136321195142
+            ],
+            "factor_origin": "Julgamento",
+            "weight_origin": "Cálculo",
+            "approval": {
+              "by": "Pedro",
+              "reference": "https://claude.ai/code/project/chan_01PHRR234GYxjr12aKa2PR3R?thread=cmsg_01PHRR234GYxjr12aKa2PR3RRqmJZKAKp7Qqou5R1a52Pm",
+              "origin": "Julgamento"
+            }
+          }
+        ],
+        "sources": [
+          {
+            "url": "https://g1.globo.com/economia/noticia/2026/11/04/copom-mantem-taxa-basica-de-juros-da-economia-em-1375percent-ao-ano.ghtml",
+            "origin": "Dado",
+            "quote": "Com a decisão, o Copom interrompe o ciclo de cortes na taxa básica de juros iniciado em março deste ano.",
+            "response_sha256": "a3f0792b7e6e3f6e3500bd5f6cac35b12e2623e1ba63ca74876cdcfcfc52413e"
+          },
+          {
+            "url": "https://g1.globo.com/politica/blog/valdo-cruz/post/2026/11/06/lula-faz-primeiros-acenos-concretos-na-direcao-de-ajuste-fiscal-e-alinha-discurso-com-propostas-de-durigan.ghtml",
+            "origin": "Dado",
+            "quote": "de perseguir o centro da meta fiscal, sem nenhum tipo de exceção, como pagamento de precatórios.",
+            "response_sha256": "ac38a8c0a19a2df463b6e28b7741124886b88ac9c7697793413f1f01c2382a66"
+          }
+        ],
+        "method": {
+          "marks_bp": {
+            "origin": "Julgamento",
+            "value": [
+              50,
+              180,
+              320
+            ],
+            "source": "index.html; marcas do monitor"
+          },
+          "sigma_bp": {
+            "origin": "Dado",
+            "value": 100,
+            "source": "metodo.html; calibração documentada"
+          },
+          "formula": "normalize(start * exp(-(move_bp - marks_bp)^2 / (2 * sigma_bp^2)))"
+        },
+        "warnings": [
+          "Mudança de partida de 30/10 sem fato justificativo; preservada.",
+          "Prompt semanal não inspecionado; regra antiga 0,3 permanece pendente de verificação."
+        ]
+      }
+    }
+  }
 }
