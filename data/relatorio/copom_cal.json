@@ -2,11 +2,6 @@
  {
   "reuniao": "atual",
   "efetivo": "",
-  "contrato": "DI1X26"
- },
- {
-  "reuniao": "R7/2026",
-  "efetivo": "2026-11-05",
   "contrato": "DI1Z26"
  },
  {
@@ -18,5 +13,10 @@
   "reuniao": "R1/2027",
   "efetivo": "2027-01-28",
   "contrato": "DI1H27"
+ },
+ {
+  "reuniao": "R2/2027",
+  "efetivo": "2027-03-18",
+  "contrato": "DI1J27"
  }
 ]

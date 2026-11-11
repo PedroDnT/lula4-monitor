@@ -6,7 +6,7 @@ O navegador lê SILO (API pública, sem Postgres direto), B3, Binance e BCB. O `
 
 ## Rotina por arquivos
 
-A tarefa “Brazil rates daily monitor” foi removida por Pedro. Não há substituta agendada. A implementação e a proposta de execução diária às 11h20 de Brasília (Julgamento operacional, ainda a confirmar), fontes, cálculos, bloqueios e pendências estão em [rotina/README.md](rotina/README.md).
+A tarefa “Brazil rates daily monitor” foi removida por Pedro. Desde 11/11/2026 o workflow `daily-monitor` do GitHub Actions abre, em dias úteis, um PR com o lote de preço (sem fatos novos). A implementação e a proposta de execução diária às 11h20 de Brasília (Julgamento operacional, ainda a confirmar), fontes, cálculos, bloqueios e pendências estão em [rotina/README.md](rotina/README.md).
 
 A nova rotina prepara um lote validado diretamente para este repositório, independente de artifacts do claude.ai. Atualização por branch e PR, sem commit direto na main. O agendador e qualquer provedor de IA continuam por escolher.
 

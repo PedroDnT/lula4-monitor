@@ -294,12 +294,13 @@ dash.calc('copom', {
     const ct = new Map(di_now.map((r) => [r.ticker, r]));
     const t = di_now[0].trade_date;
     const focus = [...focus_m1, ...focus_m2, ...focus_m3];
-    const cur = ct.get(copom_cal[0].contrato).settlement_rate;
+    const need = (code) => { const r = ct.get(code); if (!r) throw new Error('sem ajuste do ' + code + ' no SILO; o calendário do Copom (copom_cal.json) precisa de revisão'); return r; };
+    const cur = need(copom_cal[0].contrato).settlement_rate;
     let k = 1, prevEff = t, prevCdi = cur, prevSelic = cur + 0.1;
     return copom_cal.map((m, i) => {
       if (i === 0) return { reuniao: 'Hoje', decisao: '', selic_di: +(cur + 0.1).toFixed(2), mudanca_bp: null, focus: null, premio_bp: null, focus_data: null };
       k *= Math.pow(1 + prevCdi / 100, bd(prevEff, m.efetivo) / 252);
-      const c = ct.get(m.contrato), T = venc(c.contract_month);
+      const c = need(m.contrato), T = venc(c.contract_month);
       const F = Math.pow(1 + c.settlement_rate / 100, bd(t, T) / 252);
       const cdi = (Math.pow(F / k, 252 / bd(m.efetivo, T)) - 1) * 100;
       const selic = cdi + 0.1;

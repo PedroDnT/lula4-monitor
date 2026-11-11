@@ -442,6 +442,7 @@
         <table class="dm-table tb-alertas" data-source="alertas" data-row-key="indicador">
           <thead><tr>
             <th data-field="indicador">Indicador</th>
+            <th data-field="tipo">Tipo</th>
             <th data-field="grupo">Grupo</th>
             <th data-field="leitura">Último</th>
             <th data-field="regra">Alerta se</th>
@@ -759,9 +760,9 @@ dash.calc('alertas', {
       const lastSurvey = focus_debt.map((r) => r.survey_date).sort().pop();
       const path = focus_debt.filter((r) => r.survey_date === lastSurvey).sort((a, b) => a.year - b.year);
       const rising = path.length > 1 && path.every((r, i) => i === 0 || Number(r.median_gdp) > Number(path[i - 1].median_gdp));
-      rows.push({ indicador: 'Dívida bruta', origem: 'Julgamento: limite escolhido', grupo: 'Conta da dívida', leitura: `${f1(fz.gross_debt_gdp)}% do PIB; Focus vê ${f1(Number(path[path.length - 1]?.median_gdp))}% em ${path[path.length - 1]?.year}`, regra: 'Focus vê alta todo ano', estado: st(rising) });
-      rows.push({ indicador: 'r − g', origem: 'Cálculo: aritmética da dívida', grupo: 'Conta da dívida', leitura: `${sg(fz.r_minus_g, f1)} p.p.`, regra: 'Acima de zero', estado: st(fz.r_minus_g > 0), desde: since(fiscal_series.map((r) => ({ d: r.month, v: r.r_minus_g })), (v) => v > 0) });
-      rows.push({ indicador: 'Lacuna do primário', origem: 'Julgamento: limite escolhido', grupo: 'Conta da dívida', leitura: `${f1(fz.primary_gap)} p.p. do PIB`, regra: 'Acima de 2 p.p.', estado: st(fz.primary_gap > 2), desde: since(fiscal_series.map((r) => ({ d: r.month, v: r.primary_gap })), (v) => v > 2) });
+      rows.push({ tipo: 'Condição', indicador: 'Dívida bruta', origem: 'Julgamento: limite escolhido', grupo: 'Conta da dívida', leitura: `${f1(fz.gross_debt_gdp)}% do PIB; Focus vê ${f1(Number(path[path.length - 1]?.median_gdp))}% em ${path[path.length - 1]?.year}`, regra: 'Focus vê alta todo ano', estado: st(rising) });
+      rows.push({ tipo: 'Condição', indicador: 'r − g', origem: 'Cálculo: aritmética da dívida', grupo: 'Conta da dívida', leitura: `${sg(fz.r_minus_g, f1)} p.p.`, regra: 'Acima de zero', estado: st(fz.r_minus_g > 0), desde: since(fiscal_series.map((r) => ({ d: r.month, v: r.r_minus_g })), (v) => v > 0) });
+      rows.push({ tipo: 'Condição', indicador: 'Lacuna do primário', origem: 'Julgamento: limite escolhido', grupo: 'Conta da dívida', leitura: `${f1(fz.primary_gap)} p.p. do PIB`, regra: 'Acima de 2 p.p.', estado: st(fz.primary_gap > 2), desde: since(fiscal_series.map((r) => ({ d: r.month, v: r.primary_gap })), (v) => v > 2) });
     }
     const ls = lft.slice().sort((a, b) => (a.month < b.month ? -1 : 1));
     if (ls.length) {
@@ -789,6 +790,7 @@ dash.calc('alertas', {
       rows.push({ indicador: 'Leilões do Tesouro', origem: 'Julgamento: limite escolhido', grupo: 'Rolagem da dívida', leitura: `${lr.cancelamentos} leilão(ões) de venda cancelado(s) e ${lr.recompras} recompra(s) em 30 dias`, regra: 'Algum leilão de venda cancelado em 30 dias', estado: st(lr.cancelamentos > 0), desde: lr.cancelamentos > 0 && firstCancel ? dmy(firstCancel) : '' });
     }
     if (fo) rows.push({ indicador: 'Focus IPCA 2027', origem: 'Norma: teto da meta, CMN', grupo: 'Âncora de inflação', leitura: `${f2(fo.ipca_2027)}%; ${sg(fo.ipca_2027_change_4w, f2)} p.p. em 4 semanas`, regra: 'Acima do teto da meta (4,5%)', estado: st(fo.ipca_2027 > 4.5), desde: since(ipca_2027.slice().sort((a, b) => (a.survey_date < b.survey_date ? -1 : 1)).map((r) => ({ d: r.survey_date, v: r.median })), (v) => v > 4.5) });
+    rows.forEach((r) => { if (!r.tipo) r.tipo = 'Alarme'; });
     return rows;
   },
 });
@@ -1559,7 +1561,7 @@ dash.onData(() => {
   if (al.status === 'ok') {
     tbody.replaceChildren(...al.data.map((r) => {
       const tr = document.createElement('tr');
-      ['indicador', 'grupo', 'leitura', 'regra', 'origem', 'estado', 'desde'].forEach((k) => {
+      ['indicador', 'tipo', 'grupo', 'leitura', 'regra', 'origem', 'estado', 'desde'].forEach((k) => {
         const td = document.createElement('td');
         if (k === 'origem') {
           const o = r.origem || '';
@@ -1577,18 +1579,20 @@ dash.onData(() => {
       });
       return tr;
     }));
-    const on = al.data.filter((r) => r.estado === 'Aceso');
-    const debtOn = on.filter((r) => r.grupo === 'Conta da dívida').length;
-    const debtAll = al.data.filter((r) => r.grupo === 'Conta da dívida').length;
-    const ancOn = on.filter((r) => r.grupo === 'Âncora de inflação').length;
-    const ancAll = al.data.filter((r) => r.grupo === 'Âncora de inflação').length;
-    const rolOn = on.filter((r) => r.grupo === 'Rolagem da dívida').length;
-    const rolAll = al.data.filter((r) => r.grupo === 'Rolagem da dívida').length;
-    take.textContent = `${on.length} de ${al.data.length} alertas acesos: ${debtOn} de ${debtAll} na conta da dívida, ${rolOn} de ${rolAll} na rolagem e ${ancOn} de ${ancAll} na âncora de inflação. ` +
-      (debtOn > debtAll / 2 && ancOn === 0 ? 'A conta da dívida já está no regime de dominância. Até a última sessão carregada, a âncora de inflação ainda segurava.'
-        : debtOn > debtAll / 2 && ancOn > 0 ? 'A conta da dívida está ruim e a âncora de inflação começa a ceder.'
-        : 'A conta da dívida ainda não mostra dominância.') +
-      (rolOn > 0 ? ' A rolagem já mostra estresse: o Tesouro está cancelando leilões.' : '');
+    // Conditions (r − g, primary gap, Focus debt path) are on most of the time (calib: 78% and 64% of months), so the headline counts only alarms.
+    const alarms = al.data.filter((r) => r.tipo === 'Alarme'), conds = al.data.filter((r) => r.tipo === 'Condição');
+    const isOn = (r) => r.estado === 'Aceso';
+    const n = (rs, g) => rs.filter((r) => r.grupo === g);
+    const ancOn = n(alarms, 'Âncora de inflação').filter(isOn).length, ancAll = n(alarms, 'Âncora de inflação').length;
+    const rolOn = n(alarms, 'Rolagem da dívida').filter(isOn).length, rolAll = n(alarms, 'Rolagem da dívida').length;
+    const debOn = n(alarms, 'Conta da dívida').filter(isOn).length, debAll = n(alarms, 'Conta da dívida').length;
+    const cOn = conds.filter(isOn).length;
+    take.textContent = `${alarms.filter(isOn).length} de ${alarms.length} alarmes acesos: ${rolOn} de ${rolAll} na rolagem, ${ancOn} de ${ancAll} na âncora de inflação e ${debOn} de ${debAll} na conta da dívida. ` +
+      `Condições de fundo: ${cOn} de ${conds.length} acesas (trajetória da dívida no Focus, r − g e lacuna do primário). Elas indicam vulnerabilidade, não o momento de uma crise. ` +
+      (cOn > conds.length / 2 && ancOn === 0 ? 'A conta da dívida está desfavorável; até a última sessão carregada, a âncora de inflação ainda segurava.'
+        : cOn > conds.length / 2 && ancOn > 0 ? 'A conta da dívida está desfavorável e a âncora de inflação começa a ceder.'
+        : 'A conta da dívida ainda não mostra as condições de dominância.') +
+      (rolOn > 0 ? ' A rolagem mostra estresse.' : '');
     take.classList.remove('dash-skeleton');
   } else {
     tbody.replaceChildren();
