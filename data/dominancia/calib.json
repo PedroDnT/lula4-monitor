@@ -2,19 +2,19 @@
  {
   "regra": "Inflação implícita 2 anos sobe mais de 50 bp em 4 semanas",
   "grupo": "Âncora de inflação",
-  "avisou": "7 de 11",
-  "antecedencia_mediana": 24,
-  "aceso_em_calma_pct": 4.1,
-  "veredito": "Manter: avisa em parte das crises e quase nunca acende à toa.",
+  "avisou": "6 de 11",
+  "antecedencia_mediana": 36.5,
+  "aceso_em_calma_pct": 5.2,
+  "veredito": "Manter: avisa em cerca de metade das crises, com antecedência longa, e raramente acende à toa.",
   "aceso_meses_pct": null
  },
  {
   "regra": "Inflação implícita 5 anos sobe mais de 50 bp em 4 semanas",
   "grupo": "Âncora de inflação",
-  "avisou": "8 de 11",
-  "antecedencia_mediana": 14.5,
-  "aceso_em_calma_pct": 3.5,
-  "veredito": "Manter: o melhor equilíbrio entre aviso e alarme falso.",
+  "avisou": "7 de 11",
+  "antecedencia_mediana": 12,
+  "aceso_em_calma_pct": 4.0,
+  "veredito": "Manter: avisa em 7 de 11 crises com poucos alarmes falsos.",
   "aceso_meses_pct": null
  },
  {
@@ -22,26 +22,26 @@
   "grupo": "Conta da dívida",
   "avisou": "7 de 11",
   "antecedencia_mediana": 60,
-  "aceso_em_calma_pct": 74.2,
+  "aceso_em_calma_pct": 73.1,
   "veredito": "Serve como condição de custo, não como alarme: fica aceso na maior parte do tempo calmo.",
   "aceso_meses_pct": null
  },
  {
   "regra": "Juro real 5 anos acima de 7%",
   "grupo": "Conta da dívida",
-  "avisou": "2 de 11",
-  "antecedencia_mediana": 13.0,
-  "aceso_em_calma_pct": 15.6,
-  "veredito": "Fraco: avisa pouco e ainda acende à toa.",
+  "avisou": "1 de 11",
+  "antecedencia_mediana": 10,
+  "aceso_em_calma_pct": 16.2,
+  "veredito": "Fraco: avisou em 1 de 11 crises e ainda acende à toa.",
   "aceso_meses_pct": null
  },
  {
   "regra": "Juro real 5 anos sobe mais de 50 bp em 4 semanas",
   "grupo": "Conta da dívida",
-  "avisou": "9 de 11",
-  "antecedencia_mediana": 16,
-  "aceso_em_calma_pct": 4.0,
-  "veredito": "Melhor alarme do teste: avisou em quase todas as crises com poucos alarmes falsos.",
+  "avisou": "8 de 11",
+  "antecedencia_mediana": 12.0,
+  "aceso_em_calma_pct": 3.9,
+  "veredito": "Melhor alarme do teste: avisou em 8 de 11 crises com o menor índice de alarme falso.",
   "aceso_meses_pct": null
  },
  {

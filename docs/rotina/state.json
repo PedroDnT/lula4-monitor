@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-11-08",
+  "as_of": "2026-11-11",
   "start": [
     0.48039215686274506,
     0.3328664799253034,
@@ -32,8 +32,8 @@
     "stf-oposicao"
   ],
   "facts_sha256": "434d4447d094a7fd0c1e49319da18fabf24390866eeffe13dea6ab44e3764558",
-  "weights_sha256": "fb8edf9ec14789c8356888a76db04a75d975cb8e141a21b30b7ce6aab3df0b18",
-  "history_sha256": "bfc8d3d875e7145c6da84e30406eaaa03817cda18ed17388fc21d0668f79075c",
+  "weights_sha256": "20176216cccccc278bfede6d1d624f0de454b5530837a7c375c310e397d889ad",
+  "history_sha256": "0e16e4a5877965920b32748d5eb99c3f9bbc02cfc64f1894133bb2aac00e64bc",
   "baseline_origin": "Julgamento",
   "baseline_source": "6b023ca; decisão de Pedro em 04/11/2026",
   "unresolved": [
@@ -234,6 +234,94 @@
             "origin": "Dado",
             "value": 100,
             "source": "metodo.html; calibração documentada"
+          },
+          "formula": "normalize(start * exp(-(move_bp - marks_bp)^2 / (2 * sigma_bp^2)))"
+        },
+        "warnings": [
+          "Mudança de partida de 30/10 sem fato justificativo; preservada.",
+          "Prompt semanal não inspecionado; regra antiga 0,3 permanece pendente de verificação."
+        ]
+      }
+    },
+    "2026-11-11": {
+      "market": {
+        "origin": "Dado",
+        "url": "https://zcjbtpxuhdekpwcxmepn.supabase.co/rest/v1/rpc/future_series",
+        "args": {
+          "p_ticker": "DI1F29",
+          "p_from": "2026-10-23"
+        },
+        "date": "2026-11-10",
+        "rate_pct": 14.621,
+        "baseline_date": "2026-10-23",
+        "baseline_pct": 12.64,
+        "baseline_source": "prev_settlement_rate de 2026-10-26 (B3 Price Report via SILO)",
+        "response_sha256": "a59ba17841b45460f9ef5c5d1ae04673777c588131a2dceb2e809bebb9d82951"
+      },
+      "changes": [],
+      "start": [
+        0.48039215686274506,
+        0.3328664799253034,
+        0.18674136321195142
+      ],
+      "now": [
+        0.23509461808866547,
+        0.5220830881176343,
+        0.24282229379370024
+      ],
+      "report": {
+        "run_date_brt": "2026-11-11",
+        "prepared_at_brt": "2026-11-11T23:12:44.438496-03:00",
+        "market": {
+          "origin": "Dado",
+          "url": "https://zcjbtpxuhdekpwcxmepn.supabase.co/rest/v1/rpc/future_series",
+          "args": {
+            "p_ticker": "DI1F29",
+            "p_from": "2026-10-23"
+          },
+          "date": "2026-11-10",
+          "rate_pct": 14.621,
+          "baseline_date": "2026-10-23",
+          "baseline_pct": 12.64,
+          "baseline_source": "prev_settlement_rate de 2026-10-26 (B3 Price Report via SILO)",
+          "response_sha256": "a59ba17841b45460f9ef5c5d1ae04673777c588131a2dceb2e809bebb9d82951"
+        },
+        "move_bp": {
+          "origin": "Cálculo",
+          "value": 198.1
+        },
+        "start": {
+          "origin": "Julgamento",
+          "value": [
+            0.48039215686274506,
+            0.3328664799253034,
+            0.18674136321195142
+          ]
+        },
+        "now": {
+          "origin": "Cálculo",
+          "value": [
+            0.23509461808866547,
+            0.5220830881176343,
+            0.24282229379370024
+          ]
+        },
+        "changes": [],
+        "sources": [],
+        "method": {
+          "marks_bp": {
+            "origin": "Cálculo",
+            "value": [
+              28,
+              123,
+              295
+            ],
+            "source": "data/research/term_premium.json (research/termpremium.py): caminho da Selic por cenário (Julgamento) + prêmio medido (Cálculo)"
+          },
+          "sigma_bp": {
+            "origin": "Julgamento",
+            "value": 100,
+            "source": "data/research/sigma.json (research/sigma.py): faixa medida de 78 a 123 bp, mediana 101"
           },
           "formula": "normalize(start * exp(-(move_bp - marks_bp)^2 / (2 * sigma_bp^2)))"
         },

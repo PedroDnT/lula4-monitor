@@ -1,0 +1,106 @@
+{
+ "origin": "Cálculo sobre Dado (SILO: curvas PRE e DPL da B3, dólar SGS 1)",
+ "from": "2010-01-04",
+ "to": "2026-11-10",
+ "sessions": 4180,
+ "calm_sessions": 2879,
+ "crises": [
+  {
+   "start": "2011-09-21",
+   "di2_60s_bp": -149,
+   "usd_60s_pct": 15.5
+  },
+  {
+   "start": "2012-05-14",
+   "di2_60s_bp": -115,
+   "usd_60s_pct": 15.7
+  },
+  {
+   "start": "2013-06-19",
+   "di2_60s_bp": 208,
+   "usd_60s_pct": 8.0
+  },
+  {
+   "start": "2015-03-04",
+   "di2_60s_bp": 53,
+   "usd_60s_pct": 16.1
+  },
+  {
+   "start": "2015-08-04",
+   "di2_60s_bp": -8,
+   "usd_60s_pct": 15.7
+  },
+  {
+   "start": "2018-05-18",
+   "di2_60s_bp": 45,
+   "usd_60s_pct": 15.2
+  },
+  {
+   "start": "2020-03-12",
+   "di2_60s_bp": 122,
+   "usd_60s_pct": 18.7
+  },
+  {
+   "start": "2021-03-18",
+   "di2_60s_bp": 215,
+   "usd_60s_pct": 8.8
+  },
+  {
+   "start": "2021-08-23",
+   "di2_60s_bp": 212,
+   "usd_60s_pct": 1.6
+  },
+  {
+   "start": "2022-07-13",
+   "di2_60s_bp": 84,
+   "usd_60s_pct": 15.5
+  },
+  {
+   "start": "2024-11-18",
+   "di2_60s_bp": 201,
+   "usd_60s_pct": 4.2
+  }
+ ],
+ "rules": [
+  {
+   "id": "be2_50",
+   "regra": "Inflação implícita 2 anos sobe mais de 50 bp em 4 semanas",
+   "avisou": 6,
+   "crises": 11,
+   "antecedencia_mediana_sessoes": 36.5,
+   "aceso_em_calma_pct": 5.2
+  },
+  {
+   "id": "be5_50",
+   "regra": "Inflação implícita 5 anos sobe mais de 50 bp em 4 semanas",
+   "avisou": 7,
+   "crises": 11,
+   "antecedencia_mediana_sessoes": 12,
+   "aceso_em_calma_pct": 4.0
+  },
+  {
+   "id": "r5_gt5",
+   "regra": "Juro real 5 anos acima de 5%",
+   "avisou": 7,
+   "crises": 11,
+   "antecedencia_mediana_sessoes": 60,
+   "aceso_em_calma_pct": 73.1
+  },
+  {
+   "id": "r5_gt7",
+   "regra": "Juro real 5 anos acima de 7%",
+   "avisou": 1,
+   "crises": 11,
+   "antecedencia_mediana_sessoes": 10,
+   "aceso_em_calma_pct": 16.2
+  },
+  {
+   "id": "r5_50",
+   "regra": "Juro real 5 anos sobe mais de 50 bp em 4 semanas",
+   "avisou": 8,
+   "crises": 11,
+   "antecedencia_mediana_sessoes": 12.0,
+   "aceso_em_calma_pct": 3.9
+  }
+ ]
+}
