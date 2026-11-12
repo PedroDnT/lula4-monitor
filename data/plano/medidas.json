@@ -1,0 +1,26 @@
+{
+ "atualizado_em": "2026-11-11",
+ "projeto": {
+  "nome": "PLP 299/2026",
+  "autor": "Senador Jaques Wagner (PT/BA)",
+  "relator": "Senador Eduardo Braga (MDB/AM)",
+  "status": "Apresentado no Senado em 11/11/2026. Ainda não votado. Precisa de aprovação no Senado e na Câmara.",
+  "url": "https://www25.senado.leg.br/web/atividade/materias/-/materia/176328"
+ },
+ "impacto_2027": [
+  {"id": "ministro", "min_bi": 50, "max_bi": 60, "quem": "Ministro do Planejamento, Bruno Moretti, na Comissão Mista de Orçamento, 11/11/2026", "fonte": "Agência Brasil", "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-11/governo-anuncia-medidas-de-ajuste-para-economia-de-ate-r-60-bilhoes"},
+  {"id": "senado", "min_bi": 43, "max_bi": 54, "quem": "Estimativa da equipe econômica informada ao relator no Senado, 11/11/2026", "fonte": "Valor Econômico", "url": "https://valor.globo.com/politica/noticia/2026/11/11/proposta-de-ajuste-fiscal-do-governo-preve-gatilho-que-reduz-crescimento-de-despesas-de-25percent-para-2percent.ghtml"}
+ ],
+ "compromisso": {"primario_2027_pct_pib": 0.5, "primario_2030_pct_pib": 1.5, "quem": "Meta de 2027 no PLDO; superávit de 1,5% do PIB em 2030 é compromisso declarado do presidente", "fonte": "Bloomberg Línea, 11/11/2026", "url": "https://www.bloomberglinea.com.br/brasil/governo-divulga-plano-para-conter-gastos-em-tentativa-de-acalmar-preocupacoes-fiscais/"},
+ "medidas": [
+  {"medida": "Teto de crescimento real da despesa cai de 2,5% para 2,0%", "texto": "Vale a partir de 2027, só nos anos em que houver contingenciamento. Feito por bloqueio, sem entrar na base dos anos seguintes.", "artigo": "LC 200, art. 5º, §§ 5º e 6º", "lado": "Despesa", "impacto_2027_bi": 12.8, "impacto_fonte": "Moretti, via Agência Brasil"},
+  {"medida": "Contingenciamento mesmo dentro da banda da meta", "texto": "O Executivo pode bloquear despesa quando o resultado está entre o piso e o centro da meta. O bloqueio não volta no mesmo ano.", "artigo": "LC 200, arts. 6º-C a 6º-E", "lado": "Despesa", "impacto_2027_bi": null, "impacto_fonte": "Sem número oficial por medida"},
+  {"medida": "Corte de 20% nos benefícios tributários", "texto": "Isenção passa a pagar 20% da alíquota padrão; crédito vale 80% do original; regimes especiais e lucro presumido sobem 20%.", "artigo": "LC 224, art. 4º", "lado": "Receita", "impacto_2027_bi": null, "impacto_fonte": "Sem número oficial por medida"},
+  {"medida": "Limite à compensação de créditos tributários", "texto": "O Executivo pode reduzir a compensação de tributos com créditos, até o valor do bloqueio de despesa do ano.", "artigo": "LC 200, art. 6º-F", "lado": "Receita", "impacto_2027_bi": null, "impacto_fonte": "Sem número oficial por medida"},
+  {"medida": "Limites a despesas específicas", "texto": "Proex limitado a R$ 1 bi por ano até 2030; compensação previdenciária a R$ 3 bi por ano de 2027 a 2030; transferências a estados a R$ 1 bi por ano.", "artigo": "PLP 299, art. 13 e outros", "lado": "Despesa", "impacto_2027_bi": null, "impacto_min_bi": 10, "impacto_max_bi": 12, "impacto_fonte": "Moretti, via O Globo (R$ 10 a 12 bi)"},
+  {"medida": "Receita de petróleo fora da base dos pisos", "texto": "Receitas extraordinárias de petróleo e gás ficam fora da receita que define o piso da saúde, até 2030.", "artigo": "LC 235, art. 14", "lado": "Despesa", "impacto_2027_bi": null, "impacto_fonte": "Sem número oficial por medida"},
+  {"medida": "Uso de superávit de fundos públicos", "texto": "Até 40% do superávit financeiro do ano anterior, com exceções (saúde, educação, seguridade, segurança).", "artigo": "PLP 299", "lado": "Financeiro", "impacto_2027_bi": null, "impacto_fonte": "Não muda o resultado primário por si só"},
+  {"medida": "Supersalários", "texto": "Prazo de 120 dias para o Congresso analisar a regulamentação das verbas indenizatórias. O projeto não corta pagamentos.", "artigo": "PLP 299", "lado": "Despesa", "impacto_2027_bi": null, "impacto_fonte": "Sem estimativa (Agência Brasil)"},
+  {"medida": "Subsídio ao diesel fora da meta de 2026", "texto": "Até R$ 10,5 bi de subvenção ao diesel deixam de contar na meta de 2026. A despesa continua a existir.", "artigo": "PLP 299, art. 15", "lado": "Meta", "impacto_2027_bi": null, "impacto_fonte": "Não é economia: é dedução da meta de 2026"}
+ ]
+}
