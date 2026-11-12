@@ -54,3 +54,24 @@ def focus_annual(indicator, horizon, start, end=None):
     end = end or dt.date.today().year
     rows = by_year("focus_expectations", start, end, p_endpoint="ExpectativasMercadoAnuais", p_horizon=str(horizon), p_indicator=indicator)
     return sorted({r["survey_date"]: float(r["median"]) for r in rows if r.get("median") is not None}.items())
+
+
+def dol_front(days, workers=8):
+    """{date: % change of the most liquid DOL contract} from B3 settlements (future_curve).
+
+    The most liquid contract is the one with the largest open interest on the day; its change is
+    against its own settlement on the previous date in `days`, so rolls never create a jump.
+    """
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(workers) as ex:
+        curves = dict(zip(days, ex.map(lambda d: rpc("future_curve", p_root="DOL", p_trade_date=d), days)))
+    px = {d: {r["ticker"]: (float(r["settlement_price"]), r.get("open_interest") or 0) for r in rows if r.get("settlement_price")}
+          for d, rows in curves.items()}
+    out = {}
+    for a, b in zip(days, days[1:]):
+        if not px.get(b) or not px.get(a):
+            continue
+        t = max(px[b], key=lambda k: px[b][k][1])
+        if t in px[a]:
+            out[b] = (px[b][t][0] / px[a][t][0] - 1) * 100
+    return out

@@ -25,11 +25,12 @@ async function cds() {
   const r = await fetch(OBM, { headers: UA, cf: { cacheTtl: 900, cacheEverything: true } });
   if (!r.ok) return json({ error: "obm " + r.status }, 502, 0);
   const html = await r.text();
-  const row = html.match(/CDS 5 Anos Brasil \(USD\)<\/a><\/div><\/td><td[^>]*>([\d.,]+)<\/td><td[^>]*>([+−\-\d.,]+)<\/td><td[^>]*>([\d.,]+%)<\/td>/);
+  const row = html.match(/CDS 5 Anos Brasil \(USD\)<\/a><\/div><\/td><td[^>]*>([\d.,]+)<\/td><td[^>]*>([+−\-\d.,]+|—)<\/td><td[^>]*>([\d.,]+%)<\/td>/);
   if (!row) return json({ error: "linha do Brasil não encontrada" }, 502, 0);
   const num = (s) => parseFloat(s.replace(/\./g, "").replace(",", ".").replace("−", "-"));
   const d = html.match(/Atualização<\/div><div[^>]*>(\d{2}\/\d{2}\/\d{4})<\/div>/);
-  return json({ bp: num(row[1]), chg: num(row[2]), pd: row[3], date: d ? d[1] : null }, 200, 900);
+  // OBM prints "—" when the day's change is not published; keep it null, never 0.
+  return json({ bp: num(row[1]), chg: row[2] === "—" ? null : num(row[2]), pd: row[3], date: d ? d[1] : null }, 200, 900);
 }
 
 async function selic() {

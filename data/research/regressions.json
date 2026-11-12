@@ -1,0 +1,302 @@
+{
+ "method": "Re-estimate the regressions the Agora page uses, and compare them with the published constants.\n\nData, daily changes (% for prices, bp for rates), OLS with intercept, Newey-West (HAC) errors:\n  global     2019-01 to 2026-09, all days, New York closes (Yahoo): dollar (BRL=X) on EM (mean of\n             MXN and ZAR); 2-year DI (B3 PRE 720 via SILO) on EM and US 10y; EWZ on EEM; dollar on\n             DXY.                                                           (index.html GLB)\n  stress     2018-01 to 2026-09, B3 closes: dollar = most liquid DOL future, settlement via SILO;\n             Ibovespa = IBOV via SILO; stocks = B3 line (Yahoo .SA, adjusted). Days with the dollar\n             or the DI beyond 2 sd: Ibovespa on dollar (and on dollar + DI), DI on dollar. Days with\n             the dollar beyond 2 sd: each stock on dollar.                  (FV, FV2, DIFX, STK)\n  fraction   2008-01 to 2026-10, PTAX (SGS 1 via SILO): local shock = dollar - b x EM (b from the\n             same sample); days with |local shock| > 2 sd; cumulative dollar change from the day\n             before to h sessions after, on the shock (local projection, Jordà 2005), h = 21, 63,\n             126, 252.                                                      (scenario 0.75)\nLimits: Yahoo (New York) and B3 closes are not simultaneous with the PTAX (about 13:00 Brasília).\nWrites data/research/regressions.json. index.html copies the estimates by hand, with this file named.",
+ "published": {
+  "usd_on_em": 0.65,
+  "di_on_em": 4.2,
+  "di_on_ust": 0.34,
+  "ewz_on_eem": 1.07,
+  "usd_on_dxy": 0.43,
+  "ibov_on_usd": {
+   "c": -0.11,
+   "b": -0.9,
+   "se": 0.105,
+   "n": 172
+  },
+  "di_on_usd": {
+   "c": 1.96,
+   "b": 7.11
+  },
+  "stocks": {
+   "ITUB": -0.924,
+   "PBR": -0.965,
+   "VALE": -0.58,
+   "BBD": -1.1,
+   "ABEV": -0.59,
+   "SBS": -0.88,
+   "SUZ": 0.19,
+   "BBAS3.SA": -1.35
+  },
+  "fraction": {
+   "21": 0.75,
+   "63": 0.76,
+   "126": 0.92,
+   "252": 0.73,
+   "n": 213
+  }
+ },
+ "global": {
+  "sample": [
+   "2019-01-02",
+   "2026-09-30"
+  ],
+  "usd_on_em": {
+   "coef": [
+    0.0199,
+    0.5699
+   ],
+   "se": [
+    0.0201,
+    0.1111
+   ],
+   "resid_sd": 0.947,
+   "n": 1613
+  },
+  "di_on_em_ust": {
+   "coef": [
+    0.3178,
+    2.1924,
+    0.3967
+   ],
+   "se": [
+    0.3601,
+    0.5083,
+    0.1018
+   ],
+   "resid_sd": 14.663,
+   "n": 1613
+  },
+  "ewz_on_eem": {
+   "coef": [
+    -0.0004,
+    0.9755
+   ],
+   "se": [
+    0.044,
+    0.0887
+   ],
+   "resid_sd": 1.746,
+   "n": 1613
+  },
+  "usd_on_dxy": {
+   "coef": [
+    0.0224,
+    0.299
+   ],
+   "se": [
+    0.0239,
+    0.0834
+   ],
+   "resid_sd": 1.063,
+   "n": 1613
+  }
+ },
+ "stress": {
+  "rule": {
+   "usd_sd_pct": 0.909,
+   "di_sd_bp": 13.44,
+   "days": 188,
+   "fx_days": 114,
+   "usd": "DOL mais líquido (maior contratos em aberto), ajuste B3 via SILO",
+   "ibov": "IBOV, B3 via SILO"
+  },
+  "ibov_on_usd": {
+   "coef": [
+    -0.1777,
+    -0.9542
+   ],
+   "se": [
+    0.1459,
+    0.1196
+   ],
+   "resid_sd": 2.512,
+   "n": 188
+  },
+  "di_on_usd": {
+   "coef": [
+    3.5392,
+    8.6071
+   ],
+   "se": [
+    1.9477,
+    1.0819
+   ],
+   "resid_sd": 27.923,
+   "n": 188
+  },
+  "ibov_on_usd_di": {
+   "coef": [
+    -0.0325,
+    -0.6009,
+    -0.041
+   ],
+   "se": [
+    0.1297,
+    0.1255,
+    0.0123
+   ],
+   "resid_sd": 2.235,
+   "n": 188
+  },
+  "stocks": {
+   "ITUB": {
+    "coef": [
+     -0.2923,
+     -0.8148
+    ],
+    "se": [
+     0.2425,
+     0.1052
+    ],
+    "resid_sd": 2.398,
+    "n": 114,
+    "b3": "ITUB4.SA"
+   },
+   "PBR": {
+    "coef": [
+     -0.1559,
+     -1.2053
+    ],
+    "se": [
+     0.3531,
+     0.2126
+    ],
+    "resid_sd": 4.076,
+    "n": 114,
+    "b3": "PETR4.SA"
+   },
+   "VALE": {
+    "coef": [
+     -0.2394,
+     -0.444
+    ],
+    "se": [
+     0.2819,
+     0.1709
+    ],
+    "resid_sd": 3.495,
+    "n": 114,
+    "b3": "VALE3.SA"
+   },
+   "BBD": {
+    "coef": [
+     -0.1823,
+     -1.0746
+    ],
+    "se": [
+     0.268,
+     0.1445
+    ],
+    "resid_sd": 2.706,
+    "n": 114,
+    "b3": "BBDC4.SA"
+   },
+   "ABEV": {
+    "coef": [
+     -0.3886,
+     -0.6158
+    ],
+    "se": [
+     0.1912,
+     0.1023
+    ],
+    "resid_sd": 2.006,
+    "n": 114,
+    "b3": "ABEV3.SA"
+   },
+   "SBS": {
+    "coef": [
+     -0.1383,
+     -0.8821
+    ],
+    "se": [
+     0.3351,
+     0.1815
+    ],
+    "resid_sd": 3.397,
+    "n": 114,
+    "b3": "SBSP3.SA"
+   },
+   "SUZ": {
+    "coef": [
+     -0.1865,
+     0.1892
+    ],
+    "se": [
+     0.3162,
+     0.2172
+    ],
+    "resid_sd": 3.432,
+    "n": 114,
+    "b3": "SUZB3.SA"
+   },
+   "BBAS3.SA": {
+    "coef": [
+     -0.2275,
+     -1.3146
+    ],
+    "se": [
+     0.357,
+     0.1948
+    ],
+    "resid_sd": 3.61,
+    "n": 114,
+    "b3": "BBAS3.SA"
+   }
+  }
+ },
+ "fraction": {
+  "em_beta": 0.359,
+  "local_sd_pct": 0.976,
+  "shock_days": 207,
+  "h": {
+   "21": {
+    "coef": [
+     0.9509,
+     0.8278
+    ],
+    "se": [
+     0.9368,
+     0.1184
+    ],
+    "resid_sd": 6.405,
+    "n": 204
+   },
+   "63": {
+    "coef": [
+     1.6783,
+     0.9262
+    ],
+    "se": [
+     0.9558,
+     0.1148
+    ],
+    "resid_sd": 9.256,
+    "n": 204
+   },
+   "126": {
+    "coef": [
+     0.006,
+     0.967
+    ],
+    "se": [
+     1.2521,
+     0.1709
+    ],
+    "resid_sd": 13.182,
+    "n": 203
+   },
+   "252": {
+    "coef": [
+     -2.5074,
+     0.588
+    ],
+    "se": [
+     1.6357,
+     0.1423
+    ],
+    "resid_sd": 17.086,
+    "n": 202
+   }
+  }
+ }
+}
