@@ -201,7 +201,7 @@
   <section class="dm-section" id="ancora">
     <h2 class="dm-h2">Âncora de inflação</h2>
     <p class="dm-sub">Inflação implícita = (1 + PRE) ÷ (1 + DPL) − 1, nos vértices fixos de 720 e 1.800 dias corridos das curvas de referência da B3, pela SILO. Sessão mais recente: <span data-source="anchor_now" data-field="date" data-row="0">—</span>.</p>
-    <p class="porque"><b>Por que esta regra.</b> Os gatilhos de mercado deste bloco (alta de 50 bp em 4 semanas) foram calibrados em 11 crises desde 2010: o juro real avisou antes em 9, a inflação implícita em 7 ou 8, com cerca de 4% de falso alarme. O nível (juro real acima do neutro de 5% do BCB) ficou aceso em 74% dos dias calmos, por isso usamos a variação, não o nível. A tabela de calibração, abaixo, mostra a conta.</p>
+    <p class="porque"><b>Por que esta regra.</b> Os gatilhos de mercado deste bloco (alta de 50 bp em 4 semanas) foram calibrados em 11 crises desde 2010: o juro real avisou antes em 8, a inflação implícita em 6 (2 anos) e 7 (5 anos), com 4% a 5% de falso alarme. O nível (juro real acima do neutro de 5% do BCB) ficou aceso em 73% dos dias calmos, por isso usamos a variação, não o nível. A tabela de calibração, abaixo, mostra a conta, e o script <code>research/calibration.py</code> refaz o teste a partir do SILO.</p>
     <div class="dm-tiles">
       <div class="dm-tile" id="t-be2">
         <span class="dm-tile-label">Inflação implícita 2 anos <span class="tag tag-calc">Cálculo</span></span>
@@ -456,7 +456,7 @@
     </div>
     <div class="dm-card" id="c-calib">
       <h3 class="dm-h2">Calibração: os gatilhos avisaram nas crises passadas? <span class="tag tag-calc">Cálculo</span></h3>
-      <p class="dm-sub">Teste com as curvas da B3 na SILO, de 2010 a 26/10/2026. Crise = o DI de 2 anos sobe 200 bp ou o dólar sobe 15% em 60 pregões; o teste achou 11, de set/2011 a nov/2024. "Avisou" = acendeu até 60 pregões antes do início ou no dia. "Aceso em calma" = parte dos dias fora das crises em que o alerta acendeu à toa. Limite do teste: a crise e os alertas de mercado vêm das mesmas curvas, então o teste favorece esses alertas.</p>
+      <p class="dm-sub">Teste com as curvas da B3 na SILO, de 2010 a 10/11/2026, refeito pelo script <code>research/calibration.py</code>. Crise = o DI de 2 anos sobe 200 bp ou o dólar sobe 15% em 60 pregões; o teste achou 11, de set/2011 a nov/2024. "Avisou" = acendeu até 60 pregões antes do início ou no dia. "Aceso em calma" = parte dos dias fora das crises em que o alerta acendeu à toa. Limite do teste: a crise e os alertas de mercado vêm das mesmas curvas, então o teste favorece esses alertas.</p>
       <div class="dm-table-wrap">
         <table class="dm-table tb-calib" data-source="calib" data-row-key="regra">
           <thead><tr>
@@ -509,7 +509,7 @@
       <ol class="dm-steps">
         <li><b>Partida.</b> Em 26/10 o monitor fixou a primeira partida por julgamento: 45% Âncora, 33% Deriva, 22% Estresse. Não é saída de modelo. Depois disso, só fatos mudam a partida.</li>
         <li><b>Fatos movem a partida.</b> Cada fato político ou fiscal novo, com fonte, multiplica o peso de cada cenário por um fator. Fraco 1,05 (notícia não confirmada), moderado 1,15 (ato oficial), forte 1,30 (decisão com efeito direto, como sentença, Orçamento votado, ministro nomeado, rating). Contra um cenário, o inverso: 0,95, 0,87 ou 0,77. Depois os três voltam a somar 100%. Preço de mercado nunca conta como fato.</li>
-        <li><b>O mercado ajusta o dia.</b> A regra lê quanto o DI jan/29 subiu desde 23/10. Cada cenário tem uma marca: +50 bp para Âncora, +180 bp para Deriva, +320 bp para Estresse. O nível acumulado é comparado às marcas por verossimilhanças normais com σ = 100 bp.</li>
+        <li><b>O mercado ajusta o dia.</b> A regra lê quanto o DI jan/29 subiu desde 23/10. Cada cenário tem uma marca: +28 bp para Âncora, +123 bp para Deriva, +295 bp para Estresse (caminho da Selic do cenário mais o prêmio de prazo medido; ver Método). O nível acumulado é comparado às marcas por verossimilhanças normais com σ = 100 bp.</li>
         <li><b>O peso que aparece.</b> Peso = partida multiplicada pela verossimilhança do nível acumulado do DI; os três resultados são normalizados. A conta recomeça da partida para não reaplicar o nível acumulado anterior.</li>
       </ol>
       <p class="dm-sub">Os fatores e as marcas do DI são escolhas do monitor, não estimativas estatísticas. Os fatos aplicados ficam listados no Relatório diário de juros.</p>

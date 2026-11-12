@@ -1,5 +1,7 @@
 # Daily price batch: recompute "agora" from the last DI1F29 settlement in SILO and open a PR for review.
 # No new facts enter here: facts need Pedro's approval and go in by hand (docs/rotina/README.md).
+# Candidate news from the last 36 hours (scripts/news_candidates.py) go in the PR body and the
+# run summary for review; they never change a fact or a weight.
 # Runs at 11:20 Brasília (14:20 UTC) on weekdays. A merge to main publishes the site.
 name: daily-monitor
 
@@ -39,6 +41,13 @@ jobs:
           python3 scripts/daily_monitor.py validate
           git diff --check
           cp "$RUNNER_TEMP/batch/report.json" "$RUNNER_TEMP/report.json"
+      - name: Candidate news (Exa, Firecrawl fallback; never applied)
+        env:
+          EXA_API_KEY: ${{ secrets.EXA_API_KEY }}
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+        run: |
+          python3 scripts/news_candidates.py > "$RUNNER_TEMP/news.md"
+          cat "$RUNNER_TEMP/news.md" >> "$GITHUB_STEP_SUMMARY"
       - name: Open a PR when the data changed
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -62,4 +71,6 @@ jobs:
           for w in r.get("warnings", []):
               print(f"- Aviso: {w}")
           PY
+          printf '\n' >> "$RUNNER_TEMP/body.md"
+          cat "$RUNNER_TEMP/news.md" >> "$RUNNER_TEMP/body.md"
           gh pr create --base main --head "$BR" --title "data: lote de preço de $DAY" --body-file "$RUNNER_TEMP/body.md"

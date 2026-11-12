@@ -39,3 +39,6 @@ next-env.d.ts
 __pycache__/
 *.pyc
 *.json.daily-tmp
+
+# Research cache: raw SILO answers, rebuilt by research/*.py
+research/cache/

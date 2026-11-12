@@ -31,7 +31,7 @@ def fact(key='f14', channel='canal-novo'):
 class CalculationTests(unittest.TestCase):
     def test_reference(self):
         actual = m.posterior([.49, .31, .20], 232)
-        for a, b in zip(actual, [18.70, 54.15, 27.15]):
+        for a, b in zip(actual, [15.43, 43.18, 41.38]):
             self.assertAlmostEqual(a * 100, b, delta=.005)
         self.assertAlmostEqual(sum(actual), 1)
 

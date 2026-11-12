@@ -4,7 +4,7 @@
   "cenario": "Âncora retomada",
   "start": 0.49,
   "probability": 0.19,
-  "di_jan29_move_bp": 50,
+  "di_jan29_move_bp": 28,
   "partida_em": "2026-11-02",
   "agora_em": "2026-11-02"
  },
@@ -13,7 +13,7 @@
   "cenario": "Deriva fiscal",
   "start": 0.31,
   "probability": 0.54,
-  "di_jan29_move_bp": 180,
+  "di_jan29_move_bp": 123,
   "partida_em": "2026-11-02",
   "agora_em": "2026-11-02"
  },
@@ -22,7 +22,7 @@
   "cenario": "Estresse e espiral",
   "start": 0.2,
   "probability": 0.27,
-  "di_jan29_move_bp": 320,
+  "di_jan29_move_bp": 295,
   "partida_em": "2026-11-02",
   "agora_em": "2026-11-02"
  }

@@ -14,7 +14,8 @@ from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
 
 IDS = ('ancora', 'deriva', 'estresse')
-MARKS = (50, 180, 320)
+# Marks: research/termpremium.py (scenario Selic path + measured 2-year premium), approved 12/11/2026.
+MARKS = (28, 123, 295)
 BASE_DATE = '2026-10-23'
 BASE_RATE = 12.640
 SIGMA = 100
@@ -263,8 +264,8 @@ def prepare(root, run_date, incoming, market_reader=collect_market, source_reade
     report = {'run_date_brt': run_date, 'prepared_at_brt': datetime.now(TZ).isoformat(), 'market': market, 'move_bp': {'origin': 'Cálculo', 'value': move},
               'start': {'origin': 'Julgamento' if not applied else 'Cálculo', 'value': start},
               'now': {'origin': 'Cálculo', 'value': now}, 'changes': changes, 'sources': evidence,
-              'method': {'marks_bp': {'origin': 'Julgamento', 'value': list(MARKS), 'source': 'index.html; marcas do monitor'},
-                         'sigma_bp': {'origin': 'Dado', 'value': SIGMA, 'source': 'metodo.html; calibração documentada'},
+              'method': {'marks_bp': {'origin': 'Cálculo', 'value': list(MARKS), 'source': 'data/research/term_premium.json (research/termpremium.py): caminho da Selic por cenário (Julgamento) + prêmio medido (Cálculo)'},
+                         'sigma_bp': {'origin': 'Julgamento', 'value': SIGMA, 'source': 'data/research/sigma.json (research/sigma.py): faixa medida de 78 a 123 bp, mediana 101'},
                          'formula': 'normalize(start * exp(-(move_bp - marks_bp)^2 / (2 * sigma_bp^2)))'},
               'warnings': ['Mudança de partida de 30/10 sem fato justificativo; preservada.',
                            'Prompt semanal não inspecionado; regra antiga 0,3 permanece pendente de verificação.']}
