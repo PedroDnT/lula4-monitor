@@ -1,26 +1,139 @@
 {
- "atualizado_em": "2026-11-11",
+ "atualizado_em": "2026-11-12",
  "projeto": {
   "nome": "PLP 299/2026",
   "autor": "Senador Jaques Wagner (PT/BA)",
   "relator": "Senador Eduardo Braga (MDB/AM)",
-  "status": "Apresentado no Senado em 11/11/2026. Ainda não votado. Precisa de aprovação no Senado e na Câmara.",
+  "status": "Parecer de Plenário do relator com substitutivo (12/11/2026). Urgência aprovada em 12/11 por 40 a 38; o mérito precisa de 41 votos no Senado e de 257 na Câmara. O relator apresentou depois uma versão com o acolhimento parcial da emenda 14; esta página segue o texto do parecer de 12/11.",
   "url": "https://www25.senado.leg.br/web/atividade/materias/-/materia/176328"
  },
  "impacto_2027": [
-  {"id": "ministro", "min_bi": 50, "max_bi": 60, "quem": "Ministro do Planejamento, Bruno Moretti, na Comissão Mista de Orçamento, 11/11/2026", "fonte": "Agência Brasil", "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-11/governo-anuncia-medidas-de-ajuste-para-economia-de-ate-r-60-bilhoes"},
-  {"id": "senado", "min_bi": 43, "max_bi": 54, "quem": "Estimativa da equipe econômica informada ao relator no Senado, 11/11/2026", "fonte": "Valor Econômico", "url": "https://valor.globo.com/politica/noticia/2026/11/11/proposta-de-ajuste-fiscal-do-governo-preve-gatilho-que-reduz-crescimento-de-despesas-de-25percent-para-2percent.ghtml"}
+  {
+   "id": "governo",
+   "min_bi": 46,
+   "max_bi": 56,
+   "quem": "Ministro do Planejamento, Bruno Moretti, 12/11/2026; em 11/11 a faixa era de R$ 50 a 60 bi",
+   "fonte": "Folha de S.Paulo",
+   "url": "https://www1.folha.uol.com.br/mercado/2026/11/senado-inicia-votacao-do-plano-moretti-de-ajuste-fiscal-apesar-de-protesto-da-oposicao.shtml"
+  },
+  {
+   "id": "parecer",
+   "min_bi": 45.1,
+   "max_bi": 56.1,
+   "quem": "Parecer do relator, Senador Eduardo Braga, com dados do Poder Executivo, 12/11/2026",
+   "fonte": "Senado Federal, parecer ao PLP 299/2026",
+   "url": "https://www25.senado.leg.br/web/atividade/materias/-/materia/176328"
+  }
  ],
- "compromisso": {"primario_2027_pct_pib": 0.5, "primario_2030_pct_pib": 1.5, "quem": "Meta de 2027 no PLDO; superávit de 1,5% do PIB em 2030 é compromisso declarado do presidente", "fonte": "Bloomberg Línea, 11/11/2026", "url": "https://www.bloomberglinea.com.br/brasil/governo-divulga-plano-para-conter-gastos-em-tentativa-de-acalmar-preocupacoes-fiscais/"},
+ "compromisso": {
+  "primario_2027_pct_pib": 0.5,
+  "primario_2030_pct_pib": 1.5,
+  "quem": "Meta de 2027 no PLDO; superávit de 1,5% do PIB em 2030 é compromisso declarado do presidente",
+  "fonte": "Bloomberg Línea, 11/11/2026",
+  "url": "https://www.bloomberglinea.com.br/brasil/governo-divulga-plano-para-conter-gastos-em-tentativa-de-acalmar-preocupacoes-fiscais/"
+ },
  "medidas": [
-  {"medida": "Teto de crescimento real da despesa cai de 2,5% para 2,0%", "texto": "Vale a partir de 2027, só nos anos em que houver contingenciamento. Feito por bloqueio, sem entrar na base dos anos seguintes.", "artigo": "LC 200, art. 5º, §§ 5º e 6º", "lado": "Despesa", "impacto_2027_bi": 12.8, "impacto_fonte": "Moretti, via Agência Brasil"},
-  {"medida": "Contingenciamento mesmo dentro da banda da meta", "texto": "O Executivo pode bloquear despesa quando o resultado está entre o piso e o centro da meta. O bloqueio não volta no mesmo ano.", "artigo": "LC 200, arts. 6º-C a 6º-E", "lado": "Despesa", "impacto_2027_bi": null, "impacto_fonte": "Sem número oficial por medida"},
-  {"medida": "Corte de 20% nos benefícios tributários", "texto": "Isenção passa a pagar 20% da alíquota padrão; crédito vale 80% do original; regimes especiais e lucro presumido sobem 20%.", "artigo": "LC 224, art. 4º", "lado": "Receita", "impacto_2027_bi": null, "impacto_fonte": "Sem número oficial por medida"},
-  {"medida": "Limite à compensação de créditos tributários", "texto": "O Executivo pode reduzir a compensação de tributos com créditos, até o valor do bloqueio de despesa do ano.", "artigo": "LC 200, art. 6º-F", "lado": "Receita", "impacto_2027_bi": null, "impacto_fonte": "Sem número oficial por medida"},
-  {"medida": "Limites a despesas específicas", "texto": "Proex limitado a R$ 1 bi por ano até 2030; compensação previdenciária a R$ 3 bi por ano de 2027 a 2030; transferências a estados a R$ 1 bi por ano.", "artigo": "PLP 299, art. 13 e outros", "lado": "Despesa", "impacto_2027_bi": null, "impacto_min_bi": 10, "impacto_max_bi": 12, "impacto_fonte": "Moretti, via O Globo (R$ 10 a 12 bi)"},
-  {"medida": "Receita de petróleo fora da base dos pisos", "texto": "Receitas extraordinárias de petróleo e gás ficam fora da receita que define o piso da saúde, até 2030.", "artigo": "LC 235, art. 14", "lado": "Despesa", "impacto_2027_bi": null, "impacto_fonte": "Sem número oficial por medida"},
-  {"medida": "Uso de superávit de fundos públicos", "texto": "Até 40% do superávit financeiro do ano anterior, com exceções (saúde, educação, seguridade, segurança).", "artigo": "PLP 299", "lado": "Financeiro", "impacto_2027_bi": null, "impacto_fonte": "Não muda o resultado primário por si só"},
-  {"medida": "Supersalários", "texto": "Prazo de 120 dias para o Congresso analisar a regulamentação das verbas indenizatórias. O projeto não corta pagamentos.", "artigo": "PLP 299", "lado": "Despesa", "impacto_2027_bi": null, "impacto_fonte": "Sem estimativa (Agência Brasil)"},
-  {"medida": "Subsídio ao diesel fora da meta de 2026", "texto": "Até R$ 10,5 bi de subvenção ao diesel deixam de contar na meta de 2026. A despesa continua a existir.", "artigo": "PLP 299, art. 15", "lado": "Meta", "impacto_2027_bi": null, "impacto_fonte": "Não é economia: é dedução da meta de 2026"}
+  {
+   "medida": "Contenção de despesa para mirar o centro da meta",
+   "texto": "O Executivo pode bloquear despesa quando o resultado fica entre o piso e o centro da meta. A limitação pode alcançar despesas obrigatórias definidas em lei comum, com exceções (obrigações constitucionais, serviço da dívida, fundo de ciência e tecnologia e as ressalvas da LDO).",
+   "artigo": "LC 200, arts. 6º-C e 6º-D",
+   "lado": "Despesa",
+   "impacto_2027_bi": null,
+   "impacto_min_bi": 12.8,
+   "impacto_max_bi": 18.3,
+   "impacto_fonte": "Parecer do relator, 12/11"
+  },
+  {
+   "medida": "Teto de crescimento real da despesa cai de 2,5% para 2,0%",
+   "texto": "Vale a partir de 2027, só nos anos com a contenção acima. O que passa do necessário reduz o limite do ano. A redução não entra na base dos anos seguintes.",
+   "artigo": "LC 200, art. 5º, §§ 5º e 6º, e art. 6º-E",
+   "lado": "Despesa",
+   "impacto_2027_bi": null,
+   "impacto_fonte": "Incluído na contenção de despesa (parecer)"
+  },
+  {
+   "medida": "Limite à compensação de créditos tributários",
+   "texto": "O Executivo pode reduzir a compensação de tributos com créditos, até o valor da redução de limite somado ao bloqueio do ano. Os percentuais saem por ato do Executivo.",
+   "artigo": "LC 200, art. 6º-F",
+   "lado": "Receita",
+   "impacto_2027_bi": null,
+   "impacto_min_bi": 12.8,
+   "impacto_max_bi": 18.3,
+   "impacto_fonte": "Parecer do relator, 12/11"
+  },
+  {
+   "medida": "Corte nos benefícios tributários",
+   "texto": "Isenção passa a pagar 20% da alíquota padrão; crédito vale 80% do original; regimes especiais e lucro presumido sobem 20%. Ficam fora a desoneração da folha (CPRB), tecnologia e semicondutores e carros para pessoas com deficiência. Vale do 4º mês após a publicação, ou de 1/1/2027.",
+   "artigo": "LC 224, art. 4º; PLP, art. 15",
+   "lado": "Receita",
+   "impacto_2027_bi": 15.0,
+   "impacto_fonte": "Parecer do relator, 12/11 (redução de 10% do gasto tributário)"
+  },
+  {
+   "medida": "Regime especial da reforma tributária limitado",
+   "texto": "O regime do art. 106 da LC 214 fica limitado ao valor do demonstrativo de gastos tributários de 2026, corrigido pelo IPCA.",
+   "artigo": "PLP, art. 9º",
+   "lado": "Receita",
+   "impacto_2027_bi": 4.5,
+   "impacto_fonte": "Parecer do relator, 12/11"
+  },
+  {
+   "medida": "Limites a despesas específicas",
+   "texto": "Lei Kandir: entrega limitada a R$ 1 bi por ano de 2027 a 2030, e a diferença é paga de 2031 a 2037. Compensação previdenciária: R$ 3 bi por ano de 2027 a 2030. Proex: R$ 1 bi por ano até 2030.",
+   "artigo": "LC 176, art. 1º; Lei 9.796, art. 8º-C; PLP, art. 11",
+   "lado": "Despesa",
+   "impacto_2027_bi": null,
+   "impacto_min_bi": 10,
+   "impacto_max_bi": 12,
+   "impacto_fonte": "Moretti, via O Globo; fora da faixa do parecer. Parte é adiamento, não corte"
+  },
+  {
+   "medida": "Receita de petróleo fora da base dos pisos",
+   "texto": "A receita do imposto sobre exportação de petróleo fica fora da receita usada nos pisos até 2030. A partir de 2028, o limite de despesa cai no mesmo valor, sem entrar na base. O Fundo Constitucional do DF fica fora.",
+   "artigo": "LC 235, art. 14",
+   "lado": "Despesa",
+   "impacto_2027_bi": null,
+   "impacto_fonte": "Sem número no parecer; a imprensa cita cerca de R$ 9 bi a menos no piso da saúde"
+  },
+  {
+   "medida": "Excedente do primário vira investimento",
+   "texto": "Se o primário do ano anterior passar do piso da meta e houve contenção, o Executivo pode abrir crédito para investimentos no ano seguinte, até o valor contido, fora do limite de despesa.",
+   "artigo": "PLP, art. 12",
+   "lado": "Despesa",
+   "impacto_2027_bi": null,
+   "impacto_fonte": "Pode devolver em gasto o que foi contido"
+  },
+  {
+   "medida": "Uso de superávit de fundos públicos",
+   "texto": "O parecer cita R$ 100 bi a mais de margem na regra de ouro com a desvinculação de superávit financeiro. O texto do substitutivo de 12/11 não traz esse artigo.",
+   "artigo": "Parecer, impacto fiscal",
+   "lado": "Financeiro",
+   "impacto_2027_bi": null,
+   "impacto_fonte": "Não muda o resultado primário"
+  },
+  {
+   "medida": "Supersalários",
+   "texto": "O Congresso tem 120 dias para votar a lei do teto (art. 37, § 11, da Constituição). A economia do Executivo reduz o limite de despesa ou vai para investimento e segurança pública. O projeto não corta pagamentos.",
+   "artigo": "PLP, art. 10",
+   "lado": "Despesa",
+   "impacto_2027_bi": null,
+   "impacto_fonte": "Sem estimativa"
+  },
+  {
+   "medida": "Restos a pagar protegidos",
+   "texto": "Restos a pagar de contratos e convênios vigentes em novembro de 2026 só podem ser bloqueados ou cancelados depois de 31/12/2027.",
+   "artigo": "PLP, art. 14",
+   "lado": "Despesa",
+   "impacto_2027_bi": null,
+   "impacto_fonte": "Sem estimativa"
+  },
+  {
+   "medida": "Subsídio ao diesel fora da meta de 2026",
+   "texto": "Até R$ 10,5 bi de subvenção ao diesel deixam de contar na meta de 2026. A despesa continua a existir.",
+   "artigo": "PLP, art. 13",
+   "lado": "Meta",
+   "impacto_2027_bi": null,
+   "impacto_fonte": "Não é economia: é dedução da meta de 2026"
+  }
  ]
 }
