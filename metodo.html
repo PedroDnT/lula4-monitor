@@ -16,135 +16,146 @@
 .m .tw { overflow-x: auto; }
 .m code { font-size: 12.5px; background: var(--cds-chart-grid); padding: 1px 4px; border-radius: 3px; }
 .m .warn { background: var(--cds-chart-grid); border-radius: 10px; padding: 10px 14px; font-size: 14px; }
+.m .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0 6px; }
+.m .flow > div { border: 1px solid var(--color-border); border-radius: 10px; padding: 10px 12px; background: var(--color-bg); font-size: 14px; }
+.m .flow b { display: block; color: var(--color-fg); font-size: 14px; margin-bottom: 2px; }
+.m .flow .n { font-size: 12px; color: var(--color-fg-muted); }
+.m .flow .bg { border-style: dashed; }
+.m .calc { background: var(--cds-chart-grid); border-radius: 10px; padding: 12px 14px; font-size: 14px; }
+.m .calc ol { margin: 6px 0 0; padding-left: 20px; }
+.m .calc li { color: var(--color-fg); margin: 4px 0; }
+.m .n2 { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.m .tag { display: inline-block; font-size: 11px; border: 1px solid currentColor; border-radius: 999px; padding: 0 6px; line-height: 16px; white-space: nowrap; }
+.m .t-norma { color: var(--color-accent); } .m .t-dado { color: var(--color-fg); } .m .t-calc { color: var(--color-calc); } .m .t-jul { color: var(--color-warn); } .m .t-proj { color: var(--color-sim); } .m .t-reg { color: var(--color-ok); }
+.m #tp-chart svg { width: 100%; height: auto; display: block; }
+.m details { border-top: 1px solid var(--color-border); padding: 8px 0; }
+.m summary { cursor: pointer; font-weight: 500; color: var(--color-fg); }
+@media (max-width: 640px) { .m .flow { grid-template-columns: 1fr 1fr; } }
 </style></head><body>
-<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html">Agora</a><a href="dominancia.html">Fiscal</a><a href="plano.html">Plano fiscal</a><a href="metodo.html" aria-current="page">Método</a><a href="simples.html" class="tab-simple">Versão simples</a></nav></div></header>
+<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html">Agora</a><a href="dominancia.html">Fiscal</a><a href="plano.html">Plano fiscal</a><a href="metodo.html" aria-current="page">Método</a><a href="simples.html" class="tab-simple" aria-label="Versão simples"><span class="vs-long">Versão simples</span><span class="vs-short">Simples</span></a></nav></div></header>
 <main class="m">
-<h1>Como cada página funciona</h1>
-<p class="lead">O site acompanha o que o mercado de juros, o câmbio e as contas públicas dizem depois da reeleição de Lula, em 3 escalas de tempo. Esta página explica o método de cada uma, de onde vêm os números e o que eles não conseguem dizer.</p>
-<nav class="toc" aria-label="Nesta página"><a href="#m-visao">Visão geral</a><a href="#m-origem">De onde vem cada número</a><a href="#m-intraday">Intraday</a><a href="#m-dominancia">Dominância fiscal</a><a href="#m-relatorio">Relatório diário</a><a href="#m-dados">Dados e atualização</a><a href="#m-limites">Limites</a><a href="#m-referencias">Referências</a><a href="#conceitos">Conceitos</a></nav>
+<h1>Como o site chega a cada número</h1>
+<p class="lead">O site mede duas coisas: o estado das contas públicas e quanto desse risco o mercado de juros já cobra. Esta página diz de onde vem cada número, como a conta é feita e o que ela não consegue dizer.</p>
+<nav class="toc" aria-label="Nesta página"><a href="#m-resumo">Em 4 passos</a><a href="#m-cenarios">Cenários e marcas</a><a href="#m-conta">A conta de hoje</a><a href="#m-premio">Prêmio de prazo</a><a href="#m-origem">Origem dos números</a><a href="#m-paginas">Cada página</a><a href="#m-dados">Dados</a><a href="#m-limites">Limites</a><a href="#m-referencias">Referências</a><a href="#conceitos">Conceitos</a></nav>
 
-<h2 id="m-visao">Visão geral: fatos, preços e fundo</h2>
-<p>A pergunta central é qual de 3 cenários o mercado está precificando. Eles são os mesmos nas 3 páginas:</p>
-<div class="tw"><table><thead><tr><th>Cenário</th><th>Ideia</th><th>DI jan/29 sobe, desde 23/10</th></tr></thead><tbody>
-<tr><td><b>Âncora retomada</b></td><td>A equipe econômica ganha mandato fiscal e o Orçamento 2027 traz a meta de 0,50% do PIB (centro da banda).</td><td>cerca de +50 bp</td></tr>
-<tr><td><b>Deriva fiscal</b></td><td>O arcabouço é afrouxado e o Copom acomoda.</td><td>cerca de +180 bp</td></tr>
-<tr><td><b>Estresse e espiral</b></td><td>A contestação do resultado se arrasta, o rating cai, e juro e dólar sobem juntos.</td><td>cerca de +320 bp</td></tr></tbody></table></div>
-<p>Cada página cuida de uma coisa, para nenhum movimento contar duas vezes:</p>
-<ul>
-<li><b>Fatos</b> entram no <a href="relatorio.html">Relatório diário</a>, uma vez por dia. Eles fixam o peso de partida de cada cenário.</li>
-<li><b>Preços</b> entram no <a href="index.html">painel Intraday</a>, ao longo do dia. Eles movem o peso de agora a partir da partida.</li>
-<li><b>O fundo</b>, que muda devagar (dívida, rolagem, inflação implícita, orçamento), está no <a href="dominancia.html">Monitor de dominância fiscal</a>. Ele não muda os pesos.</li>
-</ul>
-<p class="warn">Os pesos são julgamento do autor, não previsão de modelo. Os fatores e as marcas do DI são escolhas, não estimativas estatísticas.</p>
+<h2 id="m-resumo">Em 4 passos</h2>
+<div class="flow" role="list">
+<div role="listitem"><span class="n">1 · Relatório</span><b>Fatos fixam a partida</b>Cada fato com fonte multiplica o peso dos cenários por um degrau fixo. <span class="tag t-jul">Julgamento</span></div>
+<div role="listitem"><span class="n">2 · Agora</span><b>O DI move o peso</b>A alta do DI jan/29 desde 23/10 é comparada com a marca de cada cenário. <span class="tag t-calc">Cálculo</span></div>
+<div role="listitem"><span class="n">3 · Agora</span><b>O DI sozinho</b>A mesma conta sem a partida: os 3 cenários começam iguais. É a leitura só de mercado. <span class="tag t-calc">Cálculo</span></div>
+<div role="listitem" class="bg"><span class="n">4 · Fiscal e Plano</span><b>O fundo</b>Dívida, rolagem, inflação implícita e orçamento. Não mudam nenhum peso. <span class="tag t-dado">Dado</span> <span class="tag t-calc">Cálculo</span></div>
+</div>
+<p>Cada informação entra uma vez só. Fatos mudam a partida; preços mudam o agora; o fundo fiscal mostra a vulnerabilidade. O peso de agora recomeça da partida todo dia, porque a alta do DI desde 23/10 já carrega tudo o que aconteceu até hoje.</p>
+<p class="warn">Etiquetas usadas no site: <span class="tag t-norma">Norma</span> lei, meta ou plano oficial; <span class="tag t-dado">Dado</span> número publicado pela fonte; <span class="tag t-calc">Cálculo</span> conta direta com dados, sem hipótese; <span class="tag t-reg">Regressão</span> estimado em dados históricos; <span class="tag t-jul">Julgamento</span> premissa explícita do autor; <span class="tag t-proj">Projeção</span> olha adiante, com premissas.</p>
+
+<h2 id="m-cenarios">Os 3 cenários e as marcas do DI</h2>
+<p>Cada cenário tem um caminho para a Selic, reunião a reunião do Copom até jan/29 <span class="tag t-jul">Julgamento</span>. A marca é a taxa que o DI jan/29 teria nesse cenário, comparada com o ajuste de 23/10 (12,640%) <span class="tag t-calc">Cálculo</span>:</p>
+<p><code>marca = média do CDI no caminho até 02/01/2029 + prêmio de prazo − 12,640%</code></p>
+<div class="tw"><table><thead><tr><th>Cenário</th><th>Ideia</th><th>Selic fim de 2027</th><th class="n2">Média do caminho</th><th class="n2">Prêmio</th><th class="n2">Marca</th></tr></thead><tbody id="tb-marcas">
+<tr><td><b>Âncora retomada</b></td><td>Equipe econômica com mandato fiscal; Orçamento 2027 com o centro da meta (0,50% do PIB). Cortes voltam em 2027.</td><td>12,00%</td><td class="n2">12,24%</td><td class="n2">68 bp, calma</td><td class="n2"><b>+28 bp</b></td></tr>
+<tr><td><b>Deriva fiscal</b></td><td>O arcabouço é afrouxado; o Copom para de cortar e corta pouco depois.</td><td>13,00%</td><td class="n2">13,19%</td><td class="n2">68 bp, calma</td><td class="n2"><b>+123 bp</b></td></tr>
+<tr><td><b>Estresse e espiral</b></td><td>Contestação do resultado, rating cai; o BC sobe a Selic no início de 2027 e o dólar sobe.</td><td>14,00%</td><td class="n2">14,24%</td><td class="n2">135 bp, crise</td><td class="n2"><b>+295 bp</b></td></tr>
+</tbody></table></div>
+<p>O caminho de cada cenário está em <code>research/termpremium.py</code>, com os valores reunião a reunião. A média do caminho usa a Selic menos 0,10 (o CDI) e composição diária. Até 11/11/2026 as marcas eram +50, +180 e +320 bp, escolhidas pelo autor sem conta; a nova regra liga cada marca a um caminho de Selic e a um prêmio medido.</p>
+
+<h2 id="m-conta">A conta, com os números de 10/11/2026</h2>
+<div class="calc"><ol>
+<li>DI jan/29 em 10/11: 14,621% <span class="tag t-dado">Dado</span>. Alta desde 23/10: <b>+198 bp</b> <span class="tag t-calc">Cálculo</span>.</li>
+<li>Para cada cenário, a verossimilhança é <code>exp(−(198 − marca)² ÷ 2σ²)</code>, com σ = 100 bp <span class="tag t-jul">Julgamento</span>. Com as marcas +28, +123 e +295, ela dá 0,24, 0,75 e 0,63.</li>
+<li><b>Só o DI</b>: as três verossimilhanças somando 100% dão <b>15 · 47 · 39</b> (Âncora · Deriva · Estresse).</li>
+<li><b>Com a partida dos fatos</b> (48 · 33 · 19, de 08/11): partida × verossimilhança, somando 100%, dá <b>24 · 52 · 24</b>.</li>
+</ol></div>
+<p>σ diz quão perto da marca o DI precisa estar para favorecer um cenário. O script <code>research/sigma.py</code> acha 32 choques do DI de 2 anos desde 2015 (movimento diário acima de 2 desvios padrão, curva PRE de 720 dias, SILO). Nas 20 a 40 sessões depois de cada um, o desvio padrão do movimento fica entre 78 e 123 bp, com mediana de 101 bp. σ = 100 bp é um valor redondo dentro dessa faixa. Com a partida, σ = 80 bp daria 14 · 61 · 25 e σ = 120 bp daria 30 · 47 · 23. A conta publicada em outubro (22 choques, 62 a 113 bp) não foi reproduzida pelo script.</p>
+
+<h2 id="m-premio">Quanto o mercado cobra a mais: o prêmio de prazo</h2>
+<p>O DI de 2 anos embute o caminho esperado da Selic mais um prêmio pelo risco de carregar 2 anos. O site separa os dois <span class="tag t-calc">Cálculo</span>: o caminho esperado vem da mediana do Focus para a Selic de fim de cada ano, ligada por retas a partir da Selic do dia; o prêmio é o DI menos a média desse caminho. Série desde 2019, quando o Focus começa no SILO.</p>
+<div id="tp-chart" aria-label="Prêmio de prazo do DI de 2 anos desde 2019"></div>
+<div class="tw"><table><thead><tr><th>Prêmio de prazo do DI de 2 anos</th><th class="n2">bp</th></tr></thead><tbody>
+<tr><td>Mediana em dias calmos (longe das crises)</td><td class="n2" id="tp-calm">68</td></tr>
+<tr><td>Faixa de 80% em dias calmos</td><td class="n2" id="tp-band">4 a 173</td></tr>
+<tr><td>Mediana nos 60 pregões depois do início de cada crise</td><td class="n2" id="tp-stress">135</td></tr>
+<tr><td>DI jan/29 contra o caminho do Focus, último ajuste</td><td class="n2" id="tp-now"><b>220</b></td></tr>
+</tbody></table></div>
+<p id="tp-read">Em 10/11/2026 o prêmio do DI jan/29 (220 bp) estava acima da mediana das crises desde 2019 (135 bp) e acima de 90% dos dias calmos. Parte desse prêmio pode ser uma Selic esperada mais alta que a mediana do Focus; a conta não separa as duas coisas.</p>
 
 <h2 id="m-origem">De onde vem cada número</h2>
-<p>O que importa em cada parâmetro é a origem, mais do que o valor. Cada linha diz de onde o número vem: <b>norma</b> (lei, meta ou plano oficial), <b>dado</b> (observação direta), <b>cálculo</b> (conta direta com dados, sem hipótese: juro implícito, r − g, inflação implícita), <b>regressão</b> (estimado em dados históricos), <b>literatura</b> (o método vem de um trabalho publicado), <b>julgamento</b> (premissa ou metodologia de referência, explícita e testável) ou <b>projeção</b> (olha adiante, como a dívida em 2030). Cálculo e projeção são diferentes: o cálculo repete o que os dados dizem hoje; a projeção depende de premissas.</p>
-<div class="tw"><table><thead><tr><th>Parâmetro</th><th>Valor</th><th>Origem</th><th>Como foi definido</th></tr></thead><tbody>
-<tr><td>Incerteza σ de cada cenário (Bayes)</td><td>100 bp</td><td>Julgamento, com referência em Dado e Literatura</td><td>Agora = partida × verossimilhança normal do nível do DI jan/29 desde 23/10, centrada na marca de cada cenário. σ é uma escolha apoiada na dispersão histórica do DI de 2 anos entre episódios; essa medida não comprova a dispersão dentro de um mesmo cenário: nas 20 a 40 sessões depois de 22 choques desde 2015 (dias com movimento acima de 2 desvios, curva PRE de 720 dias, SILO), o desvio padrão do movimento é de 62 a 113 bp. Com a partida de 45 · 32 · 23 e o DI em +216 bp: σ = 80 dá 12 · 66 · 22, σ = 100 dá 21 · 55 · 24, σ = 120 dá 27 · 48 · 25. Regras anteriores: Bayes com σ = 35 bp (saturava) e, de 27 a 29/10, agora = partida + 0,3 × (DI − partida) com limite de 15 pontos, cujo 0,3 não tinha origem.</td></tr>
-<tr><td>Marcas do DI jan/29 por cenário</td><td>+50, +180 e +320 bp desde 23/10</td><td>Julgamento</td><td>Escolha do autor, não estimativa estatística. As marcas são centros de verossimilhanças normais; o painel normaliza essas verossimilhanças para comparar os cenários. São as hipóteses que o DI testa, não previsões.</td></tr>
-<tr><td>Degraus dos fatos</td><td>×1,05, ×1,15, ×1,30 (contra: ×0,95, ×0,87, ×0,77)</td><td>Julgamento, ancorado em literatura</td><td>Fato fraco, moderado e forte, definidos por critério (fonte, ato formal, efeito direto). Fazem o papel de razões de verossimilhança. A literatura chama de evidência positiva uma razão acima de 3 e de forte uma acima de 20 (Kass e Raftery, 1995); os degraus daqui ficam bem abaixo disso, ou seja, um fato isolado move pouco.</td></tr>
-<tr><td>Banda de 4,5% para o IPCA</td><td>4,5%</td><td>Norma</td><td>A meta de inflação é 3% com tolerância de 1,5 ponto para cada lado, definida pelo Conselho Monetário Nacional. O teto da banda é 4,5%. O gatilho acende quando o Focus para o IPCA de 2027 passa desse teto.</td></tr>
-<tr><td>Meta primária de 2027</td><td>0,50% do PIB; 0,25% no piso da banda</td><td>Norma</td><td>Meta do arcabouço fiscal (Lei Complementar 200/2023) e da lei de diretrizes orçamentárias.</td></tr>
-<tr><td>Faixas da dívida: LFT 53%, vencendo em 12 meses 22%, prazo médio 3,8 anos</td><td>53%, 22%, 3,8</td><td>Norma (plano oficial)</td><td>Limites do Plano Anual de Financiamento de 2026, do Tesouro. É um plano, não uma lei.</td></tr>
-<tr><td>Fração que resta do choque do dólar</td><td>0,75</td><td>Regressão, com método da literatura</td><td>Projeções locais (Jordà, 2005) sobre a PTAX de 2008 a out/2026, 4.664 dias: a parte do choque que ainda está no dólar depois de um tempo.</td></tr>
-<tr><td>Parte global do dólar e do DI</td><td>0,65 × EM; 4,2 bp por 1% de EM; 0,34 por bp do Treasury</td><td>Regressão</td><td>Variações diárias de 2019 a set/2026, 1.929 dias, erros de Newey e West. EM é a média do peso mexicano e do rand.</td></tr>
-<tr><td>Controles globais EEM e DXY</td><td>EWZ = 1,07 × EEM; dólar = 0,43 × DXY</td><td>Regressão</td><td>Variações diárias de 2019 a set/2026. O EEM tem correlação de 0,67 com o EWZ. O DXY explica 4% do dólar, então só confere.</td></tr>
-<tr><td>Régua do Ibovespa contra o dólar</td><td>−0,11% − 0,90 × dólar</td><td>Regressão</td><td>172 dias de estresse entre 2018 e set/2026 (dólar ou DI de 2 anos além de 2 desvios padrão). Erro padrão 0,105, erros HAC.</td></tr>
-<tr><td>Sensibilidade de cada ação ao dólar</td><td>de −1,35 (Banco do Brasil) a +0,19 (Suzano)</td><td>Regressão</td><td>Uma regressão por ação nos dias de estresse. Itaú, Petrobras e Vale vêm da estimativa original; Bradesco, Sabesp, Ambev, Suzano e Banco do Brasil foram estimadas em 29 e 30/10/2026 com o ajuste do dólar futuro (WDO) do SILO, 106 dias.</td></tr>
-<tr><td>Reação do DI ao dólar</td><td>7,1 bp por 1% de alta do dólar</td><td>Regressão</td><td>Dias de estresse do DI de 2 anos.</td></tr>
-<tr><td>Limites dos 6 sinais de dominância</td><td>correlação de 20 dias acima de 0,4; 25 bp; 10 bp; 60 bp</td><td>Julgamento</td><td>Cortes escolhidos pelo autor. Em qualquer choque de risco, juro e dólar sobem juntos por alguns dias, então o sinal pesa mais quando dura semanas. A abordagem de sinais com limites (Kaminsky, Lizondo e Reinhart, 1998) é a referência para acender alertas por cortes.</td></tr>
-<tr><td>Alerta de inflação implícita (+50 bp em 4 semanas)</td><td>+50 bp</td><td>Dado</td><td>Medido em 11 crises desde 2010: acendeu antes em 7 ou 8, com cerca de 4% de falso alarme.</td></tr>
-<tr><td>Leque da dívida</td><td>2.000 trajetórias até 2030</td><td>Projeção</td><td>Choques sorteados dos meses desde 2015, sem mudança de política. Segue a lógica das análises de sustentabilidade da dívida do FMI.</td></tr>
+<div class="tw"><table><thead><tr><th>Número</th><th>Valor</th><th>Origem</th><th>Como foi definido</th></tr></thead><tbody>
+<tr><td>Marcas do DI jan/29</td><td>+28, +123, +295 bp</td><td><span class="tag t-calc">Cálculo</span> sobre <span class="tag t-jul">Julgamento</span></td><td>Caminho da Selic de cada cenário (julgamento) mais o prêmio medido. Script: <code>research/termpremium.py</code>.</td></tr>
+<tr><td>Prêmio de prazo</td><td>68 bp calma, 135 bp crise</td><td><span class="tag t-calc">Cálculo</span></td><td>PRE 720 dias menos o caminho do Focus, desde 2019 (SILO). Mesmo script.</td></tr>
+<tr><td>σ</td><td>100 bp</td><td><span class="tag t-jul">Julgamento</span></td><td>Dentro da faixa medida de 78 a 123 bp. Script: <code>research/sigma.py</code>.</td></tr>
+<tr><td>Degraus dos fatos</td><td>×1,05, ×1,15, ×1,30 (contra: ×0,95, ×0,87, ×0,77)</td><td><span class="tag t-jul">Julgamento</span></td><td>Fato fraco, moderado e forte, definidos por critério (fonte, ato formal, efeito direto). Kass e Raftery (1995) chamam de forte uma razão acima de 20; os degraus daqui são bem menores, então um fato sozinho move pouco.</td></tr>
+<tr><td>Gatilhos de mercado do Fiscal</td><td>+50 bp em 4 semanas</td><td><span class="tag t-calc">Cálculo</span></td><td>Testados em 11 crises desde 2010: o juro real de 5 anos avisou antes em 8, a inflação implícita em 6 (2 anos) e 7 (5 anos), com 4% a 5% de alarme falso. Script: <code>research/calibration.py</code>.</td></tr>
+<tr><td>Teto da meta de inflação</td><td>4,5%</td><td><span class="tag t-norma">Norma</span></td><td>Meta de 3% com tolerância de 1,5 ponto (CMN).</td></tr>
+<tr><td>Meta primária de 2027</td><td>0,50% do PIB; piso 0,25%</td><td><span class="tag t-norma">Norma</span></td><td>Lei Complementar 200/2023 e lei de diretrizes orçamentárias.</td></tr>
+<tr><td>Faixas da dívida</td><td>LFT 53%; vence em 12 meses 22%; prazo médio 3,8 anos</td><td><span class="tag t-norma">Norma</span></td><td>Plano Anual de Financiamento 2026 do Tesouro (um plano, não uma lei).</td></tr>
+<tr><td>Fração que resta do choque do dólar</td><td>0,75</td><td><span class="tag t-reg">Regressão</span></td><td>Projeções locais (Jordà, 2005) com a PTAX de 2008 a out/2026, 4.664 dias.</td></tr>
+<tr><td>Parte global do dólar e do DI</td><td>0,65 × EM; 4,2 bp por 1% de EM; 0,34 por bp do Treasury</td><td><span class="tag t-reg">Regressão</span></td><td>Variações diárias de 2019 a set/2026, 1.929 dias, erros de Newey e West. EM = média do peso mexicano e do rand.</td></tr>
+<tr><td>Ibovespa contra o dólar</td><td>−0,11% − 0,90 × dólar</td><td><span class="tag t-reg">Regressão</span></td><td>172 dias de estresse de 2018 a set/2026, erros HAC. Uma regressão por ação nos mesmos dias.</td></tr>
+<tr><td>Reação do DI ao dólar</td><td>7,1 bp por 1% de alta</td><td><span class="tag t-reg">Regressão</span></td><td>Dias de estresse do DI de 2 anos.</td></tr>
+<tr><td>Limites dos 6 sinais do Agora</td><td>correlação 0,4; 25 bp; 10 bp; 60 bp</td><td><span class="tag t-jul">Julgamento</span></td><td>Cortes do autor, na linha dos sinais com limites de Kaminsky, Lizondo e Reinhart (1998).</td></tr>
+<tr><td>Leque da dívida</td><td>2.000 trajetórias até 2030</td><td><span class="tag t-proj">Projeção</span></td><td>Choques conjuntos de r, g e primário sorteados dos meses desde 2015, sem mudança de política (lógica das análises de dívida do FMI).</td></tr>
 </tbody></table></div>
-<h3>Por que os pesos recomeçam todo dia</h3>
-<p>O peso de agora é recalculado a partir da partida, e não acumulado sobre o peso de ontem. A observação da regra de Bayes é o nível do DI jan/29 desde 23/10, que já inclui tudo o que aconteceu até hoje. Encadear o peso de ontem com o nível de hoje contaria o mesmo movimento duas vezes. Um repricing que persiste continua no nível e, por isso, continua absorvido. A partida só muda quando entra um fato novo.</p>
-<h3>Quem muda o quê</h3>
-<p>O peso de partida muda só com fatos, no relatório diário. O peso de agora muda só com preços, no painel Intraday. O Monitor de dominância fiscal mede o fundo e não muda peso nenhum.</p>
+<p>As regressões do dólar, da bolsa e do DI ainda não têm script no repositório; os números vêm da estimativa original. A pasta <code>research/</code> lê o SILO e grava em <code>data/research/</code> os arquivos que as páginas usam.</p>
 
-<h2 id="m-intraday">Intraday: o painel do choque pós-eleição</h2>
-<h3>O que mostra</h3>
-<p>Pesos de agora dos 3 cenários, os 6 sinais de dominância fiscal, o DI, o dólar, a bolsa e o histórico do dia. Atualiza a cada 2 minutos enquanto a página está aberta.</p>
-<h3>Peso de agora</h3>
-<p><code>agora_i ∝ partida_i × exp(−(DI − marca_i)² ÷ 2σ²)</code>, com σ = 100 bp e a soma voltando a 100%. DI é a alta do DI jan/29 desde 23/10 (ajuste de 12,640%); as marcas são +50, +180 e +320 bp. A coluna "O DI precifica" é a mesma verossimilhança com prior igual. Acima de +320 bp o Estresse domina e o painel avisa que o mercado está além do pior cenário.</p>
-<h3>Dólar</h3>
-<p>O choque é a cotação de agora contra a PTAX do último dia útil. Antes das 9h o câmbio oficial não negocia. O painel compara o USDT/BRL da Binance (menos um prêmio de 0,4%) com o USD/BRL do Yahoo e descarta o Yahoo se ele destoa mais de 1,5%. Dólar por cenário usa projeções locais com a PTAX de 2008 a 2026: o choque local do real quase não volta sozinho (fração que resta de 0,75). Em 12 meses, os 3 cenários se movem juntos para que a média ponderada seja igual ao dólar futuro, que embute cerca de 5,5% ao ano de diferencial de juros.</p>
-<h3>DI e prêmio</h3>
-<p>Nos dias de estresse, o DI de 2 anos subiu 7,1 bp para cada 1% de alta do dólar. A parte da alta do DI que o câmbio não explica (excesso, com faixa de cerca de ±60 bp) mistura prêmio fiscal, caminho da Selic e inflação esperada. O prêmio do DI jan/29 sobre a Selic do Focus compõe o CDI dia a dia pelo calendário do Copom e é só informação: não move os pesos.</p>
-<h3>Os 6 sinais de dominância</h3>
-<ol>
-<li>Juro e dólar sobem juntos: correlação de 20 dias dos movimentos diários acima de 0,4.</li>
-<li>Juro real de 2 anos sobe 25 bp ou mais desde 23/10.</li>
-<li>Inflação implícita de 2 anos sobe 25 bp ou mais desde 23/10.</li>
-<li>CDS de 5 anos sobe 10 bp ou mais no dia.</li>
-<li>Inclinação da curva (DI jan/33 menos jan/27) sobe 10 bp ou mais no dia.</li>
-<li>DI sobe mais de 60 bp além do que o câmbio explica.</li>
-</ol>
-<p>Os limites são julgamento. Em qualquer choque de risco, juro e dólar sobem juntos por alguns dias, então o sinal pesa mais quando dura semanas.</p>
-<h3>Bolsa</h3>
-<p>O EWZ é o Ibovespa em dólar. Antes das 9h o EWZ negocia, mas o dólar à vista é fino, então o painel dá 2 leituras: uma aceita o dólar de agora e divide a queda do Ibovespa em partes; a outra aceita o EWZ e calcula o dólar coerente com ele. Régua: nos 172 dias de estresse entre 2018 e 2026, <code>Ibovespa = −0,11% − 0,90 × dólar</code>. Cada ação tem a sua regressão (ADRs de Itaú, Bradesco, Petrobras, Sabesp, Ambev, Vale e Suzano, mais o Banco do Brasil pelo preço da B3, escolhidas para cobrir juro e crédito, intervenção, regulação, consumo e exportação), e o desvio mostra quanto cai além do normal. Em 7 eventos de 2018 a 2026, o modelo fora da amostra errou 1,4 p.p. em média, com todos dentro da faixa de 90%.</p>
-<h3>Precedentes</h3>
-<p>O dia de hoje é comparado com 8 choques passados (Dilma 2014, Joesley 2017, eleições de 2018 e 2022, fala de Lula sobre gasto, pacote fiscal de 2024 e o 1º turno de 2026) em 7 variáveis. 100% quer dizer igual a hoje.</p>
+<h2 id="m-paginas">O que cada página faz</h2>
+<details open><summary>Agora (preços durante o dia)</summary>
+<p>Mostra a leitura do DI jan/29, os 6 sinais de dominância, o dólar, a bolsa e o histórico do dia. Lê os preços a cada 2 minutos enquanto a página está aberta.</p>
+<ul>
+<li><b>Dólar:</b> choque = cotação de agora contra a PTAX do último dia útil. Antes das 9h, o painel compara o USDT/BRL da Binance (menos 0,4%) com o Yahoo e descarta o Yahoo se ele destoa mais de 1,5%. Em 12 meses, os 3 cenários se movem juntos para que a média ponderada seja igual ao dólar futuro.</li>
+<li><b>DI e câmbio:</b> nos dias de estresse, o DI de 2 anos subiu 7,1 bp para cada 1% de alta do dólar. A parte que o câmbio não explica (faixa de cerca de ±60 bp) mistura prêmio fiscal, caminho da Selic e inflação esperada.</li>
+<li><b>6 sinais:</b> juro e dólar sobem juntos (correlação de 20 dias acima de 0,4); juro real de 2 anos +25 bp desde 23/10; inflação implícita de 2 anos +25 bp desde 23/10; CDS de 5 anos +10 bp no dia; inclinação jan/33 menos jan/27 +10 bp no dia; DI 60 bp além do que o câmbio explica.</li>
+<li><b>Bolsa:</b> o EWZ é o Ibovespa em dólar. A régua de estresse divide a queda do Ibovespa em parte do câmbio e resto. Em 7 eventos de 2018 a 2026, o erro médio fora da amostra foi 1,4 p.p.</li>
+<li><b>Precedentes:</b> o dia é comparado com 8 choques passados em 7 variáveis.</li>
+</ul></details>
+<details><summary>Relatório do dia (fatos e curva)</summary>
+<ul>
+<li><b>Partida:</b> só fatos, sem preço. Degraus fraco ×1,05 (notícia sem confirmação ou sem ato formal), moderado ×1,15 (ato oficial ou declaração formal) e forte ×1,30 (decisão com efeito direto: tribunal, orçamento votado, ministro nomeado, ação de rating). Um fato novo num canal que já entrou conta no máximo como fraco.</li>
+<li><b>Curva DI:</b> ajustes do DI1 da B3 pelo SILO, contra a sessão anterior e contra 23/10.</li>
+<li><b>Copom contra o Focus:</b> cada contrato de DI é o CDI composto até o vencimento; com a Selic fixa entre reuniões, cada contrato novo dá a Selic de uma reunião.</li>
+</ul></details>
+<details><summary>Fiscal (o fundo)</summary>
+<p>Há dominância fiscal quando subir o juro deixa de segurar o real e a inflação, porque o mercado duvida da dívida (Blanchard, 2004). O painel tem 10 regras: 7 alarmes e 3 condições de fundo. As condições (dívida esperada pelo Focus subindo, r − g acima de zero, lacuna do primário acima de 2 p.p.) ficam acesas na maior parte do tempo, então o resumo conta só os alarmes.</p>
+<ul>
+<li><b>Conta da dívida:</b> r = juros nominais em 12 meses ÷ dívida bruta média de 12 meses; g = PIB nominal de 12 meses contra 12 meses antes; primário que estabiliza = dívida × (r − g) ÷ (1 + g). Os juros do BCB seguem o conceito da dívida líquida, então r é uma aproximação.</li>
+<li><b>Rolagem:</b> vencimentos em 12 meses, prazo médio, leilões e fatia em LFT, contra as faixas do PAF 2026.</li>
+<li><b>Âncora de inflação:</b> inflação implícita = (1 + PRE) ÷ (1 + DPL) − 1, nos vértices de 720 e 1.800 dias.</li>
+<li><b>Orçamento 2027:</b> PLOA e PLDO por partes e o custo de juros de cada cenário (+1 p.p. de Selic = R$ 59,3 bi em 12 meses, medida do BCB).</li>
+</ul></details>
+<details><summary>Plano fiscal (PLP 299/2026)</summary>
+<p>Simula o pacote apresentado em 11/11/2026 na hipótese de aprovação e execução integral. Usa a mesma conta da dívida do Fiscal, com o primário de partida do setor público consolidado e passos de 1 ano. A faixa do pacote é a do governo (R$ 50 a 60 bi, Ministro do Planejamento) e a da equipe econômica informada ao relator (R$ 43 a 54 bi). O pacote não tem peso nos cenários. A simulação não estima efeito sobre câmbio, inflação ou crescimento.</p>
+</details>
 
-<h2 id="m-dominancia">Monitor de dominância fiscal</h2>
-<p>Há dominância fiscal quando subir o juro deixa de proteger o real e de segurar a inflação, porque o mercado passa a duvidar da dívida. A ideia vem de um estudo sobre o Brasil (Blanchard, 2004). O monitor mede o fundo em 5 blocos, com 10 regras: 7 alarmes e 3 condições de fundo. As condições (trajetória da dívida no Focus, r − g e lacuna do primário) ficam acesas na maior parte do tempo, então o resumo da página conta só os alarmes:</p>
-<ol>
-<li><b>Conta da dívida.</b> Juro implícito r = juros nominais em 12 meses ÷ dívida bruta média de 12 meses. Crescimento nominal g = PIB de 12 meses contra 12 meses antes. Primário que estabiliza a dívida = dívida × (r − g) ÷ (1 + g). Condições de fundo: r − g acima de zero, lacuna do primário acima de 2 p.p. do PIB e a dívida esperada pelo Focus subindo em todos os anos. Leque de 2.000 trajetórias até 2030, com choques sorteados dos meses desde 2015, sem mudança de política.</li>
-<li><b>Rolagem.</b> Antes de a dívida mudar, a crise aparece na rolagem: o Tesouro cancela leilões, encurta prazos ou só vende LFT. Faixas do Plano Anual de Financiamento 2026: vincendo em 12 meses até 22%, prazo médio acima de 3,8 anos.</li>
-<li><b>Âncora de inflação.</b> Inflação implícita = (1 + PRE) ÷ (1 + DPL) − 1, nos vértices de 720 e 1.800 dias das curvas da B3. Alertas: alta de 50 bp em 4 semanas na inflação implícita e no juro real, Focus IPCA 2027 acima de 4,5% (teto da meta) e LFT acima de 53% da dívida (teto do PAF).</li>
-<li><b>Cenários possíveis.</b> Histórico dos pesos. Esta página só copia os pesos do arquivo de cenários, não calcula nem muda nada.</li>
-<li><b>Orçamento 2027.</b> O PLOA e o PLDO por partes, a conta para estabilizar a dívida (cerca de R$ 416 bi, contra R$ 266,8 bi de discricionárias), o custo de juros extra de cada cenário (+1 p.p. de Selic = R$ 59,3 bi em 12 meses, na medida do BCB) e a contabilidade criativa da meta.</li>
-</ol>
-<p><b>Calibração.</b> Em 11 crises desde 2010 (DI de 2 anos +200 bp ou dólar +15% em 60 pregões), o alerta de inflação implícita (+50 bp em 4 semanas) acendeu antes em 7 ou 8, com cerca de 4% de falso alarme. O juro real de 5 anos acima de 5,00% (neutro do BCB) ficou aceso em 74% dos dias calmos, então o gatilho é a alta de 50 bp em 4 semanas, que acertou 9 de 11. r − g e a lacuna são condições de fundo, não alarme de curto prazo.</p>
-<p><b>Defasagem.</b> A B3 publica as curvas depois do fechamento e o SILO as carrega por volta das 03:00 do dia seguinte (06:00 UTC), então o pregão de hoje só entra amanhã. O Focus é semanal.</p>
-
-<h2 id="m-relatorio">Relatório diário de juros</h2>
-<ol>
-<li><b>Pesos de partida.</b> Só fatos, sem preços. Cada fato multiplica o peso de cada cenário e os pesos voltam a somar 100%. A escala tem 3 degraus: <b>fraco</b> ×1,05 (notícia não confirmada, fonte sem nome ou intenção sem ato formal), <b>moderado</b> ×1,15 (ato oficial ou declaração formal confirmada) e <b>forte</b> ×1,30 (decisão com efeito direto: tribunal, orçamento enviado ou votado, ministro nomeado, ação de rating). Contra um cenário, vale o inverso (0,95, 0,87 e 0,77). Um fato novo num canal que já entrou conta no máximo como fraco, para não contar duas vezes. A base de 27/10 foi 45 · 35 · 20 antes de qualquer fato.</li>
-<li><b>Fechamento da curva DI.</b> Ajustes do DI1 da B3, pelo SILO, contra a sessão anterior e contra 23/10, o último fechamento antes do 2º turno. Inclui a inclinação entre vértices.</li>
-<li><b>Copom contra o Focus.</b> Bootstrap da curva: cada contrato é o CDI composto até o vencimento, em dias úteis pelo calendário nacional. Com a Selic fixa entre reuniões, cada contrato novo dá a Selic de uma reunião, que o relatório compara com a mediana do Focus. Reuniões depois da próxima são ruidosas, porque os contratos curtos negociam pouco.</li>
-<li><b>Fatos e agenda.</b> Cada fato traz fonte, o degrau e o motivo. A agenda diz o que cada evento precisa mostrar para favorecer cada cenário.</li>
-</ol>
-<p>A partida depende de fatos com fontes e julgamento. A atualização automática está em revisão; a data de cada arquivo indica sua última atualização. Os degraus são julgamento; a escala só deixa o julgamento explícito.</p>
-
-<p><b>Limites da inferência.</b> A partida é julgamento e o DI também reage aos fatos: separar as entradas não elimina a possibilidade de contar a mesma informação duas vezes. A dispersão histórica entre episódios é uma referência para σ, não uma medida comprovada da dispersão dentro de cada cenário. As marcas são fixas e o DI bruto também responde a fatores globais e à passagem do tempo.</p>
 <h2 id="m-dados">Dados e atualização</h2>
 <div class="tw"><table><thead><tr><th>Dado</th><th>Fonte</th><th>Como chega</th></tr></thead><tbody>
-<tr><td>Curvas PRE e DPL, DI1, Focus, séries fiscais, PTAX, fluxo estrangeiro</td><td>SILO (CVM, BACEN, B3)</td><td>O navegador lê a API pública do SILO a cada visita</td></tr>
-<tr><td>DI, DOL e DAP intradiários (atraso de cerca de 15 min)</td><td>B3</td><td>Direto no navegador, a cada 2 a 8 min</td></tr>
+<tr><td>Curvas PRE e DPL, DI1, Focus, séries fiscais, PTAX, fluxo estrangeiro</td><td><b>SILO</b> (CVM, BACEN, B3)</td><td>O navegador lê a API pública do SILO a cada visita</td></tr>
+<tr><td>DI, DOL e DAP intradiários (cerca de 15 min de atraso)</td><td>B3</td><td>Direto no navegador, a cada 2 a 8 min</td></tr>
 <tr><td>USDT/BRL</td><td>Binance</td><td>Direto no navegador, a cada 2 min</td></tr>
-<tr><td>PTAX e Focus</td><td>BCB (Olinda)</td><td>Direto no navegador</td></tr>
-<tr><td>EWZ, dólar, Ibovespa, ADRs; Selic; CDS 5 anos</td><td>Yahoo Finance; BCB SGS; OBM</td><td>Por uma função do próprio site, porque essas fontes não aceitam leitura direta</td></tr>
-<tr><td>Pesos, fatos, agenda, orçamento, rolagem, LFT, histórico</td><td>Arquivos em <code>data/</code> do repositório</td><td>Arquivos versionados no repositório; a atualização automática está em revisão</td></tr>
+<tr><td>PTAX, Focus e Selic</td><td>BCB</td><td>Direto no navegador ou por uma função do site</td></tr>
+<tr><td>EWZ, dólar, Ibovespa, ADRs; CDS 5 anos</td><td>Yahoo Finance; OBM</td><td>Por uma função do site (/api), porque essas fontes não aceitam leitura direta</td></tr>
+<tr><td>Pesos, fatos, agenda, orçamento, rolagem, LFT, pesquisa</td><td>Arquivos em <code>data/</code></td><td>Uma rotina diária (dias úteis, 11h20) recalcula o agora com o último ajuste do DI e abre uma revisão com notícias candidatas. Nenhum fato entra sem aprovação do autor.</td></tr>
 </tbody></table></div>
-<p>O histórico do Intraday tem um arquivo-base do site e, além dele, as leituras de 5 em 5 minutos feitas no seu navegador enquanto a página está aberta; essas leituras ficam só nele.</p>
+<p>A B3 publica as curvas depois do fechamento e o SILO as carrega por volta das 03:00 (06:00 UTC) do dia seguinte, então o pregão de hoje só entra amanhã. O Focus é semanal. O histórico do Agora tem uma base fixa do site mais as leituras de 5 em 5 minutos feitas no seu navegador, que ficam só nele.</p>
 
 <h2 id="m-limites">Limites</h2>
 <ul>
-<li>As relações do dólar, do DI e da bolsa são lineares, estimadas em dias de estresse. Choques muito maiores que os da amostra (a maior alta do dólar foi +4,7%) ficam fora dela.</li>
-<li>O modelo vê só preços. Notícia entra pelos fatos do relatório, uma vez por dia.</li>
-<li>Antes das 9h o EWZ e o USDT têm pouco volume. A abertura do dólar à vista é o teste real.</li>
-<li>O DI jan/29 vence em pouco mais de 2 anos, e o modelo usa o vértice de 720 dias da curva PRE. São próximos, mas não iguais.</li>
-<li>Os limites dos sinais e os degraus dos fatos são julgamento. Os pesos são probabilidades subjetivas.</li>
-<li>Relatório e Fiscal mostram pesos registrados nos arquivos, que podem estar defasados. O Intraday busca preços a cada poucos minutos; as duas leituras podem divergir.</li>
-<li>O Intraday depende de fontes públicas: B3, Binance, BCB, SILO, Yahoo e OBM (CDS). Yahoo, OBM e Selic passam por rotas do próprio site (/api). Se uma fonte cair ou limitar o acesso, o painel mantém o último dado, avisa na tela e tenta de novo. Ele não inventa número.</li>
-<li>O histórico do Intraday tem uma base fixa do site (29 leituras iniciais) mais as leituras de cada navegador, guardadas no próprio aparelho. Dois leitores veem gráficos um pouco diferentes até o histórico crescer.</li>
+<li>Os pesos são probabilidades subjetivas. A partida, os degraus, os caminhos de Selic e σ são julgamento; o site mostra cada um para que possam ser testados.</li>
+<li>Fatos também movem o DI. Separar fatos e preços reduz, mas não elimina, a chance de contar a mesma informação duas vezes.</li>
+<li>O prêmio de prazo usa o Focus como Selic esperada. Se o mercado espera uma Selic diferente da mediana do Focus, essa diferença aparece como prêmio.</li>
+<li>As relações do dólar, do DI e da bolsa são lineares e estimadas em dias de estresse. Choques maiores que os da amostra (a maior alta do dólar foi +4,7%) ficam fora dela.</li>
+<li>Poucas crises dão pouca prova: a calibração dos gatilhos usa 11 episódios, e as crises e os gatilhos vêm das mesmas curvas.</li>
+<li>O DI jan/29 vence em pouco mais de 2 anos; o prêmio histórico usa o vértice de 720 dias. São próximos, mas não iguais.</li>
+<li>Se uma fonte cair, o painel mantém o último dado e avisa na tela. Ele não inventa número.</li>
 <li>Nada aqui é recomendação de compra ou venda.</li>
 </ul>
+
 <h2 id="m-referencias">Referências</h2>
-<h3>Literatura</h3>
 <ul>
-<li>Blanchard, O. (2004). Fiscal Dominance and Inflation Targeting: Lessons from Brazil. NBER Working Paper 10389. Base da ideia de dominância fiscal no monitor.</li>
-<li>Jordà, Ò. (2005). Estimation and Inference of Impulse Responses by Local Projections. American Economic Review, 95(1), 161–182. Método das projeções locais, usado no dólar do cenário Âncora.</li>
+<li>Blanchard, O. (2004). Fiscal Dominance and Inflation Targeting: Lessons from Brazil. NBER Working Paper 10389.</li>
+<li>Jordà, Ò. (2005). Estimation and Inference of Impulse Responses by Local Projections. American Economic Review, 95(1), 161–182.</li>
+<li>Kaminsky, G., Lizondo, S. e Reinhart, C. (1998). Leading Indicators of Currency Crises. IMF Staff Papers, 45(1).</li>
+<li>Kass, R. e Raftery, A. (1995). Bayes Factors. Journal of the American Statistical Association, 90(430), 773–795.</li>
 </ul>
-<p>As outras técnicas são práticas comuns de mercado, sem autor único: o bootstrap da curva de juros a partir dos contratos de DI, a atualização dos pesos pela regra peso × fator e o leque de trajetórias da dívida com choques sorteados do histórico. Os degraus dos fatos e os limites dos alertas são escolha do autor.</p>
-<h3>Fontes de dados</h3>
-<ul>
-<li>B3, cotações de DI1, DOL e DAP: <a href="https://cotacao.b3.com.br">cotacao.b3.com.br</a>.</li>
-<li>BCB, PTAX e expectativas do Focus (Olinda): <a href="https://olinda.bcb.gov.br">olinda.bcb.gov.br</a>. Meta Selic (série SGS 432): <a href="https://api.bcb.gov.br">api.bcb.gov.br</a>.</li>
-<li>SILO, banco com dados da CVM, do BACEN e da B3 (curvas, ajustes, fluxo de investidores): API pública de leitura.</li>
-<li>Tesouro Nacional, Plano Anual de Financiamento e dívida: <a href="https://www.tesourotransparente.gov.br">tesourotransparente.gov.br</a>.</li>
-<li>Binance (USDT): <a href="https://data-api.binance.vision">data-api.binance.vision</a>. Yahoo Finance (EWZ, bolsa, dólar): <a href="https://finance.yahoo.com">finance.yahoo.com</a>. OBM, risco-país (CDS): <a href="https://obm.com.br/risco-pais">obm.com.br/risco-pais</a>.</li>
-</ul>
+<p>Fontes de dados: B3 (<a href="https://cotacao.b3.com.br">cotacao.b3.com.br</a>); BCB, PTAX, Focus e SGS (<a href="https://olinda.bcb.gov.br">olinda.bcb.gov.br</a>, <a href="https://api.bcb.gov.br">api.bcb.gov.br</a>); <b>SILO</b>, banco com dados abertos da CVM, do BACEN e da B3, API pública de leitura; Tesouro Nacional (<a href="https://www.tesourotransparente.gov.br">tesourotransparente.gov.br</a>); Binance (<a href="https://data-api.binance.vision">data-api.binance.vision</a>); Yahoo Finance (<a href="https://finance.yahoo.com">finance.yahoo.com</a>); OBM (<a href="https://obm.com.br/risco-pais">obm.com.br/risco-pais</a>).</p>
 <section class="gloss" id="conceitos" style="padding:0">
 <h2 style="font-size:20px;margin:36px 0 6px">Conceitos, um por um</h2>
 <p>Cada termo em uma frase, mais como ler o movimento. Os blocos das outras páginas apontam para cá.</p>
@@ -152,4 +163,34 @@
 <div id="gloss-list"></div>
 </section>
 </main>
+<script>
+(function () {
+  var nf = function (v, d) { return new Intl.NumberFormat("pt-BR", { minimumFractionDigits: d, maximumFractionDigits: d }).format(v); };
+  var br = function (iso) { var p = iso.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; };
+  fetch("data/research/term_premium.json").then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (j) {
+    var p = j.premium_2y_bp, n = j.di1f29_now;
+    document.getElementById("tp-calm").textContent = nf(p.calm_median, 0);
+    document.getElementById("tp-band").textContent = nf(p.p10_p90_calm[0], 0) + " a " + nf(p.p10_p90_calm[1], 0);
+    document.getElementById("tp-stress").textContent = nf(p.stress_median, 0);
+    document.getElementById("tp-now").innerHTML = "<b>" + nf(n.premium_bp, 0) + "</b> <span style='color:var(--color-fg-muted)'>(" + br(n.date) + ")</span>";
+    var s = j.series_2y_bp, W = 720, H = 220, m = { l: 40, r: 10, t: 10, b: 24 };
+    var t0 = Date.parse(s[0][0]), t1 = Date.parse(s[s.length - 1][0]);
+    var vals = s.map(function (x) { return x[1]; }).concat([n.premium_bp]);
+    var lo = Math.floor(Math.min.apply(null, vals) / 100) * 100, hi = Math.ceil(Math.max.apply(null, vals) / 100) * 100;
+    var X = function (d) { return m.l + (Date.parse(d) - t0) / (t1 - t0) * (W - m.l - m.r); };
+    var Y = function (v) { return m.t + (hi - v) / (hi - lo) * (H - m.t - m.b); };
+    var g = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Prêmio de prazo do DI de 2 anos, bp, desde 2019">';
+    for (var v = lo; v <= hi; v += 100) g += '<line x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + Y(v) + '" y2="' + Y(v) + '" stroke="var(--color-border)"/><text x="' + (m.l - 6) + '" y="' + (Y(v) + 4) + '" text-anchor="end" font-size="11" fill="var(--color-fg-muted)">' + v + '</text>';
+    for (var y = 2019; y <= 2026; y++) { var xx = X(y + "-01-02"); if (xx >= m.l) g += '<text x="' + xx + '" y="' + (H - 6) + '" font-size="11" fill="var(--color-fg-muted)" text-anchor="middle">' + y + '</text>'; }
+    [[p.calm_median, "calma " + nf(p.calm_median, 0), "var(--color-ok)"], [p.stress_median, "crise " + nf(p.stress_median, 0), "var(--color-bad)"]].forEach(function (r) {
+      g += '<line x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + Y(r[0]) + '" y2="' + Y(r[0]) + '" stroke="' + r[2] + '" stroke-dasharray="4 3"/><text x="' + (m.l + 4) + '" y="' + (Y(r[0]) - 4) + '" font-size="11" fill="' + r[2] + '">mediana ' + r[1] + ' bp</text>';
+    });
+    g += '<path fill="none" stroke="var(--color-accent)" stroke-width="1.5" d="' + s.map(function (x, i) { return (i ? "L" : "M") + X(x[0]).toFixed(1) + " " + Y(x[1]).toFixed(1); }).join("") + '"/>';
+    g += '</svg><p style="font-size:12px;color:var(--color-fg-muted);margin:2px 0 8px">Prêmio de prazo do DI de 2 anos, bp, a cada 5 pregões. Cálculo com curva PRE de 720 dias, Selic meta e Focus, tudo do SILO.</p>';
+    document.getElementById("tp-chart").innerHTML = g;
+    document.getElementById("tp-read").textContent = "Em " + br(n.date) + " o prêmio do DI jan/29 (" + nf(n.premium_bp, 0) + " bp) estava " + (n.premium_bp > p.stress_median ? "acima" : "abaixo") + " da mediana das crises desde 2019 (" + nf(p.stress_median, 0) + " bp) e " + (n.premium_bp > p.p10_p90_calm[1] ? "acima de 90% dos dias calmos" : "dentro da faixa dos dias calmos") + ". Parte desse prêmio pode ser uma Selic esperada mais alta que a mediana do Focus; a conta não separa as duas coisas.";
+  }).catch(function () { var c = document.getElementById("tp-chart"); c.textContent = "Arquivo do prêmio indisponível; a tabela mostra os valores de 10/11/2026."; });
+})();
+</script>
+
 <footer class="site-foot">Leitura de sinais de mercado e julgamento do autor, não recomendação de compra ou venda. Dados abertos do Brasil servidos pelo <b>SILO</b> (CVM, BACEN, B3). Tudo em horário de Brasília (UTC-3).</footer></body></html>

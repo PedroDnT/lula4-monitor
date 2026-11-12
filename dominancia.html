@@ -2,7 +2,7 @@
 <title>Monitor de dominância fiscal · Monitor LULA4</title><meta name="robots" content="index,follow">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400&display=swap">
 <link rel="stylesheet" href="assets/style.css"><script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script><script>window.DATASETS={"budget": {"kind": "file", "url": "data/dominancia/budget.json"}, "calib": {"kind": "file", "url": "data/dominancia/calib.json"}, "canais": {"kind": "file", "url": "data/dominancia/canais.json"}, "contabilidade": {"kind": "file", "url": "data/dominancia/contabilidade.json"}, "dpl_2y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "DPL", "p_from": "{{start_curve}}", "p_tenor_days": 720}}, "dpl_5y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "DPL", "p_from": "{{start_curve}}", "p_tenor_days": 1800}}, "fiscal_dbgg": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "DBGG_PIB"}}, "fiscal_nom": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "NFSP_NOMINAL_12M"}}, "fiscal_pib": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "PIB"}}, "fiscal_prim": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "NFSP_PRIMARIO_12M"}}, "focus_debt": {"kind": "file", "url": "data/dominancia/focus_debt.json"}, "ipca_2027": {"kind": "query", "tool": "focus_expectations", "args": {"p_endpoint": "ExpectativasMercadoAnuais", "p_from": "{{start_focus}}", "p_horizon": "2027", "p_indicator": "IPCA"}}, "ipca_2028": {"kind": "query", "tool": "focus_expectations", "args": {"p_endpoint": "ExpectativasMercadoAnuais", "p_from": "{{start_focus}}", "p_horizon": "2028", "p_indicator": "IPCA"}}, "leiloes": {"kind": "file", "url": "data/dominancia/leiloes.json"}, "lft": {"kind": "file", "url": "data/dominancia/lft.json"}, "obrigatorias": {"kind": "file", "url": "data/dominancia/obrigatorias.json"}, "pre_2y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "PRE", "p_from": "{{start_curve}}", "p_tenor_days": 720}}, "pre_5y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "PRE", "p_from": "{{start_curve}}", "p_tenor_days": 1800}}, "rolagem": {"kind": "file", "url": "data/dominancia/rolagem.json"}, "pesos_data": {"kind": "file", "url": "data/relatorio/pesos.json"}, "scenario_history": {"kind": "file", "url": "data/dominancia/scenario_history.json"}, "scenarios": {"kind": "file", "url": "data/dominancia/scenarios.json"}};window.PARAMS_URL="data/dominancia/params.json";</script><script src="assets/dash-shim.js"></script><link rel="stylesheet" href="assets/leia.css"><script src="assets/leia.js" defer></script></head><body data-page="dominancia">
-<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html">Agora</a><a href="dominancia.html" aria-current="page">Fiscal</a><a href="plano.html">Plano fiscal</a><a href="metodo.html">Método</a><a href="simples.html" class="tab-simple">Versão simples</a></nav></div></header>
+<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html">Agora</a><a href="dominancia.html" aria-current="page">Fiscal</a><a href="plano.html">Plano fiscal</a><a href="metodo.html">Método</a><a href="simples.html" class="tab-simple" aria-label="Versão simples"><span class="vs-long">Versão simples</span><span class="vs-short">Simples</span></a></nav></div></header>
 <div id="dash-root">
 <style>
 #dash-root .dm { display: flex; flex-direction: column; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); }
@@ -1215,7 +1215,7 @@ function fanChart(el, rows, { refs = [] } = {}) {
   refs.forEach((f) => {
     const col = f.kind === 'trigger' ? 'var(--cds-chart-status-critical, var(--color-bad))' : 'var(--color-fg-muted)';
     svg.append('line').attr('x1', m.l).attr('x2', width - m.r).attr('y1', y(f.y)).attr('y2', y(f.y)).attr('stroke', col).attr('stroke-dasharray', '4 3');
-    svg.append('text').attr('x', width - m.r + 4).attr('y', y(f.y)).attr('dy', '0.32em').attr('fill', col).attr('font-size', 'var(--cds-font-size-caption)').text(f.label);
+    svg.append('text').attr('x', m.l + 6).attr('y', y(f.y) - 5).attr('fill', col).attr('font-size', 'var(--cds-font-size-caption)').text(f.label);
   });
   rows.forEach((r) => svg.append('text').attr('x', x(r.year)).attr('y', y(r.p50) - 8).attr('text-anchor', 'middle').attr('fill', 'var(--color-fg)').attr('font-size', 'var(--cds-font-size-caption)').text(nf(1).format(r.p50)));
 }
@@ -1619,6 +1619,12 @@ dash.onData(() => {
     g.querySelector('.vl').textContent = `hoje ${signed(fmt2)(fzd.data[0].primary_balance)}% · precisa ${fmt1.format(fzd.data[0].stabilizing_primary)}%`;
     g.classList.toggle('off', lit('Lacuna do primário'));
   }
+  // Values longer than the box shrink to fit it (two values per box can pass 210 px).
+  document.querySelectorAll('.loop-node .vl, .loop-brake .vl').forEach((t) => {
+    t.style.fontSize = '';
+    const w = Number(t.parentNode.querySelector('rect').getAttribute('width')) - 14, len = t.getComputedTextLength ? t.getComputedTextLength() : 0;
+    if (len > w) t.style.fontSize = (parseFloat(getComputedStyle(t).fontSize) * w / len).toFixed(2) + 'px';
+  });
   loopList();
 });
 

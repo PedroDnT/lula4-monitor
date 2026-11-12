@@ -37,6 +37,7 @@ a { color: var(--color-accent); }
 .tabs a { white-space: nowrap; text-decoration: none; color: var(--color-fg-muted); padding: 8px 14px; border-bottom: 2px solid transparent; font-size: 14px; }
 .tabs a:hover { color: var(--color-fg); }
 .tabs a.tab-simple { margin-left: auto; align-self: center; padding: 4px 12px; border: 1px solid var(--color-border); border-radius: 999px; font-size: 13px; }
+.tabs .vs-short { display: none; }
 .tabs a.tab-simple[aria-current="page"] { border-color: var(--color-accent); }
 .tabs a[aria-current="page"] { color: var(--color-fg); border-bottom-color: var(--color-accent); font-weight: 600; }
 .site-foot { max-width: 1120px; margin: 24px auto 0; padding: 16px; border-top: 1px solid var(--color-border); font-size: 12.5px; color: var(--color-fg-muted); }
@@ -63,5 +64,10 @@ a { color: var(--color-accent); }
   .site-head .in { padding-top: 10px; }
   .site-title small { display: block; margin: 2px 0 0; }
   .tabs a { padding-left: 10px; padding-right: 10px; }
+  .tabs { gap: 0; }
+  .tabs a { padding-left: 8px; padding-right: 8px; font-size: 13.5px; }
+  .tabs a.tab-simple { padding: 3px 9px; font-size: 12.5px; }
+  .tabs .vs-long { display: none; }
+  .tabs .vs-short { display: inline; }
   #dash-root { padding-top: 20px; }
 }

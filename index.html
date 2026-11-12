@@ -190,7 +190,7 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
 </style>
 <link rel="stylesheet" href="assets/remake.css">
 <style>.site-head{background:var(--bg,#f7f6f3)} .wrap{padding-top:0}</style><link rel="stylesheet" href="assets/leia.css"><script src="assets/leia.js" defer></script></head><body>
-<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html" aria-current="page">Agora</a><a href="dominancia.html">Fiscal</a><a href="plano.html">Plano fiscal</a><a href="metodo.html">Método</a><a href="simples.html" class="tab-simple">Versão simples</a></nav></div></header><nav class="subtabs" aria-label="Agora"><a href="index.html" aria-current="page">Preços de agora</a><a href="relatorio.html">Fatos e relatório do dia</a></nav>
+<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html" aria-current="page">Agora</a><a href="dominancia.html">Fiscal</a><a href="plano.html">Plano fiscal</a><a href="metodo.html">Método</a><a href="simples.html" class="tab-simple" aria-label="Versão simples"><span class="vs-long">Versão simples</span><span class="vs-short">Simples</span></a></nav></div></header><nav class="subtabs" aria-label="Agora"><a href="index.html" aria-current="page">Preços de agora</a><a href="relatorio.html">Fatos e relatório do dia</a></nav>
 
 
 <div class="wrap">
@@ -207,8 +207,8 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
     <div class="hv" id="hx-sc">–</div>
     <div class="hs"><b id="hx-bp">–</b> desde o ajuste de 23/10 (12,640%) · <span id="hx-d1">–</span> vs ontem · <span id="hx-d5">–</span> vs 5 pregões · <span id="hx-pos"></span></div>
     <p class="src" id="weights-status" role="status">Partida: aguardando arquivo de pesos.</p>
+    <p class="src"><b>Barras: só o DI</b> (Cálculo, cada cenário com o mesmo peso inicial). Abaixo de cada barra, o peso com a partida dos fatos (Julgamento). A leitura de preço pode divergir dos pesos registrados no Relatório e em Fiscal.</p>
     <div class="bars" id="hx-bars"></div>
-    <p class="src">Cálculo baseado no DI; as marcas são julgamento. A leitura de preço pode divergir dos pesos registrados no Relatório e em Fiscal.</p>
     <p class="src">Dado: ajuste do DI1F29 (B3, pelo SILO) e o contrato de agora (B3, cerca de 15 min de atraso). Cálculo: as marcas +28, +123 e +295 bp, do caminho da Selic de cada cenário (Julgamento) mais o prêmio de prazo medido desde 2019 (SILO). Julgamento: σ = 100 bp, dentro da dispersão medida do DI de 2 anos depois de 32 choques desde 2015 (78 a 123 bp, SILO). Julgamento: a partida, só com fatos. Agora = Bayes (partida × verossimilhança). <a class="how" href="#m6">Método</a></p>
   </div>
   </section>
@@ -1032,7 +1032,7 @@ function renderHero(M, NP) {
   $("hx-d1").textContent = last ? d(M.live ? {bp: M.bp} : last, M.live ? last : prev) : "–";
   $("hx-d5").textContent = rows.length > 5 ? d(M.live ? {bp: M.bp} : last, wk) : "–";
   const cols = ["var(--down)", "var(--warn)", "var(--up)"];
-  $("hx-bars").innerHTML = SCEN.map((x, i) => `<div class="hbar"><span class="bn">${x.n}</span><span class="bt"><i style="width:${MP[i]}%;background:${cols[i]}"></i></span><span class="bv">${MP[i]}%</span><span class="bs">partida ${nf(x.p * 100, 0)}% · agora ${NP[i]}%</span></div>`).join("");
+  $("hx-bars").innerHTML = SCEN.map((x, i) => `<div class="hbar"><span class="bn">${x.n}</span><span class="bt"><i style="width:${MP[i]}%;background:${cols[i]}"></i></span><span class="bv">${MP[i]}%</span><span class="bs">com a partida dos fatos (${nf(x.p * 100, 0)}%): ${NP[i]}%</span></div>`).join("");
 }
 function renderScen(F) {
   if (!WEIGHTS_READY) return;
@@ -1049,7 +1049,8 @@ function renderScen(F) {
   const topM = M.w.indexOf(Math.max(...M.w));
   renderHero(M, NP);
   $("m-sc").textContent = SCEN[topM].n; $("m-sc-s").textContent = "o DI precifica · agora " + NP.join("/") + " · DI jan/29 " + sgn(M.bp) + " bp desde 23/10";
-  TK.sc = "Pesos agora: " + SCEN.map((x, i) => x.n.split(" ")[0] + " " + NP[i] + "%").join(", ") + ". O DI jan/29 subiu " + sgn(M.bp) + " bp desde 23/10" + (M.beyond ? ", além do pior cenário." : ", mais perto de " + SCEN[topM].n + ".") ; setTake();
+  // Lead with the market-only reading (equal prior); the weights with the judgment start come second.
+  TK.sc = "O DI jan/29 subiu " + sgn(M.bp) + " bp desde 23/10" + (M.beyond ? ", além do pior cenário" : ", mais perto de " + SCEN[topM].n) + ". Só pelo DI: " + SCEN.map((x, i) => x.n.split(" ")[0] + " " + MP[i] + "%").join(", ") + ". Com a partida dos fatos: " + NP.join(" · ") + "." ; setTake();
   const gap = M.w.map((x, i) => x - SCEN[i].p), big = gap.reduce((b, g, i) => Math.abs(g) > Math.abs(gap[b]) ? i : b, 0);
   let txt = `O DI jan/29 subiu ${sgn(M.bp)} bp desde 23/10.`;
   if (M.beyond) txt += ` Isso passa dos +${SCEN[2].mu} bp do pior cenário: o mercado precifica Estresse e mais.${M.lim ? " O contrato está no limite de alta da B3, então a alta real pode ser ainda maior." : ""}`;
