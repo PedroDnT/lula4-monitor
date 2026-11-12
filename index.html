@@ -478,7 +478,7 @@ img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
       <p>A versão com o DI teve erro quase igual (1,3 p.p.), mas ela separa a parte dos juros. O painel usa essa versão depois das 9h.</p>
     </div></div></details>
     <details id="g6"><summary>6. Histórico e precedentes</summary><div><div id="m11">
-      <p>Enquanto a página está aberta, ela grava uma leitura a cada 5 minutos no banco da página: dólar, DI jan/29, CDS, pesos de agora e placar. Duas pessoas com a página aberta gravam a mesma leitura, sem duplicar. Sem ninguém com a página aberta, não há leitura.</p>
+      <p>Enquanto a página está aberta, ela grava uma leitura a cada 5 minutos neste navegador: dólar, DI jan/29, CDS, pesos de agora e placar. As leituras ficam só neste aparelho e somam-se a um arquivo-base do site, então dois leitores podem ver históricos diferentes. Com a página fechada, não há leitura.</p>
       <p>A tabela mostra a última leitura de cada dia, e o gráfico mostra o dólar das leituras gravadas. O painel lê as 1.000 leituras mais recentes, cerca de 10 dias de pregão.</p>
     </div><div id="m8"><h4>Precedentes: como a proximidade é medida</h4>
       <p>Cada choque é um ponto em 7 variáveis do dia: dólar, Ibovespa, DI de 1, 2 e 5 anos, inclinação 5a − 1a e estatais − privadas. Cada variável é dividida pelo seu desvio padrão diário, para que todas pesem igual.</p>
@@ -530,7 +530,7 @@ function nowW(M) {
 }
 const LSD = 35;
 const PREC = {"sd": {"dol": 1.9219386886845715, "ibov": 3.011521160629353, "di1": 26.117599821599352, "di2": 35.11928625438554, "di5": 37.411068443216244, "slope": 18.665702745481145, "est": 2.1718684075479455}, "ev": [{"n": "Dilma reeleita", "dt": "26/10/2014", "dol": 2.16, "ptax": true, "ibov": -2.77, "di1": -8.0, "di2": -9.0, "di5": 19.0, "slope": 27.0, "est": null, "di2_20": 11.0, "ibov_20": 6.7, "dol_20": 1.9}, {"n": "Joesley Day", "dt": "17/05/2017", "dol": 8.79, "ptax": true, "ibov": -8.8, "di1": 132.0, "di2": 160.0, "di5": 180.0, "slope": 47.0, "est": null, "di2_20": 49.0, "ibov_20": -8.3, "dol_20": 5.7}, {"n": "Bolsonaro, 2º turno", "dt": "28/10/2018", "dol": 2.03, "ptax": false, "ibov": -2.24, "di1": -7.0, "di2": -4.0, "di5": -2.0, "slope": 5.0, "est": null, "di2_20": -30.0, "ibov_20": 4.1, "dol_20": 5.1}, {"n": "Lula, 1º turno", "dt": "02/10/2022", "dol": -4.2, "ptax": false, "ibov": 5.54, "di1": -6.0, "di2": -10.0, "di5": -25.0, "slope": -19.0, "est": 3.4, "di2_20": 5.0, "ibov_20": 5.5, "dol_20": -2.8}, {"n": "Lula eleito", "dt": "30/10/2022", "dol": -0.86, "ptax": false, "ibov": 1.31, "di1": -6.0, "di2": -12.0, "di5": -17.0, "slope": -11.0, "est": -7.8, "di2_20": 128.0, "ibov_20": -3.2, "dol_20": -0.7}, {"n": "Fala de Lula sobre gasto", "dt": "10/11/2022", "dol": 3.21, "ptax": false, "ibov": -3.35, "di1": 49.0, "di2": 96.0, "di5": 107.0, "slope": 58.0, "est": -2.5, "di2_20": 102.0, "ibov_20": -5.6, "dol_20": 0.9}, {"n": "Pacote fiscal", "dt": "27/11/2024", "dol": 0.85, "ptax": false, "ibov": -2.4, "di1": 28.0, "di2": 28.0, "di5": 30.0, "slope": 1.0, "est": 0.3, "di2_20": 208.0, "ibov_20": -5.8, "dol_20": 6.3}, {"n": "1º turno 2026", "dt": "04/10/2026", "dol": -4.34, "ptax": false, "ibov": 7.7, "di1": -69.0, "di2": -109.0, "di5": -134.0, "slope": -65.0, "est": 4.9, "di2_20": -99.0, "ibov_20": 6.2, "dol_20": -3.6}]};
-const SERVER = "Firecrawl", TOOL = "firecrawl_scrape", POLL = 120000;
+const POLL = 120000;
 const brt = () => new Date().toLocaleDateString("sv-SE", {timeZone: "America/Sao_Paulo"});   // YYYY-MM-DD in Brasília
 const mdy = iso => iso.slice(5, 7) + "-" + iso.slice(8, 10) + "-" + iso.slice(0, 4);
 function ptaxUrl() {
@@ -552,9 +552,6 @@ const URLS = {
   focus: "https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativasMercadoSelic?$top=40&$orderby=Data%20desc&$format=json&$filter=baseCalculo%20eq%200&$select=Data,Reuniao,Mediana",
   selic: "/api/selic",
 };
-// Exa (web_fetch_exa) serves Binance and OBM live. It cannot read the Yahoo JSON, and its copy of the B3 DI API was 2 months old
-// (dtTm 2026-08-31 when tested 26/10), so Yahoo and the B3 DI stay on Firecrawl.
-const EXA = {usdt: 5000, usdtK: 20000, cds: 20000};   // key -> maxCharacters
 const POLLS = {cds: 1800000, ptax: 1800000, dol: 480000, dap: 480000, focus: 21600000, selic: 21600000};                    // CDS is end-of-day: poll every 30 min
 const SRCNAME = {usdt: "USDT Binance", usdtK: "USDT 48h", y: "Yahoo", di: "DI B3", cds: "CDS OBM", ptax: "PTAX BCB", dol: "DOL B3", dap: "DAP B3", focus: "Focus BCB", selic: "Selic BCB"};
 const SRCSRV = {};
@@ -567,42 +564,12 @@ const sgn = (x, d = 0) => (x >= 0 ? "+" : "−") + nf(Math.abs(x), d);
 const cls = (el, x) => { el.classList.toggle("up", x > 0); el.classList.toggle("down", x < 0); };
 const hm = t => new Date(t).toLocaleTimeString("pt-BR", {hour: "2-digit", minute: "2-digit"});
 
-function rawField(result, field) {
-  let p = result && result.payload;
-  if (typeof p === "string") { try { p = JSON.parse(p); } catch (e) {} }
-  let raw = p && (p[field] ?? (p.data && p.data[field]));
-  if (raw == null && result && Array.isArray(result.content)) {
-    for (const b of result.content) {
-      if (b.type === "text") { try { const j = JSON.parse(b.text); raw = j[field] ?? (j.data && j.data[field]); } catch (e) {} }
-      if (raw != null) break;
-    }
-  }
-  if (raw == null) throw new Error("resposta sem " + field);
-  return String(raw);
-}
-function parsePayload(result) {
-  const raw = rawField(result, "rawHtml");
-  const m = raw.match(/[\[{][\s\S]*[\]}]/);
-  return JSON.parse(m ? m[0] : raw);
-}
 function exaText(result) {
   const p = result && result.payload;
   if (typeof p === "string") return p;
   const b = result && Array.isArray(result.content) && result.content.find(x => x.type === "text");
   if (b) return b.text;
   throw new Error("resposta sem texto");
-}
-function parseExaJson(result) {
-  const t = exaText(result), m = t.match(/[\[{][\s\S]*[\]}]/);
-  return JSON.parse(m ? m[0] : t);
-}
-function parseCds(result) {
-  const md = exaText(result);
-  const row = md.match(/CDS 5 Anos Brasil[^|]*\|\s*([\d.,]+)\s*\|\s*([+−\-\d.,]+)\s*\|\s*([\d.,]+%)/);
-  if (!row) throw new Error("linha do Brasil não encontrada");
-  const num = s => parseFloat(s.replace(/\./g, "").replace(",", ".").replace("−", "-"));
-  const d = md.match(/Atualização\s+(\d{2}\/\d{2}\/\d{4})/);
-  return {bp: num(row[1]), chg: num(row[2]), pd: row[3], date: d ? d[1] : null};
 }
 
 // Yahoo spark: base = last regular close when today's session has not started (fixes the Thursday-close bug).
@@ -623,22 +590,15 @@ function spark(j) {
   return out;
 }
 
-const ERRCOPY = {
-  needs_reauth: "Reconecte o Firecrawl em claude.ai → Configurações → Conectores.",
-  server_not_connected: "Adicione o conector Firecrawl em claude.ai → Configurações → Conectores para ver dados ao vivo.",
-  selection_required: "Escolha qual conector Firecrawl usar no aviso do claude.ai.",
-  not_in_manifest: "O Firecrawl não foi permitido para esta página. Libere em Permissões do artifact.",
-  approval_required: "Esta página precisa da sua aprovação para usar o Firecrawl.",
-  blocked_by_policy: "A política da organização bloqueia o Firecrawl nesta página.",
-};
+const ERRCOPY = {};
 const DENY = new Set(Object.keys(ERRCOPY));
 const ERRID = {usdt: "e-usdt", usdtK: "e-usdt", y: "e-y", di: "e-di", cds: "e-cds", ptax: "e-ptax", dol: "e-dol", dap: "e-silo", silo: "e-silo", focus: "e-di", selic: "e-di", flow: "e-flow"};
 const ERRAT = {};
 function showErr(key, err) {
   ERRAT[key] = {at: Date.now(), msg: err.message || err.code || "erro"};
   const rl = /rate limit/i.test(err.message || "");
-  const sv = SRCSRV[key] || "Firecrawl";
-  const msg = (ERRCOPY[err.code] || (rl ? "Limite de requisições do " + sv + " atingido (o plano permite poucas chamadas por minuto). O painel mantém o último dado e tenta de novo em 2 min; feche outras abas deste painel." : err.code === "tool_error" ? "A fonte respondeu com erro: " + (err.message || "") : "Fonte indisponível agora; mantendo o último dado.")).replace(/Firecrawl/g, sv);
+  const sv = SRCNAME[key] || "a fonte";
+  const msg = (ERRCOPY[err.code] || (rl ? "Limite de requisições do " + sv + " atingido. O painel mantém o último dado e tenta de novo em 2 min." : err.code === "tool_error" ? "A fonte respondeu com erro: " + (err.message || "") : "Fonte indisponível agora; mantendo o último dado."));
   if (DENY.has(err.code)) { delete S[key]; const pm = $("pagemsg"); pm.hidden = false; pm.innerHTML = "<b>Conector</b><span></span>"; pm.querySelector("span").textContent = msg; }
   const id = ERRID[key]; if (id) { $(id).hidden = false; $(id).textContent = msg; }
 }

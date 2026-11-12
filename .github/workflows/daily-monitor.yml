@@ -1,0 +1,65 @@
+# Daily price batch: recompute "agora" from the last DI1F29 settlement in SILO and open a PR for review.
+# No new facts enter here: facts need Pedro's approval and go in by hand (docs/rotina/README.md).
+# Runs at 11:20 Brasília (14:20 UTC) on weekdays. A merge to main publishes the site.
+name: daily-monitor
+
+on:
+  schedule:
+    - cron: "20 14 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: daily-monitor
+  cancel-in-progress: false
+
+jobs:
+  batch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Tests and validation
+        run: |
+          python3 -m unittest discover -s tests
+          python3 scripts/daily_monitor.py validate
+      - name: Prepare and apply the batch
+        id: batch
+        run: |
+          DAY=$(TZ=America/Sao_Paulo date +%F)
+          echo "day=$DAY" >> "$GITHUB_OUTPUT"
+          echo '[]' > "$RUNNER_TEMP/facts.json"
+          python3 scripts/daily_monitor.py prepare --facts "$RUNNER_TEMP/facts.json" --date "$DAY" --output "$RUNNER_TEMP/batch"
+          python3 scripts/daily_monitor.py apply --batch "$RUNNER_TEMP/batch"
+          python3 scripts/daily_monitor.py validate
+          git diff --check
+          cp "$RUNNER_TEMP/batch/report.json" "$RUNNER_TEMP/report.json"
+      - name: Open a PR when the data changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DAY: ${{ steps.batch.outputs.day }}
+        run: |
+          if git diff --quiet; then echo "Nada mudou."; exit 0; fi
+          BR="data/rotina-$DAY"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$BR"
+          git add data/relatorio data/dominancia docs/rotina/state.json
+          git commit -m "data: lote de preço de $DAY (rotina diária, sem fatos novos)"
+          git push -u origin "$BR"
+          python3 - <<'PY' > "$RUNNER_TEMP/body.md"
+          import json, os
+          r = json.load(open(os.environ["RUNNER_TEMP"] + "/report.json"))
+          m, now = r["market"], r["now"]["value"]
+          print(f"Lote automático de {r['run_date_brt']}. Sem fatos novos; a partida não muda.\n")
+          print(f"- DI1F29 em {m['date']}: {m['rate_pct']}% (Dado, SILO), {r['move_bp']['value']} bp desde 23/10 (Cálculo)")
+          print("- Agora (Cálculo): " + " / ".join(f"{x * 100:.1f}%" for x in now))
+          for w in r.get("warnings", []):
+              print(f"- Aviso: {w}")
+          PY
+          gh pr create --base main --head "$BR" --title "data: lote de preço de $DAY" --body-file "$RUNNER_TEMP/body.md"
