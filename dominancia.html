@@ -1,7 +1,7 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Monitor de dominância fiscal · Monitor LULA4</title><meta name="robots" content="index,follow">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400&display=swap">
-<link rel="stylesheet" href="assets/style.css"><script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script><script>window.DATASETS={"budget": {"kind": "file", "url": "data/dominancia/budget.json"}, "calib": {"kind": "file", "url": "data/dominancia/calib.json"}, "canais": {"kind": "file", "url": "data/dominancia/canais.json"}, "contabilidade": {"kind": "file", "url": "data/dominancia/contabilidade.json"}, "dpl_2y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "DPL", "p_from": "{{start_curve}}", "p_tenor_days": 720}}, "dpl_5y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "DPL", "p_from": "{{start_curve}}", "p_tenor_days": 1800}}, "fiscal_dbgg": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "DBGG_PIB"}}, "fiscal_nom": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "NFSP_NOMINAL_12M"}}, "fiscal_pib": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "PIB"}}, "fiscal_prim": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "NFSP_PRIMARIO_12M"}}, "focus_debt": {"kind": "file", "url": "data/dominancia/focus_debt.json"}, "ipca_2027": {"kind": "query", "tool": "focus_expectations", "args": {"p_endpoint": "ExpectativasMercadoAnuais", "p_from": "{{start_focus}}", "p_horizon": "2027", "p_indicator": "IPCA"}}, "ipca_2028": {"kind": "query", "tool": "focus_expectations", "args": {"p_endpoint": "ExpectativasMercadoAnuais", "p_from": "{{start_focus}}", "p_horizon": "2028", "p_indicator": "IPCA"}}, "leiloes": {"kind": "file", "url": "data/dominancia/leiloes.json"}, "lft": {"kind": "file", "url": "data/dominancia/lft.json"}, "obrigatorias": {"kind": "file", "url": "data/dominancia/obrigatorias.json"}, "pre_2y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "PRE", "p_from": "{{start_curve}}", "p_tenor_days": 720}}, "pre_5y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "PRE", "p_from": "{{start_curve}}", "p_tenor_days": 1800}}, "rolagem": {"kind": "file", "url": "data/dominancia/rolagem.json"}, "pesos_data": {"kind": "file", "url": "data/relatorio/pesos.json"}, "scenario_history": {"kind": "file", "url": "data/dominancia/scenario_history.json"}, "scenarios": {"kind": "file", "url": "data/dominancia/scenarios.json"}};window.PARAMS_URL="data/dominancia/params.json";</script><script src="assets/dash-shim.js"></script><link rel="stylesheet" href="assets/leia.css"><script src="assets/leia.js" defer></script></head><body data-page="dominancia">
+<link rel="stylesheet" href="assets/style.css"><script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script><script>window.DATASETS={"budget": {"kind": "file", "url": "data/dominancia/budget.json"}, "calib": {"kind": "file", "url": "data/dominancia/calib.json"}, "canais": {"kind": "file", "url": "data/dominancia/canais.json"}, "contabilidade": {"kind": "file", "url": "data/dominancia/contabilidade.json"}, "dpl_2y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "DPL", "p_from": "{{start_curve}}", "p_tenor_days": 720}}, "dpl_5y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "DPL", "p_from": "{{start_curve}}", "p_tenor_days": 1800}}, "fiscal_dbgg": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "DBGG_PIB"}}, "fiscal_dlsp": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "DLSP_PIB"}}, "fiscal_nom": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "NFSP_NOMINAL_12M"}}, "fiscal_pib": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "PIB"}}, "fiscal_prim": {"kind": "query", "tool": "macro_series", "args": {"p_from": "2012-01-01", "p_series": "NFSP_PRIMARIO_12M"}}, "focus_debt": {"kind": "file", "url": "data/dominancia/focus_debt.json"}, "ipca_2027": {"kind": "query", "tool": "focus_expectations", "args": {"p_endpoint": "ExpectativasMercadoAnuais", "p_from": "{{start_focus}}", "p_horizon": "2027", "p_indicator": "IPCA"}}, "ipca_2028": {"kind": "query", "tool": "focus_expectations", "args": {"p_endpoint": "ExpectativasMercadoAnuais", "p_from": "{{start_focus}}", "p_horizon": "2028", "p_indicator": "IPCA"}}, "leiloes": {"kind": "file", "url": "data/dominancia/leiloes.json"}, "lft": {"kind": "file", "url": "data/dominancia/lft.json"}, "obrigatorias": {"kind": "file", "url": "data/dominancia/obrigatorias.json"}, "pre_2y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "PRE", "p_from": "{{start_curve}}", "p_tenor_days": 720}}, "pre_5y": {"kind": "query", "tool": "curve_history", "args": {"p_curve": "PRE", "p_from": "{{start_curve}}", "p_tenor_days": 1800}}, "rolagem": {"kind": "file", "url": "data/dominancia/rolagem.json"}, "pesos_data": {"kind": "file", "url": "data/relatorio/pesos.json"}, "scenario_history": {"kind": "file", "url": "data/dominancia/scenario_history.json"}, "scenarios": {"kind": "file", "url": "data/dominancia/scenarios.json"}};window.PARAMS_URL="data/dominancia/params.json";</script><script src="assets/dash-shim.js"></script><link rel="stylesheet" href="assets/leia.css"><script src="assets/leia.js" defer></script></head><body data-page="dominancia">
 <header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html">Agora</a><a href="dominancia.html" aria-current="page">Fiscal</a><a href="plano.html">Plano fiscal</a><a href="metodo.html">Método</a><a href="simples.html" class="tab-simple" aria-label="Versão simples"><span class="vs-long">Versão simples</span><span class="vs-short">Simples</span></a></nav></div></header>
 <div id="dash-root">
 <style>
@@ -77,7 +77,7 @@
   </header>
   <section class="dm-section" id="divida">
     <h2 class="dm-h2">Conta da dívida</h2>
-    <p class="dm-sub">Juro implícito (r) = juros nominais em 12 meses ÷ dívida bruta média de 12 meses. Crescimento nominal (g) = PIB de 12 meses contra 12 meses antes. Primário que estabiliza = dívida × (r − g) ÷ (1 + g). Os juros do BCB seguem o conceito da dívida líquida, então r é uma aproximação.</p>
+    <p class="dm-sub">Juro implícito (r) = juros nominais em 12 meses ÷ dívida líquida do setor público (DLSP) média de 12 meses. Juros e dívida líquida são do mesmo conceito do BCB (setor público consolidado). Crescimento nominal (g) = PIB de 12 meses contra 12 meses antes. Primário que estabiliza = dívida líquida × (r − g) ÷ (1 + g). A dívida bruta segue como o nível de referência; as trajetórias dela (leque, conta do ano e cenários) usam o custo efetivo, juros pagos ÷ dívida bruta média.</p>
     <div class="dm-tiles">
       <div class="dm-tile" id="t-divida">
         <span class="dm-tile-label">Dívida bruta (<button type="button" class="term" data-term="dbgg">DBGG</button>), % do PIB <span class="tag tag-dado">Dado</span></span>
@@ -90,7 +90,7 @@
         <span class="dm-note">r <span data-source="fiscal_now" data-field="r" data-row="0">—</span>% · g <span data-source="fiscal_now" data-field="g" data-row="0">—</span>%</span>
       </div>
       <div class="dm-tile" id="t-primario">
-        <span class="dm-tile-label">Primário que estabiliza a dívida, % do PIB <span class="tag tag-calc">Cálculo</span></span>
+        <span class="dm-tile-label">Primário que estabiliza a dívida líquida, % do PIB <span class="tag tag-calc">Cálculo</span></span>
         <span class="dm-big dash-skeleton" data-source="fiscal_now" data-field="stabilizing_primary" data-row="0">—</span>
         <span class="dm-note">Hoje <span data-source="fiscal_now" data-field="primary_balance" data-row="0">—</span>% · lacuna <span data-source="fiscal_now" data-field="primary_gap" data-row="0">—</span> p.p.</span>
       </div>
@@ -103,7 +103,7 @@
     <div class="dm-grid">
       <div class="dm-card" id="c-rg">
         <h3 class="dm-h2">Juro da dívida contra crescimento nominal <span class="tag tag-calc">Cálculo</span></h3>
-        <p class="dm-sub">Acumulado em 12 meses, %. Com r acima de g, a dívida cresce sem déficit primário.</p>
+        <p class="dm-sub">Acumulado em 12 meses, %. r sobre a dívida líquida. Com r acima de g, a dívida cresce sem déficit primário.</p>
         <div class="dm-legend lg-rg"></div>
         <div class="dm-chart ch-rg" data-source="fiscal_series"></div>
       </div>
@@ -122,14 +122,14 @@
       </div>
       <div class="dm-card" id="c-gap">
         <h3 class="dm-h2">Lacuna do primário <span class="tag tag-calc">Cálculo</span></h3>
-        <p class="dm-sub">Primário que estabiliza a dívida menos o primário atual, p.p. do PIB. Gatilho: acima de 2 p.p.</p>
+        <p class="dm-sub">Primário que estabiliza a dívida líquida menos o primário atual, p.p. do PIB. Gatilho: acima de 2 p.p.</p>
         <p class="porque"><b>Por que esta regra.</b> O limite de 2 p.p. é escolha do monitor, sem base em lei. A ideia: uma lacuna menor cabe em um ajuste de orçamento; maior que isso pede mudança de regra ou de receita, o que leva mais de um ano.</p>
         <div class="dm-chart ch-gap" data-source="fiscal_series"></div>
       </div>
     </div>
     <div class="dm-card" id="c-fan">
       <h3 class="dm-h2">Leque da dívida bruta até 2030, % do PIB <span class="tag tag-sim">Projeção</span></h3>
-      <p class="dm-sub">2.000 trajetórias de dívida = dívida × (1 + r) ÷ (1 + g) − primário, ano a ano. Ponto de partida: os valores de r, g e primário do último mês. Cada ano soma um choque conjunto de r, g e primário sorteado dos meses desde 2015, o que mantém a correlação entre eles (estilo FMI). Sem mudança de política: o primário fica no nível atual. Faixas: 10% a 90% e 25% a 75%; linha: mediana.</p>
+      <p class="dm-sub">2.000 trajetórias de dívida = dívida × (1 + juro) ÷ (1 + g) − primário, ano a ano. Juro = custo efetivo da dívida bruta (juros pagos ÷ dívida bruta média), não o r da dívida líquida. Ponto de partida: os valores de juro, g e primário do último mês. Cada ano soma um choque conjunto de juro, g e primário sorteado dos meses desde 2015, o que mantém a correlação entre eles (estilo FMI). Sem mudança de política: o primário fica no nível atual. Faixas: 10% a 90% e 25% a 75%; linha: mediana.</p>
       <div class="dm-tiles">
         <div class="dm-tile">
           <span class="dm-tile-label">Dívida em 2030, mediana <span class="tag tag-sim">Projeção</span></span>
@@ -302,7 +302,7 @@
         <h3 class="dm-h2">O tamanho da conta contra o gasto que se pode cortar <span class="tag tag-calc">Cálculo</span></h3>
         <p class="dm-note dm-live"><span class="orc-txt">—</span></p>
         <ol class="dm-steps">
-          <li><b>Juros</b>: o que a dívida bruta cobra em um ano, ao custo médio dos últimos 12 meses.</li>
+          <li><b>Juros</b>: o que a dívida bruta cobra em um ano, ao custo efetivo dos últimos 12 meses (juros pagos ÷ dívida bruta média).</li>
           <li><b>Crescimento</b>: o PIB nominal cresce, e a dívida pesa menos em proporção. Isso desconta parte dos juros.</li>
           <li><b>Superávit do PLOA</b>: o que o Orçamento de 2027 já prevê poupar.</li>
           <li><b>A conta</b>: o que sobra é o superávit a mais que faria a dívida parar de subir em % do PIB.</li>
@@ -563,25 +563,26 @@ dash.loader('fiscal_dbgg', macroLoader);
 dash.loader('fiscal_prim', macroLoader);
 dash.loader('fiscal_nom', macroLoader);
 dash.loader('fiscal_pib', macroLoader);
+dash.loader('fiscal_dlsp', macroLoader);
 
 dash.calc('fiscal', {
   title: 'Dívida, déficits e PIB 12m por mês',
-  description: 'Junta as quatro séries do BCB por mês. PIB 12m = soma dos 12 últimos meses do PIB mensal (SGS 4380), o mesmo número da série 4382; só sai quando os 12 meses existem.',
-  inputs: ['fiscal_dbgg', 'fiscal_prim', 'fiscal_nom', 'fiscal_pib'],
-  fn: (dbgg, prim, nom, pib) => {
+  description: 'Junta as cinco séries do BCB por mês: dívida bruta (DBGG), dívida líquida do setor público (DLSP), déficits primário e nominal em 12 meses e PIB. PIB 12m = soma dos 12 últimos meses do PIB mensal (SGS 4380), o mesmo número da série 4382; só sai quando os 12 meses existem.',
+  inputs: ['fiscal_dbgg', 'fiscal_prim', 'fiscal_nom', 'fiscal_pib', 'fiscal_dlsp'],
+  fn: (dbgg, prim, nom, pib, dlsp) => {
     const by = (rows) => new Map(rows.map((r) => [r.month, r.value]));
-    const D = by(dbgg), P = by(prim), N = by(nom), Y = by(pib);
+    const D = by(dbgg), P = by(prim), N = by(nom), Y = by(pib), L = by(dlsp);
     const months = [...new Set([...D.keys(), ...P.keys(), ...N.keys(), ...Y.keys()])].sort();
     const back = (m, k) => { const [y, mo] = m.split('-').map(Number); const t = y * 12 + mo - 1 - k; return `${Math.floor(t / 12)}-${String(t % 12 + 1).padStart(2, '0')}`; };
     const gdp12 = (m) => { let s = 0; for (let k = 0; k < 12; k++) { const v = Y.get(back(m, k)); if (v === undefined) return null; s += v; } return s; };
     const v = (M, m) => (M.has(m) ? M.get(m) : null);
-    return months.map((m) => ({ month: m, gross_debt_gdp: v(D, m), primary_deficit_12m_gdp: v(P, m), nominal_deficit_12m_gdp: v(N, m), gdp_12m_brl_mn: gdp12(m) }));
+    return months.map((m) => ({ month: m, gross_debt_gdp: v(D, m), net_debt_gdp: v(L, m), primary_deficit_12m_gdp: v(P, m), nominal_deficit_12m_gdp: v(N, m), gdp_12m_brl_mn: gdp12(m) }));
   },
 });
 
 dash.calc('fiscal_series', {
   title: 'r, g e primário estabilizador',
-  description: 'Por mês: r = (déficit nominal − déficit primário) ÷ média da dívida bruta agora e 12 meses antes; g = PIB 12m ÷ PIB 12m de 12 meses antes − 1; primário estabilizador = dívida × (r − g) ÷ (1 + g).',
+  description: 'Por mês: juros = déficit nominal − déficit primário (12 meses, setor público consolidado); r = juros ÷ média da dívida líquida (DLSP) agora e 12 meses antes, o mesmo conceito dos dois lados; g = PIB 12m ÷ PIB 12m de 12 meses antes − 1; primário estabilizador = dívida líquida × (r − g) ÷ (1 + g). Para as trajetórias da dívida bruta: custo efetivo = juros ÷ média da dívida bruta, o que mantém os juros pagos.',
   inputs: ['fiscal'],
   fn: (fiscal) => {
     const byMonth = new Map(fiscal.map((r) => [r.month, r]));
@@ -591,14 +592,15 @@ dash.calc('fiscal_series', {
       const [y, m] = row.month.split('-');
       const prev = byMonth.get(`${Number(y) - 1}-${m}`);
       if (!prev) continue;
-      const vals = [row.gross_debt_gdp, prev.gross_debt_gdp, row.primary_deficit_12m_gdp, row.nominal_deficit_12m_gdp, row.gdp_12m_brl_mn, prev.gdp_12m_brl_mn];
+      const vals = [row.gross_debt_gdp, prev.gross_debt_gdp, row.net_debt_gdp, prev.net_debt_gdp, row.primary_deficit_12m_gdp, row.nominal_deficit_12m_gdp, row.gdp_12m_brl_mn, prev.gdp_12m_brl_mn];
       if (!vals.every(ok)) continue;
       const d = Number(row.gross_debt_gdp), d0 = Number(prev.gross_debt_gdp);
+      const l = Number(row.net_debt_gdp), l0 = Number(prev.net_debt_gdp);
       const p = Number(row.primary_deficit_12m_gdp), n = Number(row.nominal_deficit_12m_gdp);
-      const r = (n - p) / ((d + d0) / 2) * 100;
+      const r = (n - p) / ((l + l0) / 2) * 100, r_gross = (n - p) / ((d + d0) / 2) * 100;
       const g = (Number(row.gdp_12m_brl_mn) / Number(prev.gdp_12m_brl_mn) - 1) * 100;
-      const s = d * (r - g) / (100 + g);
-      out.push({ month: row.month, gross_debt_gdp: d, debt_change_12m: d - d0, r, g, r_minus_g: r - g, stabilizing_primary: s, primary_balance: -p, primary_gap: s + p });
+      const s = l * (r - g) / (100 + g);
+      out.push({ month: row.month, gross_debt_gdp: d, debt_change_12m: d - d0, net_debt_gdp: l, interest_12m_gdp: n - p, r, r_gross, g, r_minus_g: r - g, stabilizing_primary: s, primary_balance: -p, primary_gap: s + p });
     }
     return out;
   },
@@ -691,14 +693,14 @@ dash.calc('leiloes_resumo', {
 
 dash.calc('debt_fan', {
   title: 'Leque da dívida bruta',
-  description: 'Simulação de 2.000 trajetórias até 2030: partida no último mês; choques anuais conjuntos de r, g e primário sorteados dos desvios em relação à média desde 2015; semente fixa, então o resultado se repete.',
+  description: 'Simulação de 2.000 trajetórias da dívida bruta até 2030: partida no último mês; juro = custo efetivo da dívida bruta (juros pagos ÷ dívida bruta média); choques anuais conjuntos de juro, g e primário sorteados dos desvios em relação à média desde 2015; semente fixa, então o resultado se repete.',
   inputs: ['fiscal_series'],
   fn: (fiscal_series) => {
     const hist = fiscal_series.filter((r) => r.month >= '2015-01');
     if (hist.length < 24) return [];
     const last = fiscal_series[fiscal_series.length - 1];
     const mean = (k) => hist.reduce((t, r) => t + r[k], 0) / hist.length;
-    const mr = mean('r'), mg = mean('g'), mp = mean('primary_balance');
+    const mr = mean('r_gross'), mg = mean('g'), mp = mean('primary_balance');
     let seed = 20261027;
     const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
     const startYear = Number(last.month.slice(0, 4)), years = [];
@@ -708,7 +710,7 @@ dash.calc('debt_fan', {
       let d = last.gross_debt_gdp; const p = [];
       for (const y of years) {
         const h = hist[Math.floor(rnd() * hist.length)];
-        const r = last.r + (h.r - mr), g = last.g + (h.g - mg), pb = last.primary_balance + (h.primary_balance - mp);
+        const r = last.r_gross + (h.r_gross - mr), g = last.g + (h.g - mg), pb = last.primary_balance + (h.primary_balance - mp);
         d = d * (1 + r / 100) / (1 + g / 100) - pb;
         p.push(d);
       }
@@ -835,7 +837,7 @@ dash.calc('contab', {
 
 dash.calc('orcamento_impacto', {
   title: 'A conta para a dívida parar de subir',
-  description: 'Em R$ bi ao PIB de 2027 implícito na meta. Juros = dívida × r ÷ (1 + g); crescimento = − dívida × g ÷ (1 + g); menos o primário do PLOA; a soma é o esforço para estabilizar. Comparações: discricionárias do PLOA, contingenciamento da IFI e juros a mais por cenário (elasticidade do BCB).',
+  description: 'Em R$ bi ao PIB de 2027 implícito na meta. Juros = dívida bruta × custo efetivo (juros pagos ÷ dívida bruta média) ÷ (1 + g); crescimento = − dívida × g ÷ (1 + g); menos o primário do PLOA; a soma é o esforço para estabilizar. Comparações: discricionárias do PLOA, contingenciamento da IFI e juros a mais por cenário (elasticidade do BCB).',
   inputs: ['budget', 'scenarios', 'fiscal_now'],
   fn: (budget, scenarios, fiscal_now) => {
     // Calcs run apart from the page script, so the formatter is local.
@@ -847,13 +849,13 @@ dash.calc('orcamento_impacto', {
     let conta = null, sens = null;
     if (fiscal_now.length) {
       const f = fiscal_now[0], d = f.gross_debt_gdp;
-      const juros = d * f.r / (100 + f.g) / 100 * pib;
+      const juros = d * f.r_gross / (100 + f.g) / 100 * pib;
       const cresc = -d * f.g / (100 + f.g) / 100 * pib;
       const ploa = -b.primario_ploa.pct_pib / 100 * pib;
       conta = juros + cresc + ploa;
       // R$ bi off the bill per 1 p.p. more nominal growth: d/(1+g)^2 of GDP.
       sens = { g: d / 100 / Math.pow(1 + f.g / 100, 2) / 100 * pib };
-      rows.push({ id: 'juros', kind: 'up', item: 'Juros da dívida em um ano', start: 0, end: juros, valor_bi: juros, nota: `dívida ${nf(1).format(d)}% do PIB × juro médio ${nf(1).format(f.r)}%` });
+      rows.push({ id: 'juros', kind: 'up', item: 'Juros da dívida em um ano', start: 0, end: juros, valor_bi: juros, nota: `dívida bruta ${nf(1).format(d)}% do PIB × custo efetivo ${nf(1).format(f.r_gross)}%` });
       rows.push({ id: 'crescimento', kind: 'down', item: 'Desconto do crescimento do PIB', start: juros, end: juros + cresc, valor_bi: cresc, nota: `PIB nominal ${nf(1).format(f.g)}% em 12 meses` });
       rows.push({ id: 'ploa', kind: 'down', item: 'Superávit já previsto no PLOA', start: juros + cresc, end: conta, valor_bi: ploa, nota: `${nf(2).format(b.primario_ploa.pct_pib)}% do PIB` });
       rows.push({ id: 'esforco', kind: 'total', item: 'A conta: falta poupar', start: 0, end: conta, valor_bi: conta, nota: `${nf(1).format(conta / pib * 100)}% do PIB`, mes: f.month });

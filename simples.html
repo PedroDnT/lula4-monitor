@@ -86,7 +86,7 @@ dl.words dd { margin: 2px 0 0; font-size: 15px; }
     <p class="say" id="j-say">—</p>
     <div class="duo" id="j-duo"></div>
     <p class="analogy">Como um cartão de crédito: se o juro da fatura sobe mais rápido que o salário, a dívida pesa mais a cada mês.</p>
-    <details class="from"><summary><span class="tag tag-dado">Dado</span><span class="tag tag-calc">Cálculo</span></summary><p>Juro = juros pagos em 12 meses ÷ dívida média. Crescimento = PIB em reais de 12 meses contra os 12 meses anteriores. BCB, pelo <b>SILO</b>.</p></details>
+    <details class="from"><summary><span class="tag tag-dado">Dado</span><span class="tag tag-calc">Cálculo</span></summary><p>Juro = juros pagos em 12 meses ÷ dívida bruta média. A aba Fiscal também mostra o juro sobre a dívida líquida, que dá um número maior. Crescimento = PIB em reais de 12 meses contra os 12 meses anteriores. BCB, pelo <b>SILO</b>.</p></details>
   </section>
 
   <section class="card" id="c-conta">
@@ -169,7 +169,7 @@ const series = (s) => rpc("macro_series", { p_series: s, p_from: "2023-01-01" })
 
 function back(m, k) { const [y, mo] = m.split("-").map(Number); const t = y * 12 + mo - 1 - k; return `${Math.floor(t / 12)}-${String(t % 12 + 1).padStart(2, "0")}`; }
 
-// The same debt arithmetic as the Fiscal page (fiscal_series and orcamento_impacto there).
+// The gross-debt arithmetic of the Fiscal page (r_gross in fiscal_series, orcamento_impacto there).
 function debtNow(D, P, N, Y) {
   const gdp12 = (m) => { let s = 0; for (let k = 0; k < 12; k++) { const v = Y.get(back(m, k)); if (v === undefined) return null; s += v; } return s; };
   const months = [...D.keys()].filter((m) => P.has(m) && N.has(m) && D.has(back(m, 12)) && gdp12(m) && gdp12(back(m, 12))).sort();

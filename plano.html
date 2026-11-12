@@ -88,7 +88,7 @@
   </section>
 
   <details class="card"><summary><b>Método e limites</b></summary>
-    <p>A conta da dívida é a mesma da aba Fiscal: r = juros nominais em 12 meses ÷ dívida bruta média; g = PIB nominal de 12 meses contra 12 meses antes. Os juros do BCB seguem o conceito da dívida líquida, então r é uma aproximação.</p>
+    <p>A trajetória é a da dívida bruta, com a mesma conta das trajetórias da aba Fiscal: juro = custo efetivo da dívida bruta, juros nominais pagos em 12 meses ÷ dívida bruta média; g = PIB nominal de 12 meses contra 12 meses antes. Assim os juros do ponto de partida são os juros pagos. O r − g da aba Fiscal usa a dívida líquida, do mesmo conceito dos juros, e por isso dá um r maior.</p>
     <p>O primário de partida da trajetória é o resultado do setor público consolidado em 12 meses, em % do PIB. O pacote atua no governo central; a simulação soma os dois.</p>
     <p>O último dado da dívida é tratado como o nível do fim de 2026. Cada passo é de 1 ano. r e g ficam fixos; uma queda de juro só entra pelo terceiro controle.</p>
     <p>O pacote depende de aprovação no Senado e na Câmara. O teto de 2,0% e o bloqueio dentro da banda só valem nos anos em que o governo aciona o contingenciamento. A dedução do diesel muda a meta de 2026, não a despesa.</p>
@@ -150,7 +150,7 @@ function renderValue(P, B, f) {
   const c = $("v-cover"); c.replaceChildren();
   const b1 = el("b", "hi"); b1.style.width = share(lo) + "%"; const b2 = el("b"); b2.style.width = share(hi) + "%"; c.append(b2, b1);
   $("v-cov").textContent = gap > 0
-    ? `Para a dívida parar de crescer, o primário precisa ser de ${nf(1).format(f.stab)}% do PIB; hoje é de ${sg2(f.primary)}% (${monthName(f.month)}). A distância é de ${nf(1).format(gap)} p.p., ou ${bi(gap / 100 * pib)}. O pacote cobre de ${nf(0).format(share(lo))}% a ${nf(0).format(share(hi))}% dessa distância.`
+    ? `Para a dívida bruta parar de crescer, o primário precisa ser de ${nf(1).format(f.stab)}% do PIB; hoje é de ${sg2(f.primary)}% (${monthName(f.month)}). A distância é de ${nf(1).format(gap)} p.p., ou ${bi(gap / 100 * pib)}. O pacote cobre de ${nf(0).format(share(lo))}% a ${nf(0).format(share(hi))}% dessa distância.`
     : `Com os dados de ${monthName(f.month)}, o primário atual já estabiliza a dívida.`;
   return { pib, lo, hi };
 }
@@ -202,7 +202,7 @@ function renderDebt(P, f, V) {
     $("s-key").replaceChildren(...L.map(([n, , c]) => { const k = el("span"); const i = el("i"); i.style.background = c; k.append(i, document.createTextNode(n)); return k; }));
     $("s-tbl").tBodies[0].replaceChildren(...L.map(([n, v]) => { const tr = el("tr"); tr.append(td(n), ...v.slice(1).map((p) => td(nf(1).format(p) + "%", "num"))); return tr; }));
     const dif = base[4] - plano[4], rise = plano[4] - f.d;
-    $("s-say").textContent = `Dívida de ${nf(1).format(f.d)}% do PIB em ${monthName(f.month)}, juro implícito de ${nf(1).format(f.r)}% e crescimento nominal de ${nf(1).format(f.g)}%. Sem o pacote, a dívida chega a ${nf(1).format(base[4])}% em 2030. Com o pacote, a ${nf(1).format(plano[4])}%: ${nf(1).format(dif)} p.p. a menos, e ${rise > 0 ? "ainda " + nf(1).format(rise) + " p.p. acima de hoje" : nf(1).format(-rise) + " p.p. abaixo de hoje"}.`;
+    $("s-say").textContent = `Dívida de ${nf(1).format(f.d)}% do PIB em ${monthName(f.month)}, custo efetivo da dívida bruta de ${nf(1).format(f.r)}% e crescimento nominal de ${nf(1).format(f.g)}%. Sem o pacote, a dívida chega a ${nf(1).format(base[4])}% em 2030. Com o pacote, a ${nf(1).format(plano[4])}%: ${nf(1).format(dif)} p.p. a menos, e ${rise > 0 ? "ainda " + nf(1).format(rise) + " p.p. acima de hoje" : nf(1).format(-rise) + " p.p. abaixo de hoje"}.`;
   }
   [imp, grow, dr].forEach((e) => e.addEventListener("input", draw));
   addEventListener("resize", draw);
