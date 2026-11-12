@@ -7,6 +7,7 @@ Site estático público com 3 monitores sobre juros, câmbio e fiscal depois da 
 | Agora | `index.html` | Preços ao vivo, pesos de agora dos 3 cenários, 6 sinais de dominância |
 | Agora (segunda vista) | `relatorio.html` | Pesos de partida (só fatos), fechamento da curva DI, Copom contra Focus |
 | Fiscal | `dominancia.html` | Conta da dívida, rolagem, âncora de inflação, orçamento 2027 |
+| Plano fiscal | `plano.html` | Simulação do PLP 299/2026 se cumprido: primário de 2027 contra a meta e dívida até 2030; medidas em `data/plano/medidas.json` |
 | Método | `metodo.html` | De onde vem cada número, como cada página funciona, fontes, limites e conceitos |
 | Versão simples | `simples.html` | A conta do governo em 6 passos, para quem não é da área; página que pode ser compartilhada sozinha |
 
