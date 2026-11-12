@@ -24,6 +24,7 @@
 .tbl td { padding: 8px 8px 8px 0; border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
 .tbl td.num, .tbl th.num { text-align: right; white-space: nowrap; padding-right: 0; padding-left: 10px; }
 .tbl td small { display: block; color: var(--color-fg-muted); font-size: 12.5px; margin-top: 2px; }
+#m-tbl td.num small { white-space: normal; max-width: 220px; margin-left: auto; }
 .ok { color: var(--color-ok); font-weight: 600; } .bad { color: var(--color-bad); font-weight: 600; }
 .cover { height: 30px; border-radius: 6px; background: var(--color-border-line); position: relative; overflow: hidden; margin: 10px 0 6px; }
 .cover b { position: absolute; left: 0; top: 0; bottom: 0; background: var(--color-accent); opacity: .45; }
@@ -48,7 +49,7 @@
 <main class="sp">
   <h1>O plano fiscal, se for cumprido</h1>
   <p class="legend">Origem de cada número: <span class="tag tag-norma">Norma</span> texto do projeto <span class="tag tag-dado">Dado</span> publicado <span class="tag tag-calc">Cálculo</span> conta direta com dados <span class="tag tag-jul">Julgamento</span> premissa <span class="tag tag-sim">Projeção</span> olha adiante</p>
-  <p class="lead" id="lead">Em 11/11/2026 o governo apresentou o PLP 299/2026. Esta página simula o efeito do pacote nas contas, na hipótese de aprovação e execução integral.</p>
+  <p class="lead" id="lead">Em 11/11/2026 o governo apresentou o PLP 299/2026; em 12/11 o relator apresentou um substitutivo. Esta página segue o texto do parecer de 12/11 e simula o efeito do pacote nas contas, na hipótese de aprovação e execução integral.</p>
   <p class="src" id="status">—</p>
 
   <section class="card" id="c-vale">
@@ -57,7 +58,7 @@
     <p class="say" id="v-say">—</p>
     <div class="cover" id="v-cover" aria-hidden="true"></div>
     <p id="v-cov">—</p>
-    <p class="src"><span class="tag tag-dado">Dado</span> Faixa anunciada pelo governo, sem memória de cálculo por medida. <span class="tag tag-calc">Cálculo</span> % do PIB com o PIB de 2027 implícito na meta do PLDO; conta da dívida com séries do BCB pelo <b>SILO</b>. <span id="v-src"></span></p>
+    <p class="src"><span class="tag tag-dado">Dado</span> Faixas do governo (12/11) e do parecer do relator, que abre a conta em 4 medidas (tabela 4). <span class="tag tag-calc">Cálculo</span> % do PIB com o PIB de 2027 implícito na meta do PLDO; conta da dívida com séries do BCB pelo <b>SILO</b>. <span id="v-src"></span></p>
   </section>
 
   <section class="card" id="c-meta">
@@ -123,13 +124,16 @@ function debtNow(D, P, N, Y) {
 function fail(id, msg) { const e = $(id); if (e) { e.textContent = msg; e.classList.add("na"); } }
 const td = (txt, cls, label) => { const c = el("td", cls || "", txt); if (label) c.dataset.l = label; return c; };
 
+// R$ bi with a decimal only when the source has one (45,1 stays 45,1; 50 stays 50).
+const nb = (v) => nf(Number.isInteger(v) ? 0 : 1).format(v);
+
 function renderMeasures(P) {
   $("status").textContent = `${P.projeto.nome}, ${P.projeto.autor}; relator: ${P.projeto.relator}. ${P.projeto.status} Página atualizada em ${P.atualizado_em.split("-").reverse().join("/")}.`;
   $("m-link").href = P.projeto.url;
   $("m-tbl").tBodies[0].replaceChildren(...P.medidas.map((m) => {
     const tr = el("tr");
     const a = td(""); a.append(el("b", "", m.medida), el("small", "", m.texto + " (" + m.artigo + ")"));
-    const v = m.impacto_2027_bi != null ? bi(m.impacto_2027_bi) : m.impacto_min_bi != null ? `R$ ${nf(0).format(m.impacto_min_bi)} a ${nf(0).format(m.impacto_max_bi)} bi` : "—";
+    const v = m.impacto_2027_bi != null ? bi(m.impacto_2027_bi) : m.impacto_min_bi != null ? `R$ ${nb(m.impacto_min_bi)} a ${nb(m.impacto_max_bi)} bi` : "—";
     const c = td("", "num", "Impacto em 2027"); c.append(document.createTextNode(v), el("small", "", m.impacto_fonte));
     tr.append(a, td(m.lado, "", "Lado"), c);
     return tr;
@@ -140,9 +144,9 @@ function renderValue(P, B, f) {
   const pib = B.meta_centro.valor_bi / (B.meta_centro.pct_pib / 100);
   const lo = Math.min(...P.impacto_2027.map((x) => x.min_bi)), hi = Math.max(...P.impacto_2027.map((x) => x.max_bi));
   const pc = (v) => v / pib * 100;
-  $("v-big").textContent = `R$ ${nf(0).format(lo)} a ${nf(0).format(hi)} bi`;
-  const ranges = P.impacto_2027.map((x) => `R$ ${nf(0).format(x.min_bi)} a ${nf(0).format(x.max_bi)} bi (${x.quem})`).join("; ");
-  $("v-say").textContent = `Equivale a ${nf(2).format(pc(lo))}% a ${nf(2).format(pc(hi))}% do PIB de 2027. Há duas faixas oficiais: ${ranges}.`;
+  $("v-big").textContent = `R$ ${nb(lo)} a ${nb(hi)} bi`;
+  const ranges = P.impacto_2027.map((x) => `R$ ${nb(x.min_bi)} a ${nb(x.max_bi)} bi (${x.quem})`).join("; ");
+  $("v-say").textContent = `Equivale a ${nf(2).format(pc(lo))}% a ${nf(2).format(pc(hi))}% do PIB de 2027. Há duas faixas: ${ranges}.`;
   $("v-src").replaceChildren(...P.impacto_2027.flatMap((x, i) => { const a = el("a", "", x.fonte); a.href = x.url; return [document.createTextNode(i ? " · " : "Fontes: "), a]; }));
   if (!f) { fail("v-cov", "As séries do BCB não carregaram agora; a comparação com a conta da dívida fica indisponível."); return { pib, lo, hi }; }
   const gap = f.stab - f.primary;                       // p.p. of GDP still missing to stabilise the debt
