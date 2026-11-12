@@ -88,23 +88,23 @@
 <tr><td>Teto da meta de inflação</td><td>4,5%</td><td><span class="tag t-norma">Norma</span></td><td>Meta de 3% com tolerância de 1,5 ponto (CMN).</td></tr>
 <tr><td>Meta primária de 2027</td><td>0,50% do PIB; piso 0,25%</td><td><span class="tag t-norma">Norma</span></td><td>Lei Complementar 200/2023 e lei de diretrizes orçamentárias.</td></tr>
 <tr><td>Faixas da dívida</td><td>LFT 53%; vence em 12 meses 22%; prazo médio 3,8 anos</td><td><span class="tag t-norma">Norma</span></td><td>Plano Anual de Financiamento 2026 do Tesouro (um plano, não uma lei).</td></tr>
-<tr><td>Fração que resta do choque do dólar</td><td>0,75</td><td><span class="tag t-reg">Regressão</span></td><td>Projeções locais (Jordà, 2005) com a PTAX de 2008 a out/2026, 4.664 dias.</td></tr>
-<tr><td>Parte global do dólar e do DI</td><td>0,65 × EM; 4,2 bp por 1% de EM; 0,34 por bp do Treasury</td><td><span class="tag t-reg">Regressão</span></td><td>Variações diárias de 2019 a set/2026, 1.929 dias, erros de Newey e West. EM = média do peso mexicano e do rand.</td></tr>
-<tr><td>Ibovespa contra o dólar</td><td>−0,11% − 0,90 × dólar</td><td><span class="tag t-reg">Regressão</span></td><td>172 dias de estresse de 2018 a set/2026, erros HAC. Uma regressão por ação nos mesmos dias.</td></tr>
-<tr><td>Reação do DI ao dólar</td><td>7,1 bp por 1% de alta</td><td><span class="tag t-reg">Regressão</span></td><td>Dias de estresse do DI de 2 anos.</td></tr>
+<tr><td>Fração que resta do choque do dólar</td><td>0,75</td><td><span class="tag t-jul">Julgamento</span></td><td>Dentro da faixa medida de 0,59 a 0,97 (1 a 12 meses): projeções locais (Jordà, 2005) com a PTAX de 2008 a out/2026, 207 dias de choque local. Script: <code>research/regressions.py</code>.</td></tr>
+<tr><td>Parte global do dólar e do DI</td><td>0,57 × EM; 2,2 bp por 1% de EM; 0,40 por bp do Treasury</td><td><span class="tag t-reg">Regressão</span></td><td>Variações diárias de 2019 a set/2026, 1.613 dias, erros de Newey e West. EM = média do peso mexicano e do rand. Mesmo script.</td></tr>
+<tr><td>Ibovespa contra o dólar</td><td>−0,18% − 0,95 × dólar</td><td><span class="tag t-reg">Regressão</span></td><td>188 dias de estresse de 2018 a set/2026, dólar futuro e Ibovespa do SILO, erros HAC. Uma regressão por ação nos 114 dias de estresse do dólar. Mesmo script.</td></tr>
+<tr><td>Reação do DI ao dólar</td><td>8,6 bp por 1% de alta</td><td><span class="tag t-reg">Regressão</span></td><td>Os mesmos 188 dias de estresse, DI de 2 anos (PRE 720 dias) do SILO. Mesmo script.</td></tr>
 <tr><td>Limites dos 6 sinais do Agora</td><td>correlação 0,4; 25 bp; 10 bp; 60 bp</td><td><span class="tag t-jul">Julgamento</span></td><td>Cortes do autor, na linha dos sinais com limites de Kaminsky, Lizondo e Reinhart (1998).</td></tr>
-<tr><td>Leque da dívida</td><td>2.000 trajetórias até 2030</td><td><span class="tag t-proj">Projeção</span></td><td>Choques conjuntos de r, g e primário sorteados dos meses desde 2015, sem mudança de política (lógica das análises de dívida do FMI).</td></tr>
+<tr><td>Leque da dívida</td><td>2.000 trajetórias até 2030</td><td><span class="tag t-proj">Projeção</span></td><td>Choques conjuntos de r, g e primário sorteados dos meses desde 2015, sem mudança de política (lógica das análises de dívida do FMI). O código roda no navegador, na página Fiscal (cálculo <code>debt_fan</code>), com semente fixa 20261027: o mesmo dado dá o mesmo leque.</td></tr>
 </tbody></table></div>
-<p>As regressões do dólar, da bolsa e do DI ainda não têm script no repositório; os números vêm da estimativa original. A pasta <code>research/</code> lê o SILO e grava em <code>data/research/</code> os arquivos que as páginas usam.</p>
+<p>A pasta <code>research/</code> lê o SILO (e fechamentos de Nova York e da B3 pelo Yahoo, onde o SILO não tem a série) e grava em <code>data/research/</code> os resultados que as páginas usam. As regressões do dólar, da bolsa e do DI vêm de <code>research/regressions.py</code>, reestimadas em 12/11/2026. O teste fora da amostra da bolsa (erro médio de 1,4 p.p.) usa a régua de outubro e ainda não tem script.</p>
 
 <h2 id="m-paginas">O que cada página faz</h2>
 <details open><summary>Agora (preços durante o dia)</summary>
 <p>Mostra a leitura do DI jan/29, os 6 sinais de dominância, o dólar, a bolsa e o histórico do dia. Lê os preços a cada 2 minutos enquanto a página está aberta.</p>
 <ul>
 <li><b>Dólar:</b> choque = cotação de agora contra a PTAX do último dia útil. Antes das 9h, o painel compara o USDT/BRL da Binance (menos 0,4%) com o Yahoo e descarta o Yahoo se ele destoa mais de 1,5%. Em 12 meses, os 3 cenários se movem juntos para que a média ponderada seja igual ao dólar futuro.</li>
-<li><b>DI e câmbio:</b> nos dias de estresse, o DI de 2 anos subiu 7,1 bp para cada 1% de alta do dólar. A parte que o câmbio não explica (faixa de cerca de ±60 bp) mistura prêmio fiscal, caminho da Selic e inflação esperada.</li>
+<li><b>DI e câmbio:</b> nos dias de estresse, o DI de 2 anos subiu 8,6 bp para cada 1% de alta do dólar. A parte que o câmbio não explica (faixa de cerca de ±56 bp) mistura prêmio fiscal, caminho da Selic e inflação esperada.</li>
 <li><b>6 sinais:</b> juro e dólar sobem juntos (correlação de 20 dias acima de 0,4); juro real de 2 anos +25 bp desde 23/10; inflação implícita de 2 anos +25 bp desde 23/10; CDS de 5 anos +10 bp no dia; inclinação jan/33 menos jan/27 +10 bp no dia; DI 60 bp além do que o câmbio explica.</li>
-<li><b>Bolsa:</b> o EWZ é o Ibovespa em dólar. A régua de estresse divide a queda do Ibovespa em parte do câmbio e resto. Em 7 eventos de 2018 a 2026, o erro médio fora da amostra foi 1,4 p.p.</li>
+<li><b>Bolsa:</b> o EWZ é o Ibovespa em dólar. A régua de estresse divide a queda do Ibovespa em parte do câmbio e resto. Em 7 eventos de 2018 a 2026, o erro médio fora da amostra foi 1,4 p.p., com a régua de outubro.</li>
 <li><b>Precedentes:</b> o dia é comparado com 8 choques passados em 7 variáveis.</li>
 </ul></details>
 <details><summary>Relatório do dia (fatos e curva)</summary>
