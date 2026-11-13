@@ -27,6 +27,7 @@ SCENARIOS = 'data/dominancia/scenarios.json'
 FACTS = 'data/relatorio/fatos.json'
 HISTORY = 'data/dominancia/scenario_history.json'
 STATE = 'docs/rotina/state.json'
+SIGMA_FILE = 'data/research/sigma.json'
 ALLOWED = {0.77, 0.87, 0.95, 1.0, 1.05, 1.15, 1.30}
 ORIGINS = {'Norma', 'Dado', 'Cálculo', 'Regressão', 'Literatura', 'Julgamento', 'Projeção'}
 
@@ -108,6 +109,8 @@ def validate_repo(root):
     for r in weights:
         iso(r['partida_em']); iso(r['agora_em'])
         require(r['partida_em'] <= r['agora_em'], 'Partida posterior ao agora')
+    # One sigma for the batch and the pages: they read data/research/sigma.json, this script uses SIGMA.
+    require(read(root / SIGMA_FILE).get('sigma_used_bp') == SIGMA, 'Sigma divergente de ' + SIGMA_FILE)
     facts = read(root / FACTS)
     require(len({f['id'] for f in facts}) == len(facts), 'Fatos duplicados')
     for f in facts:
@@ -267,8 +270,8 @@ def prepare(root, run_date, incoming, market_reader=collect_market, source_reade
               'method': {'marks_bp': {'origin': 'Cálculo', 'value': list(MARKS), 'source': 'data/research/term_premium.json (research/termpremium.py): caminho da Selic por cenário (Julgamento) + prêmio medido (Cálculo)'},
                          'sigma_bp': {'origin': 'Julgamento', 'value': SIGMA, 'source': 'data/research/sigma.json (research/sigma.py): faixa medida de 78 a 123 bp, mediana 101'},
                          'formula': 'normalize(start * exp(-(move_bp - marks_bp)^2 / (2 * sigma_bp^2)))'},
-              'warnings': ['Mudança de partida de 30/10 sem fato justificativo; preservada.',
-                           'Prompt semanal não inspecionado; regra antiga 0,3 permanece pendente de verificação.']}
+              # Open items come from the ledger, so a warning disappears once its item is resolved there.
+              'warnings': list(state.get('unresolved', []))}
     audit = {'market': market, 'changes': changes, 'start': start, 'now': now}
     runs = state.setdefault('runs', {})
     if run_date in runs:

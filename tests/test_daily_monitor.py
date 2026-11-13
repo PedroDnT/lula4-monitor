@@ -75,6 +75,15 @@ class BatchTests(unittest.TestCase):
         fn(data)
         m.write(self.root / path, data)
 
+    def test_sigma_must_match_pages_file(self):
+        self.mutate(m.SIGMA_FILE, lambda d: d.update(sigma_used_bp=101))
+        with self.assertRaisesRegex(ValueError, 'Sigma divergente'): m.validate_repo(self.root)
+
+    def test_warnings_come_from_ledger(self):
+        _, report, _ = self.prepare()
+        self.assertEqual(report['warnings'], m.read(self.root / m.STATE)['unresolved'])
+        self.assertFalse(any('0,3' in w for w in report['warnings']))
+
     def test_baseline_unchanged_and_copies_exact(self):
         files, report, _ = self.prepare()
         self.assertEqual(report['start']['value'], [.49, .31, .2])
@@ -192,6 +201,14 @@ class SourceTests(unittest.TestCase):
         self.assertEqual(m.previous_session('2026-11-03', {'2026-11-02'}), '2026-10-30')
         self.assertEqual(m.previous_session('2026-11-09', set()), '2026-11-06')
         with self.assertRaises(ValueError): m.previous_session('2028-01-03', set())
+
+    def test_year_end_closures_in_repo_calendar(self):
+        # B3 has no session on 24/12 and 31/12 (no DI1F29 settlement on those days in 2025, SILO).
+        holidays = {r['data'] for r in m.read(ROOT / 'data/relatorio/feriados.json')}
+        self.assertEqual(m.previous_session('2026-12-28', holidays), '2026-12-23')
+        self.assertEqual(m.previous_session('2027-01-04', holidays), '2026-12-30')
+        self.assertEqual(m.previous_session('2027-12-27', holidays), '2027-12-23')
+
 
     def test_market_validation(self):
         good = [{'trade_date': m.BASE_DATE, 'settlement_rate': 12.642, 'ticker': 'DI1F29', 'settlement_status': 'F'},
