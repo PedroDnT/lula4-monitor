@@ -37,6 +37,8 @@
 #dash-root .dm-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
 #dash-root .dm-chart { position: relative; min-height: 220px; }
 #dash-root .ch-cen { min-height: 0; }
+#dash-root .cen-metodo { padding-left: 1.2em; margin: 4px 0 10px; }
+#dash-root .cen-metodo li { margin: 0 0 4px; }
 #dash-root .dm-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
 #dash-root .dm-legend span { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
 #dash-root .dm-sw { width: 10px; height: 3px; border-radius: 2px; display: inline-block; }
@@ -480,7 +482,13 @@
     <div class="dm-grid">
       <div class="dm-card" id="c-cen">
         <h3 class="dm-h2">Pesos por dia <span class="tag tag-jul">Julgamento</span></h3>
-        <p class="dm-sub">Cada barra soma 100%. A primeira é a partida da semana.</p>
+        <p class="dm-sub">Cada dia tem 2 barras, e cada barra soma 100%.</p>
+        <ol class="dm-sub cen-metodo">
+          <li><b>Partida</b> <span class="tag tag-jul">Julgamento</span> <span class="tag tag-calc">Cálculo</span>: pesos depois das notícias. Cada fato aprovado multiplica a partida anterior por um fator de julgamento: a favor 1,05 (fraco), 1,15 (moderado) ou 1,30 (forte); contra 0,95, 0,87 ou 0,77. A partida passa de um dia para o outro e só muda quando entra um fato novo.</li>
+          <li><b>Agora</b> <span class="tag tag-calc">Cálculo</span> <span class="tag tag-dado">Dado</span>: partida × o quanto o movimento do DI jan/29 desde 23/10 (ajuste da B3 pelo SILO) combina com a marca de cada cenário (coluna "DI jan/29 desde 23/10" da tabela abaixo), com desvio de 100 bp medido em choques desde 2015.</li>
+          <li>O movimento do DI é acumulado desde 23/10. Por isso o agora de cada dia parte da partida, não do agora da véspera: partir da véspera contaria o mesmo movimento do DI mais de uma vez. A partida se acumula; o agora não.</li>
+          <li>Até 28/10 o agora usava uma regra anterior (mistura com fator 0,3); a regra acima vale desde 29/10. A partida de 30/10 não tem fato registrado que a justifique; o valor foi mantido como gravado. A nota de cada barra traz a origem.</li>
+        </ol>
         <div class="dm-legend lg-cen"></div>
         <div class="dm-chart ch-cen" data-source="scenario_history"></div>
       </div>
@@ -1220,6 +1228,21 @@ function fanChart(el, rows, { refs = [] } = {}) {
   rows.forEach((r) => svg.append('text').attr('x', x(r.year)).attr('y', y(r.p50) - 8).attr('text-anchor', 'middle').attr('fill', 'var(--color-fg)').attr('font-size', 'var(--cds-font-size-caption)').text(nf(1).format(r.p50)));
 }
 
+// One "partida" and one "agora" bar per day. Days with no new fact repeat the last partida (display only).
+function cenRows(data) {
+  const dm = (d) => d.slice(8, 10) + '/' + d.slice(5, 7);
+  const dates = [...new Set(data.map((r) => r.date))].sort();
+  const out = []; let last = null;
+  dates.forEach((d) => {
+    const day = data.filter((r) => r.date === d);
+    const p = day.find((r) => /^partida/i.test(r.label)), a = day.find((r) => !/^partida/i.test(r.label));
+    if (p) last = { ...p, src: d };
+    if (last) out.push({ ...last, group: d, label: `${dm(d)} · partida`, note: p ? p.note : `Sem fato novo; mesma partida de ${dm(last.src)}.` });
+    if (a) out.push({ ...a, group: d, label: `${dm(d)} · agora` });
+  });
+  return out;
+}
+
 function stackChart(el, rows, keys, colors) {
   el.replaceChildren();
   const width = Math.max(260, el.clientWidth);
@@ -1227,12 +1250,14 @@ function stackChart(el, rows, keys, colors) {
   const probe = d3.select(el).append('svg').append('text').attr('font-size', 'var(--cds-font-size-caption)');
   const left = d3.max(rows, (r) => { probe.text(r.label); return probe.node().getComputedTextLength(); }) + 12;
   d3.select(el).selectAll('svg').remove();
-  const height = top + rows.length * (bar + gap);
+  const ys = []; let yy = top;
+  rows.forEach((r, i) => { if (i && r.group && r.group !== rows[i - 1].group) yy += gap; ys.push(yy); yy += bar + gap; });
+  const height = yy;
   const x = d3.scaleLinear([0, 1], [left, width - 8]);
   const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${width} ${height}`).attr('height', height);
   const tip = d3.select(el).append('div').attr('class', 'dm-tip').style('display', 'none');
   rows.forEach((r, i) => {
-    const y = top + i * (bar + gap);
+    const y = ys[i];
     svg.append('text').attr('x', left - 8).attr('y', y + bar / 2).attr('dy', '0.32em').attr('text-anchor', 'end').attr('fill', 'var(--color-fg-muted)').attr('font-size', 'var(--cds-font-size-caption)').text(r.label);
     let acc = 0;
     keys.forEach((k) => {
@@ -1382,7 +1407,7 @@ dash.onData(() => {
   const cenEl = document.querySelector('.ch-cen');
   const keys = [['ancora', 'Âncora retomada'], ['deriva', 'Deriva fiscal'], ['estresse', 'Estresse e espiral']];
   legend(document.querySelector('.lg-cen'), keys.map(([k, l]) => ({ label: l, color: scColor[k] })));
-  if (sh.status === 'ok') stackChart(cenEl, sh.data, keys.map(([k]) => k), scColor);
+  if (sh.status === 'ok') stackChart(cenEl, cenRows(sh.data), keys.map(([k]) => k), scColor);
   else failBox(cenEl, sh.status);
 
   // debt fan
