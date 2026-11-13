@@ -203,5 +203,22 @@
   "url": "https://doi.org/10.4236/me.2019.1010137",
   "revisao": "Multiplicadores fiscais no Brasil: entre consensos e dissensos",
   "revisao_url": "https://www.scielo.br/j/rec/a/HZkTc7hmTsg3xPvyVrv8vnk/"
+ },
+ "premissas": {
+  "gatilhos": {
+   "valor_bi": 8.9,
+   "desde": 2028,
+   "quem": "Estimativa do governo no PLOA 2027 para os 2 gatilhos (receita extra de petróleo fora dos pisos e vinculações sob o limite). O projeto os estende até 2030, e a partir de 2028 eles cortam o limite de despesa em vez de abrir espaço.",
+   "fonte": "Folha de S.Paulo, 11/11/2026",
+   "url": "https://www1.folha.uol.com.br/mercado/2026/11/medidas-fiscais-terao-impacto-de-cerca-de-r-60-bi-e-podem-ser-votadas-hoje-diz-ministro-do-planejamento.shtml"
+  },
+  "di_reacao": {
+   "ticker": "DI1F29",
+   "data": "2026-11-11",
+   "bp": -7.0,
+   "de": 14.621,
+   "para": 14.551,
+   "quem": "Ajuste da B3 no dia da apresentação do projeto, pelo SILO. Um dia de pregão também carrega o mercado externo; a variação diária típica do DI1F29 é da mesma ordem."
+  }
  }
 }
