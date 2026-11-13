@@ -1,5 +1,5 @@
 {
- "atualizado_em": "2026-11-12",
+ "atualizado_em": "2026-11-13",
  "projeto": {
   "nome": "PLP 299/2026",
   "autor": "Senador Jaques Wagner (PT/BA)",
@@ -34,6 +34,7 @@
  },
  "medidas": [
   {
+   "id": "contencao",
    "medida": "Contenção de despesa para mirar o centro da meta",
    "texto": "O Executivo pode bloquear despesa quando o resultado fica entre o piso e o centro da meta. A limitação pode alcançar despesas obrigatórias definidas em lei comum, com exceções (obrigações constitucionais, serviço da dívida, fundo de ciência e tecnologia e as ressalvas da LDO).",
    "artigo": "LC 200, arts. 6º-C e 6º-D",
@@ -44,6 +45,7 @@
    "impacto_fonte": "Parecer do relator, 12/11"
   },
   {
+   "id": "teto",
    "medida": "Teto de crescimento real da despesa cai de 2,5% para 2,0%",
    "texto": "Vale a partir de 2027, só nos anos com a contenção acima. O que passa do necessário reduz o limite do ano. A redução não entra na base dos anos seguintes.",
    "artigo": "LC 200, art. 5º, §§ 5º e 6º, e art. 6º-E",
@@ -52,6 +54,7 @@
    "impacto_fonte": "Incluído na contenção de despesa (parecer)"
   },
   {
+   "id": "creditos",
    "medida": "Limite à compensação de créditos tributários",
    "texto": "O Executivo pode reduzir a compensação de tributos com créditos, até o valor da redução de limite somado ao bloqueio do ano. Os percentuais saem por ato do Executivo.",
    "artigo": "LC 200, art. 6º-F",
@@ -62,6 +65,7 @@
    "impacto_fonte": "Parecer do relator, 12/11"
   },
   {
+   "id": "beneficios",
    "medida": "Corte nos benefícios tributários",
    "texto": "Isenção passa a pagar 20% da alíquota padrão; crédito vale 80% do original; regimes especiais e lucro presumido sobem 20%. Ficam fora a desoneração da folha (CPRB), tecnologia e semicondutores e carros para pessoas com deficiência. Vale do 4º mês após a publicação, ou de 1/1/2027.",
    "artigo": "LC 224, art. 4º; PLP, art. 15",
@@ -70,6 +74,7 @@
    "impacto_fonte": "Parecer do relator, 12/11 (redução de 10% do gasto tributário)"
   },
   {
+   "id": "regime",
    "medida": "Regime especial da reforma tributária limitado",
    "texto": "O regime do art. 106 da LC 214 fica limitado ao valor do demonstrativo de gastos tributários de 2026, corrigido pelo IPCA.",
    "artigo": "PLP, art. 9º",
@@ -78,6 +83,7 @@
    "impacto_fonte": "Parecer do relator, 12/11"
   },
   {
+   "id": "limites",
    "medida": "Limites a despesas específicas",
    "texto": "Lei Kandir: entrega limitada a R$ 1 bi por ano de 2027 a 2030, e a diferença é paga de 2031 a 2037. Compensação previdenciária: R$ 3 bi por ano de 2027 a 2030. Proex: R$ 1 bi por ano até 2030.",
    "artigo": "LC 176, art. 1º; Lei 9.796, art. 8º-C; PLP, art. 11",
@@ -88,6 +94,7 @@
    "impacto_fonte": "Moretti, via O Globo; fora da faixa do parecer. Parte é adiamento, não corte"
   },
   {
+   "id": "petroleo",
    "medida": "Receita de petróleo fora da base dos pisos",
    "texto": "A receita do imposto sobre exportação de petróleo fica fora da receita usada nos pisos até 2030. A partir de 2028, o limite de despesa cai no mesmo valor, sem entrar na base. O Fundo Constitucional do DF fica fora.",
    "artigo": "LC 235, art. 14",
@@ -96,6 +103,7 @@
    "impacto_fonte": "Sem número no parecer; a imprensa cita cerca de R$ 9 bi a menos no piso da saúde"
   },
   {
+   "id": "investimento",
    "medida": "Excedente do primário vira investimento",
    "texto": "Se o primário do ano anterior passar do piso da meta e houve contenção, o Executivo pode abrir crédito para investimentos no ano seguinte, até o valor contido, fora do limite de despesa.",
    "artigo": "PLP, art. 12",
@@ -104,6 +112,7 @@
    "impacto_fonte": "Pode devolver em gasto o que foi contido"
   },
   {
+   "id": "fundos",
    "medida": "Uso de superávit de fundos públicos",
    "texto": "O parecer cita R$ 100 bi a mais de margem na regra de ouro com a desvinculação de superávit financeiro. O texto do substitutivo de 12/11 não traz esse artigo.",
    "artigo": "Parecer, impacto fiscal",
@@ -112,6 +121,7 @@
    "impacto_fonte": "Não muda o resultado primário"
   },
   {
+   "id": "supersalarios",
    "medida": "Supersalários",
    "texto": "O Congresso tem 120 dias para votar a lei do teto (art. 37, § 11, da Constituição). A economia do Executivo reduz o limite de despesa ou vai para investimento e segurança pública. O projeto não corta pagamentos.",
    "artigo": "PLP, art. 10",
@@ -120,6 +130,7 @@
    "impacto_fonte": "Sem estimativa"
   },
   {
+   "id": "restos",
    "medida": "Restos a pagar protegidos",
    "texto": "Restos a pagar de contratos e convênios vigentes em novembro de 2026 só podem ser bloqueados ou cancelados depois de 31/12/2027.",
    "artigo": "PLP, art. 14",
@@ -128,6 +139,7 @@
    "impacto_fonte": "Sem estimativa"
   },
   {
+   "id": "diesel",
    "medida": "Subsídio ao diesel fora da meta de 2026",
    "texto": "Até R$ 10,5 bi de subvenção ao diesel deixam de contar na meta de 2026. A despesa continua a existir.",
    "artigo": "PLP, art. 13",
@@ -135,5 +147,61 @@
    "impacto_2027_bi": null,
    "impacto_fonte": "Não é economia: é dedução da meta de 2026"
   }
- ]
+ ],
+ "cenarios": [
+  {
+   "id": "integral",
+   "cenario": "Aprovado e usado por inteiro",
+   "precisa": "O Senado e a Câmara aprovam o texto do parecer, e o Executivo aciona a contenção de despesa e o limite à compensação de créditos nas faixas do parecer.",
+   "medidas": [
+    "contencao",
+    "creditos",
+    "beneficios",
+    "regime"
+   ]
+  },
+  {
+   "id": "so_lei",
+   "cenario": "Aprovado, só o que é automático",
+   "precisa": "O texto é aprovado, mas o Executivo não aciona a contenção nem o limite à compensação de créditos. Só o corte nos benefícios tributários e o limite ao regime especial têm efeito.",
+   "medidas": [
+    "beneficios",
+    "regime"
+   ]
+  },
+  {
+   "id": "rejeitado",
+   "cenario": "Rejeitado ou parado",
+   "precisa": "O mérito não alcança 41 votos no Senado ou 257 na Câmara, ou a votação não termina antes do Orçamento de 2027.",
+   "medidas": []
+  }
+ ],
+ "multiplicadores": {
+  "receita": {
+   "impacto": [
+    0,
+    -0.8
+   ],
+   "acumulado": [
+    0,
+    -1.83
+   ]
+  },
+  "despesa": {
+   "impacto": [
+    0.6,
+    0.7
+   ],
+   "acumulado": [
+    1.15,
+    1.33
+   ]
+  },
+  "horizonte_acumulado": "10 trimestres",
+  "quem": "Barros Neto e Correia (2019), SVAR com dados do Tesouro e do Ipea, 1997 a 2014. Os autores dizem que o multiplicador de tributos deles é maior que o de outros estudos brasileiros; o zero da faixa de receita representa os estudos que não acham efeito significativo.",
+  "fonte": "Modern Economy, 2019",
+  "url": "https://doi.org/10.4236/me.2019.1010137",
+  "revisao": "Multiplicadores fiscais no Brasil: entre consensos e dissensos",
+  "revisao_url": "https://www.scielo.br/j/rec/a/HZkTc7hmTsg3xPvyVrv8vnk/"
+ }
 }
