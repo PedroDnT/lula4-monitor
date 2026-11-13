@@ -7,6 +7,38 @@
   "status": "Parecer de Plenário do relator com substitutivo (12/11/2026). Urgência aprovada em 12/11 por 40 a 38; o mérito precisa de 41 votos no Senado e de 257 na Câmara. O relator apresentou depois uma versão com o acolhimento parcial da emenda 14; esta página segue o texto do parecer de 12/11.",
   "url": "https://www25.senado.leg.br/web/atividade/materias/-/materia/176328"
  },
+ "tramitacao": [
+  {
+   "etapa": "Projeto apresentado",
+   "data": "2026-11-11",
+   "feito": true
+  },
+  {
+   "etapa": "Parecer com substitutivo",
+   "data": "2026-11-12",
+   "feito": true
+  },
+  {
+   "etapa": "Urgência aprovada, 40 a 38",
+   "data": "2026-11-12",
+   "feito": true
+  },
+  {
+   "etapa": "Mérito no Senado, 41 votos",
+   "data": null,
+   "feito": false
+  },
+  {
+   "etapa": "Câmara, 257 votos",
+   "data": null,
+   "feito": false
+  },
+  {
+   "etapa": "Sanção",
+   "data": null,
+   "feito": false
+  }
+ ],
  "impacto_2027": [
   {
    "id": "governo",
