@@ -32,7 +32,7 @@
 .m summary { cursor: pointer; font-weight: 500; color: var(--color-fg); }
 @media (max-width: 640px) { .m .flow { grid-template-columns: 1fr 1fr; } }
 </style></head><body>
-<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html">Agora</a><a href="dominancia.html">Fiscal</a><a href="plano.html">Plano fiscal</a><a href="metodo.html" aria-current="page">Método</a><a href="simples.html" class="tab-simple" aria-label="Versão simples"><span class="vs-long">Versão simples</span><span class="vs-short">Simples</span></a></nav></div></header>
+<header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html"><span class="vs-long">Cenário precificado</span><span class="vs-short">Cenário</span></a><a href="dominancia.html"><span class="vs-long">Panorama fiscal</span><span class="vs-short">Fiscal</span></a><a href="plano.html"><span class="vs-long">Projeção PLP 299/2026</span><span class="vs-short">PLP 299</span></a><a href="metodo.html" aria-current="page">Método</a><a href="simples.html" class="tab-simple" aria-label="Versão simples"><span class="vs-long">Versão simples</span><span class="vs-short">Simples</span></a></nav></div></header>
 <main class="m">
 <h1>Como o site chega a cada número</h1>
 <p class="lead">O site mede duas coisas: o estado das contas públicas e quanto desse risco o mercado de juros já cobra. Esta página diz de onde vem cada número, como a conta é feita e o que ela não consegue dizer.</p>
@@ -92,13 +92,13 @@
 <tr><td>Parte global do dólar e do DI</td><td>0,57 × EM; 2,2 bp por 1% de EM; 0,40 por bp do Treasury</td><td><span class="tag t-reg">Regressão</span></td><td>Variações diárias de 2019 a set/2026, 1.613 dias, erros de Newey e West. EM = média do peso mexicano e do rand. Mesmo script.</td></tr>
 <tr><td>Ibovespa contra o dólar</td><td>−0,18% − 0,95 × dólar</td><td><span class="tag t-reg">Regressão</span></td><td>188 dias de estresse de 2018 a set/2026, dólar futuro e Ibovespa do SILO, erros HAC. Uma regressão por ação nos 114 dias de estresse do dólar. Mesmo script.</td></tr>
 <tr><td>Reação do DI ao dólar</td><td>8,6 bp por 1% de alta</td><td><span class="tag t-reg">Regressão</span></td><td>Os mesmos 188 dias de estresse, DI de 2 anos (PRE 720 dias) do SILO. Mesmo script.</td></tr>
-<tr><td>Limites dos 6 sinais do Agora</td><td>correlação 0,4; 25 bp; 10 bp; 60 bp</td><td><span class="tag t-jul">Julgamento</span></td><td>Cortes do autor, na linha dos sinais com limites de Kaminsky, Lizondo e Reinhart (1998).</td></tr>
+<tr><td>Limites dos 6 sinais do Cenário precificado</td><td>correlação 0,4; 25 bp; 10 bp; 60 bp</td><td><span class="tag t-jul">Julgamento</span></td><td>Cortes do autor, na linha dos sinais com limites de Kaminsky, Lizondo e Reinhart (1998).</td></tr>
 <tr><td>Leque da dívida</td><td>2.000 trajetórias até 2030</td><td><span class="tag t-proj">Projeção</span></td><td>Choques conjuntos de r, g e primário sorteados dos meses desde 2015, sem mudança de política (lógica das análises de dívida do FMI). O código roda no navegador, na página Fiscal (cálculo <code>debt_fan</code>), com semente fixa 20261027: o mesmo dado dá o mesmo leque.</td></tr>
 </tbody></table></div>
 <p>A pasta <code>research/</code> lê o SILO (e fechamentos de Nova York e da B3 pelo Yahoo, onde o SILO não tem a série) e grava em <code>data/research/</code> os resultados que as páginas usam. As regressões do dólar, da bolsa e do DI vêm de <code>research/regressions.py</code>, reestimadas em 12/11/2026. O teste fora da amostra da bolsa (erro médio de 1,4 p.p.) usa a régua de outubro e ainda não tem script.</p>
 
 <h2 id="m-paginas">O que cada página faz</h2>
-<details open><summary>Agora (preços durante o dia)</summary>
+<details open><summary>Cenário precificado (preços durante o dia)</summary>
 <p>Mostra a leitura do DI jan/29, os 6 sinais de dominância, o dólar, a bolsa e o histórico do dia. Lê os preços a cada 2 minutos enquanto a página está aberta.</p>
 <ul>
 <li><b>Dólar:</b> choque = cotação de agora contra a PTAX do último dia útil. Antes das 9h, o painel compara o USDT/BRL da Binance (menos 0,4%) com o Yahoo e descarta o Yahoo se ele destoa mais de 1,5%. Em 12 meses, os 3 cenários se movem juntos para que a média ponderada seja igual ao dólar futuro.</li>
@@ -113,7 +113,7 @@
 <li><b>Curva DI:</b> ajustes do DI1 da B3 pelo SILO, contra a sessão anterior e contra 23/10.</li>
 <li><b>Copom contra o Focus:</b> cada contrato de DI é o CDI composto até o vencimento; com a Selic fixa entre reuniões, cada contrato novo dá a Selic de uma reunião.</li>
 </ul></details>
-<details><summary>Fiscal (o fundo)</summary>
+<details><summary>Panorama fiscal (o fundo)</summary>
 <p>Há dominância fiscal quando subir o juro deixa de segurar o real e a inflação, porque o mercado duvida da dívida (Blanchard, 2004). O painel tem 10 regras: 7 alarmes e 3 condições de fundo. As condições (dívida esperada pelo Focus subindo, r − g acima de zero, lacuna do primário acima de 2 p.p.) ficam acesas na maior parte do tempo, então o resumo conta só os alarmes.</p>
 <ul>
 <li><b>Conta da dívida:</b> r = juros nominais em 12 meses ÷ dívida bruta média de 12 meses; g = PIB nominal de 12 meses contra 12 meses antes; primário que estabiliza = dívida × (r − g) ÷ (1 + g). Os juros do BCB seguem o conceito da dívida líquida, então r é uma aproximação.</li>
@@ -121,7 +121,7 @@
 <li><b>Âncora de inflação:</b> inflação implícita = (1 + PRE) ÷ (1 + DPL) − 1, nos vértices de 720 e 1.800 dias.</li>
 <li><b>Orçamento 2027:</b> PLOA e PLDO por partes e o custo de juros de cada cenário (+1 p.p. de Selic = R$ 59,3 bi em 12 meses, medida do BCB).</li>
 </ul></details>
-<details><summary>Plano fiscal (PLP 299/2026)</summary>
+<details><summary>Projeção PLP 299/2026</summary>
 <p>Simula o pacote apresentado em 11/11/2026, no texto do parecer do relator de 12/11, na hipótese de aprovação e execução integral. Usa a mesma conta da dívida do Fiscal, com o primário de partida do setor público consolidado e passos de 1 ano. A faixa do pacote é a do governo em 12/11 (R$ 46 a 56 bi, Ministro do Planejamento) e a do parecer (R$ 45,1 a 56,1 bi, com dados do Executivo: contenção de despesa 12,8 a 18,3; compensação de créditos 12,8 a 18,3; benefícios tributários 15,0; regime especial 4,5). O pacote não tem peso nos cenários do Agora. A página tem 3 cenários próprios, sem peso: uso integral, só as medidas automáticas (benefícios tributários e regime especial, R$ 19,5 bi) e rejeição. O efeito no PIB multiplica o impacto em % do PIB por multiplicadores da literatura brasileira (Barros Neto e Correia, 2019): tributo de 0 a −0,8 no ano e de 0 a −1,83 em 10 trimestres; despesa de 0,6 a 0,7 e de 1,15 a 1,33. O zero da faixa de tributo representa os estudos que não acham efeito significativo. Na trajetória da dívida, o impacto de 2027 cresce com o PIB nominal; a partir de 2028 entram os 2 gatilhos que cortam o limite (R$ 8,9 bi, estimativa do governo no PLOA); a queda do juro implícito parte da variação do DI1F29 no dia da apresentação, vezes a parte da dívida que muda de taxa em 1 ano (LFT mais vencimentos de 12 meses). A simulação não estima efeito sobre câmbio ou inflação.</p>
 </details>
 
