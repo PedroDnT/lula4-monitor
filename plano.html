@@ -32,6 +32,7 @@
 .ctl { display: grid; gap: 12px; margin: 10px 0 12px; }
 .ctl label { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; font-size: 14.5px; align-items: baseline; }
 .ctl label output { font-weight: 600; font-variant-numeric: tabular-nums; }
+.ctl small.base { grid-column: 1 / -1; color: var(--color-fg-muted); font-size: 12.5px; line-height: 1.45; }
 .ctl input[type=range] { grid-column: 1 / -1; width: 100%; min-height: 28px; accent-color: var(--color-accent); }
 .chart svg { width: 100%; height: auto; display: block; }
 .chart text { font-size: 12px; fill: var(--color-fg-muted); font-family: inherit; }
@@ -65,7 +66,7 @@
     <h2>2. Três cenários para o plano</h2>
     <p class="say" id="c-say">—</p>
     <table class="tbl stack" id="c-tbl"><thead><tr><th>Cenário</th><th class="num">Impacto em 2027</th><th class="num">Efeito no PIB de 2027</th><th class="num">Primário de 2027 contra o centro</th><th class="num">Dívida bruta em 2030</th></tr></thead><tbody></tbody></table>
-    <p class="src"><span class="tag tag-jul">Julgamento</span> Os 3 cenários e as medidas de cada um. Sem peso: não há preço de mercado para a votação. <span class="tag tag-dado">Dado</span> Impactos do parecer (tabela 5). <span class="tag tag-lit">Literatura</span> Multiplicadores: tributo de 0 a −0,8 no ano e de 0 a −1,83 em 10 trimestres; despesa de 0,6 a 0,7 no ano e de 1,15 a 1,33 em 10 trimestres (<a id="c-mult" href="#">—</a>; <a id="c-rev" href="#">revisão</a>). <span class="tag tag-calc">Cálculo</span> Efeito no PIB = impacto em % do PIB × multiplicador, por lado. Primário a partir do PLOA e da IFI. <span class="tag tag-sim">Projeção</span> Dívida com a conta da seção 4, impacto constante e juro sem mudança.</p>
+    <p class="src"><span class="tag tag-jul">Julgamento</span> Os 3 cenários e as medidas de cada um. Sem peso: não há preço de mercado para a votação. <span class="tag tag-dado">Dado</span> Impactos do parecer (tabela 5). <span class="tag tag-lit">Literatura</span> Multiplicadores: tributo de 0 a −0,8 no ano e de 0 a −1,83 em 10 trimestres; despesa de 0,6 a 0,7 no ano e de 1,15 a 1,33 em 10 trimestres (<a id="c-mult" href="#">—</a>; <a id="c-rev" href="#">revisão</a>). <span class="tag tag-calc">Cálculo</span> Efeito no PIB = impacto em % do PIB × multiplicador, por lado. Primário a partir do PLOA e da IFI. <span class="tag tag-sim">Projeção</span> Dívida com a conta e as bases da seção 4 (impacto que cresce com o PIB, gatilhos de 2028 e queda de juro medida no DI); no cenário de rejeição, nenhum dos três.</p>
   </section>
 
   <section class="card" id="c-meta">
@@ -80,13 +81,13 @@
     <p class="say" id="s-say">—</p>
     <div class="ctl">
       <label>Impacto do pacote em 2027 <output id="o-imp"></output><input type="range" id="i-imp" min="0" max="100" step="1" aria-label="Impacto do pacote em 2027, em R$ bilhões"></label>
-      <label>Acréscimo do impacto a cada ano depois de 2027 <output id="o-grow"></output><input type="range" id="i-grow" min="0" max="60" step="1" value="0" aria-label="Acréscimo anual do impacto, em R$ bilhões"></label>
-      <label>Queda do juro implícito da dívida <output id="o-r"></output><input type="range" id="i-r" min="0" max="4" step="0.1" value="0" aria-label="Queda do juro implícito, em pontos percentuais"></label>
+      <label>Gatilhos que cortam o limite a partir de 2028 <output id="o-grow"></output><input type="range" id="i-grow" min="0" max="20" step="0.1" aria-label="Gatilhos a partir de 2028, em R$ bilhões"><small class="base" id="b-grow">—</small></label>
+      <label>Queda do juro implícito da dívida <output id="o-r"></output><input type="range" id="i-r" min="0" max="1.5" step="0.01" aria-label="Queda do juro implícito, em pontos percentuais"><small class="base" id="b-r">—</small></label>
     </div>
     <div class="chart" id="s-chart"></div>
     <div class="key" id="s-key"></div>
     <table class="tbl" id="s-tbl"><thead><tr><th>Trajetória</th><th class="num">2027</th><th class="num">2028</th><th class="num">2029</th><th class="num">2030</th></tr></thead><tbody></tbody></table>
-    <p class="src"><span class="tag tag-sim">Projeção</span> Dívida do ano seguinte = dívida × (1 + r) ÷ (1 + g) − primário, com r e g fixos no último dado. <span class="tag tag-jul">Julgamento</span> Os 3 controles são premissas: o governo disse que o impacto cresce depois de 2027, sem publicar números; o projeto não fixa efeito sobre o juro. <span class="tag tag-dado">Dado</span> O superávit de 1,5% do PIB em 2030 é compromisso declarado do presidente.</p>
+    <p class="src"><span class="tag tag-sim">Projeção</span> Dívida do ano seguinte = dívida × (1 + r) ÷ (1 + g) − primário, com r e g fixos no último dado. <span class="tag tag-jul">Julgamento</span> O impacto de 2027 cresce com o PIB nominal nos anos seguintes, porque as medidas atuam sobre bases que crescem com ele. O governo disse que o impacto fica "um pouco maior" depois de 2027, sem publicar números. Cada controle abre no valor da sua base, escrita abaixo dele. <span class="tag tag-dado">Dado</span> O superávit de 1,5% do PIB em 2030 é compromisso declarado do presidente.</p>
   </section>
 
   <section class="card" id="c-medidas">
@@ -98,7 +99,7 @@
   <details class="card"><summary><b>Método e limites</b></summary>
     <p>A conta da dívida é a mesma da aba Fiscal: r = juros nominais em 12 meses ÷ dívida bruta média; g = PIB nominal de 12 meses contra 12 meses antes. Os juros do BCB seguem o conceito da dívida líquida, então r é uma aproximação.</p>
     <p>O primário de partida da trajetória é o resultado do setor público consolidado em 12 meses, em % do PIB. O pacote atua no governo central; a simulação soma os dois.</p>
-    <p>O último dado da dívida é tratado como o nível do fim de 2026. Cada passo é de 1 ano. r e g ficam fixos; uma queda de juro só entra pelo terceiro controle.</p>
+    <p>O último dado da dívida é tratado como o nível do fim de 2026. Cada passo é de 1 ano. r e g ficam fixos; uma queda de juro só entra pelo terceiro controle. A queda medida no DI vale para toda a trajetória; ela é pequena e está dentro do ruído de um dia de pregão. A parte da dívida que muda de taxa em 1 ano supõe que os vencimentos de 12 meses se distribuem por igual entre os títulos.</p>
     <p>O pacote depende de aprovação no Senado e na Câmara. O teto de 2,0% e o bloqueio dentro da banda só valem nos anos em que o governo aciona o contingenciamento. A dedução do diesel muda a meta de 2026, não a despesa.</p>
     <p>O efeito no PIB usa multiplicadores médios da literatura brasileira, não estimados para estas medidas. O corte atinge regimes específicos, não o consumo em geral, então o multiplicador médio pode exagerar o efeito. Um prêmio de risco menor pode compensar parte dele; esse canal não entra na conta. O efeito no PIB não volta para a trajetória da dívida. A simulação não estima efeito sobre câmbio ou inflação.</p>
   </details>
@@ -182,14 +183,14 @@ function renderTarget(B, V) {
   $("p-say").textContent = `Centro da meta: ${bi(centro)}; piso: ${bi(piso)}. Com o pacote, a partir do PLOA o resultado fica ${where(pl + V.lo, pl + V.hi)}. A partir da projeção da IFI, fica ${where(ifi + V.lo, ifi + V.hi)}.`;
 }
 
-function renderScenarios(P, B, f, V) {
+function renderScenarios(P, B, f, V, Z) {
   const M = Object.fromEntries(P.medidas.map((m) => [m.id, m]));
   const range = (m) => m.impacto_2027_bi != null ? [m.impacto_2027_bi, m.impacto_2027_bi] : [m.impacto_min_bi, m.impacto_max_bi];
   const X = P.multiplicadores, pc = (v) => v / V.pib * 100;
   const centro = B.meta_centro.valor_bi, ploa = B.primario_ploa.valor_bi, ifi = B.primario_ifi.valor_bi;
   const s1 = (v) => (v >= 0 ? "+" : "−") + nf(1).format(Math.abs(v)), s2 = (v) => (Math.abs(v) < 0.005 ? "" : v > 0 ? "+" : "−") + nf(2).format(Math.abs(v));
   const pibY = (k) => V.pib * Math.pow(1 + f.g / 100, k);
-  const debt30 = (imp) => path(f.d, f.r, f.g, [0, 1, 2, 3].map((k) => f.primary + imp / pibY(k) * 100))[4];
+  const debt30 = (imp, on) => path(f.d, f.r - (on ? Z.rMkt : 0), f.g, [0, 1, 2, 3].map((k) => f.primary + (on ? imp / V.pib * 100 + (k ? Z.gat / pibY(k) * 100 : 0) : 0)))[4];
   const fx = (a, b, fmt) => a === b ? fmt(a) : `${fmt(a)} a ${fmt(b)}`;
   const rows = P.cenarios.map((c) => {
     const t = { Receita: [0, 0], Despesa: [0, 0] };
@@ -205,7 +206,7 @@ function renderScenarios(P, B, f, V) {
     const imp = td("", "num", "Impacto em 2027"); imp.append(document.createTextNode(hi ? `R$ ${fx(nb(lo), nb(hi), String)} bi` : "R$ 0"), el("small", "", hi ? fx(nf(2).format(pc(lo)), nf(2).format(pc(hi)), String) + "% do PIB" : "—"));
     const pib = td("", "num", "Efeito no PIB de 2027"); pib.append(document.createTextNode(hi ? `${fx(s2(now[0]), s2(now[1]), String)} p.p.` : "0"), el("small", "", hi ? `${fx(s2(acc[0]), s2(acc[1]), String)} p.p. em ${X.horizonte_acumulado}` : "—"));
     const pri = td("", "num", "Primário de 2027 contra o centro"); pri.append(document.createTextNode(`PLOA: ${fx(s1(ploa + lo - centro), s1(ploa + hi - centro), String)}`), el("small", "", `IFI: ${fx(s1(ifi + lo - centro), s1(ifi + hi - centro), String)} (R$ bi)`));
-    const dv = td(f ? fx(nf(1).format(debt30(hi)), nf(1).format(debt30(lo)), String) + "% do PIB" : "—", "num", "Dívida bruta em 2030");
+    const dv = td(f ? fx(nf(1).format(debt30(hi, hi > 0)), nf(1).format(debt30(lo, hi > 0)), String) + "% do PIB" : "—", "num", "Dívida bruta em 2030");
     tr.append(a, imp, pib, pri, dv);
     return tr;
   }));
@@ -214,21 +215,37 @@ function renderScenarios(P, B, f, V) {
   $("c-say").textContent = `No cenário de uso integral, o pacote vale de ${nf(2).format(pc(top.lo))}% a ${nf(2).format(pc(top.hi))}% do PIB, e o efeito estimado no PIB de 2027 é de ${s2(top.now[0])} a ${s2(top.now[1])} p.p. A partir do PLOA, o primário fica ${ploa + top.hi >= centro ? "no centro da meta ou acima na ponta alta" : "abaixo do centro"}; a partir da projeção da IFI, fica ${ifi + top.hi >= centro ? "no centro ou acima na ponta alta" : "abaixo do centro"}.`;
 }
 
+// Bases of the two debt controls. rep = share of the debt whose rate changes within a year:
+// floating (LFT) plus the fixed part that matures in 12 months, assumed spread evenly.
+function bases(P, z) {
+  const Z = { gat: P.premissas.gatilhos.valor_bi, rMkt: 0, rAnc: 0, rep: 0, lft: 0, venc: 0, dSelic: 0 };
+  if (!z) return Z;
+  const [lft, rol, sc] = z, last = (a) => a[a.length - 1];
+  Z.lft = last(lft).floating_share_dpf; Z.venc = last(rol).vincendo_12m_pct;
+  Z.rep = Z.lft / 100 + Z.venc / 100 * (1 - Z.lft / 100);
+  Z.rMkt = Math.max(0, -P.premissas.di_reacao.bp / 100 * Z.rep);
+  const s = Object.fromEntries(sc.map((r) => [r.id, r]));
+  Z.dSelic = s.deriva.selic_end2027 - s.ancora.selic_end2027; Z.rAnc = Z.dSelic * Z.rep;
+  return Z;
+}
 const COL = { base: "var(--color-bad)", plano: "var(--color-accent)", comp: "var(--color-ok)" };
 function path(d0, r, g, prim) { const out = [d0]; let d = d0; for (const p of prim) { d = d * (1 + r / 100) / (1 + g / 100) - p; out.push(d); } return out; }
 
-function renderDebt(P, f, V) {
+function renderDebt(P, f, V, Z) {
   const years = [2026, 2027, 2028, 2029, 2030];
   const imp = $("i-imp"), grow = $("i-grow"), dr = $("i-r");
-  imp.value = Math.round((V.lo + V.hi) / 2);
+  imp.value = Math.round((V.lo + V.hi) / 2); grow.value = Z.gat; dr.value = Z.rMkt.toFixed(2);
+  const Q = P.premissas, pct0 = (v) => nf(0).format(v * 100) + "%";
+  $("b-grow").textContent = `Base: R$ ${nf(1).format(Z.gat)} bi, estimativa do governo no PLOA para os 2 gatilhos, que a partir de ${Q.gatilhos.desde} cortam o limite (${Q.gatilhos.fonte}).`;
+  $("b-r").textContent = `Base: ${nf(2).format(Z.rMkt)} p.p. O ${Q.di_reacao.ticker} caiu ${nf(0).format(-Q.di_reacao.bp)} bp no dia da apresentação (${Q.di_reacao.data.split("-").reverse().join("/")}, B3 pelo SILO), × ${pct0(Z.rep)} da dívida que muda de taxa em 1 ano (LFT ${nf(1).format(Z.lft)}% + vencimentos de 12 meses ${nf(1).format(Z.venc)}%, Tesouro). Teto de referência: ${nf(2).format(Z.rAnc)} p.p., se o pacote sozinho levasse a Selic do cenário Deriva fiscal para o Âncora retomada (${nf(1).format(Z.dSelic)} p.p.).`;
   const c27 = P.compromisso.primario_2027_pct_pib, c30 = P.compromisso.primario_2030_pct_pib;
   function draw() {
     const I = Number(imp.value), G = Number(grow.value), R = Number(dr.value);
-    $("o-imp").textContent = `R$ ${nf(0).format(I)} bi`; $("o-grow").textContent = `+ R$ ${nf(0).format(G)} bi por ano`; $("o-r").textContent = `${nf(1).format(R)} p.p.`;
+    $("o-imp").textContent = `R$ ${nf(0).format(I)} bi`; $("o-grow").textContent = `R$ ${nf(1).format(G)} bi por ano`; $("o-r").textContent = `${nf(2).format(R)} p.p.`;
     // GDP grows at g, so a R$ amount is converted with each year's GDP.
     const pibY = (k) => V.pib * Math.pow(1 + f.g / 100, k);
     const base = path(f.d, f.r, f.g, [0, 1, 2, 3].map(() => f.primary));
-    const plano = path(f.d, f.r - R, f.g, [0, 1, 2, 3].map((k) => f.primary + (I + G * k) / pibY(k) * 100));
+    const plano = path(f.d, f.r - R, f.g, [0, 1, 2, 3].map((k) => f.primary + I / V.pib * 100 + (k ? G / pibY(k) * 100 : 0)));
     const comp = path(f.d, f.r - R, f.g, [0, 1, 2, 3].map((k) => c27 + (c30 - c27) * k / 3));
     const L = [["Sem pacote: primário de hoje mantido", base, COL.base], ["Com o pacote (controles acima)", plano, COL.plano], [`Compromisso: ${nf(1).format(c27)}% em 2027 até ${nf(1).format(c30)}% em 2030`, comp, COL.comp]];
     const all = L.flatMap((l) => l[1]), lo = Math.floor(Math.min(...all) - 1), hi = Math.ceil(Math.max(...all) + 1);
@@ -253,7 +270,8 @@ function renderDebt(P, f, V) {
 }
 
 Promise.allSettled([file("data/plano/medidas.json"), file("data/dominancia/budget.json"),
-  Promise.all(["DBGG_PIB", "NFSP_PRIMARIO_12M", "NFSP_NOMINAL_12M", "PIB"].map(series))]).then(([p, b, s]) => {
+  Promise.all(["lft", "rolagem", "scenarios"].map((n) => file(`data/dominancia/${n}.json`))),
+  Promise.all(["DBGG_PIB", "NFSP_PRIMARIO_12M", "NFSP_NOMINAL_12M", "PIB"].map(series))]).then(([p, b, z, s]) => {
   if (p.status !== "fulfilled") { ["status", "v-say", "p-say", "s-say"].forEach((id) => fail(id, "O arquivo do plano não carregou agora.")); return; }
   const P = p.value; renderMeasures(P);
   if (b.status !== "fulfilled") { ["v-say", "p-say", "s-say"].forEach((id) => fail(id, "O arquivo do Orçamento não carregou agora.")); return; }
@@ -261,8 +279,9 @@ Promise.allSettled([file("data/plano/medidas.json"), file("data/dominancia/budge
   const f = s.status === "fulfilled" ? debtNow(...s.value) : null;
   const V = renderValue(P, B, f);
   renderTarget(B, V);
-  renderScenarios(P, B, f, V);
-  if (f) renderDebt(P, f, V); else fail("s-say", "As séries do BCB não carregaram agora.");
+  const Z = bases(P, z.status === "fulfilled" ? z.value : null);
+  renderScenarios(P, B, f, V, Z);
+  if (f) renderDebt(P, f, V, Z); else fail("s-say", "As séries do BCB não carregaram agora.");
 });
 })();</script>
 </body></html>
