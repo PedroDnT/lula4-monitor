@@ -48,7 +48,7 @@
 <header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html">Agora</a><a href="dominancia.html">Fiscal</a><a href="plano.html" aria-current="page">Plano fiscal</a><a href="metodo.html">Método</a><a href="simples.html" class="tab-simple" aria-label="Versão simples"><span class="vs-long">Versão simples</span><span class="vs-short">Simples</span></a></nav></div></header>
 <main class="sp">
   <h1>O plano fiscal, se for cumprido</h1>
-  <p class="legend">Origem de cada número: <span class="tag tag-norma">Norma</span> texto do projeto <span class="tag tag-dado">Dado</span> publicado <span class="tag tag-calc">Cálculo</span> conta direta com dados <span class="tag tag-jul">Julgamento</span> premissa <span class="tag tag-sim">Projeção</span> olha adiante</p>
+  <p class="legend">Origem de cada número: <span class="tag tag-norma">Norma</span> texto do projeto <span class="tag tag-dado">Dado</span> publicado <span class="tag tag-calc">Cálculo</span> conta direta com dados <span class="tag tag-jul">Julgamento</span> premissa <span class="tag tag-lit">Literatura</span> estudo publicado <span class="tag tag-sim">Projeção</span> olha adiante</p>
   <p class="lead" id="lead">Em 11/11/2026 o governo apresentou o PLP 299/2026; em 12/11 o relator apresentou um substitutivo. Esta página segue o texto do parecer de 12/11 e simula o efeito do pacote nas contas, na hipótese de aprovação e execução integral.</p>
   <p class="src" id="status">—</p>
 
@@ -58,18 +58,25 @@
     <p class="say" id="v-say">—</p>
     <div class="cover" id="v-cover" aria-hidden="true"></div>
     <p id="v-cov">—</p>
-    <p class="src"><span class="tag tag-dado">Dado</span> Faixas do governo (12/11) e do parecer do relator, que abre a conta em 4 medidas (tabela 4). <span class="tag tag-calc">Cálculo</span> % do PIB com o PIB de 2027 implícito na meta do PLDO; conta da dívida com séries do BCB pelo <b>SILO</b>. <span id="v-src"></span></p>
+    <p class="src"><span class="tag tag-dado">Dado</span> Faixas do governo (12/11) e do parecer do relator, que abre a conta em 4 medidas (tabela 5). <span class="tag tag-calc">Cálculo</span> % do PIB com o PIB de 2027 implícito na meta do PLDO; conta da dívida com séries do BCB pelo <b>SILO</b>. <span id="v-src"></span></p>
+  </section>
+
+  <section class="card" id="c-cen">
+    <h2>2. Três cenários para o plano</h2>
+    <p class="say" id="c-say">—</p>
+    <table class="tbl stack" id="c-tbl"><thead><tr><th>Cenário</th><th class="num">Impacto em 2027</th><th class="num">Efeito no PIB de 2027</th><th class="num">Primário de 2027 contra o centro</th><th class="num">Dívida bruta em 2030</th></tr></thead><tbody></tbody></table>
+    <p class="src"><span class="tag tag-jul">Julgamento</span> Os 3 cenários e as medidas de cada um. Sem peso: não há preço de mercado para a votação. <span class="tag tag-dado">Dado</span> Impactos do parecer (tabela 5). <span class="tag tag-lit">Literatura</span> Multiplicadores: tributo de 0 a −0,8 no ano e de 0 a −1,83 em 10 trimestres; despesa de 0,6 a 0,7 no ano e de 1,15 a 1,33 em 10 trimestres (<a id="c-mult" href="#">—</a>; <a id="c-rev" href="#">revisão</a>). <span class="tag tag-calc">Cálculo</span> Efeito no PIB = impacto em % do PIB × multiplicador, por lado. Primário a partir do PLOA e da IFI. <span class="tag tag-sim">Projeção</span> Dívida com a conta da seção 4, impacto constante e juro sem mudança.</p>
   </section>
 
   <section class="card" id="c-meta">
-    <h2>2. Primário de 2027 contra a meta</h2>
+    <h2>3. Primário de 2027 contra a meta</h2>
     <p class="say" id="p-say">—</p>
     <table class="tbl stack" id="p-tbl"><thead><tr><th>Ponto de partida, R$ bi</th><th class="num">Sem pacote</th><th class="num">Com pacote</th><th class="num">Contra o centro</th><th class="num">Contra o piso</th></tr></thead><tbody></tbody></table>
     <p class="src"><span class="tag tag-norma">Norma</span> Meta: centro de 0,50% do PIB, piso de 0,25% (PLDO 2027). <span class="tag tag-dado">Dado</span> Pontos de partida: PLOA 2027 e IFI (RAF 113). <span class="tag tag-jul">Julgamento</span> A soma supõe que nenhum dos dois pontos de partida já contava com o pacote. Resultado do governo central.</p>
   </section>
 
   <section class="card" id="c-divida">
-    <h2>3. Dívida bruta até 2030</h2>
+    <h2>4. Dívida bruta até 2030</h2>
     <p class="say" id="s-say">—</p>
     <div class="ctl">
       <label>Impacto do pacote em 2027 <output id="o-imp"></output><input type="range" id="i-imp" min="0" max="100" step="1" aria-label="Impacto do pacote em 2027, em R$ bilhões"></label>
@@ -83,7 +90,7 @@
   </section>
 
   <section class="card" id="c-medidas">
-    <h2>4. O que o texto diz, medida por medida</h2>
+    <h2>5. O que o texto diz, medida por medida</h2>
     <table class="tbl stack" id="m-tbl"><thead><tr><th>Medida</th><th>Lado</th><th class="num">Impacto em 2027</th></tr></thead><tbody></tbody></table>
     <p class="src"><span class="tag tag-norma">Norma</span> Texto do <a id="m-link" href="#">PLP 299/2026</a>, como apresentado. O relator apresentou substitutivo; o texto pode mudar. <span class="tag tag-dado">Dado</span> Impactos: só os números ditos em público pelo governo.</p>
   </section>
@@ -93,7 +100,7 @@
     <p>O primário de partida da trajetória é o resultado do setor público consolidado em 12 meses, em % do PIB. O pacote atua no governo central; a simulação soma os dois.</p>
     <p>O último dado da dívida é tratado como o nível do fim de 2026. Cada passo é de 1 ano. r e g ficam fixos; uma queda de juro só entra pelo terceiro controle.</p>
     <p>O pacote depende de aprovação no Senado e na Câmara. O teto de 2,0% e o bloqueio dentro da banda só valem nos anos em que o governo aciona o contingenciamento. A dedução do diesel muda a meta de 2026, não a despesa.</p>
-    <p>A simulação não estima o efeito do pacote sobre câmbio, inflação ou crescimento.</p>
+    <p>O efeito no PIB usa multiplicadores médios da literatura brasileira, não estimados para estas medidas. O corte atinge regimes específicos, não o consumo em geral, então o multiplicador médio pode exagerar o efeito. Um prêmio de risco menor pode compensar parte dele; esse canal não entra na conta. O efeito no PIB não volta para a trajetória da dívida. A simulação não estima efeito sobre câmbio ou inflação.</p>
   </details>
 </main>
 <footer class="site-foot">Leitura de sinais de mercado e julgamento do autor, não recomendação de compra ou venda. Dados abertos do Brasil servidos pelo <b>SILO</b> (BCB). Projeto: Senado Federal, PLP 299/2026. Orçamento: PLOA e PLDO 2027 (IFI, Ipea). Horários de Brasília (UTC-3).</footer>
@@ -175,6 +182,38 @@ function renderTarget(B, V) {
   $("p-say").textContent = `Centro da meta: ${bi(centro)}; piso: ${bi(piso)}. Com o pacote, a partir do PLOA o resultado fica ${where(pl + V.lo, pl + V.hi)}. A partir da projeção da IFI, fica ${where(ifi + V.lo, ifi + V.hi)}.`;
 }
 
+function renderScenarios(P, B, f, V) {
+  const M = Object.fromEntries(P.medidas.map((m) => [m.id, m]));
+  const range = (m) => m.impacto_2027_bi != null ? [m.impacto_2027_bi, m.impacto_2027_bi] : [m.impacto_min_bi, m.impacto_max_bi];
+  const X = P.multiplicadores, pc = (v) => v / V.pib * 100;
+  const centro = B.meta_centro.valor_bi, ploa = B.primario_ploa.valor_bi, ifi = B.primario_ifi.valor_bi;
+  const s1 = (v) => (v >= 0 ? "+" : "−") + nf(1).format(Math.abs(v)), s2 = (v) => (Math.abs(v) < 0.005 ? "" : v > 0 ? "+" : "−") + nf(2).format(Math.abs(v));
+  const pibY = (k) => V.pib * Math.pow(1 + f.g / 100, k);
+  const debt30 = (imp) => path(f.d, f.r, f.g, [0, 1, 2, 3].map((k) => f.primary + imp / pibY(k) * 100))[4];
+  const fx = (a, b, fmt) => a === b ? fmt(a) : `${fmt(a)} a ${fmt(b)}`;
+  const rows = P.cenarios.map((c) => {
+    const t = { Receita: [0, 0], Despesa: [0, 0] };
+    c.medidas.forEach((id) => { const m = M[id], [a, b] = range(m); t[m.lado][0] += a; t[m.lado][1] += b; });
+    const lo = t.Receita[0] + t.Despesa[0], hi = t.Receita[1] + t.Despesa[1];
+    // A cut in spending and a rise in tax both lower GDP: tax multipliers are negative, spending ones positive.
+    const eff = (k) => [pc(t.Receita[1]) * X.receita[k][1] - pc(t.Despesa[1]) * X.despesa[k][1], pc(t.Receita[0]) * X.receita[k][0] - pc(t.Despesa[0]) * X.despesa[k][0]];
+    return { c, lo, hi, now: eff("impacto"), acc: eff("acumulado") };
+  });
+  $("c-tbl").tBodies[0].replaceChildren(...rows.map(({ c, lo, hi, now, acc }) => {
+    const tr = el("tr");
+    const a = td(""); a.append(el("b", "", c.cenario), el("small", "", c.precisa));
+    const imp = td("", "num", "Impacto em 2027"); imp.append(document.createTextNode(hi ? `R$ ${fx(nb(lo), nb(hi), String)} bi` : "R$ 0"), el("small", "", hi ? fx(nf(2).format(pc(lo)), nf(2).format(pc(hi)), String) + "% do PIB" : "—"));
+    const pib = td("", "num", "Efeito no PIB de 2027"); pib.append(document.createTextNode(hi ? `${fx(s2(now[0]), s2(now[1]), String)} p.p.` : "0"), el("small", "", hi ? `${fx(s2(acc[0]), s2(acc[1]), String)} p.p. em ${X.horizonte_acumulado}` : "—"));
+    const pri = td("", "num", "Primário de 2027 contra o centro"); pri.append(document.createTextNode(`PLOA: ${fx(s1(ploa + lo - centro), s1(ploa + hi - centro), String)}`), el("small", "", `IFI: ${fx(s1(ifi + lo - centro), s1(ifi + hi - centro), String)} (R$ bi)`));
+    const dv = td(f ? fx(nf(1).format(debt30(hi)), nf(1).format(debt30(lo)), String) + "% do PIB" : "—", "num", "Dívida bruta em 2030");
+    tr.append(a, imp, pib, pri, dv);
+    return tr;
+  }));
+  $("c-mult").textContent = X.fonte; $("c-mult").href = X.url; $("c-rev").href = X.revisao_url; $("c-rev").title = X.revisao;
+  const top = rows[0];
+  $("c-say").textContent = `No cenário de uso integral, o pacote vale de ${nf(2).format(pc(top.lo))}% a ${nf(2).format(pc(top.hi))}% do PIB, e o efeito estimado no PIB de 2027 é de ${s2(top.now[0])} a ${s2(top.now[1])} p.p. A partir do PLOA, o primário fica ${ploa + top.hi >= centro ? "no centro da meta ou acima na ponta alta" : "abaixo do centro"}; a partir da projeção da IFI, fica ${ifi + top.hi >= centro ? "no centro ou acima na ponta alta" : "abaixo do centro"}.`;
+}
+
 const COL = { base: "var(--color-bad)", plano: "var(--color-accent)", comp: "var(--color-ok)" };
 function path(d0, r, g, prim) { const out = [d0]; let d = d0; for (const p of prim) { d = d * (1 + r / 100) / (1 + g / 100) - p; out.push(d); } return out; }
 
@@ -222,6 +261,7 @@ Promise.allSettled([file("data/plano/medidas.json"), file("data/dominancia/budge
   const f = s.status === "fulfilled" ? debtNow(...s.value) : null;
   const V = renderValue(P, B, f);
   renderTarget(B, V);
+  renderScenarios(P, B, f, V);
   if (f) renderDebt(P, f, V); else fail("s-say", "As séries do BCB não carregaram agora.");
 });
 })();</script>
