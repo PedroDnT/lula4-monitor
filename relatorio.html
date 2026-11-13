@@ -57,7 +57,7 @@
   </header>
 
   <section class="dm-section" id="pesos">
-    <h2 class="dm-h2">Pesos de partida</h2>
+    <h2 class="dm-h2">1. Pesos de partida</h2>
     <p class="dm-sub">A partida vem só de fatos: cada fato multiplica o peso de cada cenário, e os pesos voltam a somar 100%. Fatos com fonte podem alterar a partida; a atualização automática está em revisão. Durante o dia, o Agora atualiza a partida por Bayes com o nível do DI jan/29 desde 23/10 (σ = 100 bp).</p>
     <div class="dm-tiles">
       <div class="dm-tile" id="t-ancora">
@@ -84,8 +84,28 @@
     <p class="dm-note">Partida de <span data-source="pesos" data-field="partida_em" data-row="0">—</span>; "agora" da rotina de <span data-source="pesos" data-field="agora_em" data-row="0">—</span>. Os multiplicadores são julgamento, não modelo.</p>
   </section>
 
+  <section class="dm-section" id="fatos">
+    <h2 class="dm-h2">2. Fatos do dia: de onde vem a partida</h2>
+    <p class="dm-sub">Só fatos com fonte. Preço não entra aqui, porque já entra no intraday. Fator acima de 1 = o fato é mais provável naquele cenário. Cada fator sai da escala de 3 degraus (ver Método).</p>
+    <div class="dm-table-wrap">
+      <table class="dm-table tb-fatos" data-source="fatos" data-row-key="id">
+        <thead><tr>
+          <th data-field="data">Data</th>
+          <th data-field="fato">Fato</th>
+          <th data-field="fonte">Fonte</th>
+          <th class="num" data-field="f_ancora">Âncora</th>
+          <th class="num" data-field="f_deriva">Deriva</th>
+          <th class="num" data-field="f_estresse">Estresse</th>
+          <th data-field="degrau">Degrau e motivo</th>
+          <th data-field="status">Situação</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
   <section class="dm-section" id="curva">
-    <h2 class="dm-h2">Fechamento da curva DI</h2>
+    <h2 class="dm-h2">3. Fechamento da curva DI</h2>
     <p class="dm-sub">Ajustes da B3 (DI1), sessão de <span data-source="di_now" data-field="trade_date" data-row="0">—</span>, contra a sessão anterior e contra 23/10/2026, o último fechamento antes do 2º turno.</p>
     <div class="dm-tiles">
       <div class="dm-tile">
@@ -130,7 +150,7 @@
   </section>
 
   <section class="dm-section" id="copom">
-    <h2 class="dm-h2">Copom: o que a curva precifica</h2>
+    <h2 class="dm-h2">4. Copom: o que a curva precifica</h2>
     <p class="dm-sub">Selic por reunião tirada dos ajustes do DI1 (bootstrap: Selic fixa entre reuniões, CDI = Selic − 0,10), contra a mediana do Focus. DI − Focus é o prêmio: risco fiscal e prêmio de prazo juntos; os dois não se separam com estes dados.</p>
     <div class="dm-table-wrap">
       <table class="dm-table tb-copom" data-source="copom" data-row-key="reuniao">
@@ -148,28 +168,8 @@
     <p class="dm-note">Focus de <span data-source="copom" data-field="focus_data" data-row="1">—</span>. Contratos usados: <span data-source="copom_cal" data-field="contrato" data-row="0">—</span> para a taxa atual, depois um contrato por reunião (Fontes).</p>
   </section>
 
-  <section class="dm-section" id="fatos">
-    <h2 class="dm-h2">Fatos do dia</h2>
-    <p class="dm-sub">Só fatos com fonte. Preço não entra aqui, porque já entra no intraday. Fator acima de 1 = o fato é mais provável naquele cenário. Cada fator sai da escala de 3 degraus (ver Método).</p>
-    <div class="dm-table-wrap">
-      <table class="dm-table tb-fatos" data-source="fatos" data-row-key="id">
-        <thead><tr>
-          <th data-field="data">Data</th>
-          <th data-field="fato">Fato</th>
-          <th data-field="fonte">Fonte</th>
-          <th class="num" data-field="f_ancora">Âncora</th>
-          <th class="num" data-field="f_deriva">Deriva</th>
-          <th class="num" data-field="f_estresse">Estresse</th>
-          <th data-field="degrau">Degrau e motivo</th>
-          <th data-field="status">Situação</th>
-        </tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
-
   <section class="dm-section" id="agenda">
-    <h2 class="dm-h2">Agenda e gatilhos</h2>
+    <h2 class="dm-h2">5. Agenda e gatilhos</h2>
     <p class="dm-sub">O que cada evento precisa mostrar para favorecer cada cenário.</p>
     <div class="dm-table-wrap">
       <table class="dm-table tb-agenda" data-source="agenda" data-row-key="id">
