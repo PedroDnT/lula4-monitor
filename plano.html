@@ -7,93 +7,165 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400&display=swap">
 <link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/leia.css">
 <style>
-.sp { max-width: 760px; margin: 0 auto; padding: 20px 16px 8px; }
-.sp h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: 32px; line-height: 1.15; margin: 4px 0 10px; text-wrap: balance; }
-.sp .lead { font-size: 18px; line-height: 1.5; margin: 0 0 6px; }
-.legend { font-size: 12.5px; color: var(--color-fg-muted); margin: 0 0 12px; line-height: 2; }
-.card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 16px; margin: 0 0 16px; }
+.sp { max-width: 960px; margin: 0 auto; padding: 20px 16px 8px; }
+.sp h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: 32px; line-height: 1.15; margin: 4px 0 8px; text-wrap: balance; }
+.sp .lead { font-size: 17px; line-height: 1.5; margin: 0 0 12px; max-width: 70ch; }
+.legend { font-size: 12px; color: var(--color-fg-muted); margin: 0 0 10px; line-height: 2; }
+.steps { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 0; padding: 0; margin: 0 0 16px; font-size: 12.5px; }
+.steps li { display: flex; align-items: center; gap: 6px; color: var(--color-fg-muted); }
+.steps li + li::before { content: ""; width: 18px; height: 1px; background: var(--color-border-line); margin: 0 6px; }
+.steps li i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--color-fg-muted); flex: none; }
+.steps li.done { color: var(--color-fg); }
+.steps li.done i { background: var(--color-ok); border-color: var(--color-ok); }
+.steps li.next i { border-color: var(--color-warn); background: color-mix(in srgb, var(--color-warn) 25%, transparent); }
+.steps small { color: var(--color-fg-muted); }
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0 0 16px; }
+.kpi { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+.kpi .k { font-size: 12.5px; color: var(--color-fg-muted); line-height: 1.35; }
+.kpi .v { font-family: var(--font-anthropic-serif); font-size: 27px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.kpi .s { font-size: 12.5px; color: var(--color-fg-muted); line-height: 1.4; margin-top: auto; }
+.card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 18px; margin: 0 0 16px; }
 .card h2 { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--color-fg-muted); margin: 0 0 8px; }
-.card .big { font-family: var(--font-anthropic-serif); font-size: 40px; line-height: 1.05; margin: 2px 0 6px; }
-.card .say { font-size: 17px; line-height: 1.5; margin: 0 0 8px; }
+.card .say { font-size: 16.5px; line-height: 1.5; margin: 0 0 10px; max-width: 72ch; }
 .card p { margin: 0 0 8px; }
-.src { font-size: 12.5px; color: var(--color-fg-muted); margin: 8px 0 0; }
+.src { font-size: 12.5px; color: var(--color-fg-muted); margin: 10px 0 0; max-width: 100ch; line-height: 1.55; }
 .src a { color: inherit; }
 .na { color: var(--color-fg-muted); }
-.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 14.5px; margin: 8px 0 4px; }
-.tbl th { text-align: left; font-size: 12px; font-weight: 600; color: var(--color-fg-muted); padding: 6px 8px 6px 0; border-bottom: 1px solid var(--color-border-line); }
-.tbl td { padding: 8px 8px 8px 0; border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
-.tbl td.num, .tbl th.num { text-align: right; white-space: nowrap; padding-right: 0; padding-left: 10px; }
-.tbl td small { display: block; color: var(--color-fg-muted); font-size: 12.5px; margin-top: 2px; }
-#m-tbl td.num small { white-space: normal; max-width: 220px; margin-left: auto; }
-.ok { color: var(--color-ok); font-weight: 600; } .bad { color: var(--color-bad); font-weight: 600; }
-.cover { height: 30px; border-radius: 6px; background: var(--color-border-line); position: relative; overflow: hidden; margin: 10px 0 6px; }
-.cover b { position: absolute; left: 0; top: 0; bottom: 0; background: var(--color-accent); opacity: .45; }
+.ok { color: var(--color-ok); } .bad { color: var(--color-bad); }
+.ranges { list-style: none; padding: 0; margin: 4px 0 12px; display: grid; gap: 4px; font-size: 14.5px; }
+.ranges b { font-variant-numeric: tabular-nums; }
+.ranges small { color: var(--color-fg-muted); }
+.cover { height: 26px; border-radius: 6px; background: var(--color-border-line); position: relative; overflow: hidden; margin: 6px 0 4px; }
+.cover b { position: absolute; left: 0; top: 0; bottom: 0; background: var(--color-accent); opacity: .4; }
 .cover b.hi { opacity: 1; }
-.ctl { display: grid; gap: 12px; margin: 10px 0 12px; }
+.cover-ax { display: flex; justify-content: space-between; font-size: 12px; color: var(--color-fg-muted); gap: 10px; }
+.figure svg { width: 100%; height: auto; display: block; overflow: visible; }
+.figure text { font-size: 12px; fill: var(--color-fg-muted); font-family: var(--font-anthropic-sans); font-variant-numeric: tabular-nums; }
+.figure .lbl { fill: var(--color-fg); font-weight: 600; }
+.figure .ln { fill: none; stroke-width: 2.25; }
+.key { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px; margin: 6px 0 0; }
+.key i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+.key i.dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--color-fg-muted); background: var(--color-panel); }
+.key i.bar { height: 8px; border-radius: 4px; }
+.key i.band { height: 12px; background: color-mix(in srgb, var(--color-ok) 14%, transparent); border: 1px dashed var(--color-ok); }
+.scen { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 6px 0 0; }
+.sc { border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 14px; display: grid; grid-row: span 3; grid-template-rows: subgrid; gap: 0; border-top: 4px solid var(--c); }
+.sc h3 { font-size: 15.5px; margin: 0 0 4px; }
+.sc > p { font-size: 13px; color: var(--color-fg-muted); margin: 0 0 10px; line-height: 1.45; }
+.sc dl { margin: 0; display: grid; gap: 10px; align-content: start; }
+.sc dt { font-size: 12px; color: var(--color-fg-muted); }
+.sc dd { margin: 0; font-size: 15px; font-variant-numeric: tabular-nums; font-weight: 600; }
+.sc dd small { display: block; font-weight: 400; font-size: 12.5px; color: var(--color-fg-muted); }
+.sim { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px; align-items: start; }
+.ctl { display: grid; gap: 14px; margin: 4px 0 0; }
 .ctl label { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; font-size: 14.5px; align-items: baseline; }
 .ctl label output { font-weight: 600; font-variant-numeric: tabular-nums; }
 .ctl small.base { grid-column: 1 / -1; color: var(--color-fg-muted); font-size: 12.5px; line-height: 1.45; }
 .ctl input[type=range] { grid-column: 1 / -1; width: 100%; min-height: 28px; accent-color: var(--color-accent); }
-.chart svg { width: 100%; height: auto; display: block; }
-.chart text { font-size: 12px; fill: var(--color-fg-muted); font-family: inherit; }
-.chart .ln { fill: none; stroke-width: 2.25; }
-.key { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; margin: 6px 0 0; }
-.key i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 14px; margin: 10px 0 4px; }
+.tbl th { text-align: left; font-size: 12px; font-weight: 600; color: var(--color-fg-muted); padding: 6px 8px 6px 0; border-bottom: 1px solid var(--color-border-line); }
+.tbl td { padding: 8px 8px 8px 0; border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
+.tbl td.num, .tbl th.num { text-align: right; white-space: nowrap; padding-right: 0; padding-left: 10px; }
+.tbl td small { display: block; color: var(--color-fg-muted); font-size: 12.5px; margin-top: 2px; }
+.tbl tr:last-child td { border-bottom: 0; }
+.tbl .sw { display: inline-block; width: 10px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+#m-tbl td.num { width: 1%; }
+#m-tbl td.num small { white-space: normal; min-width: 130px; }
+.side { font-size: 12px; color: var(--color-fg-muted); white-space: nowrap; }
+details.more { margin-top: 10px; border-top: 1px solid var(--color-border-line); padding-top: 10px; }
+details.more summary { cursor: pointer; font-size: 14px; font-weight: 600; }
+details.card summary { cursor: pointer; }
+details.card[open] summary { margin-bottom: 8px; }
+details.card p { max-width: 80ch; }
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .scen, .sim { grid-template-columns: minmax(0, 1fr); }
+  .sc { grid-row: auto; grid-template-rows: none; }
+  .sc dl { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 14px; }
+}
 @media (max-width: 560px) {
+  .sp h1 { font-size: 27px; }
+  .steps { gap: 4px 14px; }
+  .steps li + li::before { display: none; }
+  .kpi { padding: 12px; } .kpi .v { font-size: 22px; }
+  .card { padding: 14px; }
+  .tbl { font-size: 13px; }
   .tbl.stack thead { display: none; }
   .tbl.stack tr { display: block; padding: 8px 0; border-bottom: 1px solid var(--color-border-line); }
-  .tbl.stack td { display: block; border: 0; padding: 2px 0; text-align: left !important; white-space: normal !important; }
+  .tbl.stack tr:last-child { border-bottom: 0; }
+  .tbl.stack td { display: block; border: 0; padding: 2px 0; text-align: left !important; white-space: normal !important; width: auto !important; }
   .tbl.stack td[data-l]::before { content: attr(data-l) ": "; color: var(--color-fg-muted); font-size: 12.5px; }
+  .tbl.stack td.num small { display: inline; margin-left: 4px; }
+  .tbl.stack td.num small::before { content: "· "; }
+  .tbl.tight td:first-child { font-size: 12.5px; }
 }
 </style></head><body>
 <header class="site-head"><div class="in"><p class="site-title">Monitor LULA4<small>juros, câmbio e fiscal depois da eleição de 2026</small></p><nav class="tabs" aria-label="Páginas"><a href="index.html">Agora</a><a href="dominancia.html">Fiscal</a><a href="plano.html" aria-current="page">Plano fiscal</a><a href="metodo.html">Método</a><a href="simples.html" class="tab-simple" aria-label="Versão simples"><span class="vs-long">Versão simples</span><span class="vs-short">Simples</span></a></nav></div></header>
 <main class="sp">
   <h1>O plano fiscal, se for cumprido</h1>
+  <p class="lead" id="lead">O PLP 299/2026 foi apresentado em 11/11/2026; o relator apresentou um substitutivo em 12/11. Esta página segue o texto do parecer de 12/11 e simula o efeito do pacote nas contas, na hipótese de aprovação e execução integral.</p>
   <p class="legend">Origem de cada número: <span class="tag tag-norma">Norma</span> texto do projeto <span class="tag tag-dado">Dado</span> publicado <span class="tag tag-calc">Cálculo</span> conta direta com dados <span class="tag tag-jul">Julgamento</span> premissa <span class="tag tag-lit">Literatura</span> estudo publicado <span class="tag tag-sim">Projeção</span> olha adiante</p>
-  <p class="lead" id="lead">Em 11/11/2026 o governo apresentou o PLP 299/2026; em 12/11 o relator apresentou um substitutivo. Esta página segue o texto do parecer de 12/11 e simula o efeito do pacote nas contas, na hipótese de aprovação e execução integral.</p>
-  <p class="src" id="status">—</p>
+  <ol class="steps" id="steps" aria-label="Tramitação"></ol>
+  <p class="src" id="status" style="margin:-8px 0 16px">—</p>
+
+  <section class="kpis" id="kpis" aria-label="Resumo">
+    <div class="kpi"><span class="k">Valor do pacote em 2027 <span class="tag tag-dado">Dado</span></span><span class="v" id="k-val">—</span><span class="s" id="k-val-s">—</span></div>
+    <div class="kpi"><span class="k">Primário de 2027 contra o centro da meta <span class="tag tag-calc">Cálculo</span></span><span class="v" id="k-pri">—</span><span class="s" id="k-pri-s">—</span></div>
+    <div class="kpi"><span class="k">Dívida bruta em 2030 <span class="tag tag-sim">Projeção</span></span><span class="v" id="k-div">—</span><span class="s" id="k-div-s">—</span></div>
+    <div class="kpi"><span class="k">Parte da distância para a dívida parar de crescer <span class="tag tag-calc">Cálculo</span></span><span class="v" id="k-cob">—</span><span class="s" id="k-cob-s">—</span></div>
+  </section>
 
   <section class="card" id="c-vale">
     <h2>1. Quanto o pacote vale em 2027</h2>
-    <div class="big" id="v-big">—</div>
     <p class="say" id="v-say">—</p>
-    <div class="cover" id="v-cover" aria-hidden="true"></div>
-    <p id="v-cov">—</p>
-    <p class="src"><span class="tag tag-dado">Dado</span> Faixas do governo (12/11) e do parecer do relator, que abre a conta em 4 medidas (tabela 5). <span class="tag tag-calc">Cálculo</span> % do PIB com o PIB de 2027 implícito na meta do PLDO; conta da dívida com séries do BCB pelo <b>SILO</b>. <span id="v-src"></span></p>
-  </section>
-
-  <section class="card" id="c-cen">
-    <h2>2. Três cenários para o plano</h2>
-    <p class="say" id="c-say">—</p>
-    <table class="tbl stack" id="c-tbl"><thead><tr><th>Cenário</th><th class="num">Impacto em 2027</th><th class="num">Efeito no PIB de 2027</th><th class="num">Primário de 2027 contra o centro</th><th class="num">Dívida bruta em 2030</th></tr></thead><tbody></tbody></table>
-    <p class="src"><span class="tag tag-jul">Julgamento</span> Os 3 cenários e as medidas de cada um. Sem peso: não há preço de mercado para a votação. <span class="tag tag-dado">Dado</span> Impactos do parecer (tabela 5). <span class="tag tag-lit">Literatura</span> Multiplicadores: tributo de 0 a −0,8 no ano e de 0 a −1,83 em 10 trimestres; despesa de 0,6 a 0,7 no ano e de 1,15 a 1,33 em 10 trimestres (<a id="c-mult" href="#">—</a>; <a id="c-rev" href="#">revisão</a>). <span class="tag tag-calc">Cálculo</span> Efeito no PIB = impacto em % do PIB × multiplicador, por lado. Primário a partir do PLOA e da IFI. <span class="tag tag-sim">Projeção</span> Dívida com a conta e as bases da seção 4 (impacto que cresce com o PIB, gatilhos de 2028 e queda de juro medida no DI); no cenário de rejeição, nenhum dos três.</p>
+    <ul class="ranges" id="v-ranges"></ul>
+    <div class="cover" id="v-cover" role="img" aria-label="Parte da distância coberta pelo pacote"></div>
+    <div class="cover-ax"><span>0</span><span id="v-ax">—</span></div>
+    <p id="v-cov" style="margin-top:8px">—</p>
+    <p class="src"><span class="tag tag-dado">Dado</span> Faixas do governo (12/11) e do parecer do relator, que abre a conta em 4 medidas (seção 5). <span class="tag tag-calc">Cálculo</span> % do PIB com o PIB de 2027 implícito na meta do PLDO; conta da dívida com séries do BCB pelo <b>SILO</b>. <span id="v-src"></span></p>
   </section>
 
   <section class="card" id="c-meta">
-    <h2>3. Primário de 2027 contra a meta</h2>
+    <h2>2. Primário de 2027 contra a meta</h2>
     <p class="say" id="p-say">—</p>
-    <table class="tbl stack" id="p-tbl"><thead><tr><th>Ponto de partida, R$ bi</th><th class="num">Sem pacote</th><th class="num">Com pacote</th><th class="num">Contra o centro</th><th class="num">Contra o piso</th></tr></thead><tbody></tbody></table>
+    <div class="figure" id="p-fig"></div>
+    <div class="key"><span><i class="dot"></i>Sem pacote</span><span><i class="bar" style="background:var(--color-accent)"></i>Com pacote (faixa)</span><span><i class="band"></i>Banda da meta, do piso ao centro</span></div>
+    <details class="more" id="p-more"><summary>Os números do gráfico</summary>
+    <table class="tbl stack tight" id="p-tbl"><thead><tr><th>Ponto de partida, R$ bi</th><th class="num">Sem pacote</th><th class="num">Com pacote</th><th class="num">Contra o centro</th><th class="num">Contra o piso</th></tr></thead><tbody></tbody></table>
+    </details>
     <p class="src"><span class="tag tag-norma">Norma</span> Meta: centro de 0,50% do PIB, piso de 0,25% (PLDO 2027). <span class="tag tag-dado">Dado</span> Pontos de partida: PLOA 2027 e IFI (RAF 113). <span class="tag tag-jul">Julgamento</span> A soma supõe que nenhum dos dois pontos de partida já contava com o pacote. Resultado do governo central.</p>
+  </section>
+
+  <section class="card" id="c-cen">
+    <h2>3. Três cenários para o plano</h2>
+    <p class="say" id="c-say">—</p>
+    <div class="scen" id="c-grid"></div>
+    <p class="src"><span class="tag tag-jul">Julgamento</span> Os 3 cenários e as medidas de cada um. Sem peso: não há preço de mercado para a votação. <span class="tag tag-dado">Dado</span> Impactos do parecer (seção 5). <span class="tag tag-lit">Literatura</span> Multiplicadores: tributo de 0 a −0,8 no ano e de 0 a −1,83 em 10 trimestres; despesa de 0,6 a 0,7 no ano e de 1,15 a 1,33 em 10 trimestres (<a id="c-mult" href="#">—</a>; <a id="c-rev" href="#">revisão</a>). <span class="tag tag-calc">Cálculo</span> Efeito no PIB = impacto em % do PIB × multiplicador, por lado. Primário a partir do PLOA e da IFI. <span class="tag tag-sim">Projeção</span> Dívida com a conta e as bases da seção 4 (impacto que cresce com o PIB, gatilhos de 2028 e queda de juro medida no DI); no cenário de rejeição, nenhum dos três.</p>
   </section>
 
   <section class="card" id="c-divida">
     <h2>4. Dívida bruta até 2030</h2>
     <p class="say" id="s-say">—</p>
-    <div class="ctl">
-      <label>Impacto do pacote em 2027 <output id="o-imp"></output><input type="range" id="i-imp" min="0" max="100" step="1" aria-label="Impacto do pacote em 2027, em R$ bilhões"></label>
-      <label>Gatilhos que cortam o limite a partir de 2028 <output id="o-grow"></output><input type="range" id="i-grow" min="0" max="20" step="0.1" aria-label="Gatilhos a partir de 2028, em R$ bilhões"><small class="base" id="b-grow">—</small></label>
-      <label>Queda do juro implícito da dívida <output id="o-r"></output><input type="range" id="i-r" min="0" max="1.5" step="0.01" aria-label="Queda do juro implícito, em pontos percentuais"><small class="base" id="b-r">—</small></label>
+    <div class="sim">
+      <div class="ctl">
+        <label>Impacto do pacote em 2027 <output id="o-imp"></output><input type="range" id="i-imp" min="0" max="100" step="1" aria-label="Impacto do pacote em 2027, em R$ bilhões"><small class="base" id="b-imp">—</small></label>
+        <label>Gatilhos que cortam o limite a partir de 2028 <output id="o-grow"></output><input type="range" id="i-grow" min="0" max="20" step="0.1" aria-label="Gatilhos a partir de 2028, em R$ bilhões"><small class="base" id="b-grow">—</small></label>
+        <label>Queda do juro implícito da dívida <output id="o-r"></output><input type="range" id="i-r" min="0" max="1.5" step="0.01" aria-label="Queda do juro implícito, em pontos percentuais"><small class="base" id="b-r">—</small></label>
+      </div>
+      <div><div class="figure" id="s-chart"></div><div class="key" id="s-key"></div></div>
     </div>
-    <div class="chart" id="s-chart"></div>
-    <div class="key" id="s-key"></div>
-    <table class="tbl" id="s-tbl"><thead><tr><th>Trajetória</th><th class="num">2027</th><th class="num">2028</th><th class="num">2029</th><th class="num">2030</th></tr></thead><tbody></tbody></table>
+    <table class="tbl" id="s-tbl"><thead><tr><th>Trajetória, % do PIB</th><th class="num">2027</th><th class="num">2028</th><th class="num">2029</th><th class="num">2030</th></tr></thead><tbody></tbody></table>
     <p class="src"><span class="tag tag-sim">Projeção</span> Dívida do ano seguinte = dívida × (1 + r) ÷ (1 + g) − primário, com r e g fixos no último dado. <span class="tag tag-jul">Julgamento</span> O impacto de 2027 cresce com o PIB nominal nos anos seguintes, porque as medidas atuam sobre bases que crescem com ele. O governo disse que o impacto fica "um pouco maior" depois de 2027, sem publicar números. Cada controle abre no valor da sua base, escrita abaixo dele. <span class="tag tag-dado">Dado</span> O superávit de 1,5% do PIB em 2030 é compromisso declarado do presidente.</p>
   </section>
 
   <section class="card" id="c-medidas">
     <h2>5. O que o texto diz, medida por medida</h2>
+    <p class="say" id="m-say">—</p>
     <table class="tbl stack" id="m-tbl"><thead><tr><th>Medida</th><th>Lado</th><th class="num">Impacto em 2027</th></tr></thead><tbody></tbody></table>
-    <p class="src"><span class="tag tag-norma">Norma</span> Texto do <a id="m-link" href="#">PLP 299/2026</a>, como apresentado. O relator apresentou substitutivo; o texto pode mudar. <span class="tag tag-dado">Dado</span> Impactos: só os números ditos em público pelo governo.</p>
+    <details class="more"><summary id="m-more">—</summary>
+      <table class="tbl stack" id="m-tbl2"><thead><tr><th>Medida</th><th>Lado</th><th class="num">Efeito</th></tr></thead><tbody></tbody></table>
+    </details>
+    <p class="src"><span class="tag tag-norma">Norma</span> Texto do <a id="m-link" href="#">PLP 299/2026</a>, no substitutivo de 12/11; o texto pode mudar. <span class="tag tag-dado">Dado</span> Impactos: só os números ditos em público pelo governo ou pelo parecer.</p>
   </section>
 
   <details class="card"><summary><b>Método e limites</b></summary>
@@ -104,6 +176,7 @@
     <p>O efeito no PIB usa multiplicadores médios da literatura brasileira, não estimados para estas medidas. O corte atinge regimes específicos, não o consumo em geral, então o multiplicador médio pode exagerar o efeito. Um prêmio de risco menor pode compensar parte dele; esse canal não entra na conta. O efeito no PIB não volta para a trajetória da dívida. A simulação não estima efeito sobre câmbio ou inflação.</p>
   </details>
 </main>
+
 <footer class="site-foot">Leitura de sinais de mercado e julgamento do autor, não recomendação de compra ou venda. Dados abertos do Brasil servidos pelo <b>SILO</b> (BCB). Projeto: Senado Federal, PLP 299/2026. Orçamento: PLOA e PLDO 2027 (IFI, Ipea). Horários de Brasília (UTC-3).</footer>
 <script>(function () {
 const SILO = "https://zcjbtpxuhdekpwcxmepn.supabase.co/rest/v1/rpc/";
@@ -111,8 +184,13 @@ const HDR = { apikey: "sb_publishable__yfFQsykAglrvc9GS6_PYw_B24ex437", "Accept-
 const nf = (d) => new Intl.NumberFormat("pt-BR", { minimumFractionDigits: d, maximumFractionDigits: d });
 const bi = (v) => (v < 0 ? "− " : "") + "R$ " + nf(1).format(Math.abs(v)) + " bi";
 const sg2 = (v) => (v < 0 ? "−" : "") + nf(2).format(Math.abs(v));
+const s1 = (v) => (v >= 0 ? "+" : "−") + nf(1).format(Math.abs(v));
+const n1 = (v) => (v < 0 ? "−" : "") + nf(1).format(Math.abs(v));
+const s2 = (v) => (Math.abs(v) < 0.005 ? "" : v > 0 ? "+" : "−") + nf(2).format(Math.abs(v));
+const fx = (a, b, fmt) => a === b ? fmt(a) : `${fmt(a)} a ${fmt(b)}`;
 const $ = (id) => document.getElementById(id);
 const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; return e; };
+const dmy = (iso) => iso.split("-").reverse().join("/");
 const monthName = (m) => { const [y, mo] = m.split("-"); return ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"][Number(mo) - 1] + "/" + y; };
 const rpc = (tool, args) => fetch(SILO + tool, { method: "POST", headers: HDR, body: JSON.stringify(args) }).then((r) => { if (!r.ok) throw new Error("SILO " + r.status); return r.json(); });
 const file = (u) => fetch(u, { cache: "no-cache" }).then((r) => { if (!r.ok) throw new Error(u + " " + r.status); return r.json(); });
@@ -131,47 +209,67 @@ function debtNow(D, P, N, Y) {
 }
 function fail(id, msg) { const e = $(id); if (e) { e.textContent = msg; e.classList.add("na"); } }
 const td = (txt, cls, label) => { const c = el("td", cls || "", txt); if (label) c.dataset.l = label; return c; };
+const kpi = (id, v, s) => { $(id).textContent = v; $(id + "-s").textContent = s; };
+const NS = "http://www.w3.org/2000/svg";
+function svg(W, H, label) {
+  const s = document.createElementNS(NS, "svg"); s.setAttribute("viewBox", `0 0 ${W} ${H}`); s.setAttribute("role", "img"); s.setAttribute("aria-label", label);
+  s.add = (tag, at, txt) => { const e = document.createElementNS(NS, tag); Object.entries(at).forEach(([k, v]) => e.setAttribute(k, v)); if (txt !== undefined) e.textContent = txt; s.append(e); return e; };
+  return s;
+}
+const COL = { base: "var(--color-bad)", plano: "var(--color-accent)", comp: "var(--color-ok)", meio: "var(--color-warn)" };
 
 // R$ bi with a decimal only when the source has one (45,1 stays 45,1; 50 stays 50).
 const nb = (v) => nf(Number.isInteger(v) ? 0 : 1).format(v);
+const hasNum = (m) => m.impacto_2027_bi != null || m.impacto_min_bi != null;
 
 function renderMeasures(P) {
-  $("status").textContent = `${P.projeto.nome}, ${P.projeto.autor}; relator: ${P.projeto.relator}. ${P.projeto.status} Página atualizada em ${P.atualizado_em.split("-").reverse().join("/")}.`;
+  $("status").textContent = `${P.projeto.nome}, ${P.projeto.autor}; relator: ${P.projeto.relator}. ${P.projeto.status} Página atualizada em ${dmy(P.atualizado_em)}.`;
+  const T = P.tramitacao || [], nx = T.findIndex((t) => !t.feito);
+  $("steps").replaceChildren(...T.map((t, i) => { const li = el("li", t.feito ? "done" : i === nx ? "next" : ""); li.append(el("i"), document.createTextNode(t.etapa)); if (t.data) li.append(el("small", "", dmy(t.data).slice(0, 5))); return li; }));
   $("m-link").href = P.projeto.url;
-  $("m-tbl").tBodies[0].replaceChildren(...P.medidas.map((m) => {
+  const row = (m) => {
     const tr = el("tr");
     const a = td(""); a.append(el("b", "", m.medida), el("small", "", m.texto + " (" + m.artigo + ")"));
-    const v = m.impacto_2027_bi != null ? bi(m.impacto_2027_bi) : m.impacto_min_bi != null ? `R$ ${nb(m.impacto_min_bi)} a ${nb(m.impacto_max_bi)} bi` : "—";
-    const c = td("", "num", "Impacto em 2027"); c.append(document.createTextNode(v), el("small", "", m.impacto_fonte));
-    tr.append(a, td(m.lado, "", "Lado"), c);
+    const v = m.impacto_2027_bi != null ? bi(m.impacto_2027_bi) : m.impacto_min_bi != null ? `R$ ${nb(m.impacto_min_bi)} a ${nb(m.impacto_max_bi)} bi` : "";
+    const c = td("", "num", hasNum(m) ? "Impacto em 2027" : "Efeito"); if (v) c.append(document.createTextNode(v)); c.append(el("small", "", m.impacto_fonte));
+    tr.append(a, td(m.lado, "side", "Lado"), c);
     return tr;
-  }));
+  };
+  const W = P.medidas.filter(hasNum), O = P.medidas.filter((m) => !hasNum(m));
+  $("m-tbl").tBodies[0].replaceChildren(...W.map(row));
+  $("m-tbl2").tBodies[0].replaceChildren(...O.map(row));
+  const top = P.cenarios[0].medidas.map((id) => P.medidas.find((m) => m.id === id));
+  const lo = top.reduce((s, m) => s + (m.impacto_2027_bi ?? m.impacto_min_bi), 0), hi = top.reduce((s, m) => s + (m.impacto_2027_bi ?? m.impacto_max_bi), 0);
+  $("m-say").textContent = `${W.length} das ${P.medidas.length} medidas têm número para 2027. As ${top.length} do parecer somam R$ ${nb(Math.round(lo * 10) / 10)} a ${nb(Math.round(hi * 10) / 10)} bi; ${W.length - top.length === 1 ? "a outra tem" : "as outras " + (W.length - top.length) + " têm"} número de outra fonte. As demais não têm estimativa ou não mudam o primário de 2027.`;
+  $("m-more").textContent = `${O.length} medidas sem número para 2027`;
 }
 
 function renderValue(P, B, f) {
   const pib = B.meta_centro.valor_bi / (B.meta_centro.pct_pib / 100);
   const lo = Math.min(...P.impacto_2027.map((x) => x.min_bi)), hi = Math.max(...P.impacto_2027.map((x) => x.max_bi));
   const pc = (v) => v / pib * 100;
-  $("v-big").textContent = `R$ ${nb(lo)} a ${nb(hi)} bi`;
-  const ranges = P.impacto_2027.map((x) => `R$ ${nb(x.min_bi)} a ${nb(x.max_bi)} bi (${x.quem})`).join("; ");
-  $("v-say").textContent = `Equivale a ${nf(2).format(pc(lo))}% a ${nf(2).format(pc(hi))}% do PIB de 2027. Há duas faixas: ${ranges}.`;
+  kpi("k-val", `R$ ${nb(lo)}–${nb(hi)} bi`, `${nf(2).format(pc(lo))}% a ${nf(2).format(pc(hi))}% do PIB de 2027`);
+  $("v-say").textContent = `R$ ${nb(lo)} a ${nb(hi)} bi, ou ${nf(2).format(pc(lo))}% a ${nf(2).format(pc(hi))}% do PIB de 2027. Há duas faixas publicadas:`;
+  $("v-ranges").replaceChildren(...P.impacto_2027.map((x) => { const li = el("li"); li.append(el("b", "", `R$ ${nb(x.min_bi)} a ${nb(x.max_bi)} bi`), document.createTextNode(" "), el("small", "", x.quem)); return li; }));
   $("v-src").replaceChildren(...P.impacto_2027.flatMap((x, i) => { const a = el("a", "", x.fonte); a.href = x.url; return [document.createTextNode(i ? " · " : "Fontes: "), a]; }));
-  if (!f) { fail("v-cov", "As séries do BCB não carregaram agora; a comparação com a conta da dívida fica indisponível."); return { pib, lo, hi }; }
+  if (!f) { fail("v-cov", "As séries do BCB não carregaram agora; a comparação com a conta da dívida fica indisponível."); kpi("k-cob", "—", "Séries do BCB indisponíveis agora"); return { pib, lo, hi }; }
   const gap = f.stab - f.primary;                       // p.p. of GDP still missing to stabilise the debt
   const share = (v) => Math.max(0, Math.min(100, pc(v) / gap * 100));
   const c = $("v-cover"); c.replaceChildren();
   const b1 = el("b", "hi"); b1.style.width = share(lo) + "%"; const b2 = el("b"); b2.style.width = share(hi) + "%"; c.append(b2, b1);
+  $("v-ax").textContent = gap > 0 ? `${bi(gap / 100 * pib)}: distância até o primário que estabiliza a dívida` : "";
   $("v-cov").textContent = gap > 0
     ? `Para a dívida parar de crescer, o primário precisa ser de ${nf(1).format(f.stab)}% do PIB; hoje é de ${sg2(f.primary)}% (${monthName(f.month)}). A distância é de ${nf(1).format(gap)} p.p., ou ${bi(gap / 100 * pib)}. O pacote cobre de ${nf(0).format(share(lo))}% a ${nf(0).format(share(hi))}% dessa distância.`
     : `Com os dados de ${monthName(f.month)}, o primário atual já estabiliza a dívida.`;
+  if (gap > 0) kpi("k-cob", `${nf(0).format(share(lo))}% a ${nf(0).format(share(hi))}%`, `de ${nf(1).format(gap)} p.p. do PIB (${bi(gap / 100 * pib)}), com dados de ${monthName(f.month)}`);
+  else kpi("k-cob", "100%", `O primário de ${monthName(f.month)} já estabiliza a dívida`);
   return { pib, lo, hi };
 }
 
 function renderTarget(B, V) {
   const centro = B.meta_centro.valor_bi, piso = B.meta_piso.valor_bi;
   const bases = [["PLOA 2027 (governo)", B.primario_ploa.valor_bi], ["IFI (RAF 113)", B.primario_ifi.valor_bi]];
-  const n1 = (v) => (v < 0 ? "−" : "") + nf(1).format(Math.abs(v)), s1 = (v) => (v >= 0 ? "+" : "−") + nf(1).format(Math.abs(v));
-  const cell = (lo, hi, ref, label) => { const a = lo - ref, b = hi - ref; const c = td(`${s1(a)} a ${s1(b)}`, "num " + (a >= 0 ? "ok" : b < 0 ? "bad" : ""), label); return c; };
+  const cell = (lo, hi, ref, label) => td(`${s1(lo - ref)} a ${s1(hi - ref)}`, "num " + (lo - ref >= 0 ? "ok" : hi - ref < 0 ? "bad" : ""), label);
   $("p-tbl").tBodies[0].replaceChildren(...bases.map(([n, v]) => {
     const tr = el("tr"); const lo = v + V.lo, hi = v + V.hi;
     tr.append(td(n), td(n1(v), "num", "Sem pacote"), td(`${n1(lo)} a ${n1(hi)}`, "num", "Com pacote"), cell(lo, hi, centro, "Contra o centro"), cell(lo, hi, piso, "Contra o piso"));
@@ -181,6 +279,32 @@ function renderTarget(B, V) {
   const pos = (v) => v >= centro ? "acima do centro" : v >= piso ? "dentro da banda, abaixo do centro" : "abaixo do piso";
   const where = (lo, hi) => pos(lo) === pos(hi) ? pos(lo) : `${pos(lo)} na ponta baixa e ${pos(hi)} na ponta alta`;
   $("p-say").textContent = `Centro da meta: ${bi(centro)}; piso: ${bi(piso)}. Com o pacote, a partir do PLOA o resultado fica ${where(pl + V.lo, pl + V.hi)}. A partir da projeção da IFI, fica ${where(ifi + V.lo, ifi + V.hi)}.`;
+  kpi("k-pri", `${s1(pl + V.lo - centro)} a ${s1(pl + V.hi - centro)}`, `R$ bi, a partir do PLOA. A partir da IFI: ${s1(ifi + V.lo - centro)} a ${s1(ifi + V.hi - centro)}`);
+  // Number line: hollow dot = without the package, bar = with it, shaded band = floor to centre of the target.
+  function draw() {
+    const all = bases.flatMap(([, v]) => [v, v + V.hi]).concat([piso, centro, 0]);
+    const step = 25, lo = Math.floor(Math.min(...all) / step) * step - 5, hi = Math.ceil(Math.max(...all) / step) * step + 5;
+    const W = Math.max(300, Math.min(900, $("p-fig").clientWidth || 700)), narrow = W < 520, lab = narrow ? 0 : 150, rowH = narrow ? 58 : 46, top = 24, H = top + bases.length * rowH + 22;
+    const x = (v) => lab + 8 + (v - lo) * (W - lab - 16) / (hi - lo);
+    const s = svg(W, H, "Primário de 2027 em R$ bilhões, sem e com o pacote, contra o piso e o centro da meta");
+    s.add("rect", { x: x(piso), y: top - 6, width: x(centro) - x(piso), height: H - top - 16, fill: "color-mix(in srgb, var(--color-ok) 12%, transparent)" });
+    [[piso, "piso " + nf(1).format(piso)], [centro, "centro " + nf(1).format(centro)]].forEach(([v, t], i) => {
+      s.add("line", { x1: x(v), x2: x(v), y1: top - 6, y2: H - 22, stroke: "var(--color-ok)", "stroke-dasharray": "4 3" });
+      s.add("text", { x: i ? Math.min(W - 78, x(v) + 4) : x(v) - 4, y: top - 10, "text-anchor": i ? "start" : "end", style: "fill:var(--color-ok)" }, t);
+    });
+    s.add("line", { x1: x(0), x2: x(0), y1: top - 6, y2: H - 22, stroke: "var(--color-border-line)" });
+    for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) s.add("text", { x: x(v), y: H - 6, "text-anchor": "middle" }, n1(v).replace(",0", ""));
+    bases.forEach(([n, v], i) => {
+      const yc = top + i * rowH + (narrow ? 34 : rowH / 2);
+      if (narrow) s.add("text", { x: 0, y: yc - 16, class: "lbl" }, n); else s.add("text", { x: 0, y: yc + 4, class: "lbl" }, n);
+      s.add("line", { x1: x(v), x2: x(v + V.lo), y1: yc, y2: yc, stroke: "var(--color-fg-muted)", "stroke-dasharray": "2 3" });
+      s.add("rect", { x: x(v + V.lo), y: yc - 6, width: Math.max(2, x(v + V.hi) - x(v + V.lo)), height: 12, rx: 6, fill: COL.plano });
+      s.add("circle", { cx: x(v), cy: yc, r: 6, fill: "var(--color-panel)", stroke: "var(--color-fg-muted)", "stroke-width": 2 });
+    });
+    $("p-fig").replaceChildren(s);
+  }
+  addEventListener("resize", draw); draw();
+  if (innerWidth > 560) $("p-more").open = true;
 }
 
 function renderScenarios(P, B, f, V, Z) {
@@ -188,31 +312,33 @@ function renderScenarios(P, B, f, V, Z) {
   const range = (m) => m.impacto_2027_bi != null ? [m.impacto_2027_bi, m.impacto_2027_bi] : [m.impacto_min_bi, m.impacto_max_bi];
   const X = P.multiplicadores, pc = (v) => v / V.pib * 100;
   const centro = B.meta_centro.valor_bi, ploa = B.primario_ploa.valor_bi, ifi = B.primario_ifi.valor_bi;
-  const s1 = (v) => (v >= 0 ? "+" : "−") + nf(1).format(Math.abs(v)), s2 = (v) => (Math.abs(v) < 0.005 ? "" : v > 0 ? "+" : "−") + nf(2).format(Math.abs(v));
   const pibY = (k) => V.pib * Math.pow(1 + f.g / 100, k);
   const debt30 = (imp, on) => path(f.d, f.r - (on ? Z.rMkt : 0), f.g, [0, 1, 2, 3].map((k) => f.primary + (on ? imp / V.pib * 100 + (k ? Z.gat / pibY(k) * 100 : 0) : 0)))[4];
-  const fx = (a, b, fmt) => a === b ? fmt(a) : `${fmt(a)} a ${fmt(b)}`;
   const rows = P.cenarios.map((c) => {
     const t = { Receita: [0, 0], Despesa: [0, 0] };
     c.medidas.forEach((id) => { const m = M[id], [a, b] = range(m); t[m.lado][0] += a; t[m.lado][1] += b; });
     const lo = t.Receita[0] + t.Despesa[0], hi = t.Receita[1] + t.Despesa[1];
     // A cut in spending and a rise in tax both lower GDP: tax multipliers are negative, spending ones positive.
     const eff = (k) => [pc(t.Receita[1]) * X.receita[k][1] - pc(t.Despesa[1]) * X.despesa[k][1], pc(t.Receita[0]) * X.receita[k][0] - pc(t.Despesa[0]) * X.despesa[k][0]];
-    return { c, lo, hi, now: eff("impacto"), acc: eff("acumulado") };
+    return { c, lo, hi, now: eff("impacto"), acc: eff("acumulado"), d30: f ? [debt30(hi, hi > 0), debt30(lo, hi > 0)] : null };
   });
-  $("c-tbl").tBodies[0].replaceChildren(...rows.map(({ c, lo, hi, now, acc }) => {
-    const tr = el("tr");
-    const a = td(""); a.append(el("b", "", c.cenario), el("small", "", c.precisa));
-    const imp = td("", "num", "Impacto em 2027"); imp.append(document.createTextNode(hi ? `R$ ${fx(nb(lo), nb(hi), String)} bi` : "R$ 0"), el("small", "", hi ? fx(nf(2).format(pc(lo)), nf(2).format(pc(hi)), String) + "% do PIB" : "—"));
-    const pib = td("", "num", "Efeito no PIB de 2027"); pib.append(document.createTextNode(hi ? `${fx(s2(now[0]), s2(now[1]), String)} p.p.` : "0"), el("small", "", hi ? `${fx(s2(acc[0]), s2(acc[1]), String)} p.p. em ${X.horizonte_acumulado}` : "—"));
-    const pri = td("", "num", "Primário de 2027 contra o centro"); pri.append(document.createTextNode(`PLOA: ${fx(s1(ploa + lo - centro), s1(ploa + hi - centro), String)}`), el("small", "", `IFI: ${fx(s1(ifi + lo - centro), s1(ifi + hi - centro), String)} (R$ bi)`));
-    const dv = td(f ? fx(nf(1).format(debt30(hi, hi > 0)), nf(1).format(debt30(lo, hi > 0)), String) + "% do PIB" : "—", "num", "Dívida bruta em 2030");
-    tr.append(a, imp, pib, pri, dv);
-    return tr;
+  const colors = [COL.plano, COL.meio, COL.base];
+  $("c-grid").replaceChildren(...rows.map(({ c, lo, hi, now, acc, d30 }, i) => {
+    const card = el("article", "sc"); card.style.setProperty("--c", colors[i % 3]);
+    const dl = el("dl");
+    const item = (k, v, small) => { const w = el("div"); const dd = el("dd", "", v); if (small) dd.append(el("small", "", small)); w.append(el("dt", "", k), dd); dl.append(w); };
+    item("Impacto em 2027", hi ? `R$ ${fx(nb(lo), nb(hi), String)} bi` : "R$ 0", hi ? fx(nf(2).format(pc(lo)), nf(2).format(pc(hi)), String) + "% do PIB" : "");
+    item("Efeito no PIB de 2027", hi ? `${fx(s2(now[0]), s2(now[1]), String)} p.p.` : "0", hi ? `${fx(s2(acc[0]), s2(acc[1]), String)} p.p. em ${X.horizonte_acumulado}` : "");
+    item("Primário de 2027 contra o centro, a partir do PLOA", `${fx(s1(ploa + lo - centro), s1(ploa + hi - centro), String)} bi`, `a partir da IFI: ${fx(s1(ifi + lo - centro), s1(ifi + hi - centro), String)} bi`);
+    item("Dívida bruta em 2030", d30 ? fx(nf(1).format(d30[0]), nf(1).format(d30[1]), String) + "% do PIB" : "—", "");
+    card.append(el("h3", "", c.cenario), el("p", "", c.precisa), dl);
+    return card;
   }));
   $("c-mult").textContent = X.fonte; $("c-mult").href = X.url; $("c-rev").href = X.revisao_url; $("c-rev").title = X.revisao;
   const top = rows[0];
-  $("c-say").textContent = `No cenário de uso integral, o pacote vale de ${nf(2).format(pc(top.lo))}% a ${nf(2).format(pc(top.hi))}% do PIB, e o efeito estimado no PIB de 2027 é de ${s2(top.now[0])} a ${s2(top.now[1])} p.p. A partir do PLOA, o primário fica ${ploa + top.hi >= centro ? "no centro da meta ou acima na ponta alta" : "abaixo do centro"}; a partir da projeção da IFI, fica ${ifi + top.hi >= centro ? "no centro ou acima na ponta alta" : "abaixo do centro"}.`;
+  $("c-say").textContent = `No cenário de uso integral, o efeito estimado no PIB de 2027 é de ${s2(top.now[0])} a ${s2(top.now[1])} p.p. A partir do PLOA, o primário fica ${ploa + top.hi >= centro ? "no centro da meta ou acima na ponta alta" : "abaixo do centro"}; a partir da projeção da IFI, fica ${ifi + top.hi >= centro ? "no centro ou acima na ponta alta" : "abaixo do centro"}.`;
+  if (f) { const last = rows[rows.length - 1]; kpi("k-div", `${fx(nf(1).format(top.d30[0]), nf(1).format(top.d30[1]), String)}%`, `do PIB com o pacote usado por inteiro; ${nf(1).format(last.d30[0])}% sem ele; ${nf(1).format(f.d)}% em ${monthName(f.month)}`); }
+  else kpi("k-div", "—", "Séries do BCB indisponíveis agora");
 }
 
 // Bases of the two debt controls. rep = share of the debt whose rate changes within a year:
@@ -228,7 +354,6 @@ function bases(P, z) {
   Z.dSelic = s.deriva.selic_end2027 - s.ancora.selic_end2027; Z.rAnc = Z.dSelic * Z.rep;
   return Z;
 }
-const COL = { base: "var(--color-bad)", plano: "var(--color-accent)", comp: "var(--color-ok)" };
 function path(d0, r, g, prim) { const out = [d0]; let d = d0; for (const p of prim) { d = d * (1 + r / 100) / (1 + g / 100) - p; out.push(d); } return out; }
 
 function renderDebt(P, f, V, Z) {
@@ -236,8 +361,9 @@ function renderDebt(P, f, V, Z) {
   const imp = $("i-imp"), grow = $("i-grow"), dr = $("i-r");
   imp.value = Math.round((V.lo + V.hi) / 2); grow.value = Z.gat; dr.value = Z.rMkt.toFixed(2);
   const Q = P.premissas, pct0 = (v) => nf(0).format(v * 100) + "%";
+  $("b-imp").textContent = `Base: R$ ${nf(0).format(Math.round((V.lo + V.hi) / 2))} bi, o meio da faixa de R$ ${nb(V.lo)} a ${nb(V.hi)} bi (seção 1).`;
   $("b-grow").textContent = `Base: R$ ${nf(1).format(Z.gat)} bi, estimativa do governo no PLOA para os 2 gatilhos, que a partir de ${Q.gatilhos.desde} cortam o limite (${Q.gatilhos.fonte}).`;
-  $("b-r").textContent = `Base: ${nf(2).format(Z.rMkt)} p.p. O ${Q.di_reacao.ticker} caiu ${nf(0).format(-Q.di_reacao.bp)} bp no dia da apresentação (${Q.di_reacao.data.split("-").reverse().join("/")}, B3 pelo SILO), × ${pct0(Z.rep)} da dívida que muda de taxa em 1 ano (LFT ${nf(1).format(Z.lft)}% + vencimentos de 12 meses ${nf(1).format(Z.venc)}%, Tesouro). Teto de referência: ${nf(2).format(Z.rAnc)} p.p., se o pacote sozinho levasse a Selic do cenário Deriva fiscal para o Âncora retomada (${nf(1).format(Z.dSelic)} p.p.).`;
+  $("b-r").textContent = `Base: ${nf(2).format(Z.rMkt)} p.p. O ${Q.di_reacao.ticker} caiu ${nf(0).format(-Q.di_reacao.bp)} bp no dia da apresentação (${dmy(Q.di_reacao.data)}, B3 pelo SILO), × ${pct0(Z.rep)} da dívida que muda de taxa em 1 ano (LFT ${nf(1).format(Z.lft)}% + vencimentos de 12 meses ${nf(1).format(Z.venc)}%, Tesouro). Teto de referência: ${nf(2).format(Z.rAnc)} p.p., se o pacote sozinho levasse a Selic do cenário Deriva fiscal para o Âncora retomada (${nf(1).format(Z.dSelic)} p.p.).`;
   const c27 = P.compromisso.primario_2027_pct_pib, c30 = P.compromisso.primario_2030_pct_pib;
   function draw() {
     const I = Number(imp.value), G = Number(grow.value), R = Number(dr.value);
@@ -247,20 +373,22 @@ function renderDebt(P, f, V, Z) {
     const base = path(f.d, f.r, f.g, [0, 1, 2, 3].map(() => f.primary));
     const plano = path(f.d, f.r - R, f.g, [0, 1, 2, 3].map((k) => f.primary + I / V.pib * 100 + (k ? G / pibY(k) * 100 : 0)));
     const comp = path(f.d, f.r - R, f.g, [0, 1, 2, 3].map((k) => c27 + (c30 - c27) * k / 3));
-    const L = [["Sem pacote: primário de hoje mantido", base, COL.base], ["Com o pacote (controles acima)", plano, COL.plano], [`Compromisso: ${nf(1).format(c27)}% em 2027 até ${nf(1).format(c30)}% em 2030`, comp, COL.comp]];
+    const L = [["Sem pacote: primário de hoje mantido", base, COL.base], ["Com o pacote (controles ao lado)", plano, COL.plano], [`Compromisso: ${nf(1).format(c27)}% em 2027 até ${nf(1).format(c30)}% em 2030`, comp, COL.comp]];
     const all = L.flatMap((l) => l[1]), lo = Math.floor(Math.min(...all) - 1), hi = Math.ceil(Math.max(...all) + 1);
-    const W = Math.max(300, Math.min(720, $("s-chart").clientWidth || 720)), H = W < 500 ? 230 : 300, m = { l: 44, r: 44, t: 12, b: 26 };
+    const W = Math.max(300, Math.min(720, $("s-chart").clientWidth || 560)), H = W < 500 ? 240 : 290, m = { l: 40, r: 40, t: 12, b: 26 };
     const x = (i) => m.l + i * (W - m.l - m.r) / 4, y = (v) => m.t + (hi - v) * (H - m.t - m.b) / (hi - lo);
-    const NS = "http://www.w3.org/2000/svg", s = document.createElementNS(NS, "svg");
-    s.setAttribute("viewBox", `0 0 ${W} ${H}`); s.setAttribute("role", "img"); s.setAttribute("aria-label", "Dívida bruta em % do PIB, de 2026 a 2030, em 3 trajetórias");
-    const add = (tag, at, txt) => { const e = document.createElementNS(NS, tag); Object.entries(at).forEach(([k, v]) => e.setAttribute(k, v)); if (txt !== undefined) e.textContent = txt; s.append(e); return e; };
+    const s = svg(W, H, "Dívida bruta em % do PIB, de 2026 a 2030, em 3 trajetórias");
     const step = (hi - lo) > 16 ? 4 : 2;
-    for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) { add("line", { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), stroke: "var(--color-border-line)" }); add("text", { x: m.l - 6, y: y(v) + 4, "text-anchor": "end" }, v + "%"); }
-    years.forEach((yr, i) => add("text", { x: x(i), y: H - 6, "text-anchor": "middle" }, yr));
-    L.forEach(([, v, c]) => { add("path", { class: "ln", stroke: c, d: v.map((p, i) => (i ? "L" : "M") + x(i) + " " + y(p)).join(" ") }); add("text", { x: x(4) + 6, y: y(v[4]) + 4, style: "fill:" + c + ";font-weight:600" }, nf(1).format(v[4])); });
+    for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) { s.add("line", { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), stroke: "var(--color-border-line)" }); s.add("text", { x: m.l - 6, y: y(v) + 4, "text-anchor": "end" }, v + "%"); }
+    years.forEach((yr, i) => s.add("text", { x: x(i), y: H - 6, "text-anchor": "middle" }, yr));
+    // End labels pushed apart so close lines stay readable.
+    const ends = L.map(([, v, c]) => ({ y: y(v[4]), v: v[4], c })).sort((a, b) => a.y - b.y);
+    for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 14) ends[i].y = ends[i - 1].y + 14;
+    L.forEach(([, v, c]) => s.add("path", { class: "ln", stroke: c, d: v.map((p, i) => (i ? "L" : "M") + x(i) + " " + y(p)).join(" ") }));
+    ends.forEach((e) => s.add("text", { x: x(4) + 6, y: e.y + 4, style: "fill:" + e.c + ";font-weight:600" }, nf(1).format(e.v)));
     $("s-chart").replaceChildren(s);
     $("s-key").replaceChildren(...L.map(([n, , c]) => { const k = el("span"); const i = el("i"); i.style.background = c; k.append(i, document.createTextNode(n)); return k; }));
-    $("s-tbl").tBodies[0].replaceChildren(...L.map(([n, v]) => { const tr = el("tr"); tr.append(td(n), ...v.slice(1).map((p) => td(nf(1).format(p) + "%", "num"))); return tr; }));
+    $("s-tbl").tBodies[0].replaceChildren(...L.map(([n, v, c]) => { const tr = el("tr"); const a = td(""); const sw = el("i", "sw"); sw.style.background = c; a.append(sw, document.createTextNode(n)); tr.append(a, ...v.slice(1).map((p) => td(nf(1).format(p), "num"))); return tr; }));
     const dif = base[4] - plano[4], rise = plano[4] - f.d;
     $("s-say").textContent = `Dívida de ${nf(1).format(f.d)}% do PIB em ${monthName(f.month)}, juro implícito de ${nf(1).format(f.r)}% e crescimento nominal de ${nf(1).format(f.g)}%. Sem o pacote, a dívida chega a ${nf(1).format(base[4])}% em 2030. Com o pacote, a ${nf(1).format(plano[4])}%: ${nf(1).format(dif)} p.p. a menos, e ${rise > 0 ? "ainda " + nf(1).format(rise) + " p.p. acima de hoje" : nf(1).format(-rise) + " p.p. abaixo de hoje"}.`;
   }
