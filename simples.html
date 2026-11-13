@@ -146,7 +146,7 @@ const SILO = "https://zcjbtpxuhdekpwcxmepn.supabase.co/rest/v1/rpc/";
 const HDR = { apikey: "sb_publishable__yfFQsykAglrvc9GS6_PYw_B24ex437", "Accept-Profile": "api", "Content-Profile": "api", "Content-Type": "application/json" };
 // Same anchor and rule as the Agora page: DI jan/29 settlement of 23/10 and Bayes with sigma = 100 bp.
 const ELECT = { di29: 12.640, iso: "2026-10-23" };
-const SIGMA = 100;
+// Sigma comes from data/research/sigma.json (sigma_used_bp), the same value the daily batch checks.
 const B3_DI = "https://cotacao.b3.com.br/mds/api/v1/DerivativeQuotation/DI1";
 // Plain names for the 3 paths; the scenario ids come from the data files.
 const PLAIN = {
@@ -242,8 +242,8 @@ async function liveDi() {
 }
 
 let MKT = null;
-function renderMarket(rows, pesos, scen, live) {
-  MKT = { rows, pesos, scen };
+function renderMarket(rows, pesos, scen, live, sigma) {
+  MKT = { rows, pesos, scen, sigma };
   rows = rows.filter((r) => r.trade_date >= ELECT.iso && r.settlement_rate != null).sort((a, b) => (a.trade_date < b.trade_date ? -1 : 1));
   if (!rows.length && !live) { fail("m-say", "O ajuste do DI jan/29 não carregou agora."); return; }
   const last = rows[rows.length - 1] || {};
@@ -251,7 +251,7 @@ function renderMarket(rows, pesos, scen, live) {
   const useLive = live && (!last.trade_date || live.date > last.trade_date);
   const rate = useLive ? live.rate : last.settlement_rate;
   const bp = Math.round((rate - ELECT.di29) * 100);
-  const lik = pesos.map((s) => Math.exp(-Math.pow(bp - s.di_jan29_move_bp, 2) / (2 * SIGMA * SIGMA)));
+  const lik = pesos.map((s) => Math.exp(-Math.pow(bp - s.di_jan29_move_bp, 2) / (2 * sigma * sigma)));
   const raw = pesos.map((s, i) => s.start * lik[i]);
   const tot = raw.reduce((a, b) => a + b, 0);
   const now = raw.map((v) => v / tot);
@@ -276,7 +276,8 @@ Promise.allSettled([
   rpc("future_series", { p_ticker: "DI1F29", p_from: ELECT.iso }),
   file("data/relatorio/pesos.json"),
   file("data/dominancia/scenarios.json"),
-]).then(([liv, mac, bud, lft, di, pes, sce]) => {
+  file("data/research/sigma.json"),
+]).then(([liv, mac, bud, lft, di, pes, sce, sig]) => {
   let f = null;
   if (mac.status === "fulfilled") f = debtNow(...mac.value);
   if (f) {
@@ -290,10 +291,11 @@ Promise.allSettled([
     ["d-say", "j-say", "c-say"].forEach((id) => fail(id, "Os dados do BCB não carregaram agora."));
   }
   if (lft.status === "fulfilled") renderLft(lft.value);
-  if (di.status === "fulfilled" && pes.status === "fulfilled") renderMarket(di.value, pes.value, sce.status === "fulfilled" ? sce.value : [], liv.status === "fulfilled" ? liv.value : null);
+  const sigma = sig.status === "fulfilled" && Number.isFinite(sig.value.sigma_used_bp) && sig.value.sigma_used_bp > 0 ? sig.value.sigma_used_bp : null;
+  if (di.status === "fulfilled" && pes.status === "fulfilled" && sigma) renderMarket(di.value, pes.value, sce.status === "fulfilled" ? sce.value : [], liv.status === "fulfilled" ? liv.value : null, sigma);
   else fail("m-say", "O ajuste do DI jan/29 não carregou agora.");
 });
 // Only the DI quote refreshes; a failed read keeps the last number on screen.
-setInterval(() => { if (!MKT || document.hidden) return; liveDi().then((l) => renderMarket(MKT.rows, MKT.pesos, MKT.scen, l)).catch(() => {}); }, 120000);
+setInterval(() => { if (!MKT || document.hidden) return; liveDi().then((l) => renderMarket(MKT.rows, MKT.pesos, MKT.scen, l, MKT.sigma)).catch(() => {}); }, 120000);
 })();</script>
 </body></html>

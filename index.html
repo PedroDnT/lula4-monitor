@@ -522,7 +522,7 @@ let WEIGHTS_AT = null, WEIGHTS_READY = false;
 // Market rule (Bayes, since 29/10/2026): now_i = start_i x N(DI move | mu_i, SIGMA), scaled to 100%.
 // SIGMA = how far the 2-year DI wanders within one scenario: sd of the move 20 to 40 sessions after 22 shocks since 2015 is 62 to 113 bp (PRE 720 d, SILO). 100 bp.
 // The earlier rule, now = start + 0.3 x (DI mix - start) capped at 15 points, is kept in the Método page as history.
-const SIGMA = 100;
+let SIGMA = null; // data/research/sigma.json (sigma_used_bp); the daily batch checks the same value.
 const lik = bp => { const l = SCEN.map(s => Math.exp(-((bp - s.mu) ** 2) / (2 * SIGMA * SIGMA))), t = l.reduce((a, b) => a + b, 0); return l.map(x => x / t); };
 function nowW(M) {
   if (!M) return SCEN.map(s => s.p);
@@ -1004,7 +1004,7 @@ function scenLv(F, NW) {
 }
 function diMix() {
   const r = S.di && S.di.c.DI1F29;
-  if (!r || r.prev == null) return null;
+  if (!r || r.prev == null || !SIGMA) return null;
   const last = r.cur != null ? r.cur : r.prev, bp = (last - ELECT.di29) * 100, lim = r.top != null && r.cur != null && r.cur >= r.top;
   const w = lik(bp), mu = SCEN.map(s => s.mu);
   return {w, bp, lim, beyond: bp > mu[mu.length - 1], live: r.cur != null};
@@ -1368,6 +1368,9 @@ db = {collection: () => ({doc: slot => ({set: data => {
     if (!Array.isArray(P) || P.length !== ids.length || new Set(P.map(p => p.id)).size !== ids.length || !ids.every(id => P.some(p => p.id === id))) throw new Error("cenários inválidos");
     const ordered = ids.map(id => P.find(p => p.id === id));
     if (!ordered.every(p => typeof p.start === "number" && Number.isFinite(p.start) && p.start >= 0 && p.start <= 1 && typeof p.di_jan29_move_bp === "number" && Number.isFinite(p.di_jan29_move_bp) && /^\d{4}-\d{2}-\d{2}$/.test(p.partida_em) && p.partida_em === ordered[0].partida_em) || Math.abs(ordered.reduce((t, p) => t + p.start, 0) - 1) > 1e-9) throw new Error("pesos ou data inválidos");
+    const SG = await getJson("data/research/sigma.json", {cache: "no-cache"});
+    if (!(typeof SG.sigma_used_bp === "number" && Number.isFinite(SG.sigma_used_bp) && SG.sigma_used_bp > 0)) throw new Error("sigma inválido");
+    SIGMA = SG.sigma_used_bp;
     ordered.forEach((p, k) => { SCEN[k].p = p.start; SCEN[k].mu = p.di_jan29_move_bp; });
     WEIGHTS_AT = ordered[0].partida_em.split("-").reverse().join("/");
     WEIGHTS_READY = true;
