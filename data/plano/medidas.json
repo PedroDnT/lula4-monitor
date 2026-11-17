@@ -1,11 +1,25 @@
 {
- "atualizado_em": "2026-11-13",
+ "atualizado_em": "2026-11-17",
  "projeto": {
   "nome": "PLP 299/2026",
   "autor": "Senador Jaques Wagner (PT/BA)",
   "relator": "Senador Eduardo Braga (MDB/AM)",
-  "status": "Parecer de Plenário do relator com substitutivo (12/11/2026). Urgência aprovada em 12/11 por 40 a 38; o mérito precisa de 41 votos no Senado e de 257 na Câmara. O relator apresentou depois uma versão com o acolhimento parcial da emenda 14; esta página segue o texto do parecer de 12/11.",
-  "url": "https://www25.senado.leg.br/web/atividade/materias/-/materia/176328"
+  "status": "Texto-base (substitutivo do relator) aprovado no Senado em 12/11/2026 por 45 a 31; a urgência passou por 40 a 38. Quatro destaques ficaram para 17/11: limite à compensação de créditos tributários, Lei Kandir, compensação previdenciária e a emenda 40, do senador Rogério Marinho. Os 3 trechos destacados precisam de 41 votos para ficar no texto; a emenda 40 precisa de 41 votos para entrar. Depois o projeto vai à Câmara, onde precisa de 257 votos. A Consultoria de Orçamentos do Senado observa que as estimativas de impacto não foram revistas após as mudanças no texto. Esta página segue o texto do parecer de 12/11.",
+  "url": "https://www25.senado.leg.br/web/atividade/materias/-/materia/176328",
+  "status_fontes": [
+   {
+    "fonte": "Senado Federal, votações do PLP 299/2026",
+    "url": "https://www25.senado.leg.br/web/atividade/materias/-/materia/176328/votacoes"
+   },
+   {
+    "fonte": "Agência Senado, 12/11/2026",
+    "url": "https://www12.senado.leg.br/noticias/materias/2026/11/12/texto-principal-do-ajuste-fiscal-e-aprovado-pelo-senado"
+   },
+   {
+    "fonte": "Forbes Brasil, 17/11/2026",
+    "url": "https://forbes.com.br/forbes-money/2026/11/destaques-ajuste-fiscal-senado/"
+   }
+  ]
  },
  "tramitacao": [
   {
@@ -24,8 +38,13 @@
    "feito": true
   },
   {
-   "etapa": "Mérito no Senado, 41 votos",
-   "data": null,
+   "etapa": "Texto-base aprovado, 45 a 31",
+   "data": "2026-11-12",
+   "feito": true
+  },
+  {
+   "etapa": "4 destaques no Senado",
+   "data": "2026-11-17",
    "feito": false
   },
   {
@@ -204,7 +223,7 @@
   {
    "id": "rejeitado",
    "cenario": "Rejeitado ou parado",
-   "precisa": "O mérito não alcança 41 votos no Senado ou 257 na Câmara, ou a votação não termina antes do Orçamento de 2027.",
+   "precisa": "A Câmara não alcança 257 votos, ou a votação não termina antes do Orçamento de 2027.",
    "medidas": []
   }
  ],
