@@ -3,6 +3,8 @@
 # Candidate news from the last 36 hours (scripts/news_candidates.py) go in the PR body and the
 # run summary for review; they never change a fact or a weight.
 # Runs at 11:20 Brasília (14:20 UTC) on weekdays. A merge to main publishes the site.
+# Price-only batches merge by themselves once tests and validate pass (Pedro, 17/11/2026):
+# the PR stays as the record. Facts still enter by a manual PR with Pedro's approval.
 name: daily-monitor
 
 on:
@@ -73,4 +75,5 @@ jobs:
           PY
           printf '\n' >> "$RUNNER_TEMP/body.md"
           cat "$RUNNER_TEMP/news.md" >> "$RUNNER_TEMP/body.md"
-          gh pr create --base main --head "$BR" --title "data: lote de preço de $DAY" --body-file "$RUNNER_TEMP/body.md"
+          PR_URL=$(gh pr create --base main --head "$BR" --title "data: lote de preço de $DAY" --body-file "$RUNNER_TEMP/body.md")
+          gh pr merge "$PR_URL" --merge --delete-branch
