@@ -145,10 +145,18 @@
   },
   {
     "date": "2026-11-17",
+    "label": "Partida 2026-11-17",
+    "note": "Cálculo: fatores aprovados dos fatos f16, f17; ver ledger.",
+    "ancora": 0.49258018190521785,
+    "deriva": 0.325058697485696,
+    "estresse": 0.18236112060908613
+  },
+  {
+    "date": "2026-11-17",
     "label": "Agora 2026-11-17",
     "note": "Cálculo: partida × verossimilhança normal; DI1F29 SILO de 2026-11-16; ver ledger.",
-    "ancora": 0.13957816059137265,
-    "deriva": 0.44982715991921846,
-    "estresse": 0.4105946794894088
+    "ancora": 0.1455413489322438,
+    "deriva": 0.44670961460298025,
+    "estresse": 0.4077490364647759
   }
 ]

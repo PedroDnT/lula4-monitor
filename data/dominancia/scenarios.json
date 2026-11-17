@@ -2,8 +2,8 @@
   {
     "id": "ancora",
     "cenario": "Âncora retomada",
-    "start": 0.48039215686274506,
-    "probability": 0.13957816059137265,
+    "start": 0.49258018190521785,
+    "probability": 0.1455413489322438,
     "precisa": "Equipe econômica com mandato fiscal e Orçamento 2027 com o centro da meta de 0,50% do PIB (piso de 0,25%) em até 4 semanas; o BC sobe a Selic com apoio fiscal.",
     "di_jan29_move_bp": 28,
     "usdbrl_6m": 5.3,
@@ -14,8 +14,8 @@
   {
     "id": "deriva",
     "cenario": "Deriva fiscal",
-    "start": 0.3328664799253034,
-    "probability": 0.44982715991921846,
+    "start": 0.325058697485696,
+    "probability": 0.44670961460298025,
     "precisa": "O arcabouço é afrouxado; o Copom para de cortar e a curva reprecifica 2027 para cima.",
     "di_jan29_move_bp": 123,
     "usdbrl_6m": 5.8,
@@ -26,8 +26,8 @@
   {
     "id": "estresse",
     "cenario": "Estresse e espiral",
-    "start": 0.18674136321195142,
-    "probability": 0.4105946794894088,
+    "start": 0.18236112060908613,
+    "probability": 0.4077490364647759,
     "precisa": "A contestação do resultado se arrasta, há choque entre STF e Congresso, rebaixamento de rating; o BC sobe o juro e o dólar continua a subir.",
     "di_jan29_move_bp": 295,
     "usdbrl_6m": 6.2,

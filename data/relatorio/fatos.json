@@ -194,5 +194,45 @@
       "reference": "https://claude.ai/code/project/chan_01PHRR234GYxjr12aKa2PR3R?thread=cmsg_01PHRR234GYxjr12aKa2PR3RRqmJZKAKp7Qqou5R1a52Pm",
       "origin": "Julgamento"
     }
+  },
+  {
+    "id": "f16",
+    "data": "2026-11-12",
+    "fato": "O Senado aprova o texto-base do PLP 299/2026 (ajuste fiscal) por 45 a 31, um substitutivo do relator Eduardo Braga. Quatro destaques ficam para 17/11; depois o projeto vai à Câmara.",
+    "fonte": "Agência Senado",
+    "url": "https://www12.senado.leg.br/noticias/materias/2026/11/12/texto-principal-do-ajuste-fiscal-e-aprovado-pelo-senado",
+    "f_ancora": 1.05,
+    "f_deriva": 1.0,
+    "f_estresse": 1.0,
+    "status": "Na partida",
+    "degrau": "Âncora fraco a favor: votação oficial no Senado, mas só uma etapa; mesmo canal de f10 e f15 (meta de 2027), então no máximo fraco.",
+    "origin": "Dado",
+    "channel": "meta-2027",
+    "evidence_quote": "O texto aprovado, por 45 votos a 31, foi um substitutivo do senador Eduardo Braga (MDB-AM) ao projeto apresentado pelo senador Jaques Wagner",
+    "approval": {
+      "by": "Pedro",
+      "reference": "https://claude.ai/code/project/chan_01PHRR234GYxjr12aKa2PR3R?thread=cmsg_01PHRR234GYxjr12aKa2PR3RUoratmszSjmsWQQhBLX5vM",
+      "origin": "Julgamento"
+    }
+  },
+  {
+    "id": "f17",
+    "data": "2026-11-16",
+    "fato": "Circula que Aloizio Mercadante (BNDES) seria nome para a Fazenda; ele nega e diz que quer ficar no BNDES. O nome do ministro segue sem anúncio.",
+    "fonte": "Valor Investe",
+    "url": "https://valorinveste.globo.com/produtos/renda-fixa/tesouro-direto/noticia/2026/11/16/tesouro-direto-hoje-juros-dos-papeis-prefixados-e-atrelados-a-inflacao-saltam.ghtml",
+    "f_ancora": 1.0,
+    "f_deriva": 1.0,
+    "f_estresse": 1.0,
+    "status": "Na partida",
+    "degrau": "Sem direção clara: boato negado pelo próprio citado, sem anúncio.",
+    "origin": "Dado",
+    "channel": "fazenda",
+    "evidence_quote": "estar cotado para comandar o Ministério da Fazenda intensificam a pressão sobre os ativos brasileiros, embora ele tenha negado que disputa o cargo",
+    "approval": {
+      "by": "Pedro",
+      "reference": "https://claude.ai/code/project/chan_01PHRR234GYxjr12aKa2PR3R?thread=cmsg_01PHRR234GYxjr12aKa2PR3RUoratmszSjmsWQQhBLX5vM",
+      "origin": "Julgamento"
+    }
   }
 ]

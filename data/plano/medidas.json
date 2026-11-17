@@ -4,7 +4,7 @@
   "nome": "PLP 299/2026",
   "autor": "Senador Jaques Wagner (PT/BA)",
   "relator": "Senador Eduardo Braga (MDB/AM)",
-  "status": "Texto-base (substitutivo do relator) aprovado no Senado em 12/11/2026 por 45 a 31; a urgência passou por 40 a 38. Quatro destaques ficaram para 17/11: limite à compensação de créditos tributários, Lei Kandir, compensação previdenciária e a emenda 40, do senador Rogério Marinho. Os 3 trechos destacados precisam de 41 votos para ficar no texto; a emenda 40 precisa de 41 votos para entrar. Depois o projeto vai à Câmara, onde precisa de 257 votos. A Consultoria de Orçamentos do Senado observa que as estimativas de impacto não foram revistas após as mudanças no texto. Esta página segue o texto do parecer de 12/11.",
+  "status": "Texto-base (substitutivo do relator) aprovado no Senado em 12/11/2026 por 45 a 31; a urgência passou por 40 a 38. A votação dos destaques, marcada para 17/11, foi adiada para 18/11 sem acordo. São 5 destaques: limite à compensação de créditos tributários, Lei Kandir, compensação previdenciária, a emenda 40 do senador Rogério Marinho e, desde 17/11, o destino da economia com o teto salarial (senador Alessandro Vieira). Em 17/11 os senadores apresentaram mais 7 emendas, que vão ao relator. Os trechos destacados precisam de 41 votos para ficar no texto; a emenda 40 precisa de 41 votos para entrar. Depois o projeto vai à Câmara, onde precisa de 257 votos. A Consultoria de Orçamentos do Senado observa que as estimativas de impacto não foram revistas após as mudanças no texto. Esta página segue o texto do parecer de 12/11.",
   "url": "https://www25.senado.leg.br/web/atividade/materias/-/materia/176328",
   "status_fontes": [
    {
@@ -18,6 +18,10 @@
    {
     "fonte": "Forbes Brasil, 17/11/2026",
     "url": "https://forbes.com.br/forbes-money/2026/11/destaques-ajuste-fiscal-senado/"
+   },
+   {
+    "fonte": "g1, 17/11/2026",
+    "url": "https://g1.globo.com/politica/noticia/2026/11/17/senado-adia-votacao-de-destaques-ao-projeto-de-ajuste-fiscal-do-governo-para-quarta-feira.ghtml"
    }
   ]
  },
@@ -43,8 +47,8 @@
    "feito": true
   },
   {
-   "etapa": "4 destaques no Senado",
-   "data": "2026-11-17",
+   "etapa": "5 destaques no Senado",
+   "data": "2026-11-18",
    "feito": false
   },
   {

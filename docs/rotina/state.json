@@ -1,9 +1,9 @@
 {
   "as_of": "2026-11-17",
   "start": [
-    0.48039215686274506,
-    0.3328664799253034,
-    0.18674136321195142
+    0.49258018190521785,
+    0.325058697485696,
+    0.18236112060908613
   ],
   "applied_ids": [
     "f1",
@@ -20,7 +20,9 @@
     "f12",
     "f13",
     "f14",
-    "f15"
+    "f15",
+    "f16",
+    "f17"
   ],
   "channels": [
     "autonomia-bc",
@@ -31,9 +33,9 @@
     "meta-2027",
     "stf-oposicao"
   ],
-  "facts_sha256": "434d4447d094a7fd0c1e49319da18fabf24390866eeffe13dea6ab44e3764558",
-  "weights_sha256": "bd999a388d67f40f3a946c3758470e530908846414bbf05b09281b364d24fe2a",
-  "history_sha256": "a56cd4940c27e0a709758fdeb77a1fda529252459e0194d22fef6b15b5c5b0b4",
+  "facts_sha256": "098b74c81c4ad2f9eed539b06e756f79f83490edb286a2917614a79f5ff5417d",
+  "weights_sha256": "3400d7750395411b6960285c29b16644c4314dc0d59605315cac02b98e2a91dd",
+  "history_sha256": "cd6b13e1be5eca826d34c186d039c33efeee43edd2503ae67db3b241db3ebfe2",
   "baseline_origin": "Julgamento",
   "baseline_source": "6b023ca; decisão de Pedro em 04/11/2026",
   "unresolved": [
@@ -608,20 +610,71 @@
         "baseline_source": "prev_settlement_rate de 2026-10-26 (B3 Price Report via SILO)",
         "response_sha256": "c6a2be42b1d78a409044ea47bd2b4087530ad5cb1195200c8168ecdaee44672e"
       },
-      "changes": [],
+      "changes": [
+        {
+          "id": "f16",
+          "before": [
+            0.48039215686274506,
+            0.3328664799253034,
+            0.18674136321195142
+          ],
+          "factors": [
+            1.05,
+            1.0,
+            1.0
+          ],
+          "after": [
+            0.49258018190521785,
+            0.325058697485696,
+            0.18236112060908613
+          ],
+          "factor_origin": "Julgamento",
+          "weight_origin": "Cálculo",
+          "approval": {
+            "by": "Pedro",
+            "reference": "https://claude.ai/code/project/chan_01PHRR234GYxjr12aKa2PR3R?thread=cmsg_01PHRR234GYxjr12aKa2PR3RUoratmszSjmsWQQhBLX5vM",
+            "origin": "Julgamento"
+          }
+        },
+        {
+          "id": "f17",
+          "before": [
+            0.49258018190521785,
+            0.325058697485696,
+            0.18236112060908613
+          ],
+          "factors": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "after": [
+            0.49258018190521785,
+            0.325058697485696,
+            0.18236112060908613
+          ],
+          "factor_origin": "Julgamento",
+          "weight_origin": "Cálculo",
+          "approval": {
+            "by": "Pedro",
+            "reference": "https://claude.ai/code/project/chan_01PHRR234GYxjr12aKa2PR3R?thread=cmsg_01PHRR234GYxjr12aKa2PR3RUoratmszSjmsWQQhBLX5vM",
+            "origin": "Julgamento"
+          }
+        }
+      ],
       "start": [
-        0.48039215686274506,
-        0.3328664799253034,
-        0.18674136321195142
+        0.49258018190521785,
+        0.325058697485696,
+        0.18236112060908613
       ],
       "now": [
-        0.13957816059137265,
-        0.44982715991921846,
-        0.4105946794894088
+        0.1455413489322438,
+        0.44670961460298025,
+        0.4077490364647759
       ],
       "report": {
         "run_date_brt": "2026-11-17",
-        "prepared_at_brt": "2026-11-17T12:41:17.937645-03:00",
+        "prepared_at_brt": "2026-11-17T18:13:19.863242-03:00",
         "market": {
           "origin": "Dado",
           "url": "https://zcjbtpxuhdekpwcxmepn.supabase.co/rest/v1/rpc/future_series",
@@ -641,23 +694,87 @@
           "value": 237.29999999999993
         },
         "start": {
-          "origin": "Julgamento",
+          "origin": "Cálculo",
           "value": [
-            0.48039215686274506,
-            0.3328664799253034,
-            0.18674136321195142
+            0.49258018190521785,
+            0.325058697485696,
+            0.18236112060908613
           ]
         },
         "now": {
           "origin": "Cálculo",
           "value": [
-            0.13957816059137265,
-            0.44982715991921846,
-            0.4105946794894088
+            0.1455413489322438,
+            0.44670961460298025,
+            0.4077490364647759
           ]
         },
-        "changes": [],
-        "sources": [],
+        "changes": [
+          {
+            "id": "f16",
+            "before": [
+              0.48039215686274506,
+              0.3328664799253034,
+              0.18674136321195142
+            ],
+            "factors": [
+              1.05,
+              1.0,
+              1.0
+            ],
+            "after": [
+              0.49258018190521785,
+              0.325058697485696,
+              0.18236112060908613
+            ],
+            "factor_origin": "Julgamento",
+            "weight_origin": "Cálculo",
+            "approval": {
+              "by": "Pedro",
+              "reference": "https://claude.ai/code/project/chan_01PHRR234GYxjr12aKa2PR3R?thread=cmsg_01PHRR234GYxjr12aKa2PR3RUoratmszSjmsWQQhBLX5vM",
+              "origin": "Julgamento"
+            }
+          },
+          {
+            "id": "f17",
+            "before": [
+              0.49258018190521785,
+              0.325058697485696,
+              0.18236112060908613
+            ],
+            "factors": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "after": [
+              0.49258018190521785,
+              0.325058697485696,
+              0.18236112060908613
+            ],
+            "factor_origin": "Julgamento",
+            "weight_origin": "Cálculo",
+            "approval": {
+              "by": "Pedro",
+              "reference": "https://claude.ai/code/project/chan_01PHRR234GYxjr12aKa2PR3R?thread=cmsg_01PHRR234GYxjr12aKa2PR3RUoratmszSjmsWQQhBLX5vM",
+              "origin": "Julgamento"
+            }
+          }
+        ],
+        "sources": [
+          {
+            "url": "https://www12.senado.leg.br/noticias/materias/2026/11/12/texto-principal-do-ajuste-fiscal-e-aprovado-pelo-senado",
+            "origin": "Dado",
+            "quote": "O texto aprovado, por 45 votos a 31, foi um substitutivo do senador Eduardo Braga (MDB-AM) ao projeto apresentado pelo senador Jaques Wagner",
+            "response_sha256": "dbdc299d27a7bf17140a998fe5d2f8100baee5f06e92274b509d99ce99cc1819"
+          },
+          {
+            "url": "https://valorinveste.globo.com/produtos/renda-fixa/tesouro-direto/noticia/2026/11/16/tesouro-direto-hoje-juros-dos-papeis-prefixados-e-atrelados-a-inflacao-saltam.ghtml",
+            "origin": "Dado",
+            "quote": "estar cotado para comandar o Ministério da Fazenda intensificam a pressão sobre os ativos brasileiros, embora ele tenha negado que disputa o cargo",
+            "response_sha256": "d1683ace4e5ff7ba767b6d8eb61d938f063850937066ff0be366e16b297e8450"
+          }
+        ],
         "method": {
           "marks_bp": {
             "origin": "Cálculo",
