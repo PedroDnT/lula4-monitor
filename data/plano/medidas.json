@@ -1,10 +1,10 @@
 {
- "atualizado_em": "2026-11-17",
+ "atualizado_em": "2026-11-18",
  "projeto": {
   "nome": "PLP 299/2026",
   "autor": "Senador Jaques Wagner (PT/BA)",
   "relator": "Senador Eduardo Braga (MDB/AM)",
-  "status": "Texto-base (substitutivo do relator) aprovado no Senado em 12/11/2026 por 45 a 31; a urgência passou por 40 a 38. A votação dos destaques, marcada para 17/11, foi adiada para 18/11 sem acordo. São 5 destaques: limite à compensação de créditos tributários, Lei Kandir, compensação previdenciária, a emenda 40 do senador Rogério Marinho e, desde 17/11, o destino da economia com o teto salarial (senador Alessandro Vieira). Em 17/11 os senadores apresentaram mais 7 emendas, que vão ao relator. Os trechos destacados precisam de 41 votos para ficar no texto; a emenda 40 precisa de 41 votos para entrar. Depois o projeto vai à Câmara, onde precisa de 257 votos. A Consultoria de Orçamentos do Senado observa que as estimativas de impacto não foram revistas após as mudanças no texto. Esta página segue o texto do parecer de 12/11.",
+  "status": "O Senado concluiu a votação em 18/11/2026; o projeto segue para a Câmara, onde precisa de 257 votos. O texto-base passou em 12/11 por 45 a 31 (urgência, 40 a 38). Em 18/11 o plenário rejeitou 3 destaques: o fim do limite à compensação de créditos tributários (31 a 49), o fim do teto da compensação previdenciária (32 a 45) e a emenda 40, com o teto de 0,6% (30 a 47). O destaque da Lei Kandir saiu por acordo: o repasse anual a estados e municípios até 2030 passa de R$ 1 bi para R$ 2 bi (hoje é R$ 4 bi). No turno suplementar (69 a 2) o relator acolheu 3 emendas: créditos acumulados de PIS/Cofins ficam fora do limite à compensação; o prazo para o Congresso votar a lei dos supersalários cai de 120 para 60 dias; e um primário abaixo de 0,5% do PIB no ano anterior obriga o Executivo a explicar a causa em audiência pública. O relator na Câmara, Mauro Benevides, prevê a votação em 23 ou 24/11. As estimativas de impacto abaixo são do parecer de 12/11 e não foram revistas após essas mudanças.",
   "url": "https://www25.senado.leg.br/web/atividade/materias/-/materia/176328",
   "status_fontes": [
    {
@@ -12,16 +12,12 @@
     "url": "https://www25.senado.leg.br/web/atividade/materias/-/materia/176328/votacoes"
    },
    {
-    "fonte": "Agência Senado, 12/11/2026",
-    "url": "https://www12.senado.leg.br/noticias/materias/2026/11/12/texto-principal-do-ajuste-fiscal-e-aprovado-pelo-senado"
+    "fonte": "CNN Brasil, 18/11/2026",
+    "url": "https://www.cnnbrasil.com.br/politica/senado-faz-acordo-sobre-lei-kandir-e-conclui-votacao-do-plp-ajuste-fiscal/"
    },
    {
-    "fonte": "Forbes Brasil, 17/11/2026",
-    "url": "https://forbes.com.br/forbes-money/2026/11/destaques-ajuste-fiscal-senado/"
-   },
-   {
-    "fonte": "g1, 17/11/2026",
-    "url": "https://g1.globo.com/politica/noticia/2026/11/17/senado-adia-votacao-de-destaques-ao-projeto-de-ajuste-fiscal-do-governo-para-quarta-feira.ghtml"
+    "fonte": "g1, 18/11/2026",
+    "url": "https://g1.globo.com/politica/noticia/2026/11/18/senado-comeca-a-votar-requerimentos-para-modificar-proposta-de-ajuste-fiscal-de-lula.ghtml"
    }
   ]
  },
@@ -47,9 +43,9 @@
    "feito": true
   },
   {
-   "etapa": "5 destaques no Senado",
+   "etapa": "Destaques rejeitados; turno suplementar, 69 a 2",
    "data": "2026-11-18",
-   "feito": false
+   "feito": true
   },
   {
    "etapa": "Câmara, 257 votos",
@@ -111,7 +107,7 @@
   {
    "id": "creditos",
    "medida": "Limite à compensação de créditos tributários",
-   "texto": "O Executivo pode reduzir a compensação de tributos com créditos, até o valor da redução de limite somado ao bloqueio do ano. Os percentuais saem por ato do Executivo.",
+   "texto": "O Executivo pode reduzir a compensação de tributos com créditos, até o valor da redução de limite somado ao bloqueio do ano. Os percentuais saem por ato do Executivo. Os créditos acumulados de PIS/Cofins ficam fora do limite (emenda acolhida em 18/11).",
    "artigo": "LC 200, art. 6º-F",
    "lado": "Receita",
    "impacto_2027_bi": null,
@@ -140,13 +136,13 @@
   {
    "id": "limites",
    "medida": "Limites a despesas específicas",
-   "texto": "Lei Kandir: entrega limitada a R$ 1 bi por ano de 2027 a 2030, e a diferença é paga de 2031 a 2037. Compensação previdenciária: R$ 3 bi por ano de 2027 a 2030. Proex: R$ 1 bi por ano até 2030.",
+   "texto": "Lei Kandir: entrega limitada a R$ 2 bi por ano de 2027 a 2030 (acordo de 18/11; era R$ 1 bi no parecer). Compensação previdenciária: R$ 3 bi por ano de 2027 a 2030. Proex: R$ 1 bi por ano até 2030.",
    "artigo": "LC 176, art. 1º; Lei 9.796, art. 8º-C; PLP, art. 11",
    "lado": "Despesa",
    "impacto_2027_bi": null,
    "impacto_min_bi": 10,
    "impacto_max_bi": 12,
-   "impacto_fonte": "Moretti, via O Globo; fora da faixa do parecer. Parte é adiamento, não corte"
+   "impacto_fonte": "Moretti, via O Globo; fora da faixa do parecer. Parte é adiamento, não corte; a faixa é anterior ao acordo da Lei Kandir de 18/11"
   },
   {
    "id": "petroleo",
@@ -178,7 +174,7 @@
   {
    "id": "supersalarios",
    "medida": "Supersalários",
-   "texto": "O Congresso tem 120 dias para votar a lei do teto (art. 37, § 11, da Constituição). A economia do Executivo reduz o limite de despesa ou vai para investimento e segurança pública. O projeto não corta pagamentos.",
+   "texto": "O Congresso tem 60 dias (era 120 no parecer) para votar a lei do teto (art. 37, § 11, da Constituição). A economia do Executivo reduz o limite de despesa ou vai para investimento e segurança pública. O projeto não corta pagamentos.",
    "artigo": "PLP, art. 10",
    "lado": "Despesa",
    "impacto_2027_bi": null,
@@ -207,7 +203,7 @@
   {
    "id": "integral",
    "cenario": "Aprovado e usado por inteiro",
-   "precisa": "O Senado e a Câmara aprovam o texto do parecer, e o Executivo aciona a contenção de despesa e o limite à compensação de créditos nas faixas do parecer.",
+   "precisa": "A Câmara aprova o texto do Senado, e o Executivo aciona a contenção de despesa e o limite à compensação de créditos nas faixas do parecer.",
    "medidas": [
     "contencao",
     "creditos",
