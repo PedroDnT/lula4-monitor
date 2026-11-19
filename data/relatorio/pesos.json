@@ -3,27 +3,27 @@
     "id": "ancora",
     "cenario": "Âncora retomada",
     "start": 0.49258018190521785,
-    "probability": 0.18974651973248952,
+    "probability": 0.16443851728768577,
     "di_jan29_move_bp": 28,
     "partida_em": "2026-11-17",
-    "agora_em": "2026-11-18"
+    "agora_em": "2026-11-19"
   },
   {
     "id": "deriva",
     "cenario": "Deriva fiscal",
     "start": 0.325058697485696,
-    "probability": 0.4875961955550835,
+    "probability": 0.46644273848204126,
     "di_jan29_move_bp": 123,
     "partida_em": "2026-11-17",
-    "agora_em": "2026-11-18"
+    "agora_em": "2026-11-19"
   },
   {
     "id": "estresse",
     "cenario": "Estresse e espiral",
     "start": 0.18236112060908613,
-    "probability": 0.3226572847124269,
+    "probability": 0.369118744230273,
     "di_jan29_move_bp": 295,
     "partida_em": "2026-11-17",
-    "agora_em": "2026-11-18"
+    "agora_em": "2026-11-19"
   }
 ]
