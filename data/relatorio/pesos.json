@@ -6,7 +6,7 @@
     "probability": 0.09041804829265158,
     "di_jan29_move_bp": 28,
     "partida_em": "2026-11-17",
-    "agora_em": "2026-11-20"
+    "agora_em": "2026-11-23"
   },
   {
     "id": "deriva",
@@ -15,7 +15,7 @@
     "probability": 0.3645057830891403,
     "di_jan29_move_bp": 123,
     "partida_em": "2026-11-17",
-    "agora_em": "2026-11-20"
+    "agora_em": "2026-11-23"
   },
   {
     "id": "estresse",
@@ -24,6 +24,6 @@
     "probability": 0.5450761686182081,
     "di_jan29_move_bp": 295,
     "partida_em": "2026-11-17",
-    "agora_em": "2026-11-20"
+    "agora_em": "2026-11-23"
   }
 ]
