@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-11-24",
+  "as_of": "2026-11-25",
   "start": [
     0.49258018190521785,
     0.325058697485696,
@@ -34,8 +34,8 @@
     "stf-oposicao"
   ],
   "facts_sha256": "098b74c81c4ad2f9eed539b06e756f79f83490edb286a2917614a79f5ff5417d",
-  "weights_sha256": "198b46922b2c307170e0ac0bde8c62ee9bf0e6d13dc93aea85e6813e6c35bc95",
-  "history_sha256": "a8f124046a0e7a5926c367b804b8e3ed8d975d47b3bd21ae34b3da31e61300de",
+  "weights_sha256": "30fd9b3ec2d17b6a36ba134f14dbf611e8baac67b5c468838bf4211dfc8d2c33",
+  "history_sha256": "e7079afd21a05fe467e2ee8fbba2de88a82b29cc2f61d46a52433c450016ea15",
   "baseline_origin": "Julgamento",
   "baseline_source": "6b023ca; decisão de Pedro em 04/11/2026",
   "unresolved": [
@@ -1206,6 +1206,93 @@
             0.13183260742082503,
             0.42999841070490913,
             0.4381689818742659
+          ]
+        },
+        "changes": [],
+        "sources": [],
+        "method": {
+          "marks_bp": {
+            "origin": "Cálculo",
+            "value": [
+              28,
+              123,
+              295
+            ],
+            "source": "data/research/term_premium.json (research/termpremium.py): caminho da Selic por cenário (Julgamento) + prêmio medido (Cálculo)"
+          },
+          "sigma_bp": {
+            "origin": "Julgamento",
+            "value": 100,
+            "source": "data/research/sigma.json (research/sigma.py): faixa medida de 78 a 123 bp, mediana 101"
+          },
+          "formula": "normalize(start * exp(-(move_bp - marks_bp)^2 / (2 * sigma_bp^2)))"
+        },
+        "warnings": [
+          "Partida 30/10: 48/32/20 sem fato justificativo; não recalcular retroativamente."
+        ]
+      }
+    },
+    "2026-11-25": {
+      "market": {
+        "origin": "Dado",
+        "url": "https://zcjbtpxuhdekpwcxmepn.supabase.co/rest/v1/rpc/future_series",
+        "args": {
+          "p_ticker": "DI1F29",
+          "p_from": "2026-10-23"
+        },
+        "date": "2026-11-24",
+        "rate_pct": 14.853,
+        "baseline_date": "2026-10-23",
+        "baseline_pct": 12.64,
+        "baseline_source": "prev_settlement_rate de 2026-10-26 (B3 Price Report via SILO)",
+        "response_sha256": "8efbfd22ea100838fac92e3f65b0345994e4dba6ccc79c70fbe548325119defb"
+      },
+      "changes": [],
+      "start": [
+        0.49258018190521785,
+        0.325058697485696,
+        0.18236112060908613
+      ],
+      "now": [
+        0.18301382153636064,
+        0.48251412642791586,
+        0.3344720520357236
+      ],
+      "report": {
+        "run_date_brt": "2026-11-25",
+        "prepared_at_brt": "2026-11-25T11:25:20.394988-03:00",
+        "market": {
+          "origin": "Dado",
+          "url": "https://zcjbtpxuhdekpwcxmepn.supabase.co/rest/v1/rpc/future_series",
+          "args": {
+            "p_ticker": "DI1F29",
+            "p_from": "2026-10-23"
+          },
+          "date": "2026-11-24",
+          "rate_pct": 14.853,
+          "baseline_date": "2026-10-23",
+          "baseline_pct": 12.64,
+          "baseline_source": "prev_settlement_rate de 2026-10-26 (B3 Price Report via SILO)",
+          "response_sha256": "8efbfd22ea100838fac92e3f65b0345994e4dba6ccc79c70fbe548325119defb"
+        },
+        "move_bp": {
+          "origin": "Cálculo",
+          "value": 221.29999999999993
+        },
+        "start": {
+          "origin": "Julgamento",
+          "value": [
+            0.49258018190521785,
+            0.325058697485696,
+            0.18236112060908613
+          ]
+        },
+        "now": {
+          "origin": "Cálculo",
+          "value": [
+            0.18301382153636064,
+            0.48251412642791586,
+            0.3344720520357236
           ]
         },
         "changes": [],
