@@ -214,5 +214,13 @@
     "ancora": 0.22088933590848223,
     "deriva": 0.5064676003988982,
     "estresse": 0.27264306369261965
+  },
+  {
+    "date": "2026-11-27",
+    "label": "Agora 2026-11-27",
+    "note": "Cálculo: partida × verossimilhança normal; DI1F29 SILO de 2026-11-26; ver ledger.",
+    "ancora": 0.2914497091058408,
+    "deriva": 0.5254820263639416,
+    "estresse": 0.18306826453021768
   }
 ]
